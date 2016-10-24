@@ -16,6 +16,7 @@ object  UserHandler {
     fun logout(session: Session) {
         session.removeAttribute("logged_in")
         session.removeAttribute("username")
+        session.attributes().clear()
     }
 
     fun isLoggedIn(session: Session): Boolean {
