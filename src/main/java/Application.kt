@@ -3,42 +3,59 @@
  */
 
 import spark.ModelAndView
+import spark.Session
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
+import java.nio.file.Path
 import java.util.*
 
 fun main(args: Array<String>) {
 
-    port(80)
-    staticFileLocation("/public")
+    val layoutTemplate = "/templates/layout.vtl"
 
-    val layout = "templates/layout.vtl"
+    port(80)
+    staticFiles.location("/public")
+    staticFiles.expireTime(600L)
 
     get("/", { request, response ->
         val model = HashMap<String, Any>()
-        model.putIfAbsent("username", request.session().attribute("username"))
-        model.putIfAbsent("template", "/templates/welcome.vtl")
-        ModelAndView(model, layout)
+        if (UserHandler.isLoggedIn(request.session())) response.redirect("/profile_page")
+        model.putIfAbsent("template", "/templates/index.vtl")
+        ModelAndView(model, layoutTemplate)
     }, VelocityTemplateEngine())
 
-    post("/welcome", { request, response ->
+    get("/profile_page", { request, response ->
         val model = HashMap<String, Any>()
-        val inputtedUsername = request.queryParams("username")
-        val inputtedPassword = request.queryParams("password")
-        if (inputtedUsername == "tauraamui" && inputtedPassword == "Password1234!") {
-            request.session().attribute("logged_in", true)
-            request.session().attribute("username", inputtedUsername)
+        if (UserHandler.isLoggedIn(request.session())) {
+            model.putIfAbsent("template", "/templates/profile_page.vtl")
+            model.putIfAbsent("username", request.session().attribute("username"))
+        } else {
+            response.redirect("/login")
         }
-        request.session().attribute("username", inputtedUsername)
-        model.putIfAbsent("username", inputtedUsername)
-        model.putIfAbsent("template", "templates/welcome.vtl")
-        ModelAndView(model, layout)
+        ModelAndView(model, layoutTemplate)
+    }, VelocityTemplateEngine())
+
+    get("/login", { request, response ->
+        val model = HashMap<String, Any>()
+        if (UserHandler.isLoggedIn(request.session())) response.redirect("/")
+        model.putIfAbsent("template", "/templates/login.vtl")
+        ModelAndView(model, layoutTemplate)
+    }, VelocityTemplateEngine())
+
+    post("/post_login", { request, response ->
+        println(request.queryParams("username"))
+        println(request.queryParams("password"))
+        val username = request.queryParams("username")
+        val password = request.queryParams("password")
+        UserHandler.login(request.session(), username, password)
+        if (UserHandler.isLoggedIn(request.session())) response.redirect("/")
+        response.redirect("/login")
+        ModelAndView(HashMap<String, Any>(), layoutTemplate)
     }, VelocityTemplateEngine())
 
     post("/logout", { request, response ->
-        if (request.session().attribute("logged_in")) {
-            request.session().attribute("username", null)
-            request.session().attribute("logged_in", false)
+        if (UserHandler.isLoggedIn(request.session())) {
+            UserHandler.logout(request.session())
         }
         response.redirect("/")
     })
