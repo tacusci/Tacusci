@@ -1,4 +1,8 @@
 
+label {
+    font-size: 150%
+}
+
 /* Set a style for all buttons */
 button {
     background-color: #4CAF50;
