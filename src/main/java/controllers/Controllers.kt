@@ -18,6 +18,7 @@ object Web {
             response.redirect("/dashboard")
         } else {
             model.putIfAbsent("template", "/templates/index.vtl")
+            model.putIfAbsent("title", "Thames Valley Furs - Homepage")
             model.putIfAbsent("stylesheet", "/css/tvf.css")
         }
         return ModelAndView(model, layoutTemplate)
@@ -26,8 +27,10 @@ object Web {
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
+            val username: String = request.session().attribute("username")
             model.putIfAbsent("template", "/templates/profile_page.vtl")
-            model.putIfAbsent("username", request.session().attribute("username"))
+            model.putIfAbsent("title", "Thames Valley Furs $username")
+            model.putIfAbsent("username", username)
             model.putIfAbsent("stylesheet", "/css/tvf.css")
         } else {
             response.redirect("/login")
@@ -41,6 +44,7 @@ object Web {
             response.redirect("/")
         } else {
             model.putIfAbsent("template", "/templates/login.vtl")
+            model.putIfAbsent("title", "Thames Valley Furs - Login")
             model.putIfAbsent("stylesheet", "/css/login.css")
         }
         return ModelAndView(model, layoutTemplate)
@@ -51,6 +55,7 @@ object Web {
         if (UserHandler.isLoggedIn(request.session())) {
             if (UserHandler.isInGroup(request.session().attribute("username"), "administrators")) {
                 model.putIfAbsent("template", "/templates/dashboard.vtl")
+                model.putIfAbsent("title", "Thames Valley Furs - Dashboard")
                 model.putIfAbsent("username", request.session().attribute("username"))
             }
         } else {
