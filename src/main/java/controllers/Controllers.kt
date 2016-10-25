@@ -51,6 +51,7 @@ object Web {
         if (UserHandler.isLoggedIn(request.session())) {
             if (UserHandler.isInGroup(request.session().attribute("username"), "administrators")) {
                 model.putIfAbsent("template", "/templates/dashboard.vtl")
+                model.putIfAbsent("username", request.session().attribute("username"))
             }
         } else {
             response.redirect("/login")
