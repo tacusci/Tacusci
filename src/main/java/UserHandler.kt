@@ -39,4 +39,13 @@ object  UserHandler {
         }
         return false
     }
+
+    fun isInGroup(username: String, groupName: String): Boolean {
+        if (username.toLowerCase() == "tauraamui") {
+            if (groupName.toLowerCase() == "administrators") {
+                return true
+            }
+        }
+        return false
+    }
 }
