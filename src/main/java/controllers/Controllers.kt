@@ -51,6 +51,8 @@ object Web {
         } else {
             model.putIfAbsent("template", "/templates/login.vtl")
             model.putIfAbsent("title", "Thames Valley Furs - Login")
+            val loginError: Boolean = request.session().attribute("loginerror")
+            if (loginError) { model.putIfAbsent("") }
             model.putIfAbsent("stylesheet", "/css/login.css")
         }
         return ModelAndView(model, layoutTemplate)

@@ -10,6 +10,8 @@ object  UserHandler {
         if (username.toLowerCase() == "tauraamui" && password == "placeholder") {
             session.attribute("logged_in", true)
             session.attribute("username", username)
+        } else {
+            session.attribute("login_error", true)
         }
     }
 
