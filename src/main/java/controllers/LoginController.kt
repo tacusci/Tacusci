@@ -15,9 +15,10 @@ object LoginController {
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         if (!UserHandler.isLoggedIn(request.session())) {
-            model.putIfAbsent("template", "/templates/login.vtl")
-            model.putIfAbsent("title", "Thames Valley Furs - Login")
-            model.putIfAbsent("stylesheet", "/css/login.css")
+            model.put("template", "/templates/login.vtl")
+            model.put("title", "Thames Valley Furs - Login")
+            model.put("base_stylesheet", "/css/tvf.css")
+            model.put("stylesheet", "/css/login.css")
             val loginError: Boolean = request.session().attribute("login_error")
             if (loginError) {
                 model.put("login_error", "Username or password incorrect...<br>")
