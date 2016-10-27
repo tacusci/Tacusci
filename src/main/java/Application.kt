@@ -2,7 +2,7 @@
  * Created by alewis on 24/10/2016.
  */
 
-import controllers.UserSession
+import controllers.LoginController
 import controllers.Web
 import spark.ModelAndView
 import spark.Session
@@ -23,10 +23,10 @@ fun main(args: Array<String>) {
     get("/", { request, response -> Web.get_root(request, response, layoutTemplate) }, VelocityTemplateEngine())
     get("/dashboard", { request, response -> Web.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-    get("/login", { request, response -> Web.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
+    get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
     get("/profile_page", { request, response -> Web.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-    post("/logout", { request, response -> UserSession.post_logout(request, response) })
-    post("/post_login", { request, response -> UserSession.post_postLogin(request, response) })
+    post("/logout", { request, response -> LoginController.post_logout(request, response) })
+    post("/post_login", { request, response -> LoginController.post_postLogin(request, response) })
     post("/create_page", {request, response -> Web.post_createPage(request, response, layoutTemplate)}, VelocityTemplateEngine())
 }

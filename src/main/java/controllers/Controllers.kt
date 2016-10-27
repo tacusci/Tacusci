@@ -1,9 +1,6 @@
 package controllers
 
-import spark.ModelAndView
-import spark.Request
-import spark.Response
-import spark.Route
+import spark.*
 import java.util.*
 
 /**
@@ -16,14 +13,21 @@ fun redirectToLoginIfNotLoggedIn(request: Request, response: Response) {
 
 object Web {
 
+    fun initSessionAttributes(session: Session) {
+        if (!session.attributes().contains("login_error")) {
+            session.attribute("login_error", false)
+        }
+    }
+
     fun get_root(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
             response.redirect("/dashboard")
         } else {
             model.putIfAbsent("template", "/templates/index.vtl")
             model.putIfAbsent("title", "Thames Valley Furs - Homepage")
-            val linkList = listOf("/login", "/dashboard", "profile_page")
+            val linkList = listOf("Login", "Dashboard", "Profile Page")
             model.putIfAbsent("pagelist", Gen.generateList(linkList).toString())
             model.putIfAbsent("stylesheet", "/css/tvf.css")
         }
@@ -40,20 +44,6 @@ object Web {
             model.putIfAbsent("stylesheet", "/css/tvf.css")
         } else {
             response.redirect("/login")
-        }
-        return ModelAndView(model, layoutTemplate)
-    }
-
-    fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val model = HashMap<String, Any>()
-        if (UserHandler.isLoggedIn(request.session())) {
-            response.redirect("/")
-        } else {
-            model.putIfAbsent("template", "/templates/login.vtl")
-            model.putIfAbsent("title", "Thames Valley Furs - Login")
-            val loginError: Boolean = request.session().attribute("loginerror")
-            if (loginError) { model.putIfAbsent("") }
-            model.putIfAbsent("stylesheet", "/css/login.css")
         }
         return ModelAndView(model, layoutTemplate)
     }
@@ -88,25 +78,5 @@ private object Gen {
         }
         stringBuilder.append("</ul><ul>")
         return stringBuilder
-    }
-}
-
-object UserSession {
-
-    fun post_postLogin(request: Request, response: Response): Response {
-        val username = request.queryParams("username")
-        val password = request.queryParams("password")
-        UserHandler.login(request.session(), username, password)
-        if (UserHandler.isLoggedIn(request.session())) response.redirect("/dashboard") else response.redirect("/")
-        return response
-    }
-
-    fun post_logout(request: Request, response: Response): Response {
-        redirectToLoginIfNotLoggedIn(request, response)
-        if (UserHandler.isLoggedIn(request.session())) {
-            UserHandler.logout(request.session())
-            response.redirect("/")
-        }
-        return response
     }
 }
