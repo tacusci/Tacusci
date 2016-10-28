@@ -11,7 +11,10 @@ abstract class GenericDAO {
     var connection: Connection? = null
     var tableName: String = ""
 
-    abstract fun count() {
-
+    constructor(connection: Connection, tableName: String) {
+        this.connection = connection
+        this.tableName = tableName
     }
+
+    abstract fun count(): Int
 }
