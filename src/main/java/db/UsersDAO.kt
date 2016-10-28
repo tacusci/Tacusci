@@ -36,10 +36,6 @@ class UsersDAO : DAO {
         val preparedStatement = connection?.prepareStatement(createUserStatementString)
         preparedStatement?.setString(1, count().toString())
         preparedStatement?.setString(2, user.username.toLowerCase())
-        preparedStatement?.setString(3, )
-    }
-
-    fun getUsers() {
-
+        preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
     }
 }
