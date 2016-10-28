@@ -1,0 +1,14 @@
+
+html * {
+   font-size: 1em !important;
+   color: #000 !important;
+   font-family: Verdana, Geneva, sans-serif !important;
+}
+
+div {
+    text-align: center;
+}
+
+body {
+    background-color: #8b8e91;
+}
