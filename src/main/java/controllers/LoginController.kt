@@ -18,7 +18,7 @@ object LoginController {
             model.put("template", "/templates/login.vtl")
             model.put("title", "Thames Valley Furs - Login")
             model.put("base_stylesheet", "/css/tvf.css")
-            model.put("stylesheet", "/css/login.css")
+            model.put("stylesheet", "/css/ui_elements.css")
             val loginError: Boolean = request.session().attribute("login_error")
             if (loginError) {
                 model.put("login_error", "Username or password incorrect...<br>")

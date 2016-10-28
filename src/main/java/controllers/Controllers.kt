@@ -1,5 +1,7 @@
 package controllers
 
+import db.models.User
+import db.models.isValid
 import spark.*
 import java.util.*
 
@@ -30,6 +32,7 @@ object Web {
             model.put("template", "/templates/index.vtl")
             model.put("title", "Thames Valley Furs - Homepage")
             val linkList = listOf("Login", "Dashboard", "Profile Page")
+            model.put("stylesheet", "/css/ui_elements.css")
             model.put("pagelist", Gen.generateList(linkList).toString())
             model.put("base_stylesheet", "/css/tvf.css")
         }
@@ -43,6 +46,7 @@ object Web {
             model.put("template", "/templates/profile_page.vtl")
             model.put("title", "Thames Valley Furs $username")
             model.put("username", username)
+            model.put("stylesheet", "/css/ui_elements.css")
             model.put("base_stylesheet", "/css/tvf.css")
         } else {
             response.redirect("/login")
@@ -55,7 +59,32 @@ object Web {
         redirectToLoginIfNotLoggedIn(request, response)
         model.put("template", "/templates/create_page.vtl")
         model.put("base_stylesheet", "/css/tvf.css")
+        model.put("stylesheet", "/css/ui_elements.css")
         model.put("title", "Thames Valley Furs - Create page")
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    fun get_signUp(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        model.put("template", "/templates/sign_up.vtl")
+        model.put("base_stylesheet", "/css/tvf.css")
+        model.put("stylesheet", "/css/ui_elements.css")
+        model.put("title", "Thames Valley Furs - Sign Up")
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    fun post_postSignUp(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        val fullName = request.queryParams("full_name")
+        val username = request.queryParams("username")
+        val password = request.queryParams("password")
+        val email = request.queryParams("email")
+
+        val user = User(fullName, username, password, email)
+        if (UserHandler.createUser(user)) {
+            response.redirect("/login")
+        }
+
         return ModelAndView(model, layoutTemplate)
     }
 }

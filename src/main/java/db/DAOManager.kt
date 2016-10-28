@@ -11,7 +11,7 @@ import java.sql.SQLException
 
 object DAOManager {
 
-    var url = URL("")
+    var url = ""
     var username = ""
     var password = ""
 
@@ -21,7 +21,7 @@ object DAOManager {
 
     private var connection: Connection? = null
 
-    fun init(url: URL, username: String, password: String) {
+    fun init(url: String, username: String, password: String) {
         Class.forName("com.mysql.jdbc.Driver")
         this.url = url
         this.username = username
@@ -31,7 +31,7 @@ object DAOManager {
     fun open() {
         try {
             if (connection == null || connection!!.isClosed) {
-                connection = DriverManager.getConnection(url.path, username, password)
+                connection = DriverManager.getConnection(url, username, password)
             }
         } catch (e: SQLException) { throw e }
     }
@@ -44,9 +44,12 @@ object DAOManager {
         } catch (e: SQLException) { throw e }
     }
 
-    fun getDAO(table: TABLE) {
-        when (table == TABLE.USERS) {
-
+    fun getDAO(table: TABLE): DAO {
+        when (table) {
+            TABLE.USERS -> return UsersDAO(connection!!, "users")
+            else -> {
+                return GenericDAO(connection!!, "")
+            }
         }
     }
 }

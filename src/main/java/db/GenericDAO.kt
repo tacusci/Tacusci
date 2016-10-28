@@ -3,18 +3,13 @@ package db
 import java.sql.Connection
 
 /**
- * Created by tauraamui on 27/10/2016.
+ * Created by alewis on 28/10/2016.
  */
+class GenericDAO : DAO {
 
-abstract class GenericDAO {
+    constructor(connection: Connection, tableName: String): super(connection, tableName)
 
-    var connection: Connection? = null
-    var tableName: String = ""
-
-    constructor(connection: Connection, tableName: String) {
-        this.connection = connection
-        this.tableName = tableName
+    override fun count(): Int {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    abstract fun count(): Int
 }

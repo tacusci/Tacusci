@@ -1,4 +1,10 @@
+import db.DAOManager
+import db.UsersDAO
+import db.models.User
+import db.models.isValid
+import javafx.scene.control.Tab
 import spark.Session
+import java.security.InvalidParameterException
 
 /**
  * Created by tauraamui on 24/10/2016.
@@ -50,5 +56,13 @@ object  UserHandler {
             }
         }
         return false
+    }
+
+    fun createUser(user: User): Boolean {
+        if (!user.isValid()) return false
+        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+        usersDAO.createUser(user)
+        println(user)
+        return true
     }
 }
