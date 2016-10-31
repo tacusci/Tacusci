@@ -1,6 +1,6 @@
 import db.DAOManager
 import db.UsersDAO
-import db.models.User
+import db.models.NewUser
 import db.models.isValid
 import javafx.scene.control.Tab
 import spark.Session
@@ -13,7 +13,10 @@ import java.security.InvalidParameterException
 object  UserHandler {
 
     fun login(session: Session, username: String, password: String) {
-        if (username.toLowerCase() == "tauraamui" && password == "placeholder") {
+        val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+        val authHash = usersDAO.getUserAuthHash(username)
+
+        if (PasswordStorage.verifyPassword(password, authHash)) {
             session.attribute("logged_in", true)
             session.attribute("username", username)
             session.attribute("login_error", false)
@@ -58,11 +61,10 @@ object  UserHandler {
         return false
     }
 
-    fun createUser(user: User): Boolean {
-        if (!user.isValid()) return false
+    fun createUser(newUser: NewUser): Boolean {
+        if (!newUser.isValid()) return false
         val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
-        usersDAO.createUser(user)
-        println(user)
+        usersDAO.insertUser(newUser)
         return true
     }
 }

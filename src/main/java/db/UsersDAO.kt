@@ -1,6 +1,6 @@
 package db
 
-import db.models.User
+import db.models.NewUser
 import java.sql.Connection
 import java.sql.SQLException
 import java.sql.ResultSet
@@ -17,7 +17,6 @@ class UsersDAO : DAO {
     override fun count(): Int {
         var count = 0
         val countStatementString = "SELECT COUNT(*) AS count FROM $tableName"
-
         try {
             connection?.autoCommit = false
             val countStatement = connection?.prepareStatement(countStatementString)
@@ -31,11 +30,34 @@ class UsersDAO : DAO {
         return count
     }
 
-    fun createUser(user: User) {
-        val createUserStatementString = "INSERT INTO $tableName (IDUSERS, USERNAME, SALT, HASH) VALUES (?,?,?,?)"
-        val preparedStatement = connection?.prepareStatement(createUserStatementString)
-        preparedStatement?.setString(1, count().toString())
-        preparedStatement?.setString(2, user.username.toLowerCase())
-        preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
+    fun insertUser(newUser: NewUser): Boolean {
+        try {
+            val createUserStatementString = "INSERT INTO $tableName (USERNAME, AUTHHASH) VALUES (?,?)"
+            val preparedStatement = connection?.prepareStatement(createUserStatementString)
+            //preparedStatement?.setString(1, count().toString())
+            preparedStatement?.setString(1, newUser.username.toLowerCase())
+            preparedStatement?.setString(2, PasswordStorage.createHash(newUser.password))
+            preparedStatement?.execute()
+            connection?.commit()
+            return true
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    fun getUserAuthHash(username: String): String {
+        var authHash: String? = ""
+        try {
+            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME='$username'"
+            val statement = connection?.createStatement()
+            val resultSet = statement?.executeQuery(queryString)
+            while (resultSet!!.next()) {
+                authHash = resultSet.getString("AUTHHASH")
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+        return authHash!!
     }
 }

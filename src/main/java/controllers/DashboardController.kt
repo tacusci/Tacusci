@@ -16,14 +16,10 @@ object DashboardController {
         val model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
             val username: String = request.session().attribute("username")
-            if (UserHandler.isInGroup(username, "administrators")) {
-                model.put("template", "/templates/dashboard.vtl")
-                model.put("base_stylesheet", "/css/tvf.css")
-                model.put("title", "Thames Valley Furs - Dashboard")
-                model.put("username", request.session().attribute("username"))
-            } else {
-                accessDeniedPage(model)
-            }
+            model.put("template", "/templates/dashboard.vtl")
+            model.put("base_stylesheet", "/css/tvf.css")
+            model.put("title", "Thames Valley Furs - Dashboard")
+            model.put("username", request.session().attribute("username"))
         } else {
             accessDeniedPage(model)
         }

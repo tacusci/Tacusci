@@ -1,6 +1,6 @@
 package controllers
 
-import db.models.User
+import db.models.NewUser
 import db.models.isValid
 import spark.*
 import java.util.*
@@ -80,7 +80,7 @@ object Web {
         val password = request.queryParams("password")
         val email = request.queryParams("email")
 
-        val user = User(fullName, username, password, email)
+        val user = NewUser(fullName, username, password, email)
         if (UserHandler.createUser(user)) {
             response.redirect("/login")
         }

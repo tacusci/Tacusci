@@ -17,7 +17,6 @@ fun main(args: Array<String>) {
 
     val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS)
 
-
     val layoutTemplate = "/templates/layout.vtl"
 
     port(1025)
