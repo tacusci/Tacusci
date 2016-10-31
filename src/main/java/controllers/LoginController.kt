@@ -1,5 +1,7 @@
 package controllers
 
+import db.DAOManager
+import db.UsersDAO
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -34,8 +36,14 @@ object LoginController {
 
     fun post_postLogin(request: Request, response: Response): Response {
         Web.initSessionAttributes(request.session())
-        val username = request.queryParams("username")
+        var username = request.queryParams("username")
+        var email = ""
         val password = request.queryParams("password")
+        if (username.contains("@")) {
+            email = username
+            val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+            username = usersDAO.getUsernameFromEmail(email)
+        }
         UserHandler.login(request.session(), username, password)
         response.redirect("/login")
         return response

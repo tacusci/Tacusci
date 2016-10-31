@@ -15,7 +15,6 @@ object  UserHandler {
     fun login(session: Session, username: String, password: String) {
         val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
         val authHash = usersDAO.getUserAuthHash(username)
-
         if (PasswordStorage.verifyPassword(password, authHash)) {
             session.attribute("logged_in", true)
             session.attribute("username", username)

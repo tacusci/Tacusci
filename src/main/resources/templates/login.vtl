@@ -1,11 +1,14 @@
 
 <h1>Login Page</h1>
-<form method="post" action="/login/post_login">
+<div>
+<form id="login" method="post" action="/login/post_login" class="pure-form">
     Username:<br>
     <input id="username" name="username" type="text"><br>
     Password:<br>
     <input id="password" name="password" type="password"/><br>
     $login_error
-    <button type="submit">Login</button>
 </form>
-<form action="/login/sign_up"><button type="submit">Sign Up</button></form>
+<form id="sign_up" action="/login/sign_up"/>
+<button class="pure-button" type="submit" name="Login" form="login">Login</button>
+<button class="pure-button" type="submit" form="sign_up">Sign Up</button>
+</div>

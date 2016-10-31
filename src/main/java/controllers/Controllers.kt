@@ -1,7 +1,6 @@
 package controllers
 
-import db.models.NewUser
-import db.models.isValid
+import db.models.*
 import spark.*
 import java.util.*
 
@@ -31,9 +30,7 @@ object Web {
         } else {
             model.put("template", "/templates/index.vtl")
             model.put("title", "Thames Valley Furs - Homepage")
-            val linkList = listOf("Login", "Dashboard", "Profile Page")
             model.put("stylesheet", "/css/ui_elements.css")
-            model.put("pagelist", Gen.generateList(linkList).toString())
             model.put("base_stylesheet", "/css/tvf.css")
         }
         return ModelAndView(model, layoutTemplate)
@@ -70,6 +67,36 @@ object Web {
         model.put("base_stylesheet", "/css/tvf.css")
         model.put("stylesheet", "/css/ui_elements.css")
         model.put("title", "Thames Valley Furs - Sign Up")
+        model.put("full_name_error_hidden", "hidden")
+        model.put("username_error_hidden", "hidden")
+        model.put("password_error_hidden", "hidden")
+        model.put("email_error_hidden", "hidden")
+
+        if (!request.session().attributes().contains("full_name_field_error")) { request.session().attribute("full_name_field_error", false) }
+        if (!request.session().attributes().contains("username_field_error")) { request.session().attribute("username_field_error", false) }
+        if (!request.session().attributes().contains("password_field_error")) { request.session().attribute("password_field_error", false) }
+        if (!request.session().attributes().contains("email_field_error")) { request.session().attribute("email_field_error", false) }
+
+        if (request.session().attribute("full_name_field_error")) {
+            model.put("full_name_error_hidden", "")
+            request.session().removeAttribute("full_name_field_error")
+        }
+
+        if (request.session().attribute("username_field_error")) {
+            model.put("username_error_hidden", "")
+            request.session().removeAttribute("username_field_error")
+        }
+
+        if (request.session().attribute("password_field_error")) {
+            model.put("password_error_hidden", "")
+            request.session().removeAttribute("password_field_error")
+        }
+
+        if (request.session().attribute("email_field_error")) {
+            model.put("email_error_hidden", "")
+            request.session().removeAttribute("email_field_error")
+        }
+
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -80,9 +107,28 @@ object Web {
         val password = request.queryParams("password")
         val email = request.queryParams("email")
 
+        model.put("full_name_error_hidden", true)
+
         val user = NewUser(fullName, username, password, email)
         if (UserHandler.createUser(user)) {
             response.redirect("/login")
+        } else {
+            if (!user.isFullnameValid()) {
+                request.session().attribute("full_name_field_error", true)
+            }
+
+            if (!user.isUsernameValid()) {
+                request.session().attribute("username_field_error", true)
+            }
+
+            if (!user.isPasswordValid()) {
+                request.session().attribute("password_field_error", true)
+            }
+
+            if (!user.isEmailValid()) {
+                request.session().attribute("email_field_error", true)
+            }
+            response.redirect("/login/sign_up")
         }
 
         return ModelAndView(model, layoutTemplate)

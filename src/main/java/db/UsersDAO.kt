@@ -32,11 +32,13 @@ class UsersDAO : DAO {
 
     fun insertUser(newUser: NewUser): Boolean {
         try {
-            val createUserStatementString = "INSERT INTO $tableName (USERNAME, AUTHHASH) VALUES (?,?)"
+            val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname) VALUES (?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
             preparedStatement?.setString(1, newUser.username.toLowerCase())
             preparedStatement?.setString(2, PasswordStorage.createHash(newUser.password))
+            preparedStatement?.setString(3, newUser.email)
+            preparedStatement?.setString(4, newUser.fullName)
             preparedStatement?.execute()
             connection?.commit()
             return true
@@ -47,7 +49,7 @@ class UsersDAO : DAO {
     }
 
     fun getUserAuthHash(username: String): String {
-        var authHash: String? = ""
+        var authHash: String = ""
         try {
             val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME='$username'"
             val statement = connection?.createStatement()
@@ -58,6 +60,21 @@ class UsersDAO : DAO {
         } catch (e: SQLException) {
             e.printStackTrace()
         }
-        return authHash!!
+        return authHash
+    }
+
+    fun getUsernameFromEmail(email: String): String {
+        var username: String = ""
+        try {
+            val queryString = "SELECT USERNAME FROM $tableName WHERE EMAIL='$email'"
+            val statement = connection?.createStatement()
+            val resultSet = statement?.executeQuery(queryString)
+            while (resultSet!!.next()) {
+                username = resultSet.getString("USERNAME")
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+        return username
     }
 }
