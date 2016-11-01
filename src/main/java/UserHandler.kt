@@ -12,7 +12,7 @@ import java.security.InvalidParameterException
 
 object  UserHandler {
 
-    fun login(session: Session, username: String, password: String) {
+    fun login(session: Session, username: String, password: String): Boolean {
         val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
         val authHash = usersDAO.getUserAuthHash(username)
         if (PasswordStorage.verifyPassword(password, authHash)) {
@@ -21,7 +21,9 @@ object  UserHandler {
             session.attribute("login_error", false)
         } else {
             session.attribute("login_error", true)
+            return false
         }
+        return true
     }
 
     fun logout(session: Session) {

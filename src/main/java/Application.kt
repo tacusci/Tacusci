@@ -30,6 +30,7 @@ fun main(args: Array<String>) {
     get("/login/sign_up", { request, response -> Web.get_signUp(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
     get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
+    get("/login/", {  })
     get("/login/profile_page", { request, response -> Web.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
     post("/logout", { request, response -> LoginController.post_logout(request, response) })
