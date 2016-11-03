@@ -8,5 +8,5 @@ CREATE TABLE `tvf`.`users` (
   `fullname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idusers`),
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC))
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC)
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC))

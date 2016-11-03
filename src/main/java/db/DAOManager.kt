@@ -28,6 +28,7 @@ object DAOManager {
         this.password = password
     }
 
+    @Throws(SQLException::class)
     fun open() {
         try {
             if (connection == null || connection!!.isClosed) {

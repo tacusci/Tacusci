@@ -3,6 +3,7 @@ import db.UsersDAO
 import db.models.NewUser
 import db.models.isValid
 import javafx.scene.control.Tab
+import mu.KLogging
 import spark.Session
 import java.security.InvalidParameterException
 
@@ -10,17 +11,28 @@ import java.security.InvalidParameterException
  * Created by tauraamui on 24/10/2016.
  */
 
-object  UserHandler {
+object  UserHandler : KLogging() {
 
     fun login(session: Session, username: String, password: String): Boolean {
+        logger.info { "Attempting to login $username" }
         val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+
         val authHash = usersDAO.getUserAuthHash(username)
-        if (PasswordStorage.verifyPassword(password, authHash)) {
-            session.attribute("logged_in", true)
-            session.attribute("username", username)
-            session.attribute("login_error", false)
+
+        if (authHash.isNotBlank() && authHash.isNotEmpty()) {
+            if (PasswordStorage.verifyPassword(password, authHash)) {
+                session.attribute("logged_in", true)
+                session.attribute("username", username)
+                session.attribute("login_error", false)
+                logger.info { "Login successful" }
+            } else {
+                session.attribute("login_error", true)
+                logger.info { "Login unsuccessful, incorrect password..." }
+                return false
+            }
         } else {
             session.attribute("login_error", true)
+            logger.info { "Login unsuccessful, username not recognised" }
             return false
         }
         return true
