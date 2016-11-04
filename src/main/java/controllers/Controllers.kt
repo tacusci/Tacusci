@@ -8,10 +8,6 @@ import java.util.*
  * Created by alewis on 25/10/2016.
  */
 
-fun redirectToLoginIfNotLoggedIn(request: Request, response: Response) {
-    if (!UserHandler.isLoggedIn(request.session())) response.redirect("/")
-}
-
 object Web {
 
     fun initSessionAttributes(session: Session) {
@@ -53,7 +49,6 @@ object Web {
 
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
-        redirectToLoginIfNotLoggedIn(request, response)
         model.put("template", "/templates/create_page.vtl")
         model.put("base_stylesheet", "/css/tvf.css")
         model.put("stylesheet", "/css/ui_elements.css")
@@ -61,9 +56,9 @@ object Web {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun get_signUp(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
-        model.put("template", "/templates/sign_up.vtl")
+        model.put("template", "/templates/register.vtl")
         model.put("base_stylesheet", "/css/tvf.css")
         model.put("stylesheet", "/css/ui_elements.css")
         model.put("title", "Thames Valley Furs - Sign Up")
@@ -100,7 +95,7 @@ object Web {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post_postSignUp(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun post_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         val fullName = request.queryParams("full_name")
         val username = request.queryParams("username")
@@ -131,6 +126,14 @@ object Web {
             response.redirect("/login/sign_up")
         }
 
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    fun accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        model.put("title", "Thames Valley Furs - Dashboard (access denied)")
+        model.put("base_stylesheet", "/css/tvf.css")
+        model.put("template", "/templates/access_denied.vtl")
         return ModelAndView(model, layoutTemplate)
     }
 }

@@ -33,6 +33,7 @@ object DAOManager {
         try {
             if (connection == null || connection!!.isClosed) {
                 connection = DriverManager.getConnection(url, username, password)
+                connection?.autoCommit = false
             }
         } catch (e: SQLException) { throw e }
     }
@@ -47,7 +48,7 @@ object DAOManager {
 
     fun getDAO(table: TABLE): DAO {
         when (table) {
-            TABLE.USERS -> return UsersDAO(connection!!, "users")
+            TABLE.USERS -> return UserDAO(connection!!, "users")
             else -> {
                 return GenericDAO(connection!!, "")
             }

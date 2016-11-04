@@ -2,7 +2,7 @@ package controllers
 
 import db.DAOManager
 
-import db.UsersDAO
+import db.UserDAO
 import mu.KLoggable
 import mu.KLogging
 import mu.NamedKLogging
@@ -53,8 +53,8 @@ object LoginController: KLogging() {
             if (username.contains("@")) {
                 logger.info { "Email instead of username detected, fetching associated username" }
                 email = username
-                val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
-                username = usersDAO.getUsernameFromEmail(email)
+                val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+                username = userDAO.getUsernameFromEmail(email)
             }
             UserHandler.login(request.session(), username, password)
         } else {

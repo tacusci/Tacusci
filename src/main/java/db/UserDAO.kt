@@ -1,6 +1,7 @@
 package db
 
 import db.models.NewUser
+import mu.KLogging
 import java.sql.Connection
 import java.sql.SQLException
 import java.sql.ResultSet
@@ -9,7 +10,9 @@ import java.sql.ResultSet
  * Created by tauraamui on 27/10/2016.
  */
 
-class UsersDAO : DAO {
+class UserDAO : DAO {
+
+    companion object: KLogging()
 
     constructor(connection: Connection, tableName: String) : super(connection, tableName)
 
@@ -39,7 +42,21 @@ class UsersDAO : DAO {
             preparedStatement?.setString(2, PasswordStorage.createHash(newUser.password))
             preparedStatement?.setString(3, newUser.email)
             preparedStatement?.setString(4, newUser.fullName)
-            preparedStatement?.execute()
+
+            val results: Boolean? = preparedStatement?.execute()
+            var count = 0
+
+            if (results!!) {
+                logger.info { "Insert user ResultSet data displayed here" }
+            } else {
+                count = preparedStatement?.updateCount!!
+                if (count >= 0) {
+                    logger.info { "DDL or update data displayed here." }
+                } else {
+                    logger.info { "No more results to process" }
+                }
+            }
+
             connection?.commit()
             return true
         } catch (e: SQLException) {

@@ -1,5 +1,5 @@
 import db.DAOManager
-import db.UsersDAO
+import db.UserDAO
 import db.models.NewUser
 import db.models.isValid
 import javafx.scene.control.Tab
@@ -15,7 +15,7 @@ object  UserHandler : KLogging() {
 
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info { "Attempting to login $username" }
-        val usersDAO: UsersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+        val usersDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
         val authHash = usersDAO.getUserAuthHash(username)
 
@@ -54,17 +54,6 @@ object  UserHandler : KLogging() {
         return false
     }
 
-    fun isLoggedIn(session: Session, username: String): Boolean {
-        if (session.attributes().isNotEmpty()) {
-            if (session.attributes().contains("logged_in")) {
-                val loggedIn: Boolean = session.attribute("logged_in")
-                val usernameInSession: String = session.attribute("username")
-                if (username.toLowerCase() == usernameInSession.toLowerCase()) return loggedIn
-            }
-        }
-        return false
-    }
-
     fun isInGroup(username: String, groupName: String): Boolean {
         if (username.toLowerCase() == "tauraamui") {
             if (groupName.toLowerCase() == "administrators") {
@@ -76,7 +65,7 @@ object  UserHandler : KLogging() {
 
     fun createUser(newUser: NewUser): Boolean {
         if (!newUser.isValid()) return false
-        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UsersDAO
+        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         usersDAO.insertUser(newUser)
         return true
     }
