@@ -4,6 +4,7 @@
 
 import controllers.DashboardController
 import controllers.LoginController
+import controllers.ProfileController
 import controllers.Web
 import db.DAOManager
 import mu.KLogging
@@ -57,9 +58,12 @@ class Application {
 
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/", { request, response -> response.redirect("/login") })
-        get("/login/profile_page", { request, response -> Web.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/login/profile_page/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/login/profile_page", { request, response -> ProfileController.get_profilePage()) })
+        get("/login/profile_page/", { request, response -> response.redirect("/login/profile_page") })
 
-        get("/access_denied", { request, response -> Web.accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/user_not_found", { request, response -> Web.get_userNotFound(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
         post("/login/post_login", { request, response -> LoginController.post_postLogin(request, response) })

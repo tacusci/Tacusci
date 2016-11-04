@@ -32,21 +32,6 @@ object Web {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val model = HashMap<String, Any>()
-        if (UserHandler.isLoggedIn(request.session())) {
-            val username: String = request.session().attribute("username")
-            model.put("template", "/templates/profile_page.vtl")
-            model.put("title", "Thames Valley Furs $username")
-            model.put("username", username)
-            model.put("stylesheet", "/css/ui_elements.css")
-            model.put("base_stylesheet", "/css/tvf.css")
-        } else {
-            response.redirect("/login")
-        }
-        return ModelAndView(model, layoutTemplate)
-    }
-
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/create_page.vtl")
@@ -129,11 +114,19 @@ object Web {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("title", "Thames Valley Furs - Dashboard (access denied)")
         model.put("base_stylesheet", "/css/tvf.css")
         model.put("template", "/templates/access_denied.vtl")
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        model.put("title", "Thames Valley Furs - Profile (User not found)")
+        model.put("base_stylesheet", "/css/tvf.css")
+        model.put("template", "/templates/user_not_found.vtl")
         return ModelAndView(model, layoutTemplate)
     }
 }
