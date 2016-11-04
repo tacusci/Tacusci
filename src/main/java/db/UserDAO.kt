@@ -43,6 +43,8 @@ class UserDAO : DAO {
             preparedStatement?.setString(3, newUser.email)
             preparedStatement?.setString(4, newUser.fullName)
 
+            //TODO: Need to work on response when duplicate username attempted insert
+
             val results: Boolean? = preparedStatement?.execute()
             var count = 0
 
