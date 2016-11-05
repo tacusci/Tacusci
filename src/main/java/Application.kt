@@ -59,7 +59,7 @@ class Application {
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/", { request, response -> response.redirect("/login") })
         get("/login/profile_page/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/login/profile_page", { request, response -> ProfileController.get_profilePage()) })
+        get("/login/profile_page", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/profile_page/", { request, response -> response.redirect("/login/profile_page") })
 
         get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())

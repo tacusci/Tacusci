@@ -25,15 +25,19 @@ object ProfileController {
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
-            val userNameOfprofileToView = request.params(":username")
-            val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-            if (userDAO.userExists(userNameOfprofileToView)) {
-                model = get_getUserProfilePage(userNameOfprofileToView)
+            val userNameOfProfileToView = request.params(":username")
+            if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
+                val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+                if (userDAO.userExists(userNameOfProfileToView)) {
+                    model = get_getUserProfilePage(userNameOfProfileToView)
+                } else {
+                    response.redirect("/user_not_found")
+                }
             } else {
                 response.redirect("/user_not_found")
             }
         } else {
-            response.redirect("/login")
+            response.redirect("/access_denied")
         }
         return ModelAndView(model, layoutTemplate)
     }
