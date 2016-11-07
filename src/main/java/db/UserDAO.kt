@@ -128,4 +128,8 @@ class UserDAO : DAO {
         }
         return usernameList
     }
+
+    fun getAdministrators(): MutableCollection<String> {
+
+    }
 }
