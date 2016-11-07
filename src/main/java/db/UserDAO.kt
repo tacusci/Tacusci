@@ -102,9 +102,11 @@ class UserDAO : DAO {
     fun getUsernameFromEmail(email: String): String {
         var username: String = ""
         try {
-            val queryString = "SELECT USERNAME FROM $tableName WHERE EMAIL='$email';"
-            val statement = connection?.createStatement()
-            val resultSet = statement?.executeQuery(queryString)
+            val selectStatement = "SELECT USERNAME FROM ? WHERE EMAIL=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, username)
+            preparedStatement?.setString(2, email)
+            val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
                 username = resultSet.getString("USERNAME")
             }
@@ -112,5 +114,18 @@ class UserDAO : DAO {
             e.printStackTrace()
         }
         return username
+    }
+
+    fun getUsernames(): MutableCollection<String> {
+
+        val usernameList = mutableListOf("")
+
+        val selectStatement = "SELECT USERNAME FROM $tableName"
+        val preparedStatement = connection?.prepareStatement(selectStatement)
+        val resultSet = preparedStatement?.executeQuery()
+        while (resultSet!!.next()) {
+            usernameList.add(resultSet.getString("USERNAME"))
+        }
+        return usernameList
     }
 }

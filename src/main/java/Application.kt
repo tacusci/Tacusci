@@ -2,10 +2,7 @@
  * Created by alewis on 24/10/2016.
  */
 
-import controllers.DashboardController
-import controllers.LoginController
-import controllers.ProfileController
-import controllers.Web
+import controllers.*
 import db.DAOManager
 import mu.KLogging
 import org.slf4j.LoggerFactory
@@ -58,6 +55,8 @@ class Application {
         get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
+        get("/admin/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
+
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/", { request, response -> response.redirect("/login") })
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -83,6 +82,12 @@ class Application {
         before("/create_page", { request, response ->
             if (showAccessDeniedIfNotAuthenticated(request, response)) {
                 logger.info { "Client at ${request.ip()} is trying to access create page without authentication. Redirecting to login page" }
+            }
+        })
+
+        before("/admin/user_management", { request, response ->
+            if (showAccessDeniedIfNotAuthenticated(request, response)) {
+                logger.info { "Client at ${request.ip()} is trying to access user management page without authentication. Redirecting to login page" }
             }
         })
     }
