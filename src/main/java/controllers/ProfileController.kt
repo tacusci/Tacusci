@@ -2,6 +2,8 @@ package controllers
 
 import db.DAOManager
 import db.UserDAO
+import mu.KLogger
+import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -10,7 +12,7 @@ import java.util.*
 /**
  * Created by alewis on 04/11/2016.
  */
-object ProfileController {
+object ProfileController : KLogging() {
 
     fun get_getUserProfilePage(username: String): HashMap<String, Any> {
         val model = HashMap<String, Any>()
@@ -31,13 +33,13 @@ object ProfileController {
                 if (userDAO.userExists(userNameOfProfileToView)) {
                     model = get_getUserProfilePage(userNameOfProfileToView)
                 } else {
-                    response.redirect("/user_not_found")
+                    return Web.get_userNotFound(request, response, layoutTemplate)
                 }
             } else {
-                response.redirect("/user_not_found")
+                return Web.get_userNotFound(request, response, layoutTemplate)
             }
         } else {
-            response.redirect("/access_denied")
+            return Web.get_accessDeniedPage(request, response, layoutTemplate)
         }
         return ModelAndView(model, layoutTemplate)
     }

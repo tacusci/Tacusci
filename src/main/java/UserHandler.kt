@@ -63,6 +63,15 @@ object  UserHandler : KLogging() {
         return false
     }
 
+    fun getLoggedInUsername(session: Session): String {
+        if (isLoggedIn(session)) {
+            if (session.attributes().contains("username")) {
+                return session.attribute("username")
+            }
+        }
+        return ""
+    }
+
     fun createUser(newUser: NewUser): Boolean {
         if (!newUser.isValid()) return false
         val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
