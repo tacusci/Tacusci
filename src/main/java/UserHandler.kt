@@ -2,10 +2,8 @@ import db.DAOManager
 import db.UserDAO
 import db.models.NewUser
 import db.models.isValid
-import javafx.scene.control.Tab
 import mu.KLogging
 import spark.Session
-import java.security.InvalidParameterException
 
 /**
  * Created by tauraamui on 24/10/2016.

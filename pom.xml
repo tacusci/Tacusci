@@ -68,10 +68,12 @@
             <version>r938</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
+
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>

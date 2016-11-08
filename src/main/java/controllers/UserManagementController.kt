@@ -26,23 +26,6 @@ object UserManagementController {
 
     private fun genUserTable(request: Request, response: Response): String {
         val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-        val stringBuilder = StringBuilder()
-        stringBuilder.appendln("<table border='1' style='width:100%'>")
-
-        stringBuilder.append("<tr>")
-        stringBuilder.append("<td>User</td>")
-        stringBuilder.append("<td>Banned</td>")
-
-        userDAO.getUsernames().forEachIndexed { i, username ->
-            if (username.isNotBlank() && username.isNotEmpty()) {
-                stringBuilder.append("<tr>")
-                stringBuilder.append("<td>")
-                stringBuilder.append(username)
-                stringBuilder.append("</td>")
-                stringBuilder.append("<td>"+HTMLUtils.genCheckBox("banned", "banned", "Banned", false)+"</td>")
-                stringBuilder.append("</tr>")
-            }
-        }
-        return stringBuilder.toString()
+        return ""
     }
 }
