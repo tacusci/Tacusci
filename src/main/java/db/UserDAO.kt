@@ -36,7 +36,7 @@ class UserDAO : DAO {
 
     fun insertUser(newUser: NewUser): Boolean {
         try {
-            val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname) VALUES (?,?,?,?);"
+            val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname) VALUES (?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
             preparedStatement?.setString(1, newUser.username.toLowerCase())
@@ -59,7 +59,6 @@ class UserDAO : DAO {
                     logger.info { "No more results to process" }
                 }
             }
-
             connection?.commit()
             return true
         } catch (e: SQLException) {
@@ -71,7 +70,7 @@ class UserDAO : DAO {
     fun getUserAuthHash(username: String): String {
         var authHash: String = ""
         try {
-            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME='$username';"
+            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME='$username'"
             val statement = connection?.createStatement()
             val resultSet = statement?.executeQuery(queryString)
             while (resultSet!!.next()) {
@@ -130,6 +129,6 @@ class UserDAO : DAO {
     }
 
     fun getAdministrators(): MutableCollection<String> {
-
+        return mutableListOf()
     }
 }

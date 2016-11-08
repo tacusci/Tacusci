@@ -10,7 +10,7 @@ CREATE TABLE `tvf`.`users` (
   PRIMARY KEY (`idusers`),
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 
 CREATE TABLE `tvf`.`groups` (

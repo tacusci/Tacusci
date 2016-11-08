@@ -2,6 +2,7 @@ package controllers
 
 import db.DAOManager
 import db.UserDAO
+import htmlutils.HTMLUtils
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -28,9 +29,9 @@ object UserManagementController {
         val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val stringBuilder = StringBuilder()
         for (username in userDAO.getUsernames()) {
-            stringBuilder.appendln("<tr>")
-            stringBuilder.appendln("<th>$username</th>")
-            stringBuilder.appendln("</tr>")
+            stringBuilder.appendln("<label>$username</label>")
+            stringBuilder.appendln(HTMLUtils.genRadioButton("banned", "banned", "Banned"))
+            stringBuilder.appendln("<br>")
         }
 
         return stringBuilder.toString()
