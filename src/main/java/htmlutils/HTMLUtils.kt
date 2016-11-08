@@ -1,19 +1,15 @@
 package htmlutils
 
-import org.w3c.dom.bootstrap.DOMImplementationRegistry
-import org.w3c.dom.ls.DOMImplementationLS
 import org.w3c.tidy.Tidy
-import org.xml.sax.InputSource
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * Created by tauraamui on 08/11/2016.
  */
 
 object HTMLUtils {
+
     fun genRadioButton(name: String, id: String, value: String): String {
         val radioButtonString = "<input type='radio' name='$name' id='$id' value='$value'>"
         return radioButtonString
@@ -26,7 +22,7 @@ object HTMLUtils {
         return checkBoxString
     }
 
-    fun format(html: String): String {
+    fun formatMarkup(html: String): String {
         val tidy = Tidy()
         tidy.xhtml = true
         tidy.indentContent = true

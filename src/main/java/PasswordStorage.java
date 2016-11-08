@@ -62,7 +62,7 @@ public class PasswordStorage
         byte[] hash = pbkdf2(password, salt, PBKDF2_ITERATIONS, HASH_BYTE_SIZE);
         int hashSize = hash.length;
 
-        // format: algorithm:iterations:hashSize:salt:hash
+        // formatMarkup: algorithm:iterations:hashSize:salt:hash
         return "sha1:" +
                 PBKDF2_ITERATIONS +
                 ":" + hashSize +

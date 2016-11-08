@@ -1,0 +1,16 @@
+
+<form method="post" action="/login/register" class="pure-form">
+    Full Name:<br>
+    <input id="full_name" name="full_name" type="text" required>
+    <p $full_name_error_hidden>This field cannot be empty</p><br>
+    Username:<br>
+    <input id="username" name="username" type="text" required>
+    <p $username_error_hidden>This field cannot be empty</p><br>
+    Password:<br>
+    <input id="password" name="password" type="password" required/>
+    <p $password_error_hidden>This field cannot be empty</p><br>
+    Email address:<br>
+    <input id="email" name="email" type="text" required>
+    <p $email_error_hidden>This field cannot be empty</p><br>
+    <button class="pure-button" type="submit">Sign up</button>
+</form>

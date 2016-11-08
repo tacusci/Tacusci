@@ -71,7 +71,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
             VelocityContext context = new VelocityContext(modelMap);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
-            return HTMLUtils.INSTANCE.format(writer.toString());
+            return HTMLUtils.INSTANCE.formatMarkup(writer.toString());
         } else {
             throw new IllegalArgumentException("modelAndView must be of type java.util.Map");
         }
