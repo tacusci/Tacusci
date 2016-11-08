@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
+import htmlutils.HTMLUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -70,7 +71,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
             VelocityContext context = new VelocityContext(modelMap);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
-            return writer.toString();
+            return HTMLUtils.INSTANCE.format(writer.toString());
         } else {
             throw new IllegalArgumentException("modelAndView must be of type java.util.Map");
         }

@@ -20,20 +20,29 @@ object UserManagementController {
         model.put("title", "Thames Valley Furs - User Management")
         model.put("stylesheet", "/css/ui_elements.css")
         model.put("base_stylesheet", "/css/tvf.css")
-        model.put("user_list", genUserList(request, response))
+        model.put("user_table", genUserTable(request, response))
         return ModelAndView(model, layoutTemplate)
     }
 
-    private fun genUserList(request: Request, response: Response): String {
-
+    private fun genUserTable(request: Request, response: Response): String {
         val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val stringBuilder = StringBuilder()
-        for (username in userDAO.getUsernames()) {
-            stringBuilder.appendln("<label>$username</label>")
-            stringBuilder.appendln(HTMLUtils.genRadioButton("banned", "banned", "Banned"))
-            stringBuilder.appendln("<br>")
-        }
+        stringBuilder.appendln("<table border='1' style='width:100%'>")
 
+        stringBuilder.append("<tr>")
+        stringBuilder.append("<td>User</td>")
+        stringBuilder.append("<td>Banned</td>")
+
+        userDAO.getUsernames().forEachIndexed { i, username ->
+            if (username.isNotBlank() && username.isNotEmpty()) {
+                stringBuilder.append("<tr>")
+                stringBuilder.append("<td>")
+                stringBuilder.append(username)
+                stringBuilder.append("</td>")
+                stringBuilder.append("<td>"+HTMLUtils.genCheckBox("banned", "banned", "Banned", false)+"</td>")
+                stringBuilder.append("</tr>")
+            }
+        }
         return stringBuilder.toString()
     }
 }
