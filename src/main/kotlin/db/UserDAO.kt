@@ -70,9 +70,10 @@ class UserDAO : DAO {
     fun getUserAuthHash(username: String): String {
         var authHash: String = ""
         try {
-            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME='$username'"
-            val statement = connection?.createStatement()
-            val resultSet = statement?.executeQuery(queryString)
+            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(queryString)
+            preparedStatement?.setString(1, username)
+            val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
                 authHash = resultSet.getString("AUTHHASH")
             }

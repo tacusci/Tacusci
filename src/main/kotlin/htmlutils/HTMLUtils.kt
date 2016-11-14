@@ -19,15 +19,20 @@ class CheckBox : HTMLElement() {
     override fun toString(): String {
         var checkedString = ""
         if (isChecked) checkedString = " checked"
-        return "<input type='checkbox' name='$name' id='$id' value='$value' $checkedString>"
+        return "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $checkedString>"
     }
 }
 
 object HTMLUtils {
 
     fun genRadioButton(name: String, id: String, value: String): String {
-        val radioButtonString = "<input type='radio' name='$name' id='$id' value='$value'>"
+        val radioButtonString = "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\">"
         return radioButtonString
+    }
+
+    fun genCheckBox(name: String, id: String, value: String): String {
+        val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\">"
+        return checkboxString
     }
 
     fun formatMarkup(html: String): String {
