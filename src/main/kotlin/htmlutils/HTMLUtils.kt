@@ -30,10 +30,10 @@ object HTMLUtils {
         return radioButtonString
     }
 
-    fun genCheckBox(name: String, id: String, value: String, checked: Boolean): String {
+    fun genCheckBox(name: String, value: String, checked: Boolean): String {
         var checkedString = ""
         if (checked) checkedString = " checked"
-        val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\"$checkedString>"
+        val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$name\" value=\"$value\"$checkedString>"
         return checkboxString
     }
 

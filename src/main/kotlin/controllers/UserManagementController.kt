@@ -35,7 +35,7 @@ object UserManagementController {
 
         for (username in userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
             val userIsCurrentlyBannedBool = if (userDAO.getUserBanned(username) > 0) true else false
-            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("banned", "banned", "Banned", userIsCurrentlyBannedBool)))
+            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("banned", "Banned", userIsCurrentlyBannedBool)))
         }
 
         stringBuilder.append(userListTable.create())
