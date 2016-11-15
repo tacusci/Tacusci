@@ -39,7 +39,7 @@ object HTMLUtils {
 
     fun formatMarkup(html: String): String {
         val tidy = Tidy()
-        tidy.xhtml = true
+        //tidy.xhtml = true
         tidy.indentContent = true
         tidy.tidyMark = false
         tidy.quiet = true
