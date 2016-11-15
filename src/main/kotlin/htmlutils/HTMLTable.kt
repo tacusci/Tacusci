@@ -26,12 +26,14 @@ class HTMLTable {
     fun create(): String {
         val model = StringBuilder()
 
-        model.append("<table>")
-
+        model.append("<table class=\"pure-table pure-table-bordered\">")
+        model.append("<thead>")
         model.append("<tr>")
-        for (columnName in columnNames) { model.append("<td>$columnName</td>") }
+        for (columnName in columnNames) { model.append("<th>$columnName</th>") }
         model.append("</tr>")
+        model.append("</thead>")
 
+        model.append("<tbody>")
         rows.forEach { rowContent ->
             model.append("<tr>")
             for (content in rowContent) {
@@ -39,6 +41,8 @@ class HTMLTable {
             }
             model.append("</tr>")
         }
+        model.append("</tbody>")
+        model.append("</table>")
         return model.toString()
     }
 

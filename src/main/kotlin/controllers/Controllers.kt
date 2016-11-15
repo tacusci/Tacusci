@@ -26,8 +26,6 @@ object Web {
         } else {
             model.put("template", "/templates/index.vtl")
             model.put("title", "Thames Valley Furs - Homepage")
-            model.put("stylesheet", "/css/ui_elements.css")
-            model.put("base_stylesheet", "/css/tvf.css")
         }
         return ModelAndView(model, layoutTemplate)
     }
@@ -35,8 +33,6 @@ object Web {
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/create_page.vtl")
-        model.put("base_stylesheet", "/css/tvf.css")
-        model.put("stylesheet", "/css/ui_elements.css")
         model.put("title", "Thames Valley Furs - Create page")
         return ModelAndView(model, layoutTemplate)
     }
@@ -44,8 +40,6 @@ object Web {
     fun get_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/register.vtl")
-        model.put("base_stylesheet", "/css/tvf.css")
-        model.put("stylesheet", "/css/ui_elements.css")
         model.put("title", "Thames Valley Furs - Sign Up")
         model.put("full_name_error_hidden", "hidden")
         model.put("username_error_hidden", "hidden")
@@ -117,7 +111,6 @@ object Web {
     fun get_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("title", "Thames Valley Furs - Dashboard (access denied)")
-        model.put("base_stylesheet", "/css/tvf.css")
         model.put("template", "/templates/access_denied.vtl")
         return ModelAndView(model, layoutTemplate)
     }
@@ -125,7 +118,6 @@ object Web {
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("title", "Thames Valley Furs - Profile (User not found)")
-        model.put("base_stylesheet", "/css/tvf.css")
         model.put("template", "/templates/user_not_found.vtl")
         return ModelAndView(model, layoutTemplate)
     }

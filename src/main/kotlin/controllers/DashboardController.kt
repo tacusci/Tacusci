@@ -16,7 +16,6 @@ object DashboardController {
         val model = HashMap<String, Any>()
         val username: String = request.session().attribute("username")
         model.put("template", "/templates/dashboard.vtl")
-        model.put("base_stylesheet", "/css/tvf.css")
         model.put("title", "Thames Valley Furs - Dashboard")
         model.put("username", request.session().attribute("username"))
         return ModelAndView(model, layoutTemplate)
