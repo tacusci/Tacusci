@@ -3,7 +3,7 @@ package db.models
 /**
  * Created by alewis on 28/10/2016.
  */
-data class NewUser(val fullName: String, val username: String, val password: String, val email: String)
+data class NewUser(val fullName: String, val username: String, val password: String, val email: String, val banned: Int)
 
 fun NewUser.isValid(): Boolean {
     if (!isUsernameValid()) { return false }

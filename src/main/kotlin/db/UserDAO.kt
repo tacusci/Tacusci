@@ -36,13 +36,14 @@ class UserDAO : DAO {
 
     fun insertUser(newUser: NewUser): Boolean {
         try {
-            val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname) VALUES (?,?,?,?)"
+            val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname, banned) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
             preparedStatement?.setString(1, newUser.username.toLowerCase())
             preparedStatement?.setString(2, PasswordStorage.createHash(newUser.password))
             preparedStatement?.setString(3, newUser.email)
             preparedStatement?.setString(4, newUser.fullName)
+            preparedStatement?.setInt(5, newUser.banned)
 
             //TODO: Need to work on response when duplicate username attempted insert
 
@@ -127,6 +128,22 @@ class UserDAO : DAO {
             usernameList.add(resultSet.getString("USERNAME"))
         }
         return usernameList
+    }
+
+    fun getUserBanned(username: String): Int {
+        var banned = 0
+        try {
+            val selectStatement = "SELECT BANNED FROM $tableName WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, username)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                banned = resultSet.getInt("BANNED")
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+        return banned
     }
 
     fun getAdministrators(): MutableCollection<String> {

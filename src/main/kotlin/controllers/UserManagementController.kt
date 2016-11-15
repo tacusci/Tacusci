@@ -3,6 +3,7 @@ package controllers
 import db.DAOManager
 import db.UserDAO
 import htmlutils.HTMLUtils
+import htmlutils.HTMLTable
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -28,25 +29,17 @@ object UserManagementController {
 
         val stringBuilder = StringBuilder()
 
-        stringBuilder.append("<table>")
+        val userListTable = HTMLTable(listOf("Username", "Banned"))
 
         val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-        for (i in 0..20) {
-            for (username in userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
-                stringBuilder.append("<tr>")
-                stringBuilder.append("<td>")
-                stringBuilder.append(username)
-                stringBuilder.append("</td>")
 
-                stringBuilder.append("<td>")
-                stringBuilder.append(HTMLUtils.genCheckBox("banned", "banned", "Banned"))
-                stringBuilder.append("</td>")
-
-                stringBuilder.append("</tr>")
-            }
-            stringBuilder.append("</table>")
+        for (username in userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
+            val userIsCurrentlyBannedBool = if (userDAO.getUserBanned(username) > 0) true else false
+            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("banned", "banned", "Banned", userIsCurrentlyBannedBool)))
         }
 
-        return stringBuilder.toString()
+        stringBuilder.append(userListTable.create())
+
+        return userListTable.create()
     }
 }

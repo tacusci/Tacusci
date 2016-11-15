@@ -89,7 +89,7 @@ object Web {
 
         model.put("full_name_error_hidden", true)
 
-        val user = NewUser(fullName, username, password, email)
+        val user = NewUser(fullName, username, password, email, 0)
         if (UserHandler.createUser(user)) {
             response.redirect("/login")
         } else {
