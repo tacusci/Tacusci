@@ -25,8 +25,8 @@ class CheckBox : HTMLElement() {
 
 object HTMLUtils {
 
-    fun genRadioButton(name: String, id: String, value: String): String {
-        val radioButtonString = "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\">"
+    fun genRadioButton(name: String, value: String): String {
+        val radioButtonString = "<input type=\"radio\" name=\"$name\" id=\"$name\" value=\"$value\">"
         return radioButtonString
     }
 
