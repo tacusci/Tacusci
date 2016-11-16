@@ -27,8 +27,10 @@ object UserManagementController {
     private fun genUserTable(request: Request, response: Response): String {
 
         val userAdminForm = HTMLForm()
+        userAdminForm.className = "pure-form"
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
+        userListTable.className = "pure-table"
         val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         for (username in userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
             val userIsCurrentlyBannedBool = if (userDAO.getUserBanned(username) > 0) true else false

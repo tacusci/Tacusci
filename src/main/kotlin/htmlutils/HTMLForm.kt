@@ -8,6 +8,7 @@ class HTMLForm {
 
     private val model = StringBuilder()
 
+    var className = ""
     var acceptCharset = ""
     var action = ""
     var method = ""
@@ -30,7 +31,7 @@ class HTMLForm {
 
     fun create(): String {
         val model = StringBuilder()
-        model.append("<form accept-charset=\"$acceptCharset\" action=\"$action\" method=\"$method\" name=\"$name\" novalidate=\"$noValidate\" target=\"$target\">")
+        model.append("<form class=\"$className\" accept-charset=\"$acceptCharset\" action=\"$action\" method=\"$method\" name=\"$name\" novalidate=\"$noValidate\" target=\"$target\">")
         model.append(content)
         model.append("</form>")
         return model.toString()

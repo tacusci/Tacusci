@@ -35,7 +35,7 @@ class Application {
         try {
             DAOManager.open()
             logger.info("Connected to DB at ${DAOManager.url}")
-        } catch (e: SQLException){
+        } catch (e: SQLException) {
             logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
             System.exit(1)
         }

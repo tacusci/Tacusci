@@ -13,6 +13,8 @@ class HTMLTable {
     private var columnNames = listOf("")
     private val rows = mutableListOf(listOf(""))
 
+    var className = ""
+
     constructor() {}
 
     constructor(columnNames: List<String>) {
@@ -26,7 +28,7 @@ class HTMLTable {
     fun create(): String {
         val model = StringBuilder()
 
-        model.append("<table class=\"pure-table pure-table-bordered\">")
+        model.append("<table class=\"$className\">")
         model.append("<thead>")
         model.append("<tr>")
         for (columnName in columnNames) { model.append("<th>$columnName</th>") }

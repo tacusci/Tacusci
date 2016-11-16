@@ -8,21 +8,6 @@ import java.io.ByteArrayOutputStream
  * Created by tauraamui on 08/11/2016.
  */
 
-abstract class HTMLElement
-
-class CheckBox : HTMLElement() {
-    var name = ""
-    var id = ""
-    var value = ""
-    var isChecked = false
-
-    override fun toString(): String {
-        var checkedString = ""
-        if (isChecked) checkedString = " checked"
-        return "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $checkedString>"
-    }
-}
-
 object HTMLUtils {
 
     fun genRadioButton(name: String, value: String): String {
