@@ -2,11 +2,10 @@
 <h1>Login Page</h1>
 <form id="login" method="post" action="/login" class="pure-form">
     Username:<br>
-    <input id="username" name="username" type="text"><br>
+    <input id="username" name="username" type="text" placeholder="Username"><br>
     Password:<br>
     <input id="password" name="password" type="password"/><br>
     $login_error
+    <button class="pure-button" type="submit" name="Login" form="login">Login</button>
 </form>
-<form id="sign_up" action="/login/register"/>
-<button class="pure-button" type="submit" name="Login" form="login">Login</button>
-<button class="pure-button" type="submit" form="sign_up">Sign Up</button>
+<button class="pure-button" type="button"><a href="/login/register">Sign Up</a></button>

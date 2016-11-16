@@ -19,7 +19,6 @@ object ProfileController : KLogging() {
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
         model.put("username", username)
-        model.put("stylesheet", "/css/ui_elements.css")
         model.put("base_stylesheet", "/css/tvf.css")
         return model
     }

@@ -26,7 +26,6 @@ object LoginController: KLogging() {
             model.put("template", "/templates/login.vtl")
             model.put("title", "Thames Valley Furs - Login")
             model.put("base_stylesheet", "/css/tvf.css")
-            model.put("stylesheet", "/css/ui_elements.css")
             val loginError: Boolean = request.session().attribute("login_error")
             if (loginError) {
                 logger.info { "Detected previous login attempt error, altering page to include error message" }
