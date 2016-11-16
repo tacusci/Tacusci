@@ -25,11 +25,10 @@ object LoginController: KLogging() {
             logger.info { "Current user session is not logged in, giving default login page" }
             model.put("template", "/templates/login.vtl")
             model.put("title", "Thames Valley Furs - Login")
-            model.put("base_stylesheet", "/css/tvf.css")
             val loginError: Boolean = request.session().attribute("login_error")
             if (loginError) {
                 logger.info { "Detected previous login attempt error, altering page to include error message" }
-                model.put("login_error", "Username or password incorrect...<br>")
+                model.put("login_error", "<p>Username or password incorrect...</p>")
                 request.session().attribute("login_error", false)
             } else {
                 model.put("login_error", "<br>")
