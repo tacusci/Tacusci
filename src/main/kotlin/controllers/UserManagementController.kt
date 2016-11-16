@@ -28,6 +28,8 @@ object UserManagementController {
 
         val userAdminForm = HTMLForm()
         userAdminForm.className = "pure-form"
+        userAdminForm.action = "/admin/user_management"
+        userAdminForm.method = "post"
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
@@ -39,6 +41,6 @@ object UserManagementController {
 
         userAdminForm.content = userListTable.create()
 
-        return userAdminForm.create()
+        return userListTable.create()
     }
 }

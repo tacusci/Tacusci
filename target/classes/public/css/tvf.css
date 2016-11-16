@@ -16,6 +16,3 @@ body {
 label {
     font-size: 150%
 }
-
-button, button a{position:relative;}
-button a{top:0;left:0;bottom:0;right:0;}

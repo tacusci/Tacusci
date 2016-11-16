@@ -9,9 +9,8 @@ import java.util.*
 
 class HTMLTable {
 
-    private val model = StringBuilder()
     private var columnNames = listOf("")
-    private val rows = mutableListOf(listOf(""))
+    private val rows: MutableList<List<String>> = mutableListOf()
 
     var className = ""
 
@@ -37,18 +36,16 @@ class HTMLTable {
 
         model.append("<tbody>")
         rows.forEach { rowContent ->
-            model.append("<tr>")
-            for (content in rowContent) {
-                model.append("<td>$content</td>")
+            if (rowContent.isNotEmpty()) {
+                model.append("<tr>")
+                for (content in rowContent) {
+                    model.append("<td>$content</td>")
+                }
+                model.append("</tr>")
             }
-            model.append("</tr>")
         }
         model.append("</tbody>")
         model.append("</table>")
         return model.toString()
-    }
-
-    private fun removeTableFooter() {
-        if (model.contains("</table>")) { model.delete("</table>") }
     }
 }
