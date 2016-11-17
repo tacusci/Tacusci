@@ -21,12 +21,8 @@ object Web {
     fun get_root(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
-        if (UserHandler.isLoggedIn(request.session())) {
-            response.redirect("/dashboard")
-        } else {
-            model.put("template", "/templates/index.vtl")
-            model.put("title", "Thames Valley Furs - Homepage")
-        }
+        model.put("template", "/templates/index.vtl")
+        model.put("title", "Thames Valley Furs - Homepage")
         return ModelAndView(model, layoutTemplate)
     }
 
