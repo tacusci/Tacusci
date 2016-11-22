@@ -72,6 +72,7 @@ class Application {
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
         post("/create_page", {request, response -> Web.post_createPage(request, response, layoutTemplate)}, VelocityTemplateEngine())
         post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate)}, VelocityTemplateEngine())
+        post("/admin/user_management", {request, response -> UserManagementController.post_userManagement(request, response)})
 
         before("/dashboard", { request, response ->
             if (redirectToLoginIfNotAuthenticated(request, response)) {
