@@ -22,12 +22,15 @@ class Application {
 
     val port = 1025
     val dbURL = "jdbc:mysql://localhost/tvf"
-    val dbUsername = "tvf_admin"
-    val dbPassword = "6V2-YFu@E8"
+    var dbUsername = ""
+    var dbPassword = ""
 
     companion object: KLogging()
 
-    fun init() {
+    fun init(dbUsername: String, dbPassword: String) {
+
+        this.dbUsername = dbUsername
+        this.dbPassword = dbPassword
 
         DAOManager.init(dbURL, dbUsername, dbPassword)
         logger.info("Trying to connect to DB at ${DAOManager.url}")
@@ -115,5 +118,13 @@ class Application {
 
 fun main(args: Array<String>) {
     val application = Application()
-    application.init()
+    if (args.isNotEmpty()) {
+        val dbUsername = args[0]
+        val dbPassword = args[1]
+        application.init(dbUsername, dbPassword)
+    } else {
+        println("Database username and password not provided....")
+        println("Exiting")
+        System.exit(-1)
+    }
 }
