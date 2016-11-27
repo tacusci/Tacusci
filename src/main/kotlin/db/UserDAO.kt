@@ -11,11 +11,9 @@ import java.sql.ResultSet
  * Created by tauraamui on 27/10/2016.
  */
 
-class UserDAO : DAO {
+class UserDAO(connection: Connection, tableName: String) : DAO(connection, tableName) {
 
     companion object: KLogging()
-
-    constructor(connection: Connection, tableName: String) : super(connection, tableName)
 
     @Throws(SQLException::class)
     override fun count(): Int {
@@ -97,7 +95,7 @@ class UserDAO : DAO {
         } catch (e: SQLException) {
             e.printStackTrace()
         }
-        if (count > 0) return true else return false
+        return count > 0
     }
 
     fun getUsernameFromEmail(email: String): String {

@@ -6,15 +6,9 @@ import java.sql.Connection
  * Created by tauraamui on 27/10/2016.
  */
 
-abstract class DAO {
+abstract class DAO(connection: Connection, var tableName: String) {
 
-    var connection: Connection? = null
-    var tableName: String = ""
-
-    constructor(connection: Connection, tableName: String) {
-        this.connection = connection
-        this.tableName = tableName
-    }
+    var connection: Connection? = connection
 
     abstract fun count(): Int
 }

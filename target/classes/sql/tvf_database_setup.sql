@@ -1,5 +1,3 @@
-CREATE SCHEMA `tvf` ;
-
 CREATE TABLE `tvf`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,

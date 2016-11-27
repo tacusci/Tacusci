@@ -21,7 +21,7 @@ class Application {
     //TODO: Find and rename all instances of varibles named 'usersDAO' to 'userDAO'
 
     val port = 1025
-    val dbURL = "jdbc:mysql://localhost/tvf"
+    val dbURL = "jdbc:mysql://localhost"
     var dbUsername = ""
     var dbPassword = ""
 
@@ -40,10 +40,21 @@ class Application {
             logger.info("Connected to DB at ${DAOManager.url}")
         } catch (e: SQLException) {
             logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
-            System.exit(1)
+            System.exit(-1)
         }
 
-        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS)
+        DAOManager.setup("tvf")
+        DAOManager.close()
+
+        DAOManager.init(dbURL+"/tvf", dbUsername, dbPassword)
+
+        try {
+            DAOManager.open()
+            logger.info("Connected to DB at ${DAOManager.url}")
+        } catch (e: SQLException) {
+            logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
+            System.exit(-1)
+        }
 
         val layoutTemplate = "/templates/layout.vtl"
 
@@ -98,7 +109,7 @@ class Application {
 
     fun redirectToLoginIfNotAuthenticated(request: Request, response: Response): Boolean {
         if (!UserHandler.isLoggedIn(request.session())) {
-            response.redirect("/login")
+            response.redirect("//login")
             halt()
             return true
         }
@@ -124,7 +135,7 @@ fun main(args: Array<String>) {
         application.init(dbUsername, dbPassword)
     } else {
         println("Database username and password not provided....")
-        println("Exiting")
+        println("Terminating...")
         System.exit(-1)
     }
 }

@@ -1,5 +1,7 @@
 package db
 
+import extensions.readTextAndClose
+import java.io.File
 import java.net.URL
 import java.sql.Connection
 import java.sql.DriverManager
@@ -28,6 +30,30 @@ object DAOManager {
         this.password = password
     }
 
+    fun setup(schemaName: String) {
+        val resultSet = connection?.metaData?.catalogs
+        var tvfSchemaExists = false
+
+        while (resultSet!!.next()) {
+            val databaseName = resultSet.getString(1)
+
+            if (schemaName == databaseName) { tvfSchemaExists = true; break }
+        }
+
+        if (!tvfSchemaExists) {
+            val classLoader: ClassLoader = javaClass.classLoader
+            val sqlFile: File = File(classLoader.getResource("/resources/sql/tvf_database_setup.sql").file)
+            val sqlFileAsString = sqlFile.inputStream().readTextAndClose()
+
+            sqlFileAsString.replace("\n", "").split(";").forEach { statement ->
+                val preparedStatement = connection?.prepareStatement(statement)
+                preparedStatement?.execute()
+            }
+        }
+
+        resultSet.close()
+    }
+
     @Throws(SQLException::class)
     fun open() {
         try {
@@ -35,7 +61,9 @@ object DAOManager {
                 connection = DriverManager.getConnection(url, username, password)
                 connection?.autoCommit = false
             }
-        } catch (e: SQLException) { throw e }
+        } catch (e: SQLException) {
+            throw e
+        }
     }
 
     fun close() {
@@ -43,7 +71,9 @@ object DAOManager {
             if (connection != null && !connection!!.isClosed) {
                 connection!!.close()
             }
-        } catch (e: SQLException) { throw e }
+        } catch (e: SQLException) {
+            throw e
+        }
     }
 
     fun getDAO(table: TABLE): DAO {
