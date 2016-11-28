@@ -20,6 +20,8 @@ class Application {
 
     //TODO: Find and rename all instances of varibles named 'usersDAO' to 'userDAO'
 
+    val properties = Properties()
+
     val port = 1025
     val dbURL = "jdbc:mysql://localhost"
     var dbUsername = ""
@@ -132,6 +134,7 @@ fun main(args: Array<String>) {
     if (args.isNotEmpty()) {
         val dbUsername = args[0]
         val dbPassword = args[1]
+        PropertiesMan.load()
         application.init(dbUsername, dbPassword)
     } else {
         println("Database username and password not provided....")
