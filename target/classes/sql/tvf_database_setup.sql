@@ -1,3 +1,5 @@
+CREATE schema tvf;
+
 CREATE TABLE `tvf`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
@@ -12,7 +14,7 @@ CREATE TABLE `tvf`.`users` (
 
 
 CREATE TABLE `tvf`.`groups` (
-  `idgroups` INT NOT NULL,
+  `idgroups` INT NOT NULL AUTO_INCREMENT,
   `groupname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idgroups`),
   UNIQUE INDEX `idgroups_UNIQUE` (`idgroups` ASC),
@@ -20,7 +22,7 @@ CREATE TABLE `tvf`.`groups` (
 
 
 CREATE TABLE `tvf`.`user2group` (
-  `idusers` INT NOT NULL,
+  `idusers` INT NOT NULL AUTO_INCREMENT,
   `idgroups` INT NOT NULL,
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
   UNIQUE INDEX `idgroups_UNIQUE` (`idgroups` ASC));

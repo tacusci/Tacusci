@@ -41,17 +41,18 @@ object DAOManager : KLogging() {
         }
 
         if (!tvfSchemaExists) {
-            logger.info { "$schemaName doesn't exist" }
-            val classLoader: ClassLoader = javaClass.classLoader
-            val sqlFile: File = File(classLoader.getResource("/resources/sql/tvf_database_setup.sql").file)
-            val sqlFileAsString = sqlFile.inputStream().readTextAndClose()
-
-            sqlFileAsString.replace("\n", "").split(";").forEach { statement ->
-                val preparedStatement = connection?.prepareStatement(statement)
+            logger.info { "Database schema $schemaName@$url doesn't exist" }
+            val sqlFile = File("tvf_database_setup.sql")
+            val sqlFileString = sqlFile.readText()
+            logger.info { "Found schema creation file tvf_database_setup.sql" }
+            val sqlStatements = sqlFileString.split(";")
+            sqlStatements.filter { it.isNotBlank() && it.isNotEmpty() }.forEach { statement ->
+                val preparedStatement = connection?.prepareStatement("$statement;")
+                logger.info { "Executing statement: $statement;" }
                 preparedStatement?.execute()
+                preparedStatement?.closeOnCompletion()
             }
         }
-
         resultSet.close()
     }
 
