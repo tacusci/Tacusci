@@ -1,6 +1,7 @@
 package db
 
 import extensions.readTextAndClose
+import mu.KLogging
 import java.io.File
 import java.net.URL
 import java.sql.Connection
@@ -11,7 +12,7 @@ import java.sql.SQLException
  * Created by tauraamui on 27/10/2016.
  */
 
-object DAOManager {
+object DAOManager : KLogging() {
 
     var url = ""
     var username = ""
@@ -36,11 +37,11 @@ object DAOManager {
 
         while (resultSet!!.next()) {
             val databaseName = resultSet.getString(1)
-
             if (schemaName == databaseName) { tvfSchemaExists = true; break }
         }
 
         if (!tvfSchemaExists) {
+            logger.info { "$schemaName doesn't exist" }
             val classLoader: ClassLoader = javaClass.classLoader
             val sqlFile: File = File(classLoader.getResource("/resources/sql/tvf_database_setup.sql").file)
             val sqlFileAsString = sqlFile.inputStream().readTextAndClose()
