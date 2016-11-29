@@ -59,6 +59,7 @@ class UserDAO(connection: Connection, tableName: String) : DAO(connection, table
                 }
             }
             connection?.commit()
+            preparedStatement?.close()
             return true
         } catch (e: SQLException) {
             e.printStackTrace()

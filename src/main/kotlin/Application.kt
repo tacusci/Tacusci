@@ -5,31 +5,28 @@
 import controllers.*
 import db.DAOManager
 import mu.KLogging
-import org.slf4j.LoggerFactory
-import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import java.sql.SQLException
-import java.util.*
-import java.util.logging.Logger
 
 
 class Application {
 
     //TODO: Find and rename all instances of varibles named 'usersDAO' to 'userDAO'
 
-    val properties = Properties()
-
-    val port = 1025
-    val dbURL = "jdbc:mysql://localhost"
+    val port = Settings.config.getProperty("port")
+    val dbURL = Settings.config.getProperty("db_url")
     var dbUsername = ""
     var dbPassword = ""
 
-    companion object: KLogging()
+    companion object : KLogging()
 
-    fun init(dbUsername: String, dbPassword: String) {
+    fun init() {
+
+        showWebsiteHeader()
+        login()
 
         this.dbUsername = dbUsername
         this.dbPassword = dbPassword
@@ -45,10 +42,11 @@ class Application {
             System.exit(-1)
         }
 
-        DAOManager.setup("tvf")
+        println(Settings.config.getProperty("schema_name"))
+        DAOManager.setup(Settings.config.getProperty("schema_name"))
         DAOManager.close()
 
-        DAOManager.init(dbURL+"/tvf", dbUsername, dbPassword)
+        //DAOManager.init(dbURL+"/tvf", dbUsername, dbPassword)
 
         try {
             DAOManager.open()
@@ -61,7 +59,15 @@ class Application {
         val layoutTemplate = "/templates/layout.vtl"
 
         logger.info("Setting port to $port")
-        port(port)
+
+        var portNum = -1
+        try {
+            portNum = Settings.config.getProperty("port").toInt()
+        } catch (e: NumberFormatException) {
+            println("Port is not a valid number. Terminating...")
+            System.exit(1)
+        }
+        port(portNum)
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
 
@@ -86,9 +92,9 @@ class Application {
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
-        post("/create_page", {request, response -> Web.post_createPage(request, response, layoutTemplate)}, VelocityTemplateEngine())
-        post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate)}, VelocityTemplateEngine())
-        post("/admin/user_management", {request, response -> UserManagementController.post_userManagement(request, response)})
+        post("/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
         before("/dashboard", { request, response ->
             if (redirectToLoginIfNotAuthenticated(request, response)) {
@@ -111,7 +117,7 @@ class Application {
 
     fun redirectToLoginIfNotAuthenticated(request: Request, response: Response): Boolean {
         if (!UserHandler.isLoggedIn(request.session())) {
-            response.redirect("//login")
+            response.redirect("/login")
             halt()
             return true
         }
@@ -126,19 +132,22 @@ class Application {
         }
         return false
     }
+
+    fun login() {
+        print("Please enter username: ")
+        dbUsername = readLine()!!
+        print("Please enter password: ")
+        dbPassword = readLine()!!
+    }
+
+    fun showWebsiteHeader() {
+        println("TVF website server")
+        println("=============== Login ===============")
+    }
 }
 
-
 fun main(args: Array<String>) {
+    Settings.config.load()
     val application = Application()
-    if (args.isNotEmpty()) {
-        val dbUsername = args[0]
-        val dbPassword = args[1]
-        PropertiesMan.load()
-        application.init(dbUsername, dbPassword)
-    } else {
-        println("Database username and password not provided....")
-        println("Terminating...")
-        System.exit(-1)
-    }
+    application.init()
 }
