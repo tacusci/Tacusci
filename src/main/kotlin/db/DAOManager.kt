@@ -42,7 +42,7 @@ object DAOManager : KLogging() {
 
         if (!tvfSchemaExists) {
             logger.info { "Database schema url$schemaName doesn't exist" }
-            val sqlFile = File(PropertiesHandler.getProperty("sql_setup_script_location"))
+            val sqlFile = File(Settings.config.getProperty("sql_setup_script_location"))
             val sqlFileString = sqlFile.readText()
             logger.info { "Found schema creation file ${sqlFile.name}" }
             val sqlStatements = sqlFileString.split(";")

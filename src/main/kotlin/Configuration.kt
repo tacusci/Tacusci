@@ -26,6 +26,7 @@ class Configuration : Properties() {
             this.store(propertiesFile.outputStream(), "")
         } else {
             try {
+                println("loading properties")
                 this.load(propertiesFile.inputStream())
             } catch (e: IOException) {
                 e.printStackTrace()

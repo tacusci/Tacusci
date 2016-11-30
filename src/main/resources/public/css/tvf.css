@@ -12,3 +12,8 @@ body {
 label {
     font-size: 150%
 }
+
+page-wrap {
+     width: 800px;
+     margin: 0 auto;
+}

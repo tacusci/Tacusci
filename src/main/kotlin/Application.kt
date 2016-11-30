@@ -42,11 +42,10 @@ class Application {
             System.exit(-1)
         }
 
-        println(Settings.config.getProperty("schema_name"))
         DAOManager.setup(Settings.config.getProperty("schema_name"))
         DAOManager.close()
 
-        //DAOManager.init(dbURL+"/tvf", dbUsername, dbPassword)
+        DAOManager.init(dbURL+"/${Settings.config.getProperty("schema_name")}", dbUsername, dbPassword)
 
         try {
             DAOManager.open()
