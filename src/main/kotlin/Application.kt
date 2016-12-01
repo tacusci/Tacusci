@@ -16,8 +16,8 @@ class Application {
 
     //TODO: Find and rename all instances of varibles named 'usersDAO' to 'userDAO'
 
-    val port = Settings.config.getProperty("port")
-    val dbURL = Settings.config.getProperty("db_url")
+    val port = Configuration.getProperty("port")
+    val dbURL = Configuration.getProperty("db_url")
     var dbUsername = ""
     var dbPassword = ""
 
@@ -42,10 +42,10 @@ class Application {
             System.exit(-1)
         }
 
-        DAOManager.setup(Settings.config.getProperty("schema_name"))
+        DAOManager.setup(Configuration.getProperty("schema_name"))
         DAOManager.close()
 
-        DAOManager.init(dbURL+"/${Settings.config.getProperty("schema_name")}", dbUsername, dbPassword)
+        DAOManager.init(dbURL+"/${Configuration.getProperty("schema_name")}", dbUsername, dbPassword)
 
         try {
             DAOManager.open()
@@ -61,7 +61,7 @@ class Application {
 
         var portNum = -1
         try {
-            portNum = Settings.config.getProperty("port").toInt()
+            portNum = Configuration.getProperty("port").toInt()
         } catch (e: NumberFormatException) {
             println("Port is not a valid number. Terminating...")
             System.exit(1)
@@ -146,7 +146,7 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    Settings.config.load()
+    Configuration.load()
     val application = Application()
     application.init()
 }
