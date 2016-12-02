@@ -41,19 +41,29 @@ object DAOManager : KLogging() {
         }
 
         if (!tvfSchemaExists) {
-            logger.info { "Database schema url$schemaName doesn't exist" }
-            val sqlFile = File(Settings.config.getProperty("sql_setup_script_location"))
+            logger.info("Database schema url$schemaName doesn't exist")
+            val sqlFile = File(Configuration.getProperty("sql_setup_script_location"))
             val sqlFileString = sqlFile.readText()
-            logger.info { "Found schema creation file ${sqlFile.name}" }
+            logger.info("Found schema creation file ${sqlFile.name}")
             val sqlStatements = sqlFileString.split(";")
             sqlStatements.filter { it.isNotBlank() && it.isNotEmpty() }.forEach { statement ->
                 val preparedStatement = connection?.prepareStatement("$statement;")
-                logger.info { "Executing statement: ${statement.replace("\n", "")};" }
+                logger.info("Executing statement: ${statement.replace("\n", "")};")
                 preparedStatement?.execute()
                 preparedStatement?.closeOnCompletion()
             }
         }
         resultSet.close()
+    }
+
+    fun connect() {
+        try {
+            DAOManager.open()
+            logger.info("Connected to DB at ${DAOManager.url}")
+        } catch (e: SQLException) {
+            logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
+            System.exit(-1)
+        }
     }
 
     @Throws(SQLException::class)

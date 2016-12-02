@@ -26,7 +26,7 @@ object UserManagementController: KLogging() {
     }
 
     fun post_userManagement(request: Request, response: Response) {
-        logger.info { "Recieved post submission for user management page" }
+        logger.info("Recieved post submission for user management page")
         Web.initSessionAttributes(request.session())
         //trying to figure out best way to associate checkbox to table row
         request.queryParams().forEach { param ->

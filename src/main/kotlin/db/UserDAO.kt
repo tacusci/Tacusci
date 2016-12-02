@@ -49,13 +49,13 @@ class UserDAO(connection: Connection, tableName: String) : DAO(connection, table
             var count = 0
 
             if (results!!) {
-                logger.info { "Insert user ResultSet data displayed here" }
+                logger.info("Insert user ResultSet data displayed here")
             } else {
                 count = preparedStatement?.updateCount!!
                 if (count >= 0) {
-                    logger.info { "DDL or update data displayed here." }
+                    logger.info("DDL or update data displayed here.")
                 } else {
-                    logger.info { "No more results to process" }
+                    logger.info("No more results to process")
                 }
             }
             connection?.commit()

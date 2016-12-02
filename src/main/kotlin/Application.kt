@@ -14,7 +14,7 @@ import java.sql.SQLException
 
 class Application {
 
-    //TODO: Find and rename all instances of varibles named 'usersDAO' to 'userDAO'
+    //TODO: Change all 'log {}' instances with 'log()' calls
 
     val port = Configuration.getProperty("port")
     val dbURL = Configuration.getProperty("db_url")
@@ -32,28 +32,11 @@ class Application {
         this.dbPassword = dbPassword
 
         DAOManager.init(dbURL, dbUsername, dbPassword)
-        logger.info("Trying to connect to DB at ${DAOManager.url}")
-
-        try {
-            DAOManager.open()
-            logger.info("Connected to DB at ${DAOManager.url}")
-        } catch (e: SQLException) {
-            logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
-            System.exit(-1)
-        }
-
+        DAOManager.connect()
         DAOManager.setup(Configuration.getProperty("schema_name"))
         DAOManager.close()
-
         DAOManager.init(dbURL+"/${Configuration.getProperty("schema_name")}", dbUsername, dbPassword)
-
-        try {
-            DAOManager.open()
-            logger.info("Connected to DB at ${DAOManager.url}")
-        } catch (e: SQLException) {
-            logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
-            System.exit(-1)
-        }
+        DAOManager.connect()
 
         val layoutTemplate = "/templates/layout.vtl"
 
@@ -97,19 +80,19 @@ class Application {
 
         before("/dashboard", { request, response ->
             if (redirectToLoginIfNotAuthenticated(request, response)) {
-                logger.info { "Client at ${request.ip()} is trying to access dashboard without authentication. Redirecting to login page" }
+                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication. Redirecting to login page")
             }
         })
 
         before("/create_page", { request, response ->
             if (showAccessDeniedIfNotAuthenticated(request, response)) {
-                logger.info { "Client at ${request.ip()} is trying to access create page without authentication. Redirecting to login page" }
+                logger.info("Client at ${request.ip()} is trying to access create page without authentication. Redirecting to login page")
             }
         })
 
         before("/admin/user_management", { request, response ->
             if (showAccessDeniedIfNotAuthenticated(request, response)) {
-                logger.info { "Client at ${request.ip()} is trying to access user management page without authentication. Redirecting to login page" }
+                logger.info("Client at ${request.ip()} is trying to access user management page without authentication. Redirecting to login page")
             }
         })
     }
@@ -133,6 +116,7 @@ class Application {
     }
 
     fun login() {
+        logger.info("Getting login information for DB: ${DAOManager.url}")
         print("Please enter username: ")
         dbUsername = readLine()!!
         print("Please enter password: ")

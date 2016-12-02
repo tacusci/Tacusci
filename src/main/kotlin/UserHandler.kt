@@ -12,7 +12,7 @@ import spark.Session
 object  UserHandler : KLogging() {
 
     fun login(session: Session, username: String, password: String): Boolean {
-        logger.info { "Attempting to login $username" }
+        logger.info("Attempting to login $username")
         val usersDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
         val authHash = usersDAO.getUserAuthHash(username)
@@ -22,15 +22,15 @@ object  UserHandler : KLogging() {
                 session.attribute("logged_in", true)
                 session.attribute("username", username)
                 session.attribute("login_error", false)
-                logger.info { "Login successful" }
+                logger.info("Login successful")
             } else {
                 session.attribute("login_error", true)
-                logger.info { "Login unsuccessful, incorrect password..." }
+                logger.info("Login unsuccessful, incorrect password...")
                 return false
             }
         } else {
             session.attribute("login_error", true)
-            logger.info { "Login unsuccessful, username not recognised" }
+            logger.info("Login unsuccessful, username not recognised")
             return false
         }
         return true
