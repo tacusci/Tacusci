@@ -19,17 +19,30 @@ class Configuration private constructor() {
         override val logger = logger()
 
         fun load() {
+
+            val settingAndValue = HashMap<String, String>()
+            settingAndValue.put("server_address", "localhost")
+            settingAndValue.put("port", "1025")
+            settingAndValue.put("db_url", "jdbc:mysql://localhost")
+            settingAndValue.put("sql_setup_script_location", "sql_setup_script.sql")
+            settingAndValue.put("schema_name", "tvf")
+
             val propertiesFile = File("tvf.properties")
+
             if (propertiesFile.doesNotExist()) {
-                this.setProperty("server_address", "localhost")
-                this.setProperty("port", "1025")
-                this.setProperty("db_url", "jdbc:mysql://localhost")
-                this.setProperty("sql_setup_script_location", "sql_setup_script.sql")
-                this.setProperty("schema_name", "tvf")
+                logger.info("Creating tvf.properties file with default settings")
+                this.putAll(settingAndValue)
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
                     logger.info("Loading properties from tvf.properties")
+                    this.load(propertiesFile.inputStream())
+                    settingAndValue.forEach { setting, value ->
+                        if (!this.containsKey(setting)) {
+                            this.put(setting, value)
+                        }
+                    }
+                    this.store(propertiesFile.outputStream(), "")
                     this.load(propertiesFile.inputStream())
                 } catch (e: IOException) {
                     e.printStackTrace()
