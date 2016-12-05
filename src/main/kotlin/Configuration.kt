@@ -33,7 +33,7 @@ class Configuration private constructor() {
                 logger.info("Creating tvf.properties file with default settings")
                 this.putAll(settingAndValue)
                 this.store(propertiesFile.outputStream(), "")
-                this.load()
+                this.load(propertiesFile.inputStream())
             } else {
                 try {
                     logger.info("Loading properties from tvf.properties")
