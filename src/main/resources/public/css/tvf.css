@@ -13,11 +13,10 @@ label {
     font-size: 150%
 }
 
-page-wrap {
-     width: 800px;
-     margin: 0 auto;
-}
-
 pure-u* {
     text-align:center
+}
+
+.logo-div {
+    margin: 0 auto;
 }

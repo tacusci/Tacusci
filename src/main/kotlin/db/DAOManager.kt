@@ -2,6 +2,7 @@ package db
 
 import extensions.readTextAndClose
 import mu.KLogging
+import utils.Configuration
 import java.io.File
 import java.net.URL
 import java.sql.Connection

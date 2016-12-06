@@ -9,7 +9,9 @@ import spark.Request
 import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
+import utils.Configuration
 import java.sql.SQLException
+import kotlin.concurrent.thread
 
 
 class Application {
@@ -131,6 +133,7 @@ class Application {
 
 fun main(args: Array<String>) {
     Configuration.load()
+    Configuration.monitorPropertiesFile()
     val application = Application()
     application.init()
 }

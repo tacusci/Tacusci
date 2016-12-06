@@ -1,7 +1,8 @@
+package utils
+
 import extensions.doesNotExist
 import mu.KLoggable
-import mu.KLogger
-import mu.KLogging
+import utils.Configuration.props.propertiesFileUpdate
 import java.io.File
 import java.io.IOException
 import java.security.InvalidParameterException
@@ -14,12 +15,12 @@ import java.util.*
 
 class Configuration private constructor() {
 
-    companion object props : Properties(), KLoggable {
+    companion object props : Properties() {
 
-        override val logger = logger()
 
         fun load() {
-            val propertiesFile = File("tvf.properties")
+            this.setProperty("properties_file", "tvf.properties")
+            val propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
                 this.setProperty("server_address", "localhost")
                 this.setProperty("port", "1025")
@@ -29,7 +30,7 @@ class Configuration private constructor() {
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
-                    logger.info("Loading properties from tvf.properties")
+                    //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -46,5 +47,14 @@ class Configuration private constructor() {
             return super.getProperty(key, defaultValue)
         }
 
+        fun monitorPropertiesFile() {
+            val fileWatcher = FileWatcher(File(this.getProperty("properties_file")))
+            fileWatcher.action = {propertiesFileUpdate()}
+            fileWatcher.start()
+        }
+
+        fun propertiesFileUpdate() {
+            println("TODO: Add stuff")
+        }
     }
 }
