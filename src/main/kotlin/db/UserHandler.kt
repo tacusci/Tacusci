@@ -1,3 +1,5 @@
+package db
+
 import db.DAOManager
 import db.UserDAO
 import db.models.NewUser

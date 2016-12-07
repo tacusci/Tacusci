@@ -1,5 +1,6 @@
 package controllers
 
+import db.UserHandler
 import db.models.*
 import spark.*
 import java.util.*

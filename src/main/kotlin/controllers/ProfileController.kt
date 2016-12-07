@@ -2,6 +2,7 @@ package controllers
 
 import db.DAOManager
 import db.UserDAO
+import db.UserHandler
 import mu.KLogger
 import mu.KLogging
 import spark.ModelAndView

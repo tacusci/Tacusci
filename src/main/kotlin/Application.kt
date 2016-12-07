@@ -4,6 +4,7 @@
 
 import controllers.*
 import db.DAOManager
+import db.UserHandler
 import mu.KLogging
 import spark.Request
 import spark.Response

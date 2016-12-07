@@ -17,7 +17,6 @@ class Configuration private constructor() {
 
     companion object props : Properties() {
 
-
         fun load() {
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))

@@ -3,6 +3,7 @@ package controllers
 import db.DAOManager
 
 import db.UserDAO
+import db.UserHandler
 import mu.KLoggable
 import mu.KLogging
 import mu.NamedKLogging
