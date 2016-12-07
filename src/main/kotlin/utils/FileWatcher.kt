@@ -42,7 +42,7 @@ class FileWatcher(var file: File) : KLogging() {
                     }
                     val valid = wk.reset()
                     if (!valid) {
-                        println("Key has been unregistered...")
+                        logger.debug("File watch key has been unregistered...")
                     }
                 }
 
