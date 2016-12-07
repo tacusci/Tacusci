@@ -21,6 +21,8 @@ class SchemaCreationFile(var file: File) {
     }
 
     private fun passAsSQL() {
-
+        for (line in file.readLines()) {
+            println(line)
+        }
     }
 }
