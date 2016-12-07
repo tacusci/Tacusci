@@ -4,13 +4,15 @@
 
 import controllers.*
 import db.DAOManager
+import db.SchemaCreationFile
 import db.UserHandler
 import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
-import utils.Configuration
+import utils.Config
+import java.io.File
 import java.sql.SQLException
 import kotlin.concurrent.thread
 
@@ -19,8 +21,8 @@ class Application {
 
     //TODO: Change all 'log {}' instances with 'log()' calls
 
-    val port = Configuration.getProperty("port")
-    val dbURL = Configuration.getProperty("db_url")
+    val port = Config.getProperty("port")
+    val dbURL = Config.getProperty("db_url")
     var dbUsername = ""
     var dbPassword = ""
 
@@ -36,9 +38,9 @@ class Application {
 
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
-        DAOManager.setup(Configuration.getProperty("schema_name"))
+        DAOManager.setup(Config.getProperty("schema_name"))
         DAOManager.close()
-        DAOManager.init(dbURL+"/${Configuration.getProperty("schema_name")}", dbUsername, dbPassword)
+        DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
         val layoutTemplate = "/templates/layout.vtl"
@@ -47,7 +49,7 @@ class Application {
 
         var portNum = -1
         try {
-            portNum = Configuration.getProperty("port").toInt()
+            portNum = Config.getProperty("port").toInt()
         } catch (e: NumberFormatException) {
             println("Port is not a valid number. Terminating...")
             System.exit(1)
@@ -133,8 +135,11 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    Configuration.load()
-    Configuration.monitorPropertiesFile()
+    Config.load()
+    Config.monitorPropertiesFile()
+    //these two lines are here so I don't have to authenticate DB stuff each time when testing this :)
+    val schemaFile = SchemaCreationFile(File(Config.getProperty("sql_setup_script_location")))
+    schemaFile.pass()
     val application = Application()
     application.init()
 }

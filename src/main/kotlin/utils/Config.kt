@@ -2,7 +2,7 @@ package utils
 
 import extensions.doesNotExist
 import mu.KLoggable
-import utils.Configuration.props.propertiesFileUpdate
+import utils.Config.props.propertiesFileUpdate
 import java.io.File
 import java.io.IOException
 import java.security.InvalidParameterException
@@ -13,7 +13,7 @@ import java.util.*
  * Created by alewis on 29/11/2016.
  */
 
-class Configuration private constructor() {
+class Config private constructor() {
 
     companion object props : Properties() {
 

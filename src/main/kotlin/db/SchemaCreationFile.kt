@@ -7,8 +7,8 @@ import java.io.File
  */
 class SchemaCreationFile(var file: File) {
 
-    val schemas = listOf<String>()
-    val tables = listOf<String>()
+    val schemas = mutableListOf<String>()
+    val tables = mutableListOf<String>()
 
     fun pass() {
         if (file.exists()) {
@@ -21,8 +21,17 @@ class SchemaCreationFile(var file: File) {
     }
 
     private fun passAsSQL() {
-        for (line in file.readLines()) {
-            println(line)
+        file.readLines().forEach { line ->
+            val lowerCaseLine = line.toLowerCase()
+            if (lowerCaseLine.contains("create")) {
+                if (lowerCaseLine.contains("schema")) {
+                    val schemaNameRegex = """([a-zA-Z]+;)""".toRegex()
+                    if (schemaNameRegex.containsMatchIn(lowerCaseLine)) {
+                        schemaNameRegex.find(lowerCaseLine)?.groupValues?.forEach { schemas.add(it.replace(";","")) }
+                    }
+                }
+            }
         }
+        schemas.forEach(::println)
     }
 }

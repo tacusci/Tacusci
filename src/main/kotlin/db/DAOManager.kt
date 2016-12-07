@@ -2,7 +2,7 @@ package db
 
 import extensions.readTextAndClose
 import mu.KLogging
-import utils.Configuration
+import utils.Config
 import java.io.File
 import java.net.URL
 import java.sql.Connection
@@ -35,9 +35,6 @@ object DAOManager : KLogging() {
 
     fun setup(schemaName: String) {
 
-        val schemaFile = SchemaCreationFile(File(Configuration.getProperty("sql_setup_script_location")))
-        schemaFile.pass()
-
         val resultSet = connection?.metaData?.catalogs
         var tvfSchemaExists = false
 
@@ -48,7 +45,7 @@ object DAOManager : KLogging() {
 
         if (!tvfSchemaExists) {
             logger.info("Database schema $schemaName doesn't exist")
-            val sqlFile = File(Configuration.getProperty("sql_setup_script_location"))
+            val sqlFile = File(Config.getProperty("sql_setup_script_location"))
             val sqlFileString = sqlFile.readText()
             logger.info("Found schema creation file ${sqlFile.name}")
             val sqlStatements = sqlFileString.split(";")
