@@ -8,6 +8,7 @@ import java.net.URL
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
+import javax.xml.validation.Schema
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -33,6 +34,10 @@ object DAOManager : KLogging() {
     }
 
     fun setup(schemaName: String) {
+
+        val schemaFile = SchemaCreationFile(File(Configuration.getProperty("sql_setup_script_location")))
+        schemaFile.pass()
+
         val resultSet = connection?.metaData?.catalogs
         var tvfSchemaExists = false
 
