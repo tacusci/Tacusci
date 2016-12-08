@@ -136,8 +136,6 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    val logFile = File("tvf.log")
-    //if (logFile.doesNotExist()) logFile.createNewFile()
     Config.load()
     Config.monitorPropertiesFile()
     val application = Application()
