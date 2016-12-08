@@ -1,5 +1,6 @@
 package db
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import extensions.readTextAndClose
 import mu.KLogging
 import utils.Config
@@ -35,23 +36,19 @@ object DAOManager : KLogging() {
         this.password = password
     }
 
-    fun setup(schemaName: String) {
-
+    fun setup() {
         val databaseSetupFile = DatabaseSetupFile(File(Config.getProperty("sql_setup_script_location")))
         databaseSetupFile.pass()
 
         databaseSetupFile.schemas.forEach { name, line ->
-            val resultSet = connection?.metaData?.catalogs
-            var schemaExists = false
-            while (resultSet!!.next()) {
-                val existingSchemaName = resultSet.getString(1)
-                if (name == existingSchemaName) schemaExists = true; break
-            }
-
-            if (!schemaExists) {
+            if (!schemaExists(name)) {
                 val statement = connection?.prepareStatement(line)
-                statement?.execute()
-                statement?.closeOnCompletion()
+                try {
+                    statement?.execute()
+                    statement?.closeOnCompletion()
+                } catch (e: SQLException) {
+                    logger.error("SQL Exception: ${e.message}")
+                }
             }
         }
 
@@ -120,5 +117,19 @@ object DAOManager : KLogging() {
                 return GenericDAO(connection!!, "")
             }
         }
+    }
+
+    fun schemaExists(schemaName: String): Boolean {
+
+        val resultSet = connection?.metaData?.catalogs
+
+        var schemaExists = false
+
+        while (resultSet!!.next()) {
+            println(resultSet.getString(1))
+            val existingSchemaName = resultSet.getString(1)
+            if (schemaName == existingSchemaName) schemaExists = true; break
+        }
+        return schemaExists
     }
 }

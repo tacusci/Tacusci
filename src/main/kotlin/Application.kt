@@ -38,7 +38,7 @@ class Application {
 
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
-        DAOManager.setup(Config.getProperty("schema_name"))
+        DAOManager.setup()
         DAOManager.close()
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
