@@ -11,6 +11,8 @@ import java.util.*
 
 object Web {
 
+    //TODO: Move most of these to their own controller classes :3
+
     fun initSessionAttributes(session: Session) {
         if (!session.attributes().contains("login_error")) {
             session.attribute("login_error", false)
