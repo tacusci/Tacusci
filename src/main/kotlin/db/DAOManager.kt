@@ -30,7 +30,6 @@ object DAOManager : KLogging() {
     private var connection: Connection? = null
 
     fun init(url: String, username: String, password: String) {
-        Class.forName("com.mysql.jdbc.Driver")
         this.url = url
         this.username = username
         this.password = password
