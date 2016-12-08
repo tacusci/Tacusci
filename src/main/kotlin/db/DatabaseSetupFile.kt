@@ -9,33 +9,39 @@ import java.util.*
 class DatabaseSetupFile(var file: File) {
 
     val schemas = HashMap<String, String>()
-    val tables = mutableListOf<String>()
+    val tables = HashMap<String, String>()
 
     fun pass() {
         if (file.exists()) {
             if (file.isFile) {
                 if (file.name.endsWith(".sql")) {
-                    passAsSQL()
+                    selectSQLSchemas()
+                    selectSQLTables()
                 }
             }
         }
     }
 
-    private fun passAsSQL() {
+    private fun selectSQLSchemas() {
         file.readLines().forEach { line -> val lowerCaseLine = line.toLowerCase()
-            if (lowerCaseLine.contains("create")) {
-                if (lowerCaseLine.contains("schema")) {
-                    val schemaNameRegex = """([a-zA-Z]\S+;)""".toRegex()
-                    if (schemaNameRegex.containsMatchIn(lowerCaseLine)) {
-                        val matches = schemaNameRegex.find(lowerCaseLine) ?: return@forEach
-                        if (matches.groups.size > 1) {
-                            matches.groups.forEachIndexed { i, matchGroup ->
-                                if (i > 0) if (matchGroup != null) schemas.put(matchGroup.value.replace(";",""), line)
-                            }
+
+            val lineRegex = """([a-zA-Z]+) ([a-zA-Z]+) ([a-zA-Z]+;)""".toRegex()
+            val matches = lineRegex.find(line)
+
+            var schemaName = ""
+
+            if (matches != null && matches.groups.size > 1) {
+                matches.groupValues.forEachIndexed { i, value ->
+                    if (i == 0 && value.toLowerCase() == "create") {
+                        if (i == 1 && value.toLowerCase() == "schema") {
+                            if (i == 2) schemaName = value.replace(";","")
+                            schemas.put(schemaName, line)
                         }
                     }
                 }
             }
         }
     }
+
+    private fun selectSQLTables() {}
 }

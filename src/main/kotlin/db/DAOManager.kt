@@ -52,6 +52,9 @@ object DAOManager : KLogging() {
             }
         }
 
+        //TODO: Finish implementing this :)
+        databaseSetupFile.tables.forEach { name, tableScruct ->}
+
         /*
         val resultSet = connection?.metaData?.catalogs
         var tvfSchemaExists = false
@@ -131,5 +134,9 @@ object DAOManager : KLogging() {
             if (schemaName == existingSchemaName) schemaExists = true; break
         }
         return schemaExists
+    }
+
+    fun tableExists(tableName: String) {
+
     }
 }
