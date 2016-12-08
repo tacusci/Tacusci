@@ -4,7 +4,7 @@
 
 import controllers.*
 import db.DAOManager
-import db.SchemaCreationFile
+import db.DatabaseSetupFile
 import db.UserHandler
 import mu.KLogging
 import spark.Request
@@ -137,9 +137,6 @@ class Application {
 fun main(args: Array<String>) {
     Config.load()
     Config.monitorPropertiesFile()
-    //these two lines are here so I don't have to authenticate DB stuff each time when testing this :)
-    val schemaFile = SchemaCreationFile(File(Config.getProperty("sql_setup_script_location")))
-    schemaFile.pass()
     val application = Application()
     application.init()
 }

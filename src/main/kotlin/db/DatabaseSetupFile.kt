@@ -1,13 +1,14 @@
 package db
 
 import java.io.File
+import java.util.*
 
 /**
  * Created by alewis on 07/12/2016.
  */
-class SchemaCreationFile(var file: File) {
+class DatabaseSetupFile(var file: File) {
 
-    val schemas = mutableListOf<String>()
+    val schemas = HashMap<String, String>()
     val tables = mutableListOf<String>()
 
     fun pass() {
@@ -29,7 +30,7 @@ class SchemaCreationFile(var file: File) {
                         val matches = schemaNameRegex.find(lowerCaseLine) ?: return@forEach
                         if (matches.groups.size > 1) {
                             matches.groups.forEachIndexed { i, matchGroup ->
-                                if (i > 0) if (matchGroup != null) schemas.add(matchGroup.value.replace(";",""))
+                                if (i > 0) if (matchGroup != null) schemas.put(matchGroup.value.replace(";",""), line)
                             }
                         }
                     }

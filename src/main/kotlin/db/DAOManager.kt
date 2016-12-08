@@ -7,7 +7,9 @@ import java.io.File
 import java.net.URL
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.ResultSet
 import java.sql.SQLException
+import javax.xml.crypto.Data
 import javax.xml.validation.Schema
 
 /**
@@ -35,6 +37,25 @@ object DAOManager : KLogging() {
 
     fun setup(schemaName: String) {
 
+        val databaseSetupFile = DatabaseSetupFile(File(Config.getProperty("sql_setup_script_location")))
+        databaseSetupFile.pass()
+
+        databaseSetupFile.schemas.forEach { name, line ->
+            val resultSet = connection?.metaData?.catalogs
+            var schemaExists = false
+            while (resultSet!!.next()) {
+                val exjstingSchemaName = resultSet.getString(1)
+                if (name == exjstingSchemaName) schemaExists = true; break
+            }
+
+            if (!schemaExists) {
+                val statement = connection?.prepareStatement(line)
+                statement?.execute()
+                statement?.closeOnCompletion()
+            }
+        }
+
+        /*
         val resultSet = connection?.metaData?.catalogs
         var tvfSchemaExists = false
 
@@ -57,6 +78,7 @@ object DAOManager : KLogging() {
             }
         }
         resultSet.close()
+        */
     }
 
     fun connect() {
