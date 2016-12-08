@@ -44,8 +44,8 @@ object DAOManager : KLogging() {
             val resultSet = connection?.metaData?.catalogs
             var schemaExists = false
             while (resultSet!!.next()) {
-                val exjstingSchemaName = resultSet.getString(1)
-                if (name == exjstingSchemaName) schemaExists = true; break
+                val existingSchemaName = resultSet.getString(1)
+                if (name == existingSchemaName) schemaExists = true; break
             }
 
             if (!schemaExists) {
