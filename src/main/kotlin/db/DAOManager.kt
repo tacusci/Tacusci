@@ -84,15 +84,24 @@ object DAOManager : KLogging() {
     fun connect() {
         try {
             DAOManager.open()
-            logger.info("Connected to DB at ${DAOManager.url}")
+            logger.info("Connected to DB at $url")
         } catch (e: SQLException) {
-            logger.error("Unable to connect to db at ${DAOManager.url}... Terminating...")
+            logger.error("Unable to connect to db at $url... Terminating...")
             System.exit(-1)
         }
     }
 
+    fun disconnect() {
+        try {
+            DAOManager.close()
+            logger.info("Disconnected from db at $url")
+        } catch (e: SQLException) {
+
+        }
+    }
+
     @Throws(SQLException::class)
-    fun open() {
+    private fun open() {
         try {
             if (connection == null || connection!!.isClosed) {
                 connection = DriverManager.getConnection(url, username, password)
@@ -103,7 +112,8 @@ object DAOManager : KLogging() {
         }
     }
 
-    fun close() {
+    @Throws(SQLException::class)
+    private fun close() {
         try {
             if (connection != null && !connection!!.isClosed) {
                 connection!!.close()

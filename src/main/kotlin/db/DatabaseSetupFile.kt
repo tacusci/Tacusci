@@ -23,25 +23,22 @@ class DatabaseSetupFile(var file: File) {
     }
 
     private fun selectSQLSchemas() {
-        file.readLines().forEach { line -> val lowerCaseLine = line.toLowerCase()
-
+        file.readLines().forEach { line ->
             val lineRegex = """([a-zA-Z]+) ([a-zA-Z]+) ([a-zA-Z]+;)""".toRegex()
             val matches = lineRegex.find(line)
 
-            var schemaName = ""
-
             if (matches != null && matches.groups.size > 1) {
-                matches.groupValues.forEachIndexed { i, value ->
-                    if (i == 0 && value.toLowerCase() == "create") {
-                        if (i == 1 && value.toLowerCase() == "schema") {
-                            if (i == 2) schemaName = value.replace(";","")
-                            schemas.put(schemaName, line)
-                        }
-                    }
+                for (index in 0..matches.groupValues.size - 1) {
+                    if (index == 1 && matches.groupValues[index].toLowerCase() != "create") return@forEach
+                    if (index == 2 && matches.groupValues[index].toLowerCase() != "schema") return@forEach
+                    schemas.put(matches.groupValues[1], line)
+                    schemas.put(matches.groupValues[2], line)
+                    schemas.put(matches.groupValues[3], line)
                 }
             }
         }
     }
 
-    private fun selectSQLTables() {}
+    private fun selectSQLTables() {
+    }
 }

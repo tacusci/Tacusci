@@ -25,7 +25,7 @@ class FileWatcher(var file: File) : KLogging() {
     }
 
     private fun run() {
-        thread {
+        thread(name = "file_watcher:${file.name}") {
             val path: Path = File(File(file.absolutePath).parent).toPath()
 
             try {
@@ -37,12 +37,13 @@ class FileWatcher(var file: File) : KLogging() {
                     wk.pollEvents().forEach { event ->
                         val changed: Path = event.context() as Path
                         if (changed.endsWith(file.name)) {
+                            logger.info("File ${file.name} has been updated")
                             action()
                         }
                     }
                     val valid = wk.reset()
                     if (!valid) {
-                        logger.debug("File watch key has been unregistered...")
+                        logger.info("File ${file.name} watch key has been unregistered...")
                     }
                 }
 

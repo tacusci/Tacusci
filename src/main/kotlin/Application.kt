@@ -6,6 +6,7 @@ import controllers.*
 import db.DAOManager
 import db.DatabaseSetupFile
 import db.UserHandler
+import extensions.doesNotExist
 import mu.KLogging
 import spark.Request
 import spark.Response
@@ -39,7 +40,7 @@ class Application {
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
         DAOManager.setup()
-        DAOManager.close()
+        DAOManager.disconnect()
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
@@ -135,6 +136,8 @@ class Application {
 }
 
 fun main(args: Array<String>) {
+    val logFile = File("tvf.log")
+    //if (logFile.doesNotExist()) logFile.createNewFile()
     Config.load()
     Config.monitorPropertiesFile()
     val application = Application()
