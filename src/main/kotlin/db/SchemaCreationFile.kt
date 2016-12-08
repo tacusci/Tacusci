@@ -36,6 +36,5 @@ class SchemaCreationFile(var file: File) {
                 }
             }
         }
-        schemas.forEach(::println)
     }
 }
