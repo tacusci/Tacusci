@@ -20,7 +20,7 @@ import kotlin.concurrent.thread
 
 class Application {
 
-    //TODO: Change all 'log {}' instances with 'log()' calls
+    //TODO: Remove old SQL database setup file
 
     val port = Config.getProperty("port")
     val dbURL = Config.getProperty("db_url")
