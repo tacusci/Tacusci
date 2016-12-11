@@ -38,21 +38,16 @@ class DatabaseSetupFile(var file: File) {
 
     private fun selectSQLTables() {
         //regex for capturing create table content \(\X*\);
-        file.readLines().forEachIndexed { i, line ->
-            val lineRegex = """([a-zA-Z]+)\s([a-zA-Z]+)\s(\W[a-zA-Z]+\W).(\W[a-zA-Z]+\W)""".toRegex()
-            val matches = lineRegex.find(line)
 
-            if (matches != null && matches.groups.size > 1) {
-                for (index in 0..matches.groupValues.size -1) {
-                    if (index == 1 && matches.groupValues[index].toLowerCase() != "create") return@forEach
-                    if (index == 2 && matches.groupValues[index].toLowerCase() != "table") return@forEach
-                    if (index == 3) tables.put(matches.groupValues[3], "") else return@forEach
-                }
+        val fileContent = file.readText()
+        val matches = """([a-zA-Z]+)\s([a-zA-Z]+)\s(\W[a-zA-Z]+\W).(\W[a-zA-Z]+\W)""".toRegex().find(fileContent)
+
+        if (matches != null && matches.groupValues.size > 1) {
+            (0..matches.groupValues.size-1).forEach { i ->
+                if (i == 1 && matches.groupValues[i].toLowerCase() != "create") return@forEach
+                if (i == 2 && matches.groupValues[i].toLowerCase() != "table") return@forEach
+                if (i == 3) tables.put(matches.groupValues[3], matches.groupValues[0]) else return@forEach
             }
-
-            if (i < file.readLines().)
-
-            println(line)
         }
     }
 }
