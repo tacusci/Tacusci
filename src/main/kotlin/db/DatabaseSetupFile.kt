@@ -38,6 +38,7 @@ class DatabaseSetupFile(var file: File) {
     }
 
     private fun selectSQLTables() {
+        //regex for capturing create table content \(\X*\);
         file.readLines().forEach { line ->
             val lineRegex = """([a-zA-Z]+)\s([a-zA-Z]+)\s(\W[a-zA-Z]+\W).(\W[a-zA-Z]+\W)""".toRegex()
             val matches = lineRegex.find(line)
@@ -49,6 +50,11 @@ class DatabaseSetupFile(var file: File) {
                     if (index == 3) tables.put(matches.groupValues[3], "") else return@forEach
                 }
             }
+
+            var firstRegParenthesesIndex = 0
+
+
+
             println(line)
         }
     }
