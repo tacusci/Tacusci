@@ -35,12 +35,6 @@ class DatabaseSetupFile(var file: File) {
                 if (i == 3) schemas.put(matches.groupValues[3], matches.groupValues[0]) else return@forEach
             }
         }
-        //TODO: work out how 'information_schema' is getting added to this list
-        /*
-        schemas.forEach { key, value ->
-            println(key)
-        }
-        */
     }
 
     private fun selectSQLTables() {

@@ -51,10 +51,6 @@ object DAOManager : KLogging() {
             }
         }
 
-        databaseSetupFile.tables.forEach { name, tableStruct ->
-
-        }
-
         //TODO: Finish implementing this :)
         databaseSetupFile.tables.forEach { name, tableScruct ->}
 
