@@ -19,7 +19,7 @@ import java.util.*
 object LoginController: KLogging() {
 
     fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("Recieved GET request for LOGIN page")
+        logger.info("Received GET request for LOGIN page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         if (!UserHandler.isLoggedIn(request.session())) {
@@ -42,7 +42,7 @@ object LoginController: KLogging() {
     }
 
     fun post_postLogin(request: Request, response: Response): Response {
-        logger.info("Recieved POST submission for LOGIN page")
+        logger.info("Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
         var username = request.queryParams("username")
         var email = ""

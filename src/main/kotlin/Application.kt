@@ -118,7 +118,7 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    if (args.isEmpty() && args.size == 2) { println("No username/password args") }
+    if (args.isEmpty() || args.size < 2) { println("No username/password args"); System.exit(1) }
     Config.load()
     Config.monitorPropertiesFile()
     val application = Application()
