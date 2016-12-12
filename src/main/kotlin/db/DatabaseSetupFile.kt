@@ -25,6 +25,7 @@ class DatabaseSetupFile(var file: File) {
     private fun selectSQLSchemas() {
 
         val fileContent = file.readText()
+        //find all instances of a pattern like this: 'CREATE schema tvf;'
         val matches = """([a-zA-Z]+)\s([a-zA-Z]+)\s([a-zA-Z]+;)""".toRegex().find(fileContent)
 
         if (matches != null && matches.groupValues.size > 1) {
@@ -33,6 +34,10 @@ class DatabaseSetupFile(var file: File) {
                 if (i == 2 && matches.groupValues[i].toLowerCase() != "schema") return@forEach
                 if (i == 3) schemas.put(matches.groupValues[3], matches.groupValues[0]) else return@forEach
             }
+        }
+
+        schemas.forEach { key, value ->
+            println(key)
         }
     }
 
@@ -47,6 +52,7 @@ class DatabaseSetupFile(var file: File) {
                 if (i == 1 && matches.groupValues[i].toLowerCase() != "create") return@forEach
                 if (i == 2 && matches.groupValues[i].toLowerCase() != "table") return@forEach
                 if (i == 3) tables.put(matches.groupValues[3], matches.groupValues[0]) else return@forEach
+                //need to force include index 4
             }
         }
     }
