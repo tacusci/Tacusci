@@ -31,9 +31,6 @@ class Application {
 
     fun init() {
 
-        this.dbUsername = dbUsername
-        this.dbPassword = dbPassword
-
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
         DAOManager.setup()
