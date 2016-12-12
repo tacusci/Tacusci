@@ -31,9 +31,6 @@ class Application {
 
     fun init() {
 
-        showWebsiteHeader()
-        login()
-
         this.dbUsername = dbUsername
         this.dbPassword = dbPassword
 
@@ -121,24 +118,14 @@ class Application {
         }
         return false
     }
-
-    fun login() {
-        logger.info("Getting login information for DB: ${DAOManager.url}")
-        print("Please enter username: ")
-        dbUsername = readLine()!!
-        print("Please enter password: ")
-        dbPassword = readLine()!!
-    }
-
-    fun showWebsiteHeader() {
-        println("TVF website server")
-        println("=============== Login ===============")
-    }
 }
 
 fun main(args: Array<String>) {
+    if (args.isEmpty() && args.size == 2) { println("No username/password args") }
     Config.load()
     Config.monitorPropertiesFile()
     val application = Application()
+    application.dbUsername = args[0]
+    application.dbPassword = args[1]
     application.init()
 }
