@@ -38,6 +38,9 @@ class DatabaseSetupFile(var file: File) {
     }
 
     private fun selectSQLTables() {
+
+        //TODO: Finish working out table schema extraction for easy caching and then indexing
+
         //regex for capturing create table content \(\X*\);
 
         val fileContent = file.readText()
@@ -48,6 +51,7 @@ class DatabaseSetupFile(var file: File) {
 
         if (matches != null && matches.groupValues.size > 1) {
             (0..matches.groupValues.size-1).forEach { i ->
+                println(i)
                 if (i == 1 && matches.groupValues[i].toLowerCase() != "create") return@forEach
                 if (i == 2 && matches.groupValues[i].toLowerCase() != "table") return@forEach
                 if (i == 3) tables.put(matches.groupValues[3], matches.groupValues[0]) else return@forEach

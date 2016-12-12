@@ -73,6 +73,7 @@ class Application {
         get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile/", { request, response -> response.redirect("/profile") })
 
+        //TODO: Change these gets to posts/returning these pages in the response
         get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/user_not_found", { request, response -> Web.get_userNotFound(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
@@ -92,13 +93,13 @@ class Application {
 
         before("/create_page", { request, response ->
             if (showAccessDeniedIfNotAuthenticated(request, response)) {
-                logger.info("Client at ${request.ip()} is trying to access create page without authentication. Redirecting to login page")
+                logger.info("Client at ${request.ip()} is trying to access create page without authentication. Showing access denied page")
             }
         })
 
         before("/admin/user_management", { request, response ->
             if (showAccessDeniedIfNotAuthenticated(request, response)) {
-                logger.info("Client at ${request.ip()} is trying to access user management page without authentication. Redirecting to login page")
+                logger.info("Client at ${request.ip()} is trying to access user management page without authentication. Showing access denied page")
             }
         })
     }
