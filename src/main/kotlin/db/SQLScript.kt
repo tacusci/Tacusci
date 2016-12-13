@@ -8,7 +8,9 @@ import java.util.*
 /**
  * Created by alewis on 13/12/2016.
  */
-class SQLScript(var file: File) : KLogging() {
+class SQLScript(var file: File) {
+
+    companion object : KLogging()
 
     private val statements = mutableListOf("")
 
