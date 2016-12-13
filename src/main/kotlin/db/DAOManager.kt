@@ -52,7 +52,7 @@ object DAOManager : KLogging() {
         }
 
         //TODO: Finish implementing this :)
-        databaseSetupFile.tables.forEach { name, tableScruct ->}
+        databaseSetupFile.tables.forEach { name, tableScruct -> println(name)}
 
         /*
         val resultSet = connection?.metaData?.catalogs

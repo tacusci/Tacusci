@@ -26,13 +26,13 @@ class DatabaseSetupFile(var file: File) {
 
         val fileContent = file.readText()
         //find all instances of a pattern like this: CREATE schema tvf;
-        val matches = """([a-zA-Z]+)\s([a-zA-Z]+)\s([a-zA-Z]+;)""".toRegex().find(fileContent)
+        val schemaMatches = """([a-zA-Z]+)\s([a-zA-Z]+)\s([a-zA-Z]+;)""".toRegex().find(fileContent)
 
-        if (matches != null && matches.groupValues.size > 1) {
-            (0..matches.groupValues.size-1).forEach { i ->
-                if (i == 1 && matches.groupValues[i].toLowerCase() != "create") return@forEach
-                if (i == 2 && matches.groupValues[i].toLowerCase() != "schema") return@forEach
-                if (i == 3) schemas.put(matches.groupValues[3].replace(";", ""), matches.groupValues[0]) else return@forEach
+        if (schemaMatches != null && schemaMatches.groupValues.size > 1) {
+            (0..schemaMatches.groupValues.size-1).forEach { i ->
+                if (i == 1 && schemaMatches.groupValues[i].toLowerCase() != "create") return@forEach
+                if (i == 2 && schemaMatches.groupValues[i].toLowerCase() != "schema") return@forEach
+                if (i == 3) schemas.put(schemaMatches.groupValues[3].replace(";", ""), schemaMatches.groupValues[0]) else return@forEach
             }
         }
     }
@@ -45,17 +45,24 @@ class DatabaseSetupFile(var file: File) {
 
         val fileContent = file.readText()
         //find all instances of pattern like this: CREATE TABLE `tvf`.`groups`
-        val matches = """([a-zA-Z]+)\s([a-zA-Z]+)\s(\W[a-zA-Z]+\W).(\W[a-zA-Z]+\W)""".toRegex().find(fileContent)
+        val tableCreateStructMatches = """([a-zA-Z]+)\s([a-zA-Z]+)\s(\W[a-zA-Z]+\W).(\W[a-zA-Z]+\W)""".toRegex().find(fileContent)
 
-        if (matches != null && matches.groupValues.size > 1) {
+        if (tableCreateStructMatches != null && tableCreateStructMatches.groupValues.size > 1) {
             val tableName = StringBuilder()
-            (0..matches.groupValues.size-1).forEach { i ->
-                if (i == 1 && matches.groupValues[i].toLowerCase() != "create") return@forEach
-                if (i == 2 && matches.groupValues[i].toLowerCase() != "table") return@forEach
-                if (i == 3) tableName.append("'${matches.groupValues[i]}'")
-                if (i == 4) tableName.append(".'${matches.groupValues[i]}'")
-                println(tableName)
+            (0..tableCreateStructMatches.groupValues.size-1).forEach { i ->
+                if (i == 1 && tableCreateStructMatches.groupValues[i].toLowerCase() != "create") return@forEach
+                if (i == 2 && tableCreateStructMatches.groupValues[i].toLowerCase() != "table") return@forEach
+                if (i == 3) tableName.append("'${tableCreateStructMatches.groupValues[i]}'")
+                if (i == 4) {tableName.append(".'${tableCreateStructMatches.groupValues[i]}'"); tables.put(tableName.toString(), "")}
                 //need to force include index 4
+            }
+        }
+
+        val tableStructContentMatches = """\((?:\P{M}\p{M}*)*\);""".toRegex().find(fileContent)
+
+        if (tableStructContentMatches != null && tableStructContentMatches.groupValues.size > 1) {
+            (0..tableStructContentMatches.groupValues.size-1).forEach { i ->
+                println(tableStructContentMatches.groupValues[i])
             }
         }
     }
