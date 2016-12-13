@@ -36,23 +36,11 @@ object DAOManager : KLogging() {
     }
 
     fun setup() {
-        val databaseSetupFile = DatabaseSetupFile(File(Config.getProperty("sql_setup_script_location")))
-        databaseSetupFile.pass()
 
-        databaseSetupFile.schemas.forEach { name, line ->
-            if (!schemaExists(name)) {
-                val statement = connection?.prepareStatement(line)
-                try {
-                    statement?.execute()
-                    statement?.closeOnCompletion()
-                } catch (e: SQLException) {
-                    logger.error("SQL Exception: ${e.message}")
-                }
-            }
-        }
+        //TODO: Clean up this
 
-        //TODO: Finish implementing this :)
-        databaseSetupFile.tables.forEach { name, tableScruct -> println(name)}
+        val sqlScript = SQLScript(File(Config.getProperty("sql_setup_script_location")))
+
 
         /*
         val resultSet = connection?.metaData?.catalogs
