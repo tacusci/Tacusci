@@ -3,9 +3,9 @@ package db.models
 /**
  * Created by alewis on 28/10/2016.
  */
-data class NewUser(val fullName: String, val username: String, val password: String, val email: String, val banned: Int)
+data class User(val fullName: String, val username: String, val password: String, val email: String, val banned: Int)
 
-fun NewUser.isValid(): Boolean {
+fun User.isValid(): Boolean {
     if (!isUsernameValid()) { return false }
     if (!isFullnameValid()) { return false }
     if (!isPasswordValid()) { return false }
@@ -13,15 +13,15 @@ fun NewUser.isValid(): Boolean {
     return true
 }
 
-fun NewUser.isUsernameValid(): Boolean {
+fun User.isUsernameValid(): Boolean {
     return !(username.isBlank() || username.isEmpty())
 }
-fun NewUser.isFullnameValid(): Boolean {
+fun User.isFullnameValid(): Boolean {
     return !(fullName.isBlank() || fullName.isEmpty())
 }
-fun NewUser.isPasswordValid(): Boolean {
+fun User.isPasswordValid(): Boolean {
     return !(password.isBlank() || password.isEmpty())
 }
-fun NewUser.isEmailValid(): Boolean {
+fun User.isEmailValid(): Boolean {
     return !(email.isBlank() || email.isEmpty())
 }

@@ -1,7 +1,7 @@
 package db
 
 import com.sun.org.apache.xpath.internal.operations.Bool
-import db.models.NewUser
+import db.models.User
 import mu.KLogging
 import java.sql.Connection
 import java.sql.SQLException
@@ -32,16 +32,16 @@ class UserDAO(connection: Connection, tableName: String) : DAO(connection, table
         return count
     }
 
-    fun insertUser(newUser: NewUser): Boolean {
+    fun insertUser(user: User): Boolean {
         try {
             val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname, banned) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
-            preparedStatement?.setString(1, newUser.username.toLowerCase())
-            preparedStatement?.setString(2, PasswordStorage.createHash(newUser.password))
-            preparedStatement?.setString(3, newUser.email)
-            preparedStatement?.setString(4, newUser.fullName)
-            preparedStatement?.setInt(5, newUser.banned)
+            preparedStatement?.setString(1, user.username.toLowerCase())
+            preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
+            preparedStatement?.setString(3, user.email)
+            preparedStatement?.setString(4, user.fullName)
+            preparedStatement?.setInt(5, user.banned)
 
             //TODO: Need to work on response when duplicate username attempted insert
 

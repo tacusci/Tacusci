@@ -38,4 +38,14 @@ object HTMLUtils {
         tidy.pprint(htmlDOM, out)
         return out.toString()
     }
+
+    fun generateList(list: List<Any>): StringBuilder {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("<ul>")
+        list.forEach { element ->
+            stringBuilder.append("<li>$element</li>")
+        }
+        stringBuilder.append("</ul><ul>")
+        return stringBuilder
+    }
 }

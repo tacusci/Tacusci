@@ -2,7 +2,7 @@ package db
 
 import db.DAOManager
 import db.UserDAO
-import db.models.NewUser
+import db.models.User
 import db.models.isValid
 import mu.KLogging
 import spark.Session
@@ -72,10 +72,16 @@ object  UserHandler : KLogging() {
         return ""
     }
 
-    fun createUser(newUser: NewUser): Boolean {
-        if (!newUser.isValid()) return false
+    fun createUser(user: User): Boolean {
+        if (!user.isValid()) return false
         val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-        usersDAO.insertUser(newUser)
+        usersDAO.insertUser(user)
         return true
+    }
+
+    fun userExists(user: User): Boolean {
+        if (!user.isValid()) return false
+        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+        return usersDAO.userExists(user.username)
     }
 }
