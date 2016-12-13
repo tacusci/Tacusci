@@ -23,16 +23,16 @@ class SQLScript(var file: File) {
             if (line.startsWith("/*") && line.endsWith("*/")) {
                 val i = line.indexOf(' ')
                 line = line.substring(i + 1, line.length - " */".length)
-                if (line.trim().isNotEmpty()) {
-                    statements.add(line)
-                }
+            }
+            if (line.trim().isNotEmpty()) {
+                statements.add(line)
             }
         }
     }
 
     fun executeStatements(connection: Connection) {
         statements.forEach { statement ->
-            val preparedStatement = connection?.prepareStatement("$statement;")
+            val preparedStatement = connection.prepareStatement("$statement;")
             logger.info("Executing statement: ${statement.replace("\n", "")};")
             preparedStatement?.execute()
             preparedStatement?.closeOnCompletion()
