@@ -15,8 +15,6 @@ import utils.Config
 
 class Application {
 
-    //TODO: Remove old SQL database setup file
-
     val port = Config.getProperty("port")
     val dbURL = Config.getProperty("db_url")
     var dbUsername = ""

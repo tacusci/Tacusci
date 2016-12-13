@@ -43,8 +43,6 @@ class UserDAO(connection: Connection, tableName: String) : DAO(connection, table
             preparedStatement?.setString(4, user.fullName)
             preparedStatement?.setInt(5, user.banned)
 
-            //TODO: Need to work on response when duplicate username attempted insert
-
             val results: Boolean? = preparedStatement?.execute()
             var count = 0
 

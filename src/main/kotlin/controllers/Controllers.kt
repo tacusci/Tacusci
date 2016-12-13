@@ -97,15 +97,12 @@ object Web: KLogging() {
                 if (!user.isFullnameValid()) {
                     request.session().attribute("full_name_field_error", true)
                 }
-
                 if (!user.isUsernameValid()) {
                     request.session().attribute("username_field_error", true)
                 }
-
                 if (!user.isPasswordValid()) {
                     request.session().attribute("password_field_error", true)
                 }
-
                 if (!user.isEmailValid()) {
                     request.session().attribute("email_field_error", true)
                 }
