@@ -4,18 +4,13 @@
 
 import controllers.*
 import db.DAOManager
-import db.DatabaseSetupFile
 import db.UserHandler
-import extensions.doesNotExist
 import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
-import java.io.File
-import java.sql.SQLException
-import kotlin.concurrent.thread
 
 
 class Application {

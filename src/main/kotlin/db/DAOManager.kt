@@ -36,36 +36,9 @@ object DAOManager : KLogging() {
     }
 
     fun setup() {
-
-        //TODO: Clean up this
-
         val sqlScript = SQLScript(File(Config.getProperty("sql_setup_script_location")))
-
-
-        /*
-        val resultSet = connection?.metaData?.catalogs
-        var tvfSchemaExists = false
-
-        while (resultSet!!.next()) {
-            val databaseName = resultSet.getString(1)
-            if (schemaName == databaseName) { tvfSchemaExists = true; break }
-        }
-
-        if (!tvfSchemaExists) {
-            logger.info("Database schema $schemaName doesn't exist")
-            val sqlFile = File(Config.getProperty("sql_setup_script_location"))
-            val sqlFileString = sqlFile.readText()
-            logger.info("Found schema creation file ${sqlFile.name}")
-            val sqlStatements = sqlFileString.split(";")
-            sqlStatements.filter { it.isNotBlank() && it.isNotEmpty() }.forEach { statement ->
-                val preparedStatement = connection?.prepareStatement("$statement;")
-                logger.info("Executing statement: ${statement.replace("\n", "")};")
-                preparedStatement?.execute()
-                preparedStatement?.closeOnCompletion()
-            }
-        }
-        resultSet.close()
-        */
+        sqlScript.parse()
+        sqlScript.executeStatements(connection!!)
     }
 
     fun connect() {
