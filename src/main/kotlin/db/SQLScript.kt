@@ -33,7 +33,6 @@ class SQLScript(var file: File) {
     fun executeStatements(connection: Connection) {
         statements.forEach { statement ->
             val preparedStatement = connection.prepareStatement("$statement;")
-            logger.info("Executing statement: ${statement.replace("\n", "")};")
             preparedStatement?.execute()
             preparedStatement?.closeOnCompletion()
         }
