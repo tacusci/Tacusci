@@ -58,7 +58,6 @@ class Application {
         get("/login/", { request, response -> response.redirect("/login") })
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/profile/", { request, response -> response.redirect("/profile") })
 
         //TODO: Change these gets to posts/returning these pages in the response
         get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -73,40 +72,30 @@ class Application {
         post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
         before("/dashboard", { request, response ->
-            if (redirectToLoginIfNotAuthenticated(request, response)) {
+            if (!UserHandler.isLoggedIn(request.session())) {
                 logger.info("Client at ${request.ip()} is trying to access dashboard without authentication. Redirecting to login page")
+                halt(401, "Access is denied")
             }
         })
 
+        //SETUP REDIRECTS
+
+        redirect.get("/profile/", "/profile")
+        redirect.get("/login/", "/login")
+
         before("/create_page", { request, response ->
-            if (showAccessDeniedIfNotAuthenticated(request, response)) {
+            if (!UserHandler.isLoggedIn(request.session())) {
                 logger.info("Client at ${request.ip()} is trying to access create page without authentication. Showing access denied page")
+                halt(401, "Access is denied")
             }
         })
 
         before("/admin/user_management", { request, response ->
-            if (showAccessDeniedIfNotAuthenticated(request, response)) {
+            if (!UserHandler.isLoggedIn(request.session())) {
                 logger.info("Client at ${request.ip()} is trying to access user management page without authentication. Showing access denied page")
+                halt(401, "Access is denied")
             }
         })
-    }
-
-    fun redirectToLoginIfNotAuthenticated(request: Request, response: Response): Boolean {
-        if (!UserHandler.isLoggedIn(request.session())) {
-            response.redirect("/login")
-            halt()
-            return true
-        }
-        return false
-    }
-
-    fun showAccessDeniedIfNotAuthenticated(request: Request, response: Response): Boolean {
-        if (!UserHandler.isLoggedIn(request.session())) {
-            response.redirect("/access_denied")
-            halt()
-            return true
-        }
-        return false
     }
 }
 
