@@ -51,7 +51,7 @@ class Application {
 
         //MAP GET ROUTES
 
-        get("/", { request, response -> Web.get_root(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/", { request, response -> IndexController.get_indexPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 

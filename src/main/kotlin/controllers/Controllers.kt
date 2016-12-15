@@ -27,6 +27,7 @@ object Web: KLogging() {
         }
     }
 
+    /*
     fun get_root(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
@@ -34,6 +35,7 @@ object Web: KLogging() {
         model.put("title", "Thames Valley Furs - Homepage")
         return ModelAndView(model, layoutTemplate)
     }
+    */
 
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
