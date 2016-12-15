@@ -1,5 +1,7 @@
 package controllers
 
+import db.UserHandler
+import htmlutils.HTMLUtils
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -14,6 +16,11 @@ object IndexController {
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
+        if (UserHandler.isLoggedIn(request.session())) {
+
+        } else {
+            model.put("profile_or_login_link", HTMLUtils.genLink("/login", "Login"))
+        }
         model.put("title", "Thames Valley Furs - Homepage")
         return ModelAndView(model, layoutTemplate)
     }

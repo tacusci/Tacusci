@@ -39,13 +39,18 @@ object HTMLUtils {
         return out.toString()
     }
 
-    fun generateList(list: List<Any>): StringBuilder {
+    fun genLink(linkLocation: String, name: String): String {
+        val linkString = "<a href=$linkLocation>$name</a>"
+        return linkString
+    }
+
+    fun genList(list: List<Any>): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<ul>")
         list.forEach { element ->
             stringBuilder.append("<li>$element</li>")
         }
         stringBuilder.append("</ul><ul>")
-        return stringBuilder
+        return stringBuilder.toString()
     }
 }
