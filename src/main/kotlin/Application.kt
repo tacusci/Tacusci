@@ -24,10 +24,13 @@ class Application {
 
     fun init() {
 
+        //connect to route SQL server instance
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
+        //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
+        //reconnect at the requested specific schema
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
