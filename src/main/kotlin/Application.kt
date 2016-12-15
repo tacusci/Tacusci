@@ -85,7 +85,6 @@ class Application {
 
         //SETUP REDIRECTS
 
-
         before("/create_page", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
                 logger.info("Client at ${request.ip()} is trying to access create page without authentication. Showing access denied page")
