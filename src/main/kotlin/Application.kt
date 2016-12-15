@@ -46,7 +46,7 @@ class Application {
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
 
-        //SET UP GET ROUTES
+        //MAP GET ROUTES
 
         get("/", { request, response -> Web.get_root(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -63,7 +63,7 @@ class Application {
         get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/user_not_found", { request, response -> Web.get_userNotFound(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        //SET UP POST ROUTES
+        //MAP POST ROUTES
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
@@ -78,7 +78,7 @@ class Application {
             }
         })
 
-        //SETUP REDIRECTS
+        //MAP REDIRECTS
 
         redirect.get("/profile/", "/profile")
         redirect.get("/login/", "/login")
