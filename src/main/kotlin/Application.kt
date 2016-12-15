@@ -71,6 +71,11 @@ class Application {
         post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
         post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
+        redirect.get("/profile/", "/profile")
+        redirect.get("/login/", "/login")
+
+        //SET UP BEFORES
+
         before("/dashboard", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
                 logger.info("Client at ${request.ip()} is trying to access dashboard without authentication. Redirecting to login page")
@@ -80,8 +85,6 @@ class Application {
 
         //SETUP REDIRECTS
 
-        redirect.get("/profile/", "/profile")
-        redirect.get("/login/", "/login")
 
         before("/create_page", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
