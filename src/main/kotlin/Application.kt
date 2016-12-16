@@ -24,10 +24,13 @@ class Application {
 
     fun init() {
 
+        //connect to route SQL server instance
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
+        //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
+        //reconnect at the requested specific schema
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
@@ -46,16 +49,15 @@ class Application {
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
 
-        //SET UP GET ROUTES
+        //MAP GET ROUTES
 
-        get("/", { request, response -> Web.get_root(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/", { request, response -> IndexController.get_indexPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/login/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/admin/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/login/", { request, response -> response.redirect("/login") })
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
@@ -63,7 +65,7 @@ class Application {
         get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/user_not_found", { request, response -> Web.get_userNotFound(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        //SET UP POST ROUTES
+        //MAP POST ROUTES
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
@@ -71,10 +73,13 @@ class Application {
         post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
         post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
+
+        //MAP REDIRECTS
+
         redirect.get("/profile/", "/profile")
         redirect.get("/login/", "/login")
 
-        //SET UP BEFORES
+        //MAP BEFORES
 
         before("/dashboard", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
@@ -82,8 +87,6 @@ class Application {
                 halt(401, "Access is denied")
             }
         })
-
-        //SETUP REDIRECTS
 
         before("/create_page", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {

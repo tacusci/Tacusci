@@ -26,6 +26,7 @@ object ProfileController : KLogging() {
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
+            //the username who's profile is requested is from the end of the URL: /profile/IamAUser
             val userNameOfProfileToView = request.params(":username")
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
                 val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
@@ -35,6 +36,7 @@ object ProfileController : KLogging() {
                     return Web.get_userNotFound(request, response, layoutTemplate)
                 }
             } else {
+                //if they've just requested: /profile then we give them /profile->the username of the person browsing
                 if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
                     response.redirect("/profile/${UserHandler.getLoggedInUsername(request.session())}")
                 } else {
