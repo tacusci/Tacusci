@@ -26,7 +26,7 @@ class Config private constructor() {
                     Pair("schema_name", "tvf"),
                     Pair("root_user", "tvf_admin"),
                     Pair("root_password", "Password1234!"))
-
+            //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
