@@ -24,8 +24,8 @@ class Config private constructor() {
                     Pair("db_url", "jdbc:mysql://localhost"),
                     Pair("sql_setup_script_location", "sql_setup_script.sql"),
                     Pair("schema_name", "tvf"),
-                    Pair("root_user", "tvf_admin"),
-                    Pair("root_password", "Password1234!"))
+                    Pair("default_admin_user", "tvf_admin"),
+                    Pair("default_admin_password", "Password1234!"))
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))

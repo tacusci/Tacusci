@@ -1,6 +1,6 @@
-CREATE schema tvf;
+CREATE schema IF NOT EXISTS tvf;
 
-CREATE TABLE `tvf`.`users` (
+CREATE TABLE IF NOT EXISTS `tvf`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NOT NULL,
   `authhash` CHAR(72) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE `tvf`.`users` (
   UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 
-CREATE TABLE `tvf`.`groups` (
+CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
   `idgroups` INT NOT NULL AUTO_INCREMENT,
   `groupname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idgroups`),
@@ -21,7 +21,7 @@ CREATE TABLE `tvf`.`groups` (
   UNIQUE INDEX `groupname_UNIQUE` (`groupname` ASC));
 
 
-CREATE TABLE `tvf`.`user2group` (
+CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `idgroups` INT NOT NULL,
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
