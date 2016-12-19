@@ -25,7 +25,8 @@ class Config private constructor() {
                     Pair("sql_setup_script_location", "sql_setup_script.sql"),
                     Pair("schema_name", "tvf"),
                     Pair("default_admin_user", "tvf_admin"),
-                    Pair("default_admin_password", "Password1234!"))
+                    Pair("default_admin_password", "Password1234!"),
+                    Pair("default_admin_email", "admin_tvf@tvf.net"))
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))
