@@ -1,15 +1,12 @@
 package db
 
+import mu.KLogging
 import java.sql.Connection
 
 /**
  * Created by alewis on 20/12/2016.
  */
-class User2GroupDAO(connection: Connection, tableName: String) : DAO(connection, tableName) {
+class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(connection, tableName) {
 
-    override fun count(): Int {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
+    companion object : KLogging()
 }

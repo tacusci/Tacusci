@@ -11,26 +11,9 @@ import java.sql.ResultSet
  * Created by tauraamui on 27/10/2016.
  */
 
-class UserDAO(connection: Connection, tableName: String) : DAO(connection, tableName) {
+class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection, tableName) {
 
-    companion object: KLogging()
-
-    @Throws(SQLException::class)
-    override fun count(): Int {
-        var count = 0
-        val countStatementString = "SELECT COUNT(*) AS count FROM $tableName;"
-        try {
-            connection?.autoCommit = false
-            val countStatement = connection?.prepareStatement(countStatementString)
-            val resultSet: ResultSet = countStatement!!.executeQuery()
-            while (resultSet.next()) {
-                count = resultSet.getInt("count")
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-        return count
-    }
+    companion object : KLogging()
 
     fun insertUser(user: User): Boolean {
         try {
