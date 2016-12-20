@@ -24,7 +24,8 @@ object DAOManager : KLogging() {
     var password = ""
 
     enum class TABLE {
-        USERS
+        USERS,
+        USER2GROUP
     }
 
     private var connection: Connection? = null
@@ -90,23 +91,5 @@ object DAOManager : KLogging() {
                 return GenericDAO(connection!!, "")
             }
         }
-    }
-
-    fun schemaExists(schemaName: String): Boolean {
-
-        val resultSet = connection?.metaData?.catalogs
-
-        var schemaExists = false
-
-        while (resultSet!!.next()) {
-            println(resultSet.getString(1))
-            val existingSchemaName = resultSet.getString(1)
-            if (schemaName == existingSchemaName) schemaExists = true; break
-        }
-        return schemaExists
-    }
-
-    fun tableExists(tableName: String) {
-
     }
 }
