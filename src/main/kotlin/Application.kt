@@ -5,6 +5,7 @@
 import controllers.*
 import db.DAOManager
 import db.UserHandler
+import db.models.User
 import mu.KLogging
 import spark.Request
 import spark.Response
@@ -30,9 +31,13 @@ class Application {
         //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
+        //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
+
+        val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
+        UserHandler.createUser(defaultRootUser)
 
         val layoutTemplate = "/templates/layout.vtl"
 

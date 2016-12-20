@@ -18,19 +18,31 @@ class Config private constructor() {
     companion object props : Properties() {
 
         fun load() {
+
+            val defaults: HashMap<String, String> = hashMapOf(Pair("server_address", "localhost"),
+                    Pair("port", "1025"),
+                    Pair("db_url", "jdbc:mysql://localhost"),
+                    Pair("sql_setup_script_location", "sql_setup_script.sql"),
+                    Pair("schema_name", "tvf"),
+                    Pair("default_admin_user", "tvf_admin"),
+                    Pair("default_admin_password", "Password1234!"),
+                    Pair("default_admin_email", "admin_tvf@tvf.net"))
+            //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
-                this.setProperty("server_address", "localhost")
-                this.setProperty("port", "1025")
-                this.setProperty("db_url", "jdbc:mysql://localhost")
-                this.setProperty("sql_setup_script_location", "sql_setup_script.sql")
-                this.setProperty("schema_name", "tvf")
+                defaults.forEach { property, value -> this.setProperty(property, value) }
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
                     //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
+                    defaults.forEach { property, value ->
+                        if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
+                            this.setProperty(property, value)
+                        }
+                    }
+                    this.store(propertiesFile.outputStream(), "")
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -38,7 +50,7 @@ class Config private constructor() {
         }
 
         override fun getProperty(key: String): String {
-            val property = super.getProperty(key) ?: throw InvalidParameterException(MessageFormat.format("Missing value for key {0}!", key))
+            val property = super.getProperty(key) ?: ""
             return property
         }
 

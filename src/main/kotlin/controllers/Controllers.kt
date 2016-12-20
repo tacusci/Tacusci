@@ -52,8 +52,10 @@ object Web: KLogging() {
         model.put("email_error_hidden", "hidden")
         model.put("username_not_available_hidden", "hidden")
 
-        sessionAttributes.forEach { attribute, defaultValue -> if (!request.session().attributes().contains(attribute)) {
-            request.session().attribute(attribute, defaultValue) }
+        sessionAttributes.forEach { attribute, defaultValue ->
+            if (!request.session().attributes().contains(attribute)) {
+                request.session().attribute(attribute, defaultValue)
+            }
         }
 
         if (request.session().attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
