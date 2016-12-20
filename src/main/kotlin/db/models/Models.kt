@@ -1,9 +1,10 @@
 package db.models
 
 /**
- * Created by alewis on 28/10/2016.
+ * Created by alewis on 20/12/2016.
  */
 data class User(val fullName: String, val username: String, val password: String, val email: String, val banned: Int)
+data class Group(val name: String)
 
 fun User.isValid(): Boolean {
     if (!isUsernameValid()) { return false }
