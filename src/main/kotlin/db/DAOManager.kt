@@ -87,6 +87,7 @@ object DAOManager : KLogging() {
     fun getDAO(table: TABLE): DAO {
         when (table) {
             TABLE.USERS -> return UserDAO(connection!!, "users")
+            TABLE.USER2GROUP -> return User2GroupDAO(connection!!, "user2group")
             else -> {
                 return GenericDAO(connection!!, "")
             }
