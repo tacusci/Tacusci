@@ -10,4 +10,6 @@ class User2GroupDAO(connection: Connection, tableName: String) : DAO(connection,
     override fun count(): Int {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+
 }
