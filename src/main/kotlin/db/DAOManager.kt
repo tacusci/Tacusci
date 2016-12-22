@@ -23,7 +23,7 @@ object DAOManager : KLogging() {
     enum class TABLE {
         USERS,
         USER2GROUP,
-        GROUP
+        GROUPS
     }
 
     private var connection: Connection? = null
@@ -86,7 +86,7 @@ object DAOManager : KLogging() {
         when (table) {
             TABLE.USERS -> return UserDAO(connection!!, "users")
             TABLE.USER2GROUP -> return User2GroupDAO(connection!!, "user2group")
-            TABLE.GROUP -> return GroupDAO(connection!!, "groups")
+            TABLE.GROUPS -> return GroupDAO(connection!!, "groups")
             else -> {
                 return GenericDAO(connection!!, "")
             }
