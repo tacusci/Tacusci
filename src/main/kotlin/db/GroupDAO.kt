@@ -12,7 +12,7 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
 
     companion object : KLogging()
 
-    fun insertGroup(group: Group) {
+    fun insertGroup(group: Group): Boolean {
         try {
 
             val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
@@ -21,7 +21,7 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
-
-        } catch (e: SQLException) { logger.error(e.message) }
+            return true
+        } catch (e: SQLException) { logger.error(e.message); return false }
     }
 }
