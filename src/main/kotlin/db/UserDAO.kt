@@ -26,19 +26,7 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
             preparedStatement?.setString(4, user.fullName)
             preparedStatement?.setInt(5, user.banned)
 
-            val results: Boolean? = preparedStatement?.execute()
-            var count = 0
-
-            if (results!!) {
-                logger.info("Insert user ResultSet data displayed here")
-            } else {
-                count = preparedStatement?.updateCount!!
-                if (count >= 0) {
-                    logger.info("DDL or update data displayed here.")
-                } else {
-                    logger.info("No more results to process")
-                }
-            }
+            preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
             return true

@@ -18,19 +18,7 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setString(1, group.name)
-
-            val results: Boolean? = preparedStatement?.execute()
-            var count = 0
-            if (results!!) {
-                logger.info("Insert group ResultSet data displayed here")
-            } else {
-                count = preparedStatement?.updateCount!!
-                if (count >= 0) {
-                    logger.info("DDL or update data displayed here.")
-                } else {
-                    logger.info("No more results to process")
-                }
-            }
+            preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
 
