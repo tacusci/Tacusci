@@ -6,10 +6,7 @@ import mu.KLogging
 import utils.Config
 import java.io.File
 import java.net.URL
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.SQLException
+import java.sql.*
 import javax.xml.crypto.Data
 import javax.xml.validation.Schema
 
@@ -25,7 +22,8 @@ object DAOManager : KLogging() {
 
     enum class TABLE {
         USERS,
-        USER2GROUP
+        USER2GROUP,
+        GROUP
     }
 
     private var connection: Connection? = null
@@ -88,6 +86,7 @@ object DAOManager : KLogging() {
         when (table) {
             TABLE.USERS -> return UserDAO(connection!!, "users")
             TABLE.USER2GROUP -> return User2GroupDAO(connection!!, "user2group")
+            TABLE.GROUP -> return GroupDAO(connection!!, "groups")
             else -> {
                 return GenericDAO(connection!!, "")
             }
