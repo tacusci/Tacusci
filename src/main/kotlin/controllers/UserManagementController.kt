@@ -1,7 +1,7 @@
 package controllers
 
-import db.DAOManager
-import db.UserDAO
+import db.daos.DAOManager
+import db.daos.UserDAO
 import htmlutils.HTMLForm
 import htmlutils.HTMLUtils
 import htmlutils.HTMLTable

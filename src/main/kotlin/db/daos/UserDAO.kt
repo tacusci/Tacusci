@@ -1,4 +1,4 @@
-package db
+package db.daos
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 import db.models.User
@@ -25,12 +25,11 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
             preparedStatement?.setString(3, user.email)
             preparedStatement?.setString(4, user.fullName)
             preparedStatement?.setInt(5, user.banned)
-
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
             return true
-        } catch (e: SQLException) { logger.error(e.message); return false }
+        } catch (e: SQLException) { KLogging.logger.error(e.message); return false }
     }
 
     fun getUserAuthHash(username: String): String {

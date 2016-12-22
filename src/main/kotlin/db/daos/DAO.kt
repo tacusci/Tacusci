@@ -1,4 +1,4 @@
-package db
+package db.daos
 
 import java.sql.Connection
 

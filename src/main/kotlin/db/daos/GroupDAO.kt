@@ -1,4 +1,4 @@
-package db
+package db.daos
 
 import db.models.Group
 import mu.KLogging
@@ -14,7 +14,6 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
 
     fun insertGroup(group: Group): Boolean {
         try {
-
             val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setString(1, group.name)
@@ -22,6 +21,6 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             connection?.commit()
             preparedStatement?.close()
             return true
-        } catch (e: SQLException) { logger.error(e.message); return false }
+        } catch (e: SQLException) { KLogging.logger.error(e.message); return false }
     }
 }

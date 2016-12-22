@@ -1,7 +1,7 @@
-package db
+package db.handlers
 
-import db.DAOManager
-import db.UserDAO
+import db.daos.DAOManager
+import db.daos.UserDAO
 import db.models.User
 import db.models.isValid
 import mu.KLogging

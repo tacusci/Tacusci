@@ -1,6 +1,6 @@
 package controllers
 
-import db.UserHandler
+import db.handlers.UserHandler
 import htmlutils.HTMLUtils
 import spark.ModelAndView
 import spark.Request

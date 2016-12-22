@@ -1,9 +1,9 @@
 package controllers
 
-import db.DAOManager
+import db.daos.DAOManager
 
-import db.UserDAO
-import db.UserHandler
+import db.daos.UserDAO
+import db.handlers.UserHandler
 import mu.KLoggable
 import mu.KLogging
 import mu.NamedKLogging

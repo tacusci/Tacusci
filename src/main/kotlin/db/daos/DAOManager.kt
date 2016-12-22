@@ -1,6 +1,7 @@
-package db
+package db.daos
 
 import com.sun.org.apache.xpath.internal.operations.Bool
+import db.SQLScript
 import extensions.readTextAndClose
 import mu.KLogging
 import utils.Config
@@ -35,7 +36,7 @@ object DAOManager : KLogging() {
     }
 
     fun setup() {
-        val sqlScript = SQLScript(File(Config.getProperty("sql_setup_script_location")))
+        val sqlScript = SQLScript(File(Config.props.getProperty("sql_setup_script_location")))
         sqlScript.parse()
         sqlScript.executeStatements(connection!!)
     }
@@ -43,9 +44,9 @@ object DAOManager : KLogging() {
     fun connect() {
         try {
             DAOManager.open()
-            logger.info("Connected to DB at $url")
+            logger.info("Connected to DB at ${url}")
         } catch (e: SQLException) {
-            logger.error("Unable to connect to db at $url... Terminating...")
+            logger.error("Unable to connect to db at ${url}... Terminating...")
             System.exit(-1)
         }
     }
@@ -53,7 +54,7 @@ object DAOManager : KLogging() {
     fun disconnect() {
         try {
             DAOManager.close()
-            logger.info("Disconnected from db at $url")
+            logger.info("Disconnected from db at ${url}")
         } catch (e: SQLException) {
             logger.error(e.message)
         }

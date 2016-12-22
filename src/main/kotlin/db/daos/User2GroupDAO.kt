@@ -1,4 +1,4 @@
-package db
+package db.daos
 
 import mu.KLogging
 import java.sql.Connection

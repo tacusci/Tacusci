@@ -3,8 +3,10 @@
  */
 
 import controllers.*
-import db.DAOManager
-import db.UserHandler
+import db.daos.DAOManager
+import db.daos.GroupDAO
+import db.handlers.UserHandler
+import db.models.Group
 import db.models.User
 import mu.KLogging
 import spark.Request
@@ -38,6 +40,9 @@ class Application {
 
         val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
         UserHandler.createUser(defaultRootUser)
+
+        val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+        groupDAO.insertGroup(Group("admins"))
 
         val layoutTemplate = "/templates/layout.vtl"
 
@@ -88,21 +93,21 @@ class Application {
 
         before("/dashboard", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication. Redirecting to login page")
+                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
                 halt(401, "Access is denied")
             }
         })
 
         before("/create_page", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access create page without authentication. Showing access denied page")
+                logger.info("Client at ${request.ip()} is trying to access create page without authentication.")
                 halt(401, "Access is denied")
             }
         })
 
         before("/admin/user_management", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access user management page without authentication. Showing access denied page")
+                logger.info("Client at ${request.ip()} is trying to access user management page without authentication.")
                 halt(401, "Access is denied")
             }
         })
