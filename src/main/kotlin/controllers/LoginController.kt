@@ -49,6 +49,7 @@ object LoginController: KLogging() {
         val password = request.queryParams("password")
 
         if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
+            //TODO: Need to improve email validation
             if (username.contains("@")) {
                 logger.info("Email instead of username detected, fetching associated username")
                 email = username
