@@ -60,7 +60,7 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
             connection?.commit()
             preparedStatement?.close()
             return true
-        } catch (e: SQLException) { KLogging.logger.error(e.message); return false }
+        } catch (e: SQLException) { logger.error(e.message); return false }
     }
 
     fun getUserAuthHash(username: String): String {
