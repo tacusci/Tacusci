@@ -11,6 +11,7 @@ To host this on a webserver JRE 1.8 or higher is required. To run as a service u
 * [Spark Framework](http://sparkjava.com/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [Velocity](http://velocity.apache.org/) - Used to generate the HTML from templates
+* [Kotlin](https://kotlinlang.org/) - Alternative JVM language to Java
 
 ## Authors
 
