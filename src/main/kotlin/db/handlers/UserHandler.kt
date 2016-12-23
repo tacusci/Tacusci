@@ -17,7 +17,7 @@
 
 	 1a. Outright copyright infringement - Don't just copy this and change the name.  
 	 1b. Selling the unmodified original with no work done what-so-ever, that's REALLY being a dick.  
-	 1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.  
+	 1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.
 
  2. If you become rich through modifications, related works/services, or supporting the original work,
  share the love. Only a dick would make loads off this work and not buy the original work's 
@@ -118,7 +118,11 @@ object  UserHandler : KLogging() {
 
     fun userExists(user: User): Boolean {
         if (!user.isValid()) return false
+        return userExists(user.username)
+    }
+
+    fun userExists(username: String): Boolean {
         val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-        return usersDAO.userExists(user.username)
+        return usersDAO.userExists(username)
     }
 }

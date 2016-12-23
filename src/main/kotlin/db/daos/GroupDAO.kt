@@ -52,6 +52,22 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             connection?.commit()
             preparedStatement?.close()
             return true
-        } catch (e: SQLException) { KLogging.logger.error(e.message); return false }
+        } catch (e: SQLException) { logger.error(e.message); return false }
+    }
+
+    fun groupExists(groupName: String): Boolean {
+        var count = 0
+        try {
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE GROUPNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, groupName)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                count = resultSet.getInt(1)
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+        return count > 0
     }
 }
