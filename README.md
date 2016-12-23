@@ -14,7 +14,7 @@ To host this on a webserver JRE 1.8 or higher is required. To run as a service u
 
 ## Authors
 
-* **Adam Prakash Lewis** - *All Kotlin, Java and Velocity templates* - [tauraamui](https://github.com/tauraamui)
+* **Adam Prakash Lewis** - *All Kotlin code and Velocity templates* - [tauraamui](https://github.com/tauraamui)
 
 See also the list of [contributors](https://github.com/tauraamui/TVF/contributors) who participated in this project.
 
