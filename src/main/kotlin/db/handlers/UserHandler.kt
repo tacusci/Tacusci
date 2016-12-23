@@ -6,6 +6,7 @@ import db.models.User
 import db.models.isValid
 import mu.KLogging
 import spark.Session
+import utils.Config
 
 /**
  * Created by tauraamui on 24/10/2016.
@@ -70,6 +71,11 @@ object  UserHandler : KLogging() {
             }
         }
         return ""
+    }
+
+    fun createDefaultUser(): Boolean {
+        val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
+        return createUser(defaultRootUser)
     }
 
     fun createUser(user: User): Boolean {

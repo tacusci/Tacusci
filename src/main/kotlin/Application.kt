@@ -5,6 +5,7 @@
 import controllers.*
 import db.daos.DAOManager
 import db.daos.GroupDAO
+import db.handlers.GroupHandler
 import db.handlers.UserHandler
 import db.models.Group
 import db.models.User
@@ -38,11 +39,8 @@ class Application {
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
-        val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
-        UserHandler.createUser(defaultRootUser)
-
-        val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
-        groupDAO.insertGroup(Group("admins"))
+        UserHandler.createDefaultUser()
+        GroupHandler.createGroup(Group("admins"))
 
         val layoutTemplate = "/templates/layout.vtl"
 
