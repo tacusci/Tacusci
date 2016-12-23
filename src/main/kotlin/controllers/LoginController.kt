@@ -32,17 +32,14 @@
  package controllers
 
 import db.daos.DAOManager
-
 import db.daos.UserDAO
 import db.handlers.UserHandler
-import mu.KLoggable
 import mu.KLogging
-import mu.NamedKLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-
 import java.util.*
+
 /**
  * Created by alewis on 27/10/2016.
  */
