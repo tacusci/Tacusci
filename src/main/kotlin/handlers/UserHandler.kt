@@ -86,15 +86,6 @@ object  UserHandler : KLogging() {
         return false
     }
 
-    fun isInGroup(username: String, groupName: String): Boolean {
-        if (username.toLowerCase() == "tauraamui") {
-            if (groupName.toLowerCase() == "administrators") {
-                return true
-            }
-        }
-        return false
-    }
-
     fun getLoggedInUsername(session: Session): String {
         if (isLoggedIn(session)) {
             if (session.attributes().contains("username")) {
