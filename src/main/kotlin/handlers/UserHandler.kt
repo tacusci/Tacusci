@@ -105,7 +105,7 @@ object  UserHandler : KLogging() {
     }
 
     fun createDefaultUser(): Boolean {
-        val defaultRootUser = User(Config.props.getProperty("default_admin_user"), Config.props.getProperty("default_admin_user"), Config.props.getProperty("default_admin_password"), Config.props.getProperty("default_admin_email"), 0)
+        val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
         return createUser(defaultRootUser)
     }
 
