@@ -54,10 +54,10 @@ object GroupHandler : KLogging() {
             if (groupExists(groupName)) {
                 println(getGroupID(groupName))
             } else {
-                logger.info("The group $groupName doesn't exist")
+                logger.error("The group $groupName doesn't exist")
             }
         } else {
-            logger.info("The $username doesn't exist")
+            logger.error("The user $username doesn't exist")
         }
     }
 
