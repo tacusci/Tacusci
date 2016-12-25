@@ -29,15 +29,15 @@
  
  
  
- /**
+/**
  * Created by alewis on 24/10/2016.
  */
 
 import controllers.*
 import db.daos.DAOManager
 import db.daos.GroupDAO
-import db.handlers.GroupHandler
-import db.handlers.UserHandler
+import handlers.GroupHandler
+import handlers.UserHandler
 import db.models.Group
 import db.models.User
 import mu.KLogging

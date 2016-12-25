@@ -31,7 +31,7 @@
  
  package controllers
 
-import db.handlers.UserHandler
+import handlers.UserHandler
 import htmlutils.HTMLUtils
 import spark.ModelAndView
 import spark.Request

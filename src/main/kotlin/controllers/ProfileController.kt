@@ -33,7 +33,7 @@
 
 import db.daos.DAOManager
 import db.daos.UserDAO
-import db.handlers.UserHandler
+import handlers.UserHandler
 import mu.KLogger
 import mu.KLogging
 import spark.ModelAndView
