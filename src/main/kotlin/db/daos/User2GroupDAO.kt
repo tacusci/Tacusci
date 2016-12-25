@@ -26,10 +26,9 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package db.daos
+
+
+package db.daos
 
 import mu.KLogging
 import java.sql.Connection
@@ -42,9 +41,36 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
 
     companion object : KLogging()
 
-    fun mapUserIDToGroupID(userID: Int, groupID: Int) {
-        try {
+    fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
+        if (!mapAlreadyExists(userID, groupID)) {
+            try {
+                val createGroupStatementString = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
+                val preparedStatement = connection?.prepareStatement(createGroupStatementString)
+                preparedStatement?.setString(1, userID.toString())
+                preparedStatement?.setString(2, groupID.toString())
+                preparedStatement?.execute()
+                connection?.commit()
+                preparedStatement?.close()
+                return true
+            } catch (e: SQLException) {
+                logger.error(e.message)
+            }
+        }
+        return false
+    }
 
+    private fun mapAlreadyExists(userID: Int, groupID: Int): Boolean {
+        var count = 0
+        try {
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, userID.toString())
+            preparedStatement?.setString(2, groupID.toString())
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                count = resultSet.getInt(1)
+            }
         } catch (e: SQLException) { logger.error(e.message) }
+        return count > 0
     }
 }

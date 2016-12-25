@@ -89,9 +89,7 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val userID = userDAO.getUserID(username)
         val groupID = getGroupID(groupName)
-
         val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-        println("User ID: $userID, group ID: $groupID")
-        return false
+        return user2groupDAO.mapUserIDToGroupID(userID, groupID)
     }
 }

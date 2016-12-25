@@ -25,7 +25,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5">
-        <schema name="tvf" object-types="table, view" />
+        <schema name="tvf" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -33,6 +33,10 @@
     <connection id="0261cb09-88fd-4119-9a60-f49c0a9968c5">
       <console name="tvf" type="STANDARD"><![CDATA[select * from user2group]]></console>
     </connection>
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.user2group" active-filter-id="" />
+    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.groups" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
