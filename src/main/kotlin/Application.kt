@@ -59,7 +59,7 @@ class Application {
 
     fun init() {
 
-        //connect to route SQL server instance
+        //connect to root SQL server instance
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
         //run the set up schemas if they don't exist
@@ -72,7 +72,7 @@ class Application {
 
         UserHandler.createDefaultUser()
         GroupHandler.createGroup(Group("admins"))
-        GroupHandler.addUserToGroup("tvf_admin", "admins")
+        GroupHandler.addUserToGroup("tvf_admin", "adminskefoekf")
 
         val layoutTemplate = "/templates/layout.vtl"
 
