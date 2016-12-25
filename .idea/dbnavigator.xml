@@ -31,7 +31,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="0261cb09-88fd-4119-9a60-f49c0a9968c5">
-      <console name="tvf" type="STANDARD"><![CDATA[select * from groups]]></console>
+      <console name="tvf" type="STANDARD"><![CDATA[select * from user2group]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">

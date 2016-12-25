@@ -33,6 +33,7 @@
 
 import mu.KLogging
 import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * Created by alewis on 20/12/2016.
@@ -41,4 +42,9 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
 
     companion object : KLogging()
 
+    fun mapUserIDToGroupID(userID: Int, groupID: Int) {
+        try {
+
+        } catch (e: SQLException) { logger.error(e.message) }
+    }
 }
