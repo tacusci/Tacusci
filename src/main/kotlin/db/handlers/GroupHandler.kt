@@ -34,14 +34,13 @@
 import db.daos.DAOManager
 import db.daos.GroupDAO
 import db.models.Group
-import db.models.User
 import db.models.isValid
-import javax.print.attribute.standard.JobOriginatingUserName
+import mu.KLogging
 
 /**
  * Created by alewis on 22/12/2016.
  */
-object GroupHandler {
+object GroupHandler : KLogging() {
 
     fun createGroup(group: Group): Boolean {
         if (!group.isValid()) return false
@@ -50,18 +49,27 @@ object GroupHandler {
         return true
     }
 
-    fun groupExists(groupName: String) {
-
-    }
-
     fun isUserInGroup(userName: String, groupName: String) {}
 
     fun  addUserToGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
-            val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
-            if (groupDAO.groupExists(groupName)) {
-
+            if (groupExists(groupName)) {
+                println(getGroupID(groupName))
+            } else {
+                logger.info("The group $groupName doesn't exist")
             }
+        } else {
+            logger.info("The $username doesn't exist")
         }
+    }
+
+    fun groupExists(groupName: String): Boolean {
+        val groupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+        return groupDAO.groupExists(groupName)
+    }
+
+    fun getGroupID(groupName: String): Int {
+        val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+        return groupDAO.getGroupID(groupName)
     }
 }

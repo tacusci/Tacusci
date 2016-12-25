@@ -70,4 +70,25 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
         }
         return count > 0
     }
+
+    fun getGroupID(groupName: String): Int {
+        var groupID = -1
+        try {
+            val selectStatement = "SELECT IDGROUPS FROM $tableName WHERE GROUPNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, groupName)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                groupID = resultSet.getInt(1)
+            }
+        } catch (e: SQLException) { logger.error(e.message) }
+        return groupID
+    }
+
+    fun insertIntoGroup(username: String, groupName: String): Boolean {
+        try {
+
+        } catch (e: SQLException) { logger.error(e.message) }
+        return false
+    }
 }
