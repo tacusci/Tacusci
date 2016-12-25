@@ -116,11 +116,6 @@ object  UserHandler : KLogging() {
         return true
     }
 
-    fun userExists(user: User): Boolean {
-        if (!user.isValid()) return false
-        return userExists(user.username)
-    }
-
     fun userExists(username: String): Boolean {
         val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         return usersDAO.userExists(username)

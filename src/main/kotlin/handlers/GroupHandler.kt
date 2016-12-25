@@ -49,8 +49,6 @@ object GroupHandler : KLogging() {
         return true
     }
 
-    fun isUserInGroup(userName: String, groupName: String) {}
-
     fun  addUserToGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
