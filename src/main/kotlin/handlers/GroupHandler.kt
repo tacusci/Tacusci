@@ -52,6 +52,8 @@ object GroupHandler : KLogging() {
     fun  addUserToGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
+                val groupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+                groupDAO.addUserToGroup(username, groupName)
                 println(getGroupID(groupName))
             } else {
                 logger.error("The group $groupName doesn't exist")

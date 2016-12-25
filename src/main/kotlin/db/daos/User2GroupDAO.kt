@@ -40,4 +40,5 @@ import java.sql.Connection
 class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(connection, tableName) {
 
     companion object : KLogging()
+
 }

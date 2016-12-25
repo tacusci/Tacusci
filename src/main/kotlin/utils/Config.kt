@@ -96,7 +96,7 @@ class Config private constructor() {
         }
 
         fun propertiesFileUpdate() {
-            println("TODO: Add stuff")
+            //println("TODO: Add stuff")
         }
     }
 }

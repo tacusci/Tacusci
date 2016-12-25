@@ -43,6 +43,20 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
 
     companion object : KLogging()
 
+    fun getGroupID(groupName: String): Int {
+        var groupID = -1
+        try {
+            val selectStatement = "SELECT IDGROUPS FROM $tableName WHERE GROUPNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, groupName)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                groupID = resultSet.getInt(1)
+            }
+        } catch (e: SQLException) { logger.error(e.message) }
+        return groupID
+    }
+
     fun insertGroup(group: Group): Boolean {
         try {
             val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
@@ -71,24 +85,12 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
         return count > 0
     }
 
-    fun getGroupID(groupName: String): Int {
-        var groupID = -1
-        try {
-            val selectStatement = "SELECT IDGROUPS FROM $tableName WHERE GROUPNAME=?"
-            val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setString(1, groupName)
-            val resultSet = preparedStatement?.executeQuery()
-            if (resultSet!!.next()) {
-                groupID = resultSet.getInt(1)
-            }
-        } catch (e: SQLException) { logger.error(e.message) }
-        return groupID
-    }
-
-    fun insertIntoGroup(username: String, groupName: String): Boolean {
-        try {
-
-        } catch (e: SQLException) { logger.error(e.message) }
+    fun addUserToGroup(username: String, groupName: String): Boolean {
+        val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+        val groupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+        val userID = userDAO.getUserID(username)
+        val groupID = groupDAO.getGroupID(groupName)
+        println("User ID: $userID, group ID: $groupID")
         return false
     }
 }

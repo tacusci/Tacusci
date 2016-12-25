@@ -46,6 +46,20 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
 
     companion object : KLogging()
 
+    fun getUserID(username: String): Int {
+        var groupID = -1
+        try {
+            val selectStatement = "SELECT IDUSERS FROM $tableName WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, username)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                groupID = resultSet.getInt(1)
+            }
+        } catch (e: SQLException) { GroupDAO.logger.error(e.message) }
+        return groupID
+    }
+
     fun insertUser(user: User): Boolean {
         try {
             val createUserStatementString = "INSERT INTO $tableName (username, authhash, email, fullname, banned) VALUES (?,?,?,?,?)"
@@ -66,16 +80,14 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
     fun getUserAuthHash(username: String): String {
         var authHash: String = ""
         try {
-            val queryString = "SELECT AUTHHASH FROM $tableName WHERE USERNAME=?"
-            val preparedStatement = connection?.prepareStatement(queryString)
+            val selectStatement = "SELECT AUTHHASH FROM $tableName WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
                 authHash = resultSet.getString("AUTHHASH")
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+        } catch (e: SQLException) { logger.error(e.message) }
         return authHash
     }
 
@@ -106,9 +118,7 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
             while (resultSet!!.next()) {
                 username = resultSet.getString("USERNAME")
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+        } catch (e: SQLException) { logger.error(e.message) }
         return username
     }
 
@@ -135,9 +145,7 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
             if (resultSet!!.next()) {
                 banned = resultSet.getInt("BANNED")
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+        } catch (e: SQLException) { logger.error(e.message) }
         return banned
     }
 

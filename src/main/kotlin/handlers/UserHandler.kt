@@ -47,7 +47,7 @@ object  UserHandler : KLogging() {
 
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info("Attempting to login $username")
-        val usersDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
         val authHash = usersDAO.getUserAuthHash(username)
 
