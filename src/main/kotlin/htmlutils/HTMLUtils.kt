@@ -75,6 +75,10 @@ object HTMLUtils {
         return linkString
     }
 
+    fun genParagraph(content: String): String {
+        return "<p>$content</p>"
+    }
+
     fun genList(list: List<Any>): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<ul>")

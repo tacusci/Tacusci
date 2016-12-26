@@ -35,6 +35,7 @@ import db.daos.DAOManager
 import db.daos.UserDAO
 import handlers.GroupHandler
 import handlers.UserHandler
+import htmlutils.HTMLUtils
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -58,7 +59,7 @@ object LoginController : KLogging() {
             val loginError: Boolean = request.session().attribute("login_error")
             if (loginError) {
                 logger.info("Detected previous login attempt error, altering page to include error message")
-                model.put("login_error", "<p>Username or password incorrect...</p>")
+                model.put("login_error", HTMLUtils.genParagraph("Username or password incorrect..."))
                 request.session().attribute("login_error", false)
             } else {
                 model.put("login_error", "<br>")
