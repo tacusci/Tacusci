@@ -60,8 +60,7 @@ object ProfileController : KLogging() {
             //the username who's profile is requested is from the end of the URL: /profile/IamAUser
             val userNameOfProfileToView = request.params(":username")
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
-                val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-                if (userDAO.userExists(userNameOfProfileToView)) {
+                if (UserHandler.usersDAO.userExists(userNameOfProfileToView)) {
                     model = genAndGetUserProfilePage(userNameOfProfileToView)
                 } else {
                     return Web.get_userNotFound(request, response, layoutTemplate)
