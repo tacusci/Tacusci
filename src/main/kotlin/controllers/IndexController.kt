@@ -49,8 +49,7 @@ object IndexController {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         if (UserHandler.isLoggedIn(request.session())) {
-            val currentSessionUsername = UserHandler.getLoggedInUsername(request.session())
-            model.put("profile_or_login_link", HTMLUtils.genLink("/profile", currentSessionUsername))
+            model.put("profile_or_login_link", HTMLUtils.genLink("/profile", UserHandler.getLoggedInUsername(request.session())))
         } else {
             model.put("profile_or_login_link", HTMLUtils.genLink("/login", "Login"))
         }
