@@ -33,6 +33,7 @@
 
 import db.daos.DAOManager
 import db.daos.UserDAO
+import handlers.GroupHandler
 import handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
@@ -64,7 +65,11 @@ object LoginController: KLogging() {
             }
         } else {
             logger.info("User already logged in, redirecting to landing page")
-            response.redirect("/dashboard")
+            if (GroupHandler.userInGroup(UserHandler.getLoggedInUsername(request.session()), "admins")) {
+                response.redirect("/dashboard")
+            } else {
+                response.redirect("/")
+            }
         }
         return ModelAndView(model, layoutTemplate)
     }

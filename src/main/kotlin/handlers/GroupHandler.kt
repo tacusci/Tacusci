@@ -38,6 +38,7 @@ import db.models.Group
 import db.models.User
 import db.models.isValid
 import mu.KLogging
+import spark.Session
 
 /**
  * Created by alewis on 22/12/2016.
