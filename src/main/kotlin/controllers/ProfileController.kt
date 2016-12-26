@@ -46,7 +46,7 @@ import java.util.*
  */
 object ProfileController : KLogging() {
 
-    fun genAndgetUserProfilePage(username: String): HashMap<String, Any> {
+    fun genAndGetUserProfilePage(username: String): HashMap<String, Any> {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
@@ -62,7 +62,7 @@ object ProfileController : KLogging() {
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
                 val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
                 if (userDAO.userExists(userNameOfProfileToView)) {
-                    model = genAndgetUserProfilePage(userNameOfProfileToView)
+                    model = genAndGetUserProfilePage(userNameOfProfileToView)
                 } else {
                     return Web.get_userNotFound(request, response, layoutTemplate)
                 }
