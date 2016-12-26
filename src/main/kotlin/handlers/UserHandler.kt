@@ -104,6 +104,7 @@ object  UserHandler : KLogging() {
     fun createUser(user: User): Boolean {
         if (!user.isValid()) return false
         usersDAO.insertUser(user)
+        GroupHandler.addUserToGroup(user, "members")
         return true
     }
 

@@ -113,9 +113,8 @@ object Web: KLogging() {
         model.put("full_name_error_hidden", true)
 
         val user = User(fullName, username, password, email, 0)
-        val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
-        if (!userDAO.userExists(user.username)) {
+        if (!UserHandler.usersDAO.userExists(user.username)) {
             if (UserHandler.createUser(user)) {
                 response.redirect("/login")
             } else {

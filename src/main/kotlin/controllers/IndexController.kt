@@ -31,6 +31,7 @@
  
  package controllers
 
+import handlers.GroupHandler
 import handlers.UserHandler
 import htmlutils.HTMLUtils
 import spark.ModelAndView
@@ -49,7 +50,7 @@ object IndexController {
         model.put("template", "/templates/index.vtl")
         if (UserHandler.isLoggedIn(request.session())) {
             val currentSessionUsername = UserHandler.getLoggedInUsername(request.session())
-            model.put("profile_or_login_link", HTMLUtils.genLink("/dashboard", currentSessionUsername))
+            model.put("profile_or_login_link", HTMLUtils.genLink("/profile", currentSessionUsername))
         } else {
             model.put("profile_or_login_link", HTMLUtils.genLink("/login", "Login"))
         }
