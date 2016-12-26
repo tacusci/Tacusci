@@ -50,8 +50,10 @@ object IndexController {
         model.put("template", "/templates/index.vtl")
         if (UserHandler.isLoggedIn(request.session())) {
             model.put("profile_or_login_link", HTMLUtils.genLink("/profile", UserHandler.getLoggedInUsername(request.session())))
+            model.put("sign_up_link", "")
         } else {
             model.put("profile_or_login_link", HTMLUtils.genLink("/login", "Login"))
+            model.put("sign_up_link", HTMLUtils.genLink("/login/register", "Sign Up"))
         }
         model.put("title", "Thames Valley Furs - Homepage")
         return ModelAndView(model, layoutTemplate)
