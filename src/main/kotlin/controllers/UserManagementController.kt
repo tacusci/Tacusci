@@ -75,7 +75,7 @@ object UserManagementController: KLogging() {
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
-        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
+        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
             val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
             userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("$username", "$username", userIsCurrentlyBannedBool)))
         }
