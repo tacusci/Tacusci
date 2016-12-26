@@ -46,8 +46,8 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
             try {
                 val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
                 val preparedStatement = connection?.prepareStatement(insertUserIntoGroupStatement)
-                preparedStatement?.setString(1, userID.toString())
-                preparedStatement?.setString(2, groupID.toString())
+                preparedStatement?.setInt(1, userID)
+                preparedStatement?.setInt(2, groupID)
                 preparedStatement?.execute()
                 connection?.commit()
                 preparedStatement?.close()

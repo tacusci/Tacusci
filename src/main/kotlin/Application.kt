@@ -46,6 +46,7 @@ import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
+import javax.jws.soap.SOAPBinding
 
 
 class Application {
@@ -124,22 +125,28 @@ class Application {
 
         before("/dashboard", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
-                halt(401, "Access is denied")
+                if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
+                    logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
+                    halt(401, "Access is denied")
+                }
             }
         })
 
         before("/create_page", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access create page without authentication.")
-                halt(401, "Access is denied")
+                if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
+                    logger.info("Client at ${request.ip()} is trying to access create page without authentication.")
+                    halt(401, "Access is denied")
+                }
             }
         })
 
         before("/admin/user_management", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
-                logger.info("Client at ${request.ip()} is trying to access user management page without authentication.")
-                halt(401, "Access is denied")
+                if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
+                    logger.info("Client at ${request.ip()} is trying to access user management page without authentication.")
+                    halt(401, "Access is denied")
+                }
             }
         })
     }

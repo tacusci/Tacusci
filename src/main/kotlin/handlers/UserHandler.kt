@@ -116,4 +116,8 @@ object  UserHandler : KLogging() {
     fun userExists(username: String): Boolean {
         return usersDAO.userExists(username)
     }
+
+    fun hasAdminRights(username: String): Boolean {
+        return GroupHandler.userInGroup(username, "admins")
+    }
 }
