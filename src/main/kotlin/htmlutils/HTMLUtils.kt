@@ -41,18 +41,6 @@ import java.io.ByteArrayOutputStream
 
 object HTMLUtils {
 
-    fun genRadioButton(name: String, value: String): String {
-        val radioButtonString = "<input type=\"radio\" name=\"$name\" id=\"$name\" value=\"$value\">"
-        return radioButtonString
-    }
-
-    fun genCheckBox(name: String, value: String, checked: Boolean): String {
-        var checkedString = ""
-        if (checked) checkedString = " checked"
-        val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$name\" value=\"$value\"$checkedString>"
-        return checkboxString
-    }
-
     fun formatMarkup(html: String): String {
         val tidy = Tidy()
         //tidy.xhtml = true
@@ -68,6 +56,18 @@ object HTMLUtils {
         val out = ByteArrayOutputStream()
         tidy.pprint(htmlDOM, out)
         return out.toString()
+    }
+
+    fun genRadioButton(name: String, value: String): String {
+        val radioButtonString = "<input type=\"radio\" name=\"$name\" id=\"$name\" value=\"$value\">"
+        return radioButtonString
+    }
+
+    fun genCheckBox(name: String, value: String, checked: Boolean): String {
+        var checkedString = ""
+        if (checked) checkedString = " checked"
+        val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$name\" value=\"$value\"$checkedString>"
+        return checkboxString
     }
 
     fun genLink(linkLocation: String, name: String): String {
