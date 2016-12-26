@@ -86,8 +86,7 @@ object LoginController: KLogging() {
             if (username.contains("@")) {
                 logger.info("Email instead of username detected, fetching associated username")
                 email = username
-                val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-                username = userDAO.getUsernameFromEmail(email)
+                username = UserHandler.usersDAO.getUsernameFromEmail(email)
             }
             UserHandler.login(request.session(), username, password)
         } else {
