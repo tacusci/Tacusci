@@ -42,9 +42,10 @@ import mu.KLogging
  */
 object GroupHandler : KLogging() {
 
+    val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
+
     fun createGroup(group: Group): Boolean {
         if (!group.isValid()) return false
-        val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
         groupDAO.insertGroup(group)
         return true
     }
@@ -52,7 +53,6 @@ object GroupHandler : KLogging() {
     fun  addUserToGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
-                val groupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
                 groupDAO.addUserToGroup(username, groupName)
             } else {
                 logger.error("The group $groupName doesn't exist")
@@ -63,12 +63,10 @@ object GroupHandler : KLogging() {
     }
 
     fun groupExists(groupName: String): Boolean {
-        val groupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
         return groupDAO.groupExists(groupName)
     }
 
     fun getGroupID(groupName: String): Int {
-        val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
         return groupDAO.getGroupID(groupName)
     }
 }

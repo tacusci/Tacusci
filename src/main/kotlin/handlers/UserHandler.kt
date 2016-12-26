@@ -45,9 +45,10 @@ import utils.Config
 
 object  UserHandler : KLogging() {
 
+    val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info("Attempting to login $username")
-        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
         val authHash = usersDAO.getUserAuthHash(username)
 
@@ -102,13 +103,11 @@ object  UserHandler : KLogging() {
 
     fun createUser(user: User): Boolean {
         if (!user.isValid()) return false
-        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         usersDAO.insertUser(user)
         return true
     }
 
     fun userExists(username: String): Boolean {
-        val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         return usersDAO.userExists(username)
     }
 }
