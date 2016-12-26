@@ -33,6 +33,7 @@
 
 import db.daos.DAOManager
 import db.daos.UserDAO
+import handlers.UserHandler
 import htmlutils.HTMLForm
 import htmlutils.HTMLUtils
 import htmlutils.HTMLTable
@@ -74,10 +75,9 @@ object UserManagementController: KLogging() {
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
-        val userDAO: UserDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-        for (username in userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
-            val userIsCurrentlyBannedBool = if (userDAO.getUserBanned(username) > 0) true else false
-            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("banned", "$username", userIsCurrentlyBannedBool)))
+        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() }) {
+            val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
+            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("$username", "$username", userIsCurrentlyBannedBool)))
         }
 
         userAdminForm.content = userListTable.create()
