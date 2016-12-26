@@ -26,10 +26,10 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package controllers
+
+
+
+package controllers
 
 import db.daos.DAOManager
 import db.daos.UserDAO
@@ -45,7 +45,7 @@ import java.util.*
  * Created by alewis on 27/10/2016.
  */
 
-object LoginController: KLogging() {
+object LoginController : KLogging() {
 
     fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("Received GET request for LOGIN page")
@@ -65,11 +65,7 @@ object LoginController: KLogging() {
             }
         } else {
             logger.info("User already logged in, redirecting to landing page")
-            if (GroupHandler.userInGroup(UserHandler.getLoggedInUsername(request.session()), "admins")) {
-                response.redirect("/dashboard")
-            } else {
-                response.redirect("/")
-            }
+            response.redirect("/")
         }
         return ModelAndView(model, layoutTemplate)
     }
