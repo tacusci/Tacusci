@@ -46,6 +46,7 @@ import utils.Config
 object  UserHandler : KLogging() {
 
     val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+    var defaultUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
 
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info("Attempting to login $username")
@@ -97,8 +98,7 @@ object  UserHandler : KLogging() {
     }
 
     fun createDefaultUser(): Boolean {
-        val defaultRootUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
-        return createUser(defaultRootUser)
+        return createUser(defaultUser)
     }
 
     fun createUser(user: User): Boolean {

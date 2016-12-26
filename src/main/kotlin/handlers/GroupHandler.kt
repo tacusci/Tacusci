@@ -33,7 +33,9 @@ package handlers
 
 import db.daos.DAOManager
 import db.daos.GroupDAO
+import db.daos.User2GroupDAO
 import db.models.Group
+import db.models.User
 import db.models.isValid
 import mu.KLogging
 
@@ -66,7 +68,13 @@ object GroupHandler : KLogging() {
         return groupDAO.groupExists(groupName)
     }
 
-    fun getGroupID(groupName: String): Int {
-        return groupDAO.getGroupID(groupName)
+    fun userInGroup(username: String, groupName: String): Boolean {
+        if (UserHandler.userExists(username)) {
+            if (groupExists(groupName)) {
+                val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+                return user2GroupDAO.userAndGroupMapped(UserHandler.usersDAO.getUserID(username), groupDAO.getGroupID(groupName))
+            }
+        }
+        return false
     }
 }

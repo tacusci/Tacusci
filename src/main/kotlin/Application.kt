@@ -70,9 +70,9 @@ class Application {
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
 
-        UserHandler.createDefaultUser()
         GroupHandler.createGroup(Group("admins"))
-        GroupHandler.addUserToGroup("tvf_admin", "admins")
+        UserHandler.createDefaultUser()
+        GroupHandler.addUserToGroup(UserHandler.defaultUser.username, "admins")
 
         val layoutTemplate = "/templates/layout.vtl"
 

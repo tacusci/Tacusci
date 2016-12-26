@@ -42,7 +42,7 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
     companion object : KLogging()
 
     fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
-        if (!mapAlreadyExists(userID, groupID)) {
+        if (!userAndGroupMapped(userID, groupID)) {
             try {
                 val createGroupStatementString = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
                 val preparedStatement = connection?.prepareStatement(createGroupStatementString)
@@ -59,7 +59,7 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
         return false
     }
 
-    private fun mapAlreadyExists(userID: Int, groupID: Int): Boolean {
+    fun userAndGroupMapped(userID: Int, groupID: Int): Boolean {
         var count = 0
         try {
             val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
