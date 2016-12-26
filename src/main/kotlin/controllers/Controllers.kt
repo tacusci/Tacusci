@@ -114,7 +114,7 @@ object Web: KLogging() {
 
         val user = User(fullName, username, password, email, 0)
 
-        if (!UserHandler.usersDAO.userExists(user.username)) {
+        if (!UserHandler.userDAO.userExists(user.username)) {
             if (UserHandler.createUser(user)) {
                 response.redirect("/login")
             } else {

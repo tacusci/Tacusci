@@ -45,13 +45,13 @@ import utils.Config
 
 object  UserHandler : KLogging() {
 
-    val usersDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+    val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
     var defaultUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
 
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info("Attempting to login $username")
 
-        val authHash = usersDAO.getUserAuthHash(username)
+        val authHash = userDAO.getUserAuthHash(username)
 
         if (authHash.isNotBlank() && authHash.isNotEmpty()) {
             if (PasswordStorage.verifyPassword(password, authHash)) {
@@ -103,18 +103,18 @@ object  UserHandler : KLogging() {
 
     fun createUser(user: User): Boolean {
         if (!user.isValid()) return false
-        usersDAO.insertUser(user)
+        userDAO.insertUser(user)
         GroupHandler.addUserToGroup(user, "members")
         return true
     }
 
     fun userExists(user: User): Boolean {
         if (!user.isValid()) return false
-        return usersDAO.userExists(user.username)
+        return userDAO.userExists(user.username)
     }
 
     fun userExists(username: String): Boolean {
-        return usersDAO.userExists(username)
+        return userDAO.userExists(username)
     }
 
     fun hasAdminRights(username: String): Boolean {

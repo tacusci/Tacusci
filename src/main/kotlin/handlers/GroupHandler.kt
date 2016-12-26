@@ -77,7 +77,7 @@ object GroupHandler : KLogging() {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
                 val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                user2groupDAO.removeUserAndGroupMap(UserHandler.usersDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                user2groupDAO.removeUserAndGroupMap(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
             }
         }
     }
@@ -94,7 +94,7 @@ object GroupHandler : KLogging() {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
                 val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                return user2GroupDAO.userAndGroupMapped(UserHandler.usersDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                return user2GroupDAO.userAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
             }
         }
         return false
