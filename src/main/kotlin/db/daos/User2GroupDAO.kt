@@ -44,8 +44,8 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
     fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
         if (!userAndGroupMapped(userID, groupID)) {
             try {
-                val createGroupStatementString = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
-                val preparedStatement = connection?.prepareStatement(createGroupStatementString)
+                val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
+                val preparedStatement = connection?.prepareStatement(insertUserIntoGroupStatement)
                 preparedStatement?.setString(1, userID.toString())
                 preparedStatement?.setString(2, groupID.toString())
                 preparedStatement?.execute()
@@ -64,13 +64,28 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
         try {
             val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setString(1, userID.toString())
-            preparedStatement?.setString(2, groupID.toString())
+            preparedStatement?.setInt(1, userID)
+            preparedStatement?.setInt(2, groupID)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
                 count = resultSet.getInt(1)
             }
+            preparedStatement?.close()
         } catch (e: SQLException) { logger.error(e.message) }
         return count > 0
+    }
+
+    fun removeUserAndGroupMap(userID: Int, groupID: Int) {
+        if (userAndGroupMapped(userID, groupID)) {
+            try {
+                val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
+                val preparedStatement = connection?.prepareStatement(removeUserFromGroupStatement)
+                preparedStatement?.setInt(1, userID)
+                preparedStatement?.setInt(2, groupID)
+                preparedStatement?.execute()
+                connection?.commit()
+                preparedStatement?.close()
+            } catch (e: SQLException) { logger.error(e.message) }
+        }
     }
 }

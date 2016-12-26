@@ -52,7 +52,11 @@ object GroupHandler : KLogging() {
         return true
     }
 
-    fun  addUserToGroup(username: String, groupName: String) {
+    fun addUserToGroup(user: User, groupName: String) {
+        addUserToGroup(user.username, groupName)
+    }
+
+    fun addUserToGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
                 groupDAO.addUserToGroup(username, groupName)
@@ -64,8 +68,25 @@ object GroupHandler : KLogging() {
         }
     }
 
+    fun removeUserFromGroup(user: User, groupName: String) {
+        removeUserFromGroup(user.username, groupName)
+    }
+
+    fun removeUserFromGroup(username: String, groupName: String) {
+        if (UserHandler.userExists(username)) {
+            if (groupExists(groupName)) {
+                val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+                user2groupDAO.removeUserAndGroupMap(UserHandler.usersDAO.getUserID(username), groupDAO.getGroupID(groupName))
+            }
+        }
+    }
+
     fun groupExists(groupName: String): Boolean {
         return groupDAO.groupExists(groupName)
+    }
+
+    fun userInGroup(user: User, groupName: String): Boolean {
+        return userInGroup(user.username, groupName)
     }
 
     fun userInGroup(username: String, groupName: String): Boolean {

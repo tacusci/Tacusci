@@ -107,6 +107,11 @@ object  UserHandler : KLogging() {
         return true
     }
 
+    fun userExists(user: User): Boolean {
+        if (!user.isValid()) return false
+        return usersDAO.userExists(user.username)
+    }
+
     fun userExists(username: String): Boolean {
         return usersDAO.userExists(username)
     }

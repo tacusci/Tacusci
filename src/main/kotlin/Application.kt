@@ -72,7 +72,7 @@ class Application {
 
         GroupHandler.createGroup(Group("admins"))
         UserHandler.createDefaultUser()
-        GroupHandler.addUserToGroup(UserHandler.defaultUser.username, "admins")
+        GroupHandler.addUserToGroup(UserHandler.defaultUser, "admins")
 
         val layoutTemplate = "/templates/layout.vtl"
 
