@@ -31,16 +31,10 @@
  
  package db.daos
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-import db.SQLScript
-import extensions.readTextAndClose
 import mu.KLogging
-import utils.Config
-import java.io.File
-import java.net.URL
-import java.sql.*
-import javax.xml.crypto.Data
-import javax.xml.validation.Schema
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -68,9 +62,10 @@ object DAOManager : KLogging() {
 
     fun setup() {
         //FIX: replace getting sql file location from config to internal res folder
-        val sqlScript = SQLScript(File(Config.props.getProperty("sql_setup_script_location")))
-        sqlScript.parse()
-        sqlScript.executeStatements(connection!!)
+        val sqlScriptData = InternalResourceFile("")
+        //val sqlScript = SQLScript(File(""))
+        //sqlScript.parse()
+        //sqlScript.executeStatements(connection!!)
     }
 
     fun connect() {
