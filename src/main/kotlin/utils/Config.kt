@@ -53,7 +53,6 @@ class Config private constructor() {
             val defaults: HashMap<String, String> = hashMapOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
                     Pair("db_url", "jdbc:mysql://localhost"),
-                    Pair("sql_setup_script_location", "sql_setup_script.sql"),
                     Pair("schema_name", "tvf"),
                     Pair("default_admin_user", "tvf_admin"),
                     Pair("default_admin_password", "Password1234!"),
