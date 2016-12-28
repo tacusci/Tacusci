@@ -15,6 +15,6 @@ public class InternalResourceFile {
     }
 
     public InputStream getInputStream() {
-        return InternalResourceFile.class.getResourceAsStream(path);
+        return ClassLoader.getSystemClassLoader().getResourceAsStream(path);
     }
 }
