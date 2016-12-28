@@ -32,6 +32,7 @@
  package db.daos
 
 import mu.KLogging
+import utils.InternalResourceFile
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -62,7 +63,8 @@ object DAOManager : KLogging() {
 
     fun setup() {
         //FIX: replace getting sql file location from config to internal res folder
-        val sqlScriptData = InternalResourceFile("")
+        val sqlScriptData = InternalResourceFile("main/resources/sql/sql_setup_script.sql")
+        println(sqlScriptData.inputStream == null)
         //val sqlScript = SQLScript(File(""))
         //sqlScript.parse()
         //sqlScript.executeStatements(connection!!)

@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/TVF_jar</output-path>
     <root id="archive" name="TVF.jar">
       <element id="module-output" name="TVF" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/res/mysql-connector-java-5.1.40-bin.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/eclipse/jetty/websocket/websocket-server/9.3.6.v20151106/websocket-server-9.3.6.v20151106.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/io/github/microutils/kotlin-logging/1.4/kotlin-logging-1.4.jar" path-in-jar="/" />

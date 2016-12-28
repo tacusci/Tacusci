@@ -38,6 +38,7 @@ import db.models.isValid
 import mu.KLogging
 import spark.Session
 import utils.Config
+import utils.PasswordStorage
 
 /**
  * Created by tauraamui on 24/10/2016.

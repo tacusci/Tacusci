@@ -1,3 +1,5 @@
+package utils;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,6 +15,6 @@ public class InternalResourceFile {
     }
 
     public InputStream getInputStream() {
-        return getClass().getResourceAsStream(path);
+        return InternalResourceFile.class.getResourceAsStream(path);
     }
 }
