@@ -63,8 +63,7 @@ object DAOManager : KLogging() {
 
     fun setup() {
         //FIX: replace getting sql file location from config to internal res folder
-        val sqlScriptData = InternalResourceFile("main/resources/sql/sql_setup_script.sql")
-        println(sqlScriptData.inputStream == null)
+        val sqlScriptData = InternalResourceFile("/sql/sql_setup_script.sql")
         //val sqlScript = SQLScript(File(""))
         //sqlScript.parse()
         //sqlScript.executeStatements(connection!!)
