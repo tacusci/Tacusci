@@ -33,21 +33,27 @@
 
 import mu.KLogging
 import java.io.File
+import java.io.InputStream
 import java.sql.Connection
 import java.util.*
 
 /**
  * Created by alewis on 13/12/2016.
  */
-class SQLScript(var file: File) {
+class SQLScript() {
 
     companion object : KLogging()
+
+    var inputStream: InputStream? = null
+
+    constructor(inputStream: InputStream): this() { this.inputStream = inputStream }
+    constructor(file: File): this() { this.inputStream = file.inputStream() }
 
     private val statements = mutableListOf("")
 
     fun parse() {
         statements.clear()
-        val fileScanner = Scanner(file.inputStream())
+        val fileScanner = Scanner(inputStream)
         fileScanner.useDelimiter("(;(\r)?\n)|(--\n)")
         while (fileScanner.hasNext()) {
             var line = fileScanner.next()
