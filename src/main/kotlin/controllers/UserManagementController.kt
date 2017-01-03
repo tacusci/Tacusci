@@ -78,7 +78,7 @@ object UserManagementController: KLogging() {
         for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
             val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
             //TODO: need to replace username text to label with name tag
-            userListTable.addRow(listOf(username, HTMLUtils.genCheckBox("$username", "$username", userIsCurrentlyBannedBool)))
+            userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username), HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
         }
 
         userAdminForm.content = userListTable.create()

@@ -79,6 +79,10 @@ object HTMLUtils {
         return "<p>$content</p>"
     }
 
+    fun genLabel(content: String, id: String): String {
+        return "<label id=$id>$content</label>"
+    }
+
     fun genList(list: List<Any>): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<ul>")
