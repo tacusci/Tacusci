@@ -80,9 +80,7 @@ object UserManagementController: KLogging() {
             //TODO: need to replace username text to label with name tag
             userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username), HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
         }
-
         userAdminForm.content = userListTable.create()
-
         return userListTable.create()
     }
 }
