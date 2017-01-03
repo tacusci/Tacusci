@@ -60,11 +60,7 @@ object UserManagementController: KLogging() {
     fun post_userManagement(request: Request, response: Response) {
         logger.info("Recieved post submission for user management page")
         Web.initSessionAttributes(request.session())
-        //trying to figure out best way to associate checkbox to table row
         //TODO: REMEMBER TO PREVENT THE CURRENTLY LOGGED IN USER FROM BEING ABLE TO BAN THEMSELVES...
-        request.queryParams().forEach { param ->
-            request.queryParams(param).forEach(::println)
-        }
     }
 
     private fun genUserTable(request: Request, response: Response): String {
