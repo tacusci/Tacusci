@@ -60,6 +60,7 @@ object UserManagementController: KLogging() {
     fun post_userManagement(request: Request, response: Response) {
         logger.info("Recieved post submission for user management page")
         Web.initSessionAttributes(request.session())
+        println(request.body())
         //TODO: REMEMBER TO PREVENT THE CURRENTLY LOGGED IN USER FROM BEING ABLE TO BAN THEMSELVES...
     }
 

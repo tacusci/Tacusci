@@ -31,6 +31,7 @@
  
  package controllers
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import db.daos.DAOManager
 import db.daos.UserDAO
 import handlers.UserHandler
@@ -50,12 +51,10 @@ object Web: KLogging() {
 
     //TODO: Move most of these to their own controller classes :3
 
+    val sessionAttributes = hashMapOf(Pair("login_error", false), Pair("username", ""))
+
     fun initSessionAttributes(session: Session) {
-        if (!session.attributes().contains("login_error")) {
-            session.attribute("login_error", false)
-        } else if (!session.attributes().contains("username")) {
-            session.attribute("username", "")
-        }
+        sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }
     }
 
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
