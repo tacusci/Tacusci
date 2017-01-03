@@ -87,7 +87,7 @@ object Web: KLogging() {
                 request.session().attribute(attribute, defaultValue)
             }
         }
-
+        //TODO: doing this twice? need to review/take a closer look again
         if (request.session().attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
         if (request.session().attribute("username_field_error")) { model.put("username_error_hidden", "") }
         if (request.session().attribute("password_field_error")) { model.put("password_error_hidden", "") }
