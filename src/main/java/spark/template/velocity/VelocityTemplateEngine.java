@@ -20,7 +20,7 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
-import htmlutils.HTMLUtils;
+import utils.HTMLUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
