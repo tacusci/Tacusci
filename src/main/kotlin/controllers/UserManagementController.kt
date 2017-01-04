@@ -68,7 +68,6 @@ object UserManagementController: KLogging() {
         val userAdminForm = HTMLForm()
         userAdminForm.className = "pure-form"
         userAdminForm.action = "/admin/user_management"
-        //this attribute is getting ignored WTF? >:C
         userAdminForm.method = "post"
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
@@ -79,6 +78,6 @@ object UserManagementController: KLogging() {
             userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username), HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
         }
         userAdminForm.content = userListTable.create()
-        return userListTable.create()
+        return userAdminForm.create()
     }
 }
