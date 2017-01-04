@@ -53,7 +53,7 @@ object UserManagementController: KLogging() {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")
         model.put("title", "Thames Valley Furs - User Management")
-        model.put("user_table", genUserTable(request, response))
+        model.put("user_admin_form", genUserForm(request, response))
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -64,7 +64,7 @@ object UserManagementController: KLogging() {
         //TODO: REMEMBER TO PREVENT THE CURRENTLY LOGGED IN USER FROM BEING ABLE TO BAN THEMSELVES...
     }
 
-    private fun genUserTable(request: Request, response: Response): String {
+    private fun genUserForm(request: Request, response: Response): String {
         val userAdminForm = HTMLForm()
         userAdminForm.className = "pure-form"
         userAdminForm.action = "/admin/user_management"
@@ -74,9 +74,11 @@ object UserManagementController: KLogging() {
         userListTable.className = "pure-table"
         for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
             val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
-            userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username), HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
+            userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username),
+                    HTMLUtils.genInput(type = "hidden", name = username, value = "0")+HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
         }
-        userAdminForm.content = userListTable.create()
+        userAdminForm.content.add(userListTable.create())
+        userAdminForm.content.add(HTMLUtils.genInput(type = "submit", name = "update_user_management", id = "update_user_management", value = "Update"))
         return userAdminForm.create()
     }
 }

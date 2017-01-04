@@ -46,7 +46,7 @@ class HTMLForm {
     var name = ""
     var noValidate = ""
     var target = ""
-    var content = ""
+    var content = mutableListOf<String>()
 
     constructor() {}
 
@@ -57,13 +57,13 @@ class HTMLForm {
         this.name = name
         this.noValidate = noValidate
         this.target = target
-        this.content = content
+        this.content.add(content)
     }
 
     fun create(): String {
         val model = StringBuilder()
         model.append("<form class=\"$className\" accept-charset=\"$acceptCharset\" action=\"$action\" method=\"$method\" name=\"$name\" novalidate=\"$noValidate\" target=\"$target\">")
-        model.append(content)
+        content.forEach { model.append(it) }
         model.append("</form>")
         return model.toString()
     }

@@ -64,8 +64,8 @@ object HTMLUtils {
     }
 
     fun genCheckBox(name: String, value: String, checked: Boolean): String {
-        var checkedString = ""
-        if (checked) checkedString = " checked"
+        var checkedString = "0"
+        if (checked) checkedString = "1"
         val checkboxString = "<input type=\"checkbox\" name=\"$name\" id=\"$name\" value=\"$value\"$checkedString>"
         return checkboxString
     }
@@ -91,5 +91,13 @@ object HTMLUtils {
         }
         stringBuilder.append("</ul><ul>")
         return stringBuilder.toString()
+    }
+
+    fun genInput(type: String, id: String, name: String, value: String): String {
+        return "<input type=$type id=$id name=$name value=$value</input>"
+    }
+
+    fun  genInput(type: String, name: String, value: String): String {
+        return genInput(type, "\'\'", name, value)
     }
 }
