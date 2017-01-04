@@ -32,12 +32,14 @@
  package controllers
 
 import handlers.UserHandler
+import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.HTMLTable
 import java.util.*
-import j2html.TagCreator.*
+
 /**
  * Created by alewis on 07/11/2016.
  */
@@ -61,20 +63,17 @@ object UserManagementController: KLogging() {
 
     private fun genUserForm(request: Request, response: Response): String {
 
-        val userAdminForm = HTMLForm()
-        userAdminForm.className = "pure-form"
-        userAdminForm.action = "/admin/user_management"
-        userAdminForm.method = "post"
+        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/admin/user_management").withMethod("post")
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
         for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
             val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
-            userListTable.addRow(listOf(HTMLUtils.genLabel(content = username, id = username),
-                    HTMLUtils.genInput(type = "hidden", name = username, value = "0")+HTMLUtils.genCheckBox(username, username, userIsCurrentlyBannedBool)))
+            userListTable.addRow(listOf(label(username).withName(username).withId(username).render(),
+                                        input().withType("hidden").withName(username).withValue("0").render() + input().withType("checkbox").withName(username).withValue("0").render()))
         }
-        userAdminForm.content.add(userListTable.create())
-        userAdminForm.content.add(HTMLUtils.genInput(type = "submit", name = "update_user_management", id = "update_user_management", value = "Update"))
-        return userAdminForm.create()
+        userAdminForm.withText(userListTable.render())
+        userAdminForm.withText(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update").render())
+        return userAdminForm.render()
     }
 }

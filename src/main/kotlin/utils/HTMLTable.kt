@@ -26,36 +26,54 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package controllers
 
-import handlers.UserHandler
-import j2html.TagCreator.*
-import spark.ModelAndView
-import spark.Request
-import spark.Response
-import java.util.*
+
+
+package utils
 
 /**
- * Created by tauraamui on 15/12/2016.
+ * Created by alewis on 08/11/2016.
  */
-object IndexController {
 
-    fun get_indexPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        Web.initSessionAttributes(request.session())
-        val model = HashMap<String, Any>()
-        model.put("template", "/templates/index.vtl")
-        if (UserHandler.isLoggedIn(request.session())) {
-            val userProfileLink = link().withHref("/profile").withClass("pure-button").withValue(UserHandler.getLoggedInUsername(request.session()))
-            model.put("profile_or_login_link", userProfileLink.render())
-            model.put("sign_up_link", "")
-        } else {
-            model.put("profile_or_login_link", link().withHref("/login").withValue("Login").render())
-            model.put("sign_up_link", link().withHref("/login/register").withValue("Sign Up").render())
+class HTMLTable {
+
+    private var columnNames = listOf("")
+    private val rows: MutableList<List<String>> = mutableListOf()
+
+    var className = ""
+
+    constructor() {}
+
+    constructor(columnNames: List<String>) {
+        this.columnNames = columnNames
+    }
+
+    fun addRow(rowContent: List<String>) {
+        rows.add(rowContent)
+    }
+
+    fun render(): String {
+        val model = StringBuilder()
+
+        model.append("<table class=\"$className\">")
+        model.append("<thead>")
+        model.append("<tr>")
+        for (columnName in columnNames) { model.append("<th>$columnName</th>") }
+        model.append("</tr>")
+        model.append("</thead>")
+
+        model.append("<tbody>")
+        rows.forEach { rowContent ->
+            if (rowContent.isNotEmpty()) {
+                model.append("<tr>")
+                for (content in rowContent) {
+                    model.append("<td>$content</td>")
+                }
+                model.append("</tr>")
+            }
         }
-        model.put("title", "Thames Valley Furs - Homepage")
-        return ModelAndView(model, layoutTemplate)
+        model.append("</tbody>")
+        model.append("</table>")
+        return model.toString()
     }
 }
