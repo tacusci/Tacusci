@@ -31,16 +31,13 @@
 
 package controllers
 
-import db.daos.DAOManager
-import db.daos.UserDAO
-import handlers.GroupHandler
 import handlers.UserHandler
-import htmlutils.HTMLUtils
-import j2html.TagCreator.p
+import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.*
 import java.util.*
 
 /**
@@ -53,23 +50,22 @@ object LoginController : KLogging() {
         logger.info("Received GET request for LOGIN page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
-        if (!UserHandler.isLoggedIn(request.session())) {
-            logger.info("Current user session is not logged in, giving default login page")
-            model.put("template", "/templates/login.vtl")
-            model.put("title", "Thames Valley Furs - Login")
-            val loginError: Boolean = request.session().attribute("login_error")
-            if (loginError) {
-                logger.info("Detected previous login attempt error, altering page to include error message")
-                //using j2HTML here
-                model.put("login_error", p("Username or password incorrect...").render())
-                request.session().attribute("login_error", false)
-            } else {
-                model.put("login_error", "<br>")
-            }
-        } else {
+
+        if (UserHandler.isLoggedIn(request.session())) {
             logger.info("User already logged in, redirecting to landing page")
             response.redirect("/")
         }
+
+        val loginForm = form().withMethod("post").with(usernameInput("Username"), passwordInput("password", "Password"))
+
+        if (request.session().attribute("login_error")) {
+            loginForm.withText("Username or password incorrect...")
+            request.session().attribute("login_error", false)
+        }
+
+        loginForm.with(submitButton("Sign in", "pure-button"))
+
+        model.put("login_form", loginForm.render())
         return ModelAndView(model, layoutTemplate)
     }
 
