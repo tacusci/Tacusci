@@ -68,8 +68,6 @@ object LoginController : KLogging() {
 
         loginForm.with(submitButton("Sign in", "pure-button"))
 
-        println(loginForm.render())
-
         model.put("login_form", loginForm.render())
         model.put("signup_link", link().withHref("/login/register").withClass("pure-button").withValue("Sign Up").render())
 
