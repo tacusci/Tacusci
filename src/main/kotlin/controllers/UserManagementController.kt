@@ -31,18 +31,13 @@
  
  package controllers
 
-import db.daos.DAOManager
-import db.daos.UserDAO
 import handlers.UserHandler
-import htmlutils.HTMLForm
-import htmlutils.HTMLUtils
-import htmlutils.HTMLTable
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import java.util.*
-
+import j2html.TagCreator.*
 /**
  * Created by alewis on 07/11/2016.
  */
@@ -65,6 +60,7 @@ object UserManagementController: KLogging() {
     }
 
     private fun genUserForm(request: Request, response: Response): String {
+
         val userAdminForm = HTMLForm()
         userAdminForm.className = "pure-form"
         userAdminForm.action = "/admin/user_management"
