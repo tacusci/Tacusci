@@ -59,13 +59,14 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withMethod("post").with(usernameInput("Username"), passwordInput("password", "Password"))
+        val loginForm = form().withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
 
         if (request.session().attribute("login_error")) {
             loginForm.withText("Username or password incorrect...")
             request.session().attribute("login_error", false)
         }
 
+        loginForm.with(br())
         loginForm.with(submitButton("Sign in", "pure-button"))
 
         model.put("login_form", loginForm.render())
