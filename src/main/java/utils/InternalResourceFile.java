@@ -12,7 +12,6 @@ public class InternalResourceFile {
 
     public InternalResourceFile(String path) {
         this.path = path;
-        System.out.println(getInputStream());
     }
 
     public InputStream getInputStream() {
