@@ -47,6 +47,7 @@ object IndexController {
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
+        model.put("title", "Thames Valley Furs - Homepage")
         if (UserHandler.isLoggedIn(request.session())) {
             val userProfileLink = link().withHref("/profile").withClass("pure-button").withValue(UserHandler.getLoggedInUsername(request.session()))
             model.put("profile_or_login_link", userProfileLink.render())
@@ -55,7 +56,7 @@ object IndexController {
             model.put("profile_or_login_link", link().withHref("/login").withValue("Login").render())
             model.put("sign_up_link", link().withHref("/login/register").withValue("Sign Up").render())
         }
-        model.put("title", "Thames Valley Furs - Homepage")
+        println(model)
         return ModelAndView(model, layoutTemplate)
     }
 }
