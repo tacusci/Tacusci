@@ -1,5 +1,8 @@
 package utils
 
+import j2html.TagCreator.*
+import j2html.tags.ContainerTag
+import j2html.tags.Tag
 import org.w3c.tidy.Tidy
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -31,7 +34,7 @@ object HTMLUtils {
 class HTMLTable {
 
     private var columnNames = listOf("")
-    private val rows: MutableList<List<String>> = mutableListOf()
+    private val rows: MutableList<List<List<Tag>>> = mutableListOf()
 
     var className = ""
 
@@ -41,32 +44,29 @@ class HTMLTable {
         this.columnNames = columnNames
     }
 
-    fun addRow(rowContent: List<String>) {
+    fun addRow(rowContent: List<List<Tag>>) {
         rows.add(rowContent)
     }
 
-    fun render(): String {
+    fun render(): Tag {
         val model = StringBuilder()
 
-        model.append("<table class=\"$className\">")
-        model.append("<thead>")
-        model.append("<tr>")
-        for (columnName in columnNames) { model.append("<th>$columnName</th>") }
-        model.append("</tr>")
-        model.append("</thead>")
+        val table = table().withClass(className).with(thead()).with(tr())
+        for (columnName in columnNames) { table.with(th(columnName)) }
+        table.with(tr()).with(thead())
+        table.with(tbody())
 
-        model.append("<tbody>")
-        rows.forEach { rowContent ->
-            if (rowContent.isNotEmpty()) {
-                model.append("<tr>")
-                for (content in rowContent) {
-                    model.append("<td>$content</td>")
+        rows.forEach rowsLoop@ { row ->
+            if (row.isEmpty()) { return@rowsLoop }
+            table.with(tr())
+            row.forEach { rowContent ->
+                rowContent.forEach { rowColumnElement ->
+                    table.with(td().with(rowColumnElement))
                 }
-                model.append("</tr>")
             }
+            table.with(tr())
         }
-        model.append("</tbody>")
-        model.append("</table>")
-        return model.toString()
+        table.with(tbody())
+        return table
     }
 }

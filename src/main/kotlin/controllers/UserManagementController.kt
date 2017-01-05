@@ -33,6 +33,7 @@
 
 import handlers.UserHandler
 import j2html.TagCreator.*
+import j2html.tags.Tag
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -68,12 +69,14 @@ object UserManagementController: KLogging() {
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
         for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
-            val userIsCurrentlyBannedBool = if (UserHandler.userDAO.getUserBanned(username) > 0) true else false
-            userListTable.addRow(listOf(label(username).withName(username).withId(username).render(),
-                                        input().withType("hidden").withName(username).withValue("0").render() + input().withType("checkbox").withName(username).withValue("0").render()))
+            val userIsCurrentlyBannedInt = if (UserHandler.userDAO.getUserBanned(username) > 0) "1" else "0"
+            userListTable.addRow(listOf(listOf<Tag>(label(username).withName(username).withId(username)),
+                                        listOf<Tag>(input().withType("hidden").withName(username).withValue("0"),
+                                                input().withType("checkbox").withName(username).withValue("0"))))
+
         }
-        userAdminForm.withText(userListTable.render())
-        userAdminForm.withText(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update").render())
+        userAdminForm.with(userListTable.render())
+        userAdminForm.with(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm.render()
     }
 }

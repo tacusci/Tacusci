@@ -56,7 +56,6 @@ object IndexController {
             model.put("profile_or_login_link", a().withHref("/login").withText("Login").render())
             model.put("sign_up_link", a().withHref("/login/register").withText("Sign Up").render())
         }
-        println(model)
         return ModelAndView(model, layoutTemplate)
     }
 }
