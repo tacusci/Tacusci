@@ -49,8 +49,6 @@ class HTMLTable {
     }
 
     fun render(): Tag {
-        val model = StringBuilder()
-
         val table = table().withClass(className).with(thead()).with(tr())
         for (columnName in columnNames) { table.with(th(columnName)) }
         table.with(tr()).with(thead())
