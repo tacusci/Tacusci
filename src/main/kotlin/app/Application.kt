@@ -1,4 +1,4 @@
-/*
+package app/*
 # DON'T BE A DICK PUBLIC LICENSE
 
 > Version 1.1, December 2016
@@ -34,12 +34,12 @@
  */
 
 import controllers.*
-import db.daos.DAOManager
-import db.daos.GroupDAO
+import database.daos.DAOManager
+import database.daos.GroupDAO
 import handlers.GroupHandler
 import handlers.UserHandler
-import db.models.Group
-import db.models.User
+import database.models.Group
+import database.models.User
 import mu.KLogging
 import spark.Request
 import spark.Response

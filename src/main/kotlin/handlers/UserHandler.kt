@@ -31,10 +31,10 @@
  
 package handlers
 
-import db.daos.DAOManager
-import db.daos.UserDAO
-import db.models.User
-import db.models.isValid
+import database.daos.DAOManager
+import database.daos.UserDAO
+import database.models.User
+import database.models.isValid
 import mu.KLogging
 import spark.Session
 import utils.Config

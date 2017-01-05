@@ -31,12 +31,12 @@
  
 package handlers
 
-import db.daos.DAOManager
-import db.daos.GroupDAO
-import db.daos.User2GroupDAO
-import db.models.Group
-import db.models.User
-import db.models.isValid
+import database.daos.DAOManager
+import database.daos.GroupDAO
+import database.daos.User2GroupDAO
+import database.models.Group
+import database.models.User
+import database.models.isValid
 import mu.KLogging
 import spark.Session
 

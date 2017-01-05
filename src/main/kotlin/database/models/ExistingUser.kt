@@ -29,7 +29,7 @@
  
  
  
- package db.models
+ package database.models
 
 /**
  * Created by alewis on 07/11/2016.

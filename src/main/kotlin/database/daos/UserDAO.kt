@@ -29,10 +29,10 @@
  
  
  
- package db.daos
+ package database.daos
 
 import com.sun.org.apache.xpath.internal.operations.Bool
-import db.models.User
+import database.models.User
 import mu.KLogging
 import utils.PasswordStorage
 import java.sql.Connection

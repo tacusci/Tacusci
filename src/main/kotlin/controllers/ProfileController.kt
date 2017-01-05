@@ -31,8 +31,8 @@
  
  package controllers
 
-import db.daos.DAOManager
-import db.daos.UserDAO
+import database.daos.DAOManager
+import database.daos.UserDAO
 import handlers.UserHandler
 import mu.KLogger
 import mu.KLogging

@@ -29,9 +29,9 @@
  
  
  
- package db.daos
+ package database.daos
 
-import db.models.Group
+import database.models.Group
 import mu.KLogging
 import java.sql.Connection
 import java.sql.SQLException

@@ -29,9 +29,9 @@
  
  
  
- package db.daos
+ package database.daos
 
-import db.SQLScript
+import database.SQLScript
 import mu.KLogging
 import utils.InternalResourceFile
 import java.io.FileInputStream
@@ -75,7 +75,7 @@ object DAOManager : KLogging() {
             DAOManager.open()
             logger.info("Connected to DB at ${url}")
         } catch (e: SQLException) {
-            logger.error("Unable to connect to db at ${url}... Terminating...")
+            logger.error("Unable to connect to database at ${url}... Terminating...")
             System.exit(-1)
         }
     }
@@ -83,7 +83,7 @@ object DAOManager : KLogging() {
     fun disconnect() {
         try {
             DAOManager.close()
-            logger.info("Disconnected from db at ${url}")
+            logger.info("Disconnected from database at ${url}")
         } catch (e: SQLException) {
             logger.error(e.message)
         }

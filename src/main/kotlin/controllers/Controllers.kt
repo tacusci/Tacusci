@@ -32,10 +32,10 @@
  package controllers
 
 import com.sun.org.apache.xpath.internal.operations.Bool
-import db.daos.DAOManager
-import db.daos.UserDAO
+import database.daos.DAOManager
+import database.daos.UserDAO
 import handlers.UserHandler
-import db.models.*
+import database.models.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request

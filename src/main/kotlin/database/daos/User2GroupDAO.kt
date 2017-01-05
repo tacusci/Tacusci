@@ -28,7 +28,7 @@
  */
 
 
-package db.daos
+package database.daos
 
 import mu.KLogging
 import java.sql.Connection
