@@ -6,6 +6,7 @@ import j2html.tags.Tag
 import org.w3c.tidy.Tidy
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.util.stream.Collectors
 
 /**
  * Created by alewis on 04/01/2017.
@@ -49,22 +50,17 @@ class HTMLTable {
     }
 
     fun render(): Tag {
-        val table = table().withClass(className).with(thead()).with(tr())
-        for (columnName in columnNames) { table.with(th(columnName)) }
-        table.with(tr()).with(thead())
-        table.with(tbody())
+        val table = table().withClass(className).with(thead()).with(columnNames.map(::th))
 
-        rows.forEach rowsLoop@ { row ->
-            if (row.isEmpty()) { return@rowsLoop }
-            table.with(tr())
-            row.forEach { rowContent ->
-                rowContent.forEach { rowColumnElement ->
-                    table.with(td().with(rowColumnElement))
-                }
+        rows.filter { it.isNotEmpty() }.forEach { row ->
+            val tableRow = tr()
+            row.filter { it.isNotEmpty() }.forEach { column ->
+                val tableColumn = td()
+                column.forEach { element -> tableColumn.children.add(element) }
+                tableRow.with(tableColumn)
             }
-            table.with(tr())
+            table.with(tableRow)
         }
-        table.with(tbody())
         return table
     }
 }
