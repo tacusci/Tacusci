@@ -76,8 +76,6 @@ class Application {
         UserHandler.createDefaultUser()
         GroupHandler.addUserToGroup(UserHandler.defaultUser, "admins")
 
-        UserHandler.userDAO.ban("tauraamui")
-
         val layoutTemplate = "/templates/layout.vtl"
 
         logger.info("Setting port to $port")
