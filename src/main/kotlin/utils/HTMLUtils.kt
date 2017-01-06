@@ -50,7 +50,7 @@ class HTMLTable {
     }
 
     fun render(): Tag {
-        val table = table().withClass(className).with(thead()).with(columnNames.map(::th))
+        val table = table().withClass(className).with(thead().with(tr().with(columnNames.map(::th))))
 
         rows.filter { it.isNotEmpty() }.forEach { row ->
             val tableRow = tr()
