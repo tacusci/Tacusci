@@ -136,7 +136,7 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
         return usernameList
     }
 
-    fun getUserBanned(username: String): Int {
+    fun isBanned(username: String): Int {
         var banned = 0
         try {
             val selectStatement = "SELECT BANNED FROM $tableName WHERE USERNAME=?"

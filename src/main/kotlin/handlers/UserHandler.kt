@@ -114,6 +114,11 @@ object  UserHandler : KLogging() {
         return userDAO.userExists(user.username)
     }
 
+    fun isBanned(username: String): Boolean {
+        //this is clever, impressed myself
+        return userDAO.isBanned(username) == 1
+    }
+
     fun userExists(username: String): Boolean {
         return userDAO.userExists(username)
     }
