@@ -52,21 +52,29 @@ object  UserHandler : KLogging() {
     fun login(session: Session, username: String, password: String): Boolean {
         logger.info("Attempting to login $username")
 
+        if (UserHandler.isBanned(username)) {
+            logger.info("User $username is banned, denying login")
+            session.attribute("is_banned", true)
+            return false
+        } else {
+            session.attribute("is_banned", false)
+        }
+
         val authHash = userDAO.getUserAuthHash(username)
 
         if (authHash.isNotBlank() && authHash.isNotEmpty()) {
             if (PasswordStorage.verifyPassword(password, authHash)) {
                 session.attribute("logged_in", true)
                 session.attribute("username", username)
-                session.attribute("login_error", false)
+                session.attribute("login_incorrect_creds", false)
                 logger.info("Login successful")
             } else {
-                session.attribute("login_error", true)
+                session.attribute("login_incorrect_creds", true)
                 logger.info("Login unsuccessful, incorrect password...")
                 return false
             }
         } else {
-            session.attribute("login_error", true)
+            session.attribute("login_incorrect_creds", true)
             logger.info("Login unsuccessful, username not recognised")
             return false
         }

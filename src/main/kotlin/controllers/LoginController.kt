@@ -61,16 +61,16 @@ object LoginController : KLogging() {
 
         val loginForm = form().withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
 
-        if (request.session().attribute("login_error")) {
+        if (request.session().attribute("login_incorrect_creds")) {
             loginForm.with(br()).withText("Username or password incorrect...")
-            request.session().attribute("login_error", false)
+            request.session().attribute("login_incorrect_creds", false)
         }
 
         loginForm.with(br())
         loginForm.with(submitButton("Sign in", "pure-button"))
 
         model.put("login_form", loginForm.render())
-        model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withValue("Sign Up").render())
+        model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
 
         return ModelAndView(model, layoutTemplate)
     }
