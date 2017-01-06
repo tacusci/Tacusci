@@ -78,7 +78,7 @@ object LoginController : KLogging() {
     fun post_postLogin(request: Request, response: Response): Response {
         logger.info("Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
-        var username = request.queryParams("username")
+        var username = request.queryParams("username").toLowerCase()
         var email = ""
         val password = request.queryParams("password")
 
