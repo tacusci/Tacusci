@@ -71,7 +71,14 @@ object LoginController : KLogging() {
 
         model.put("login_form", loginForm.render())
         model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
+        model.put("banned_message", "")
 
+        if (request.session().attribute("is_banned")) {
+            model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
+            model.put("login_form", "")
+            model.put("signup_link", "")
+            request.session().attribute("is_banned", false)
+        }
         return ModelAndView(model, layoutTemplate)
     }
 
