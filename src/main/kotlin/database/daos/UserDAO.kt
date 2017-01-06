@@ -136,6 +136,19 @@ class UserDAO(connection: Connection, tableName: String) : GenericDAO(connection
         return usernameList
     }
 
+    fun ban(username: String): Boolean {
+        try {
+            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(updateStatement)
+            preparedStatement?.setInt(1, 1)
+            preparedStatement?.setString(2, username)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); return false }
+    }
+
     fun isBanned(username: String): Int {
         var banned = 0
         try {
