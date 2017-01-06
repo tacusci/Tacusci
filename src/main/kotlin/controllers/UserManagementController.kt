@@ -71,8 +71,8 @@ object UserManagementController: KLogging() {
         for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.getLoggedInUsername(request.session()) }) {
             val userIsCurrentlyBannedInt = if (UserHandler.userDAO.getUserBanned(username) > 0) "1" else "0"
             userListTable.addRow(listOf(listOf<Tag>(label(username).withName(username).withId(username)),
-                                        listOf<Tag>(input().withType("hidden").withName(username).withValue("0"),
-                                                input().withType("checkbox").withName(username).withValue(userIsCurrentlyBannedInt))))
+                                        listOf<Tag>(input().withType("hidden").withName(username).withValue("username_hidden"),
+                                                input().withType("checkbox").withName(username).withValue("username_checkbox"))))
 
         }
         userAdminForm.with(userListTable.render())
