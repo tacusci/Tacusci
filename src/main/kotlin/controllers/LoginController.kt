@@ -62,7 +62,7 @@ object LoginController : KLogging() {
         val loginForm = form().withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
 
         if (request.session().attribute("login_error")) {
-            loginForm.withText("Username or password incorrect...")
+            loginForm.with(br()).withText("Username or password incorrect...")
             request.session().attribute("login_error", false)
         }
 
