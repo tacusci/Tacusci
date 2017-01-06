@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
+import com.googlecode.htmlcompressor.compressor.Compressor;
+import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 import utils.HTMLUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -71,7 +73,9 @@ public class VelocityTemplateEngine extends TemplateEngine {
             VelocityContext context = new VelocityContext(modelMap);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
-            return HTMLUtils.INSTANCE.formatMarkup(writer.toString());
+            Compressor htmlCompressor = new HtmlCompressor();
+            return htmlCompressor.compress(writer.toString());
+            //return HTMLUtils.INSTANCE.formatMarkup(writer.toString());
             //return writer.toString();
         } else {
             throw new IllegalArgumentException("modelAndView must be of type java.util.Map");
