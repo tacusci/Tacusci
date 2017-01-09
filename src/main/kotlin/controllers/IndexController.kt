@@ -49,12 +49,12 @@ object IndexController {
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
         if (UserHandler.isLoggedIn(request.session())) {
-            val userProfileLink = a().withHref("/profile").withClass("pure-button").withText(UserHandler.getLoggedInUsername(request.session()))
+            val userProfileLink = a().withClass("size-chart-item").withHref("/profile").withClass("pure-button").withText(UserHandler.getLoggedInUsername(request.session()))
             model.put("profile_or_login_link", userProfileLink.render())
             model.put("sign_up_link", "")
         } else {
-            model.put("profile_or_login_link", a().withHref("/login").withText("Login").render())
-            model.put("sign_up_link", a().withHref("/login/register").withText("Sign Up").render())
+            model.put("profile_or_login_link", a().withClass("size-chart-item").withHref("/login").withText("Login").render())
+            model.put("sign_up_link", a().withClass("size-chart-item").withHref("/login/register").withText("Sign Up").render())
         }
         return ModelAndView(model, layoutTemplate)
     }
