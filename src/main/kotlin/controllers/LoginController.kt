@@ -59,18 +59,18 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withClass("centred_element").withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
+        val loginForm = form().withClass("centered_element").withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
 
         if (request.session().attribute("login_incorrect_creds")) {
-            loginForm.with(br()).withClass("centred_element").withText("Username or password incorrect...")
+            loginForm.with(br()).withClass("centered_element").withText("Username or password incorrect...")
             request.session().attribute("login_incorrect_creds", false)
         }
 
         loginForm.with(br())
-        loginForm.with(submitButton("Sign in", "pure-button centred_element"))
+        loginForm.with(submitButton("Sign in", "pure-button centered_element"))
 
         model.put("login_form", loginForm.render())
-        model.put("signup_link", a().withClass("centred_element").withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
+        model.put("signup_link", a().withClass("centered_element").withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {

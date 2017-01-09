@@ -6,7 +6,7 @@ html * {
 }
 
 body {
-    background-color: #E4F1FE;
+    background-color: #FFFFFF;
 }
 
 label {
@@ -14,19 +14,15 @@ label {
 }
 
 pure-u* {
-    text-align:center
+    margin: 0 auto;
+    width:250px;
 }
 
 .logo-div {
     margin: 0 auto;
 }
 
-.centred_element {
-margin: 0 auto;
-width:250px;
-}
-
-form {
+.centered_element {
 margin: 0 auto;
 width:250px;
 }
