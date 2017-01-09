@@ -32,7 +32,6 @@
  package controllers
 
 import handlers.UserHandler
-import j2html.TagCreator.*
 import spark.ModelAndView
 import spark.Request
 import spark.Response
