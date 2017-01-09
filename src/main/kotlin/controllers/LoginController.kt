@@ -37,7 +37,7 @@ import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-import utils.*
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -59,7 +59,7 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
+        val loginForm = form().withMethod("post").with(j2htmlPartials.usernameInput("Username"), br(), j2htmlPartials.passwordInput("password", "Password"))
 
         if (request.session().attribute("login_incorrect_creds")) {
             loginForm.with(br()).withClass("centered_element").withText("Username or password incorrect...")
@@ -67,7 +67,7 @@ object LoginController : KLogging() {
         }
 
         loginForm.with(br())
-        loginForm.with(submitButton("Sign in", "pure-button"))
+        loginForm.with(j2htmlPartials.submitButton("Sign in", "pure-button"))
 
         model.put("login_form", loginForm.render())
         model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withText("Sign Up").render())

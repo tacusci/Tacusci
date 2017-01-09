@@ -36,6 +36,7 @@ import j2html.TagCreator.*
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -48,13 +49,14 @@ object IndexController {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
+
         if (UserHandler.isLoggedIn(request.session())) {
-            val userProfileLink = a().withClass("size-chart-item").withHref("/profile").withClass("pure-button").withText(UserHandler.getLoggedInUsername(request.session()))
-            model.put("profile_or_login_link", userProfileLink.render())
+            //val userProfileLink = a().withClass("size-chart-item").withHref("/profile").withClass("pure-button").with(span().withClass("size-chart-label").withText(UserHandler.getLoggedInUsername(request.session())))
+            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("/login", UserHandler.getLoggedInUsername(request.session())).render())
             model.put("sign_up_link", "")
         } else {
-            model.put("profile_or_login_link", a().withClass("size-chart-item").withHref("/login").withText("Login").render())
-            model.put("sign_up_link", a().withClass("size-chart-item").withHref("/login/register").withText("Sign Up").render())
+            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("/login", "Login").render())
+            model.put("sign_up_link", j2htmlPartials.pureChartElement("/login/register", "Sign Up").render())
         }
         return ModelAndView(model, layoutTemplate)
     }
