@@ -59,22 +59,22 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
+        val loginForm = form().withClass("centred_element").withMethod("post").with(usernameInput("Username"), br(), passwordInput("password", "Password"))
 
         if (request.session().attribute("login_incorrect_creds")) {
-            loginForm.with(br()).withText("Username or password incorrect...")
+            loginForm.with(br()).withClass("centred_element").withText("Username or password incorrect...")
             request.session().attribute("login_incorrect_creds", false)
         }
 
         loginForm.with(br())
-        loginForm.with(submitButton("Sign in", "pure-button"))
+        loginForm.with(submitButton("Sign in", "pure-button centred_element"))
 
         model.put("login_form", loginForm.render())
-        model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
+        model.put("signup_link", a().withClass("centred_element").withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {
-            model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
+            model.put("banned_message", img().withClass("centered_element").withSrc("/images/you_have_been_banned.jpg"))
             model.put("login_form", "")
             model.put("signup_link", "")
             request.session().attribute("is_banned", false)

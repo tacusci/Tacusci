@@ -20,3 +20,13 @@ pure-u* {
 .logo-div {
     margin: 0 auto;
 }
+
+.centred_element {
+margin: 0 auto;
+width:250px;
+}
+
+form {
+margin: 0 auto;
+width:250px;
+}
