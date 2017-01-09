@@ -36,7 +36,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import utils.j2htmlPartials
-import java.util.*
+import java.util.HashMap
 
 /**
  * Created by tauraamui on 15/12/2016.
@@ -50,7 +50,6 @@ object IndexController {
         model.put("title", "Thames Valley Furs - Homepage")
 
         if (UserHandler.isLoggedIn(request.session())) {
-            //val userProfileLink = a().withClass("size-chart-item").withHref("/profile").withClass("pure-button").with(span().withClass("size-chart-label").withText(UserHandler.getLoggedInUsername(request.session())))
             model.put("profile_or_login_link", j2htmlPartials.pureChartElement("/login", UserHandler.getLoggedInUsername(request.session())).render())
             model.put("sign_up_link", "")
         } else {
