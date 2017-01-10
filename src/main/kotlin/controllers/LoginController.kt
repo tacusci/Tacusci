@@ -47,12 +47,13 @@ import java.util.*
 object LoginController : KLogging() {
 
     fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("Received GET request for LOGIN page")
+        val userIP = request.ip()
+        logger.info("$userIP -> Received GET request for LOGIN page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
 
         if (UserHandler.isLoggedIn(request.session())) {
-            logger.info("User already logged in, redirecting to landing page")
+            logger.info("$userIP -> User already logged in, redirecting to landing page")
             response.redirect("/")
         }
 
@@ -74,6 +75,7 @@ object LoginController : KLogging() {
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {
+            logger.info("$userIP -> user is banned")
             model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
             model.put("login_form", "")
             model.put("signup_link", "")
@@ -83,7 +85,8 @@ object LoginController : KLogging() {
     }
 
     fun post_postLogin(request: Request, response: Response): Response {
-        logger.info("Received POST submission for LOGIN page")
+        val userIP = request.ip()
+        logger.info("$userIP -> Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
         var username = request.queryParams("username").toLowerCase()
         var email = ""
@@ -92,7 +95,7 @@ object LoginController : KLogging() {
         if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
             //TODO: Need to improve email validation
             if (username.contains("@")) {
-                logger.info("Email instead of username detected, fetching associated username")
+                logger.info("$userIP -> Email instead of username detected, fetching associated username")
                 email = username
                 username = UserHandler.userDAO.getUsernameFromEmail(email)
             }
@@ -101,7 +104,7 @@ object LoginController : KLogging() {
             request.session().attribute("login_error", true)
             logger.info("Unrecognised username/password provided in form")
         }
-        logger.info("Redirecting to login page")
+        logger.info("$userIP -> Redirecting to login page")
         response.redirect("/login")
         return response
     }
