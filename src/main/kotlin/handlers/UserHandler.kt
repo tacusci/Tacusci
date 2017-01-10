@@ -36,6 +36,7 @@ import database.daos.UserDAO
 import database.models.User
 import database.models.isValid
 import mu.KLogging
+import spark.Request
 import spark.Session
 import utils.Config
 import utils.PasswordStorage
@@ -133,5 +134,9 @@ object  UserHandler : KLogging() {
 
     fun hasAdminRights(username: String): Boolean {
         return GroupHandler.userInGroup(username, "admins")
+    }
+
+    fun getSessionIdentifier(request: Request): String {
+        return if (UserHandler.isLoggedIn(request.session())) "${request.ip()} | ${UserHandler.getLoggedInUsername(request.session())}" else request.ip()
     }
 }

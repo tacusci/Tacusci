@@ -47,7 +47,7 @@ import java.util.*
  * Created by alewis on 25/10/2016.
  */
 
-object Web: KLogging() {
+object Web : KLogging() {
 
     //TODO: Move most of these to their own controller classes :3
 
@@ -58,6 +58,7 @@ object Web: KLogging() {
     }
 
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CREATE_PAGE page")
         val model = HashMap<String, Any>()
         model.put("template", "/templates/create_page.vtl")
         model.put("title", "Thames Valley Furs - Create page")
@@ -65,7 +66,7 @@ object Web: KLogging() {
     }
 
     fun get_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("Received GET request for REGISTER page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
         val sessionAttributes = hashMapOf(Pair("full_name_field_error", false),
                                         Pair("username_field_error",false),
                                         Pair("password_field_error", false),
@@ -102,7 +103,7 @@ object Web: KLogging() {
     }
 
     fun post_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("Received POST submission for REGISTER page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
         val model = HashMap<String, Any>()
         val fullName = request.queryParams("full_name")
         val username = request.queryParams("username")

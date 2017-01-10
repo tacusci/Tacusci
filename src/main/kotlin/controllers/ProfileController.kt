@@ -55,6 +55,7 @@ object ProfileController : KLogging() {
     }
 
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE page")
         var model = HashMap<String, Any>()
         if (UserHandler.isLoggedIn(request.session())) {
             //the username who's profile is requested is from the end of the URL: /profile/IamAUser

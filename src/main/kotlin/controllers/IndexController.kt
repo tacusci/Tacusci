@@ -32,6 +32,7 @@
  package controllers
 
 import handlers.UserHandler
+import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -41,9 +42,10 @@ import java.util.HashMap
 /**
  * Created by tauraamui on 15/12/2016.
  */
-object IndexController {
+object IndexController : KLogging() {
 
     fun get_indexPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")

@@ -31,6 +31,8 @@
  
  package controllers
 
+import handlers.UserHandler
+import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -40,9 +42,10 @@ import java.util.*
  * Created by tauraamui on 27/10/2016.
  */
 
-object DashboardController {
+object DashboardController : KLogging() {
 
     fun get_dashboard(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
         val username: String = request.session().attribute("username")

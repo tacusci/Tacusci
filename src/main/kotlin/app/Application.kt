@@ -103,10 +103,6 @@ class Application {
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        //TODO: Change these gets to posts/returning these pages in the response
-        get("/access_denied", { request, response -> Web.get_accessDeniedPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/user_not_found", { request, response -> Web.get_userNotFound(request, response, layoutTemplate) }, VelocityTemplateEngine())
-
         //MAP POST ROUTES
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })

@@ -47,13 +47,12 @@ import java.util.*
 object LoginController : KLogging() {
 
     fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val userIP = request.ip()
-        logger.info("$userIP -> Received GET request for LOGIN page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
 
         if (UserHandler.isLoggedIn(request.session())) {
-            logger.info("$userIP -> User already logged in, redirecting to landing page")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
             response.redirect("/")
         }
 
@@ -75,7 +74,7 @@ object LoginController : KLogging() {
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {
-            logger.info("$userIP -> user is banned")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> user is banned")
             model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
             model.put("login_form", "")
             model.put("signup_link", "")
@@ -86,7 +85,7 @@ object LoginController : KLogging() {
 
     fun post_postLogin(request: Request, response: Response): Response {
         val userIP = request.ip()
-        logger.info("$userIP -> Received POST submission for LOGIN page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
         var username = request.queryParams("username").toLowerCase()
         var email = ""
@@ -95,7 +94,7 @@ object LoginController : KLogging() {
         if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
             //TODO: Need to improve email validation
             if (username.contains("@")) {
-                logger.info("$userIP -> Email instead of username detected, fetching associated username")
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
                 email = username
                 username = UserHandler.userDAO.getUsernameFromEmail(email)
             }

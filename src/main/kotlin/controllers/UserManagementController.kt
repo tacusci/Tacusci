@@ -33,7 +33,6 @@
 
 import handlers.UserHandler
 import j2html.TagCreator.*
-import j2html.tags.EmptyTag
 import j2html.tags.Tag
 import mu.KLogging
 import spark.ModelAndView
@@ -46,9 +45,10 @@ import java.util.*
  * Created by alewis on 07/11/2016.
  */
 
-object UserManagementController: KLogging() {
+object UserManagementController : KLogging() {
 
     fun get_getUserManagement(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         val model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")
         model.put("title", "Thames Valley Furs - User Management")
@@ -57,7 +57,7 @@ object UserManagementController: KLogging() {
     }
 
     fun post_userManagement(request: Request, response: Response) {
-        logger.info("Recieved post submission for user management page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         Web.initSessionAttributes(request.session())
         println(request.body())
         //TODO: REMEMBER TO PREVENT THE CURRENTLY LOGGED IN USER FROM BEING ABLE TO BAN THEMSELVES...
