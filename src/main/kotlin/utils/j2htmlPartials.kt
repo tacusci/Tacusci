@@ -59,8 +59,8 @@ object j2htmlPartials {
         return button().withType("submit").withClass(classString).withText(text)
     }
 
-    fun pureChartElement(href: String, text: String): Tag {
-        return a().withClass("size-chart-item pure-button").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
+    fun pureChartElement(lookAndFeelClass: String = "pure-button", href: String, text: String): Tag {
+        return a().withClass("size-chart-item $").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
     }
 
 }

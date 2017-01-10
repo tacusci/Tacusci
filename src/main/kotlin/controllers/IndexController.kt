@@ -52,11 +52,11 @@ object IndexController : KLogging() {
         model.put("title", "Thames Valley Furs - Homepage")
 
         if (UserHandler.isLoggedIn(request.session())) {
-            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("/login", UserHandler.getLoggedInUsername(request.session())).render())
+            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("", "/login", UserHandler.getLoggedInUsername(request.session())).render())
             model.put("sign_up_link", "")
         } else {
-            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("/login", "Login").render())
-            model.put("sign_up_link", j2htmlPartials.pureChartElement("/login/register", "Sign Up").render())
+            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("", "/login", "Login").render())
+            model.put("sign_up_link", j2htmlPartials.pureChartElement("", "/login/register", "Sign Up").render())
         }
         return ModelAndView(model, layoutTemplate)
     }
