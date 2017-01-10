@@ -48,10 +48,9 @@ object DashboardController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         Web.initSessionAttributes(request.session())
         val model = HashMap<String, Any>()
-        val username: String = request.session().attribute("username")
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
-        model.put("username", request.session().attribute("username"))
+        model.put("username", UserHandler.getLoggedInUsername(request.session()))
         return ModelAndView(model, layoutTemplate)
     }
 }
