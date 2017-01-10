@@ -60,7 +60,10 @@ object j2htmlPartials {
     }
 
     fun pureChartElement(lookAndFeelClass: String = "pure-button", href: String, text: String): Tag {
-        return a().withClass("size-chart-item $").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
+        return a().withClass("size-chart-item $lookAndFeelClass").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
     }
 
+    fun pureMenuItem(lookAndFeelClass: String, href: String, text: String): Tag {
+        return li().withClass("pure-menu-item $lookAndFeelClass").with(a().withHref(href).withClass("pure-menu-link").withText(text))
+    }
 }

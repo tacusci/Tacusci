@@ -37,7 +37,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import utils.j2htmlPartials
-import java.util.HashMap
+import java.util.*
 
 /**
  * Created by tauraamui on 15/12/2016.
@@ -52,11 +52,11 @@ object IndexController : KLogging() {
         model.put("title", "Thames Valley Furs - Homepage")
 
         if (UserHandler.isLoggedIn(request.session())) {
-            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("", "/login", UserHandler.getLoggedInUsername(request.session())).render())
-            model.put("sign_up_link", "")
+            model.put("login_link_title", UserHandler.getLoggedInUsername(request.session()))
+            model.put("sign_up_menu_item", "")
         } else {
-            model.put("profile_or_login_link", j2htmlPartials.pureChartElement("", "/login", "Login").render())
-            model.put("sign_up_link", j2htmlPartials.pureChartElement("", "/login/register", "Sign Up").render())
+            model.put("login_link_title", "Login")
+            model.put("sign_up_menu_item", j2htmlPartials.pureMenuItem("", "/login/register", "Sign Up").render())
         }
         return ModelAndView(model, layoutTemplate)
     }
