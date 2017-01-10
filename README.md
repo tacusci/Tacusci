@@ -4,7 +4,7 @@ TVF is a website for (Thames Valley Furs). It will be created using a custom CMS
 
 ## Deployment
 
-To host this on a webserver JRE 8 or higher is required. To run as a service use a 3rd party tool, or if on Linux 'screen' is also an option
+To host this on a webserver JRE 8 or higher is required. To run as a service use a 3rd party tool, or if on Linux 'screen' or the & parameter
 
 ## Built With
 
@@ -12,6 +12,7 @@ To host this on a webserver JRE 8 or higher is required. To run as a service use
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [Velocity](http://velocity.apache.org/) - Used to generate the HTML from templates
 * [Kotlin](https://kotlinlang.org/) - Alternative JVM language to Java
+* [j2html](http://j2html.com/) - Fast and fluent Java HTML5 builder
 
 ## Authors
 
