@@ -1,32 +1,4 @@
-
-html * {
-   font-size: 1em !important;
-   color: #000 !important;
-   font-family: Verdana, Geneva, sans-serif !important;
-}
-
-body {
-    background-color: #FFFFFF;
-}
-
-label {
-    font-size: 150%
-}
-
-.logo-div {
-    margin: 0 auto;
-}
-
-.centered_element {
-    position:absolute;
-    margin-left:auto;
-    margin-right:auto;
-    left: 0; /*NEW*/
-    right: 0; /*NEW*/
-    display: inline-block;
-}
-
-.top_right_menu_bar {
+.top_right {
     position: absolute;
     right:0;
     top:0;

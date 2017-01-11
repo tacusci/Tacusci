@@ -130,7 +130,7 @@ object Web : KLogging() {
                 if (!user.isEmailValid()) {
                     request.session().attribute("email_field_error", true)
                 }
-                response.redirect("/login/register")
+                response.redirect("/register")
             }
         } else {
             request.session().attribute("username_not_available_error", true)

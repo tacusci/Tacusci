@@ -1,10 +1,20 @@
-<div class="top_right_menu_bar">
-    <div class="size-chart pure-g">
-        <div class="size-chart-base pure-u" style="width:50%">
-            $profile_or_login_link
-        </div>
-        <div class="size-chart-base pure-u" style="width:50%">
-            $sign_up_link
-        </div>
+<style>
+      .custom-restricted-width {
+          /* To limit the menu width to the content of the menu: */
+          display: inline-block;
+          /* Or set the width explicitly: */
+          /* width: 10em; */
+      }
+</style>
+<div class="top_right">
+    <div class="pure-menu custom-restricted-width pure-menu-horizontal">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+                <a href="/login" class="pure-menu-link">$login_link_title</a>
+                <a href="/login" class="pure-menu-link">$login_link_title</a>
+                $sign_up_menu_link
+                $sign_out_form
+            </li>
+        </ul>
     </div>
 </div>

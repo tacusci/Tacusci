@@ -95,9 +95,9 @@ class Application {
 
         get("/", { request, response -> IndexController.get_indexPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/login/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        get("/admin/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -107,8 +107,8 @@ class Application {
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
-        post("/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        post("/login/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        post("/dashboard/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
         post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
 

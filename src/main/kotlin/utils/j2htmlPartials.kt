@@ -63,7 +63,15 @@ object j2htmlPartials {
         return a().withClass("size-chart-item $lookAndFeelClass").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
     }
 
-    fun pureMenuItem(lookAndFeelClass: String, href: String, text: String): Tag {
+    fun pureMenuItemLink(lookAndFeelClass: String, href: String, text: String): Tag {
         return li().withClass("pure-menu-item $lookAndFeelClass").with(a().withHref(href).withClass("pure-menu-link").withText(text))
+    }
+
+    fun pureMenuItemForm(lookAndFeelClass: String, href: String, text: String): Tag {
+        return li().withClass("pure-menu-item").with(link(lookAndFeelClass, href, text))
+    }
+
+    fun link(lookAndFeelClass: String, href: String, text: String): Tag {
+        return a().withHref(href).withClass(lookAndFeelClass).withText(text)
     }
 }
