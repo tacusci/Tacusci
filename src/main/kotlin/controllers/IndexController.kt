@@ -32,8 +32,7 @@
  package controllers
 
 import handlers.UserHandler
-import j2html.TagCreator.button
-import j2html.TagCreator.form
+import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -56,8 +55,7 @@ object IndexController : KLogging() {
         if (UserHandler.isLoggedIn(request.session())) {
             model.put("login_link_title", UserHandler.getLoggedInUsername(request.session()))
             model.put("sign_up_menu_link", "")
-            val logoutForm = form().withAction("/logout").withMethod("post").with(button().withClass("pure-button").withType("submit").withText("Logout"))
-            model.put("sign_out_form", logoutForm.render())
+            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
         } else {
             model.put("login_link_title", "Login")
             model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())

@@ -55,6 +55,10 @@ object j2htmlPartials {
         return button().withType("submit").withText(text)
     }
 
+    fun link(lookAndFeelClass: String, href: String, text: String): Tag {
+        return a().withHref(href).withClass(lookAndFeelClass).withText(text)
+    }
+
     fun submitButton(text: String, classString: String): Tag {
         return button().withType("submit").withClass(classString).withText(text)
     }
@@ -64,14 +68,10 @@ object j2htmlPartials {
     }
 
     fun pureMenuItemLink(lookAndFeelClass: String, href: String, text: String): Tag {
-        return li().withClass("pure-menu-item $lookAndFeelClass").with(a().withHref(href).withClass("pure-menu-link").withText(text))
+        return li().withClass("pure-menu-item").with(a().withHref(href).withClass("pure-menu-link $lookAndFeelClass").withText(text))
     }
 
-    fun pureMenuItemForm(lookAndFeelClass: String, href: String, text: String): Tag {
-        return li().withClass("pure-menu-item").with(link(lookAndFeelClass, href, text))
-    }
-
-    fun link(lookAndFeelClass: String, href: String, text: String): Tag {
-        return a().withHref(href).withClass(lookAndFeelClass).withText(text)
+    fun pureMenuItemForm(lookAndFeelClass: String, href: String, method: String, text: String): Tag {
+        return li().withClass("pure-menu-item").with(form().withClass("pure-menu-link $lookAndFeelClass").withMethod(method).withAction(href).with(submitButton(text, "pure-menu-link")))
     }
 }
