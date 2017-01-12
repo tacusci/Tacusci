@@ -66,7 +66,6 @@ object LoginController : KLogging() {
             request.session().attribute("login_incorrect_creds", false)
         }
 
-        loginForm.with(br())
         loginForm.with(j2htmlPartials.submitButton("Sign in", "pure-button"))
 
         model.put("login_form", loginForm.render())
