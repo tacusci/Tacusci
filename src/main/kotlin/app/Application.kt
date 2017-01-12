@@ -136,16 +136,6 @@ class Application {
                 }
             }
         })
-        /*
-        before("/dashboard/user_management", { request, response ->
-            if (!UserHandler.isLoggedIn(request.session())) {
-                if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
-                    logger.info("Client at ${request.ip()} is trying to access user management page without authentication.")
-                    halt(401, "Access is denied")
-                }
-            }
-        })
-        */
     }
 }
 
