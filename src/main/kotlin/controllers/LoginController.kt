@@ -59,7 +59,7 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withMethod("post").with(j2htmlPartials.usernameInput("Username"), br(), j2htmlPartials.passwordInput("password", "Password"))
+        val loginForm = form().withMethod("post").with(j2htmlPartials.usernameInput("Username"), j2htmlPartials.passwordInput("password", "Password"))
 
         if (request.session().attribute("login_incorrect_creds")) {
             loginForm.with(br()).withClass("centered_element").withText("Username or password incorrect...")
