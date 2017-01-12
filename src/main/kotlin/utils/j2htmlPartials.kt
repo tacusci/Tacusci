@@ -3,6 +3,7 @@ package utils
 import handlers.UserHandler
 import j2html.tags.Tag
 import j2html.TagCreator.*
+import j2html.tags.ContainerTag
 
 /**
  * Created by alewis on 04/01/2017.
@@ -42,13 +43,27 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun emailInput(placeholder: String): Tag {
-        return input()
-                .withType("email")
-                .withId("email")
-                .withName("email")
-                .withPlaceholder(placeholder)
-                .isRequired
+    fun pureFormCompact_Login(legend: String, href: String): ContainerTag {
+        return form().withClass("pure-form").withHref(href).withMethod("post").with(
+                fieldset().with(
+                        legend(legend),
+                        j2htmlPartials.input("username", "Username"),
+                        passwordInput("password", "Password"),
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                )
+        )
+    }
+
+    fun pureFormStacked_Login(legend: String, href: String): ContainerTag {
+        return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod("post").with(
+                fieldset().with(
+                        legend(legend),
+                        j2htmlPartials.input("username", "Username"),
+                        passwordInput("password", "Password"),
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login"),
+                        a().withHref("/register").withClass("pure-button").withText("Sign Up")
+                )
+        )
     }
 
     fun submitButton(text: String): Tag {

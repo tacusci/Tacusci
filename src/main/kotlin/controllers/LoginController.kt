@@ -59,17 +59,14 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = form().withMethod("post").with(j2htmlPartials.usernameInput("Username"), j2htmlPartials.passwordInput("password", "Password"))
+        val loginForm = j2htmlPartials.pureFormStacked_Login("Login", "/login")
 
         if (request.session().attribute("login_incorrect_creds")) {
             loginForm.with(br()).withClass("centered_element").withText("Username or password incorrect...")
             request.session().attribute("login_incorrect_creds", false)
         }
 
-        loginForm.with(j2htmlPartials.submitButton("Sign in", "pure-button"))
-
         model.put("login_form", loginForm.render())
-        model.put("signup_link", a().withHref("/login/register").withClass("pure-button").withText("Sign Up").render())
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {
