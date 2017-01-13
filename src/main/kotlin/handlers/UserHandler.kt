@@ -34,7 +34,6 @@ package handlers
 import database.daos.DAOManager
 import database.daos.UserDAO
 import database.models.User
-import database.models.isValid
 import mu.KLogging
 import spark.Request
 import spark.Session

@@ -36,7 +36,6 @@ import database.daos.GroupDAO
 import database.daos.User2GroupDAO
 import database.models.Group
 import database.models.User
-import database.models.isValid
 import mu.KLogging
 import spark.Session
 
