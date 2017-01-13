@@ -14,6 +14,7 @@ object j2htmlPartials {
     fun usernameInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)
+                .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
                 .isRequired
