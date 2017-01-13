@@ -97,7 +97,7 @@ object  UserHandler : KLogging() {
         return false
     }
 
-    fun getLoggedInUsername(session: Session): String {
+    fun loggedInUsername(session: Session): String {
         if (isLoggedIn(session)) {
             if (session.attributes().contains("username")) {
                 return session.attribute("username")
@@ -131,11 +131,7 @@ object  UserHandler : KLogging() {
         return userDAO.userExists(username)
     }
 
-    fun hasAdminRights(username: String): Boolean {
-        return GroupHandler.userInGroup(username, "admins")
-    }
-
     fun getSessionIdentifier(request: Request): String {
-        return if (UserHandler.isLoggedIn(request.session())) "${request.ip()} | ${UserHandler.getLoggedInUsername(request.session())}" else request.ip()
+        return if (UserHandler.isLoggedIn(request.session())) "${request.ip()} | ${UserHandler.loggedInUsername(request.session())}" else request.ip()
     }
 }

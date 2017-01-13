@@ -50,7 +50,7 @@ object DashboardController : KLogging() {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
-        model.put("username", UserHandler.getLoggedInUsername(request.session()))
+        model.put("username", UserHandler.loggedInUsername(request.session()))
         return ModelAndView(model, layoutTemplate)
     }
 }

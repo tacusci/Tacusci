@@ -84,8 +84,6 @@ object LoginController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
 
-        request.queryParams().forEach(::println)
-
         var username = request.queryParams("username").toLowerCase()
         var email = ""
         val password = request.queryParams("password")

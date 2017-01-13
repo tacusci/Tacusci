@@ -31,6 +31,7 @@
  
  package controllers
 
+import handlers.GroupHandler
 import handlers.UserHandler
 import j2html.TagCreator.*
 import mu.KLogging
@@ -52,16 +53,22 @@ object IndexController : KLogging() {
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
 
+        model.put("dashboard_link", "")
+        model.put("login_link_title", "Login")
+        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
+        model.put("sign_out_form", "")
+
         if (UserHandler.isLoggedIn(request.session())) {
-            model.put("login_link_title", UserHandler.getLoggedInUsername(request.session()))
+            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
+                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("", "/dashboard", "Dashboard").render())
+            } else {
+                model.put("dashboard_link", "")
+            }
+            model.put("login_link_title", UserHandler.loggedInUsername(request.session()))
             model.put("sign_up_menu_link", "")
             model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
-        } else {
-            model.put("login_link_title", "Login")
-            model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
-            model.put("sign_out_form", "")
-
         }
+
         return ModelAndView(model, layoutTemplate)
     }
 }
