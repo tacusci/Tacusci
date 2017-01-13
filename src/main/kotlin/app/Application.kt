@@ -58,8 +58,7 @@ class Application {
 
     companion object : KLogging()
 
-    fun init() {
-
+    fun connectToDB() {
         //connect to root SQL server instance
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
@@ -70,16 +69,17 @@ class Application {
         //reconnect at the requested specific schema
         DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
+    }
 
+    fun setupDefaultGroups() {
         GroupHandler.createGroup(Group("admins"))
         GroupHandler.createGroup(Group("members"))
         UserHandler.createDefaultUser()
         GroupHandler.addUserToGroup(UserHandler.defaultUser, "admins")
+    }
 
-        val layoutTemplate = "/templates/layout.vtl"
-
+    fun setupSpark() {
         logger.info("Setting port to $port")
-
         var portNum = -1
         try {
             portNum = Config.getProperty("port").toInt()
@@ -90,6 +90,10 @@ class Application {
         port(portNum)
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
+    }
+
+    fun setupSparkRoutes() {
+        val layoutTemplate = "/templates/layout.vtl"
 
         //MAP GET ROUTES
 
@@ -145,6 +149,13 @@ class Application {
                 }
             }
         })
+    }
+
+    fun init() {
+        connectToDB()
+        setupDefaultGroups()
+        setupSpark()
+        setupSparkRoutes()
     }
 }
 
