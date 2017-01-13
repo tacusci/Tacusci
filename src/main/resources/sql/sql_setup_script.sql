@@ -22,7 +22,5 @@ CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
 
 
 CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
-  `idusers` INT NOT NULL AUTO_INCREMENT,
-  `idgroups` INT NOT NULL,
-  UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
-  UNIQUE INDEX `idgroups_UNIQUE` (`idgroups` ASC));
+  `idusers` INT NOT NULL,
+  `idgroups` INT NOT NULL);

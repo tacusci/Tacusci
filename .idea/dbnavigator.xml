@@ -31,13 +31,17 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="0261cb09-88fd-4119-9a60-f49c0a9968c5">
-      <console name="tvf" type="STANDARD"><![CDATA[select * from users]]></console>
+      <console name="tvf" type="STANDARD"><![CDATA[select * from user2group]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.user2group" active-filter-id="" />
-    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.groups" active-filter-id="">
-      <filter id="eb70e59e-a501-4a96-a50a-9c5c1e3fc425" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.user2group" active-filter-id="">
+      <filter id="92b82577-a340-4b64-bc42-251893b5ec1c" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="idusers" operator="=" value="" active="true" />
+      </filter>
+    </filter-list>
+    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.groups" active-filter-id="eb70e59e-a501-4a96-a50a-9c5c1e3fc425">
+      <filter id="eb70e59e-a501-4a96-a50a-9c5c1e3fc425" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="idgroups" operator="=" value="" active="true" />
       </filter>
     </filter-list>
