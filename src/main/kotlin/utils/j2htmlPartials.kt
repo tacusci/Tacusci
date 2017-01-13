@@ -11,14 +11,13 @@ import j2html.tags.ContainerTag
 
 object j2htmlPartials {
 
-    /*
-    fun input(identifier: String, placeholder: String): Tag {
-        return input().withId(identifier)
+    fun usernameInput(identifier: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
                 .withName(identifier)
                 .withPlaceholder(placeholder)
                 .isRequired
     }
-    */
 
     fun passwordInput(identifier: String, placeholder: String): Tag {
         return input()
@@ -44,7 +43,7 @@ object j2htmlPartials {
         return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
                 fieldset().with(
                         legend(legend),
-                        input().withId("username").withPlaceholder("Username"),
+                        usernameInput("username", "Username"),
                         passwordInput("password", "Password"),
                         button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login"),
                         a().withHref("/register").withClass("pure-button").withText("Sign Up")
