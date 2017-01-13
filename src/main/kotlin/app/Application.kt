@@ -46,6 +46,7 @@ import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
+import java.time.Duration
 import javax.jws.soap.SOAPBinding
 
 
@@ -144,8 +145,7 @@ class Application {
 
     fun restartSpark() {
         stop()
-        setupSpark()
-        setupSparkRoutes()
+        init()
     }
 
     fun init() {
