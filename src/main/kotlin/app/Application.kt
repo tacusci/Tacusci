@@ -51,14 +51,13 @@ import javax.jws.soap.SOAPBinding
 
 class Application {
 
-    val port = Config.getProperty("port")
-    val dbURL = Config.getProperty("db_url")
     var dbUsername = ""
     var dbPassword = ""
 
     companion object : KLogging()
 
     fun connectToDB() {
+        val dbURL = Config.getProperty("db_url")
         //connect to root SQL server instance
         DAOManager.init(dbURL, dbUsername, dbPassword)
         DAOManager.connect()
@@ -79,6 +78,7 @@ class Application {
     }
 
     fun setupSpark() {
+        val port = Config.getProperty("port")
         logger.info("Setting port to $port")
         var portNum = -1
         try {
@@ -142,6 +142,12 @@ class Application {
         })
     }
 
+    fun restartSpark() {
+        stop()
+        setupSpark()
+        setupSparkRoutes()
+    }
+
     fun init() {
         connectToDB()
         setupDefaultGroups()
@@ -153,9 +159,9 @@ class Application {
 fun main(args: Array<String>) {
     if (args.isEmpty() || args.size < 2) { println("No username/password args"); System.exit(1) }
     Config.load()
-    Config.monitorPropertiesFile()
     val application = Application()
     application.dbUsername = args[0]
     application.dbPassword = args[1]
     application.init()
+    Config.monitorPropertiesFile(application)
 }

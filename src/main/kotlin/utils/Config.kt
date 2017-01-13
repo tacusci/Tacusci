@@ -31,6 +31,7 @@
  
  package utils
 
+import app.Application
 import extensions.doesNotExist
 import mu.KLoggable
 import utils.Config.props.propertiesFileUpdate
@@ -49,7 +50,6 @@ class Config private constructor() {
     companion object props : Properties() {
 
         fun load() {
-
             val defaults: HashMap<String, String> = hashMapOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
                     Pair("db_url", "jdbc:mysql://localhost"),
@@ -88,14 +88,17 @@ class Config private constructor() {
             return super.getProperty(key, defaultValue)
         }
 
-        fun monitorPropertiesFile() {
+        fun monitorPropertiesFile(application: Application) {
             val fileWatcher = FileWatcher(File(this.getProperty("properties_file")))
-            fileWatcher.action = {propertiesFileUpdate()}
+            fileWatcher.action = {propertiesFileUpdate(application)}
             fileWatcher.start()
         }
 
-        fun propertiesFileUpdate() {
-            //println("TODO: Add stuff")
+        fun propertiesFileUpdate(application: Application) {
+            if (File(this.getProperty("properties_file")).exists()) {
+                this.load(File(this.getProperty("properties_file")).inputStream())
+                application.restartSpark()
+            }
         }
     }
 }
