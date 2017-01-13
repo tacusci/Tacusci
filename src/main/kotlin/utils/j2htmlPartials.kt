@@ -57,22 +57,22 @@ object j2htmlPartials {
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Full Name").attr("for", "full_name"),
-                                input().withId("full_name").withType("text").withPlaceholder("Full Name").isRequired
+                                input().withId("full_name").withName("full_name").withType("text").withPlaceholder("Full Name").isRequired
                         ),
 
                         div().withClass("pure-control-group").with(
                                 label("Username").attr("for", "username"),
-                                input().withId("username").withType("text").withPlaceholder("Username").isRequired
+                                usernameInput("username", "Username")
                         ),
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
-                                input().withId("password").withType("text").withPlaceholder("Password").isRequired
+                                passwordInput("password", "Password")
                         ),
 
                         div().withClass("pure-control-group").with(
                                 label("Email").attr("for", "email"),
-                                input().withId("email").withType("text").withPlaceholder("Email").isRequired
+                                input().withId("email").withName("email").withType("text").withPlaceholder("Email").isRequired
                         ),
 
                         button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
