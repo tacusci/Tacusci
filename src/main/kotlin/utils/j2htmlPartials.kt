@@ -1,5 +1,6 @@
 package utils
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import handlers.UserHandler
 import j2html.tags.Tag
 import j2html.TagCreator.*
@@ -10,6 +11,15 @@ import j2html.tags.ContainerTag
  */
 
 object j2htmlPartials {
+
+    fun fullNameInput(identifier: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withPlaceholder(placeholder)
+                .isRequired
+    }
 
     fun usernameInput(identifier: String, placeholder: String): Tag {
         return input()
@@ -24,6 +34,15 @@ object j2htmlPartials {
         return input()
                 .withType("password")
                 .withId(identifier)
+                .withName(identifier)
+                .withPlaceholder(placeholder)
+                .isRequired
+    }
+
+    fun emailInput(identifier: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
                 .isRequired
@@ -57,7 +76,7 @@ object j2htmlPartials {
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Full Name").attr("for", "full_name"),
-                                input().withId("full_name").withName("full_name").withType("text").withPlaceholder("Full Name").isRequired
+                                fullNameInput("full_name", "Full Name")
                         ),
 
                         div().withClass("pure-control-group").with(
@@ -72,7 +91,7 @@ object j2htmlPartials {
 
                         div().withClass("pure-control-group").with(
                                 label("Email").attr("for", "email"),
-                                input().withId("email").withName("email").withType("text").withPlaceholder("Email").isRequired
+                                emailInput("email", "Email")
                         ),
 
                         button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
