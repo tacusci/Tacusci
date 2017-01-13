@@ -3,6 +3,7 @@ package utils
 import handlers.UserHandler
 import j2html.tags.Tag
 import j2html.TagCreator.*
+import j2html.tags.ContainerTag
 
 /**
  * Created by alewis on 04/01/2017.
@@ -10,28 +11,14 @@ import j2html.TagCreator.*
 
 object j2htmlPartials {
 
-    fun enterPasswordInput(placeholder: String): Tag {
-        return passwordInput("enterPassword", placeholder)
-    }
-
-    fun choosePasswordInput(placeholder: String): Tag {
-        return passwordInput("choosePassword", placeholder)
-    }
-
-    fun repeatPasswordInput(placeholder: String): Tag {
-        return passwordInput("repeatPassword", placeholder)
-    }
-
-    fun usernameInput(placeholder: String): Tag {
-        return input("username", placeholder)
-    }
-
+    /*
     fun input(identifier: String, placeholder: String): Tag {
         return input().withId(identifier)
                 .withName(identifier)
                 .withPlaceholder(placeholder)
                 .isRequired
     }
+    */
 
     fun passwordInput(identifier: String, placeholder: String): Tag {
         return input()
@@ -42,13 +29,55 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun emailInput(placeholder: String): Tag {
-        return input()
-                .withType("email")
-                .withId("email")
-                .withName("email")
-                .withPlaceholder(placeholder)
-                .isRequired
+    fun pureFormCompact_Login(legend: String, href: String): ContainerTag {
+        return form().withClass("pure-form").withHref(href).withMethod("post").with(
+                fieldset().with(
+                        legend(legend),
+                        input().withId("username").withPlaceholder("Username"),
+                        passwordInput("password", "Password"),
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                )
+        )
+    }
+
+    fun pureFormStacked_Login(legend: String, href: String, method: String): ContainerTag {
+        return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
+                fieldset().with(
+                        legend(legend),
+                        input().withId("username").withPlaceholder("Username"),
+                        passwordInput("password", "Password"),
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login"),
+                        a().withHref("/register").withClass("pure-button").withText("Sign Up")
+                )
+        )
+    }
+
+    fun pureFormAligned_Register(href: String, method: String): ContainerTag {
+        return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
+                fieldset().with(
+                        div().withClass("pure-control-group").with(
+                                label("Full Name").attr("for", "full_name"),
+                                input().withId("full_name").withType("text").withPlaceholder("Full Name").isRequired
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Username").attr("for", "username"),
+                                input().withId("username").withType("text").withPlaceholder("Username").isRequired
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Password").attr("for", "password"),
+                                input().withId("password").withType("text").withPlaceholder("Password").isRequired
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Email").attr("for", "email"),
+                                input().withId("email").withType("text").withPlaceholder("Email").isRequired
+                        ),
+
+                        button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
+                )
+        )
     }
 
     fun submitButton(text: String): Tag {

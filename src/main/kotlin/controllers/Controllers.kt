@@ -41,6 +41,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -88,7 +89,7 @@ object Web : KLogging() {
                 request.session().attribute(attribute, defaultValue)
             }
         }
-        //TODO: doing this twice? need to review/take a closer look again
+
         if (request.session().attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
         if (request.session().attribute("username_field_error")) { model.put("username_error_hidden", "") }
         if (request.session().attribute("password_field_error")) { model.put("password_error_hidden", "") }
@@ -99,6 +100,9 @@ object Web : KLogging() {
         }
 
         sessionAttributes.forEach { attribute, defaultValue -> request.session().removeAttribute(attribute) }
+
+        model.put("register_form", j2htmlPartials.pureFormAligned_Register("/register", "post").render())
+
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -135,9 +139,8 @@ object Web : KLogging() {
         } else {
             request.session().attribute("username_not_available_error", true)
             request.session().attribute("username_not_available", user.username)
-            response.redirect("/login/register")
+            response.redirect("/register")
         }
-
         return ModelAndView(model, layoutTemplate)
     }
 

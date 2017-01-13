@@ -132,19 +132,10 @@ class Application {
             }
         })
 
-        before("/create_page", { request, response ->
+        before("/dashboard/*", { request, response ->
             if (!UserHandler.isLoggedIn(request.session())) {
                 if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
-                    logger.info("Client at ${request.ip()} is trying to access render page without authentication.")
-                    halt(401, "Access is denied")
-                }
-            }
-        })
-
-        before("/admin/user_management", { request, response ->
-            if (!UserHandler.isLoggedIn(request.session())) {
-                if (!UserHandler.hasAdminRights(UserHandler.getLoggedInUsername(request.session()))) {
-                    logger.info("Client at ${request.ip()} is trying to access user management page without authentication.")
+                    logger.info("Client at ${request.ip()} is trying to access dashboard sub page without authentication.")
                     halt(401, "Access is denied")
                 }
             }
