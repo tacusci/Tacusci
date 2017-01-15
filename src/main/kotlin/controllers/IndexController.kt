@@ -54,7 +54,7 @@ object IndexController : KLogging() {
         model.put("title", "Thames Valley Furs - Homepage")
 
         model.put("dashboard_link", "")
-        model.put("login_link_title", "Login")
+        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/login", "Login").render())
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
         model.put("sign_out_form", "")
 
@@ -64,7 +64,7 @@ object IndexController : KLogging() {
             } else {
                 model.put("dashboard_link", "")
             }
-            model.put("login_link_title", UserHandler.loggedInUsername(request.session()))
+            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/profile", UserHandler.loggedInUsername(request.session())).render())
             model.put("sign_up_menu_link", "")
             model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
         }
