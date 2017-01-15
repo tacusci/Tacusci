@@ -60,7 +60,7 @@ object UserManagementController : KLogging() {
     fun post_userManagement(request: Request, response: Response) {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         Web.initSessionAttributes(request.session())
-        val usersAndBanned = getUsersAndBanned(request.body())
+        val usersAndBanned = getUserBannedState(request.body())
         usersAndBanned.forEach {
             for ((username, banned) in it) {
                 if (username == UserHandler.loggedInUsername(request.session())) continue
@@ -70,7 +70,7 @@ object UserManagementController : KLogging() {
         response.redirect("/dashboard/user_management")
     }
 
-    private fun getUsersAndBanned(body: String): MutableList<MutableMap<String, Boolean>> {
+    private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {
         val usersAnnedBanned = mutableListOf<MutableMap<String, Boolean>>()
         val bodyAttributes = body.split("&")
         val usernameAndBanned = mutableMapOf<String, Boolean>()
