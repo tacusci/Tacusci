@@ -114,7 +114,7 @@ class Application {
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
         post("/dashboard/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        post("/admin/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
+        post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
 
         //MAP REDIRECTS

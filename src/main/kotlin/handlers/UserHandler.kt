@@ -31,6 +31,7 @@
  
 package handlers
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import database.daos.DAOManager
 import database.daos.UserDAO
 import database.models.User
@@ -120,6 +121,14 @@ object  UserHandler : KLogging() {
     fun userExists(user: User): Boolean {
         if (!user.isValid()) return false
         return userDAO.userExists(user.username)
+    }
+
+    fun ban(username: String): Boolean {
+        return userDAO.ban(username)
+    }
+
+    fun unban(username: String): Boolean {
+        return userDAO.unban(username)
     }
 
     fun isBanned(username: String): Boolean {

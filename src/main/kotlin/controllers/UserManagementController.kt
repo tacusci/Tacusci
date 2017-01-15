@@ -31,6 +31,7 @@
  
  package controllers
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.Tag
@@ -59,13 +60,36 @@ object UserManagementController : KLogging() {
     fun post_userManagement(request: Request, response: Response) {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         Web.initSessionAttributes(request.session())
-        println(request.body())
-        //TODO: REMEMBER TO PREVENT THE CURRENTLY LOGGED IN USER FROM BEING ABLE TO BAN THEMSELVES...
+        val usersAndBanned = getUsersAndBanned(request.body())
+        usersAndBanned.forEach {
+            for ((username, banned) in it) {
+                if (banned) UserHandler.ban(username) else UserHandler.unban(username)
+            }
+        }
+        response.redirect("/dashboard/user_management")
+    }
+
+    private fun getUsersAndBanned(body: String): MutableList<MutableMap<String, Boolean>> {
+        val usersAnnedBanned = mutableListOf<MutableMap<String, Boolean>>()
+        val bodyAttributes = body.split("&")
+        val usernameAndBanned = mutableMapOf<String, Boolean>()
+        bodyAttributes.forEach { attribute ->
+            if (attribute.contains("banned_checkbox.hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndBanned.put(username, false)
+            }
+            if (attribute.contains("banned_checkbox") && !attribute.contains(".hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndBanned.put(username, true)
+            }
+        }
+        usersAnnedBanned.add(usernameAndBanned)
+        return usersAnnedBanned
     }
 
     private fun genUserForm(request: Request, response: Response): String {
 
-        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/admin/user_management").withMethod("post")
+        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
