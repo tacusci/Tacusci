@@ -121,6 +121,7 @@ class Application {
 
         redirect.get("/profile/", "/profile")
         redirect.get("/login/", "/login")
+        redirect.get("/dashboard/create_page/", "/dashboard/create_page")
 
         //MAP BEFORES
 
