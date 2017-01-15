@@ -71,7 +71,7 @@ object UserManagementController : KLogging() {
     }
 
     private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAnnedBanned = mutableListOf<MutableMap<String, Boolean>>()
+        val usersAnedBanned = mutableListOf<MutableMap<String, Boolean>>()
         val bodyAttributes = body.split("&")
         val usernameAndBanned = mutableMapOf<String, Boolean>()
         bodyAttributes.forEach { attribute ->
@@ -84,8 +84,8 @@ object UserManagementController : KLogging() {
                 usernameAndBanned.put(username, true)
             }
         }
-        usersAnnedBanned.add(usernameAndBanned)
-        return usersAnnedBanned
+        usersAnedBanned.add(usernameAndBanned)
+        return usersAnedBanned
     }
 
     private fun genUserForm(request: Request, response: Response): String {
