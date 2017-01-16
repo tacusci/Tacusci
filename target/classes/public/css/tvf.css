@@ -1,5 +1,43 @@
-.top_right {
+.top-right {
     position: absolute;
     right:0;
     top:0;
+}
+
+body, html {
+  height: 100%;
+  font-size: 16px;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+.wrapper:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-left: -2em;
+}
+.wrapper div {
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 2em;
+}
+.wrapper div h1 {
+  margin: 0;
+  padding: 20px 0;
+  display: block;
+  font-size: 200%;
+}
+.wrapper div p {
+  margin: 0;
+  padding-bottom: 20px;
+  display: block;
+  text-align: justify;
+  line-height: 1.2;
+  font-size: 95%;
 }
