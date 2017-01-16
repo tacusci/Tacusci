@@ -49,26 +49,10 @@ object IndexController : KLogging() {
     fun get_indexPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         Web.initSessionAttributes(request.session())
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
-
-        model.put("dashboard_link", "")
-        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/login", "Login").render())
-        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
-        model.put("sign_out_form", "")
-
-        if (UserHandler.isLoggedIn(request.session())) {
-            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
-                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("", "/dashboard", "Dashboard").render())
-            } else {
-                model.put("dashboard_link", "")
-            }
-            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/profile", UserHandler.loggedInUsername(request.session())).render())
-            model.put("sign_up_menu_link", "")
-            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
-        }
-
+        model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 }

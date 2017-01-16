@@ -46,7 +46,7 @@ import java.util.*
  */
 object ProfileController : KLogging() {
 
-    fun genAndGetUserProfilePage(username: String): HashMap<String, Any> {
+    fun genUserProfilePage(username: String): HashMap<String, Any> {
         val model = HashMap<String, Any>()
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
@@ -57,12 +57,13 @@ object ProfileController : KLogging() {
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE page")
         var model = HashMap<String, Any>()
+        model = Web.loadNavBar(request, response, model)
         if (UserHandler.isLoggedIn(request.session())) {
             //the username who's profile is requested is from the end of the URL: /profile/IamAUser
             val userNameOfProfileToView = request.params(":username")
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
                 if (UserHandler.userDAO.userExists(userNameOfProfileToView)) {
-                    model = genAndGetUserProfilePage(userNameOfProfileToView)
+                    model = genUserProfilePage(userNameOfProfileToView)
                 } else {
                     return Web.get_userNotFound(request, response, layoutTemplate)
                 }

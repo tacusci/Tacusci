@@ -50,10 +50,11 @@ object UserManagementController : KLogging() {
 
     fun get_getUserManagement(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")
         model.put("title", "Thames Valley Furs - User Management")
         model.put("user_admin_form", genUserForm(request, response))
+        model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -64,14 +65,20 @@ object UserManagementController : KLogging() {
         usersAndBanned.forEach {
             for ((username, banned) in it) {
                 if (username == UserHandler.loggedInUsername(request.session())) continue
-                if (banned) UserHandler.ban(username) else UserHandler.unban(username)
+                if (banned) {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
+                    UserHandler.ban(username)
+                } else {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
+                    UserHandler.unban(username)
+                }
             }
         }
         response.redirect("/dashboard/user_management")
     }
 
     private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAnedBanned = mutableListOf<MutableMap<String, Boolean>>()
+        val usersAndBanned = mutableListOf<MutableMap<String, Boolean>>()
         val bodyAttributes = body.split("&")
         val usernameAndBanned = mutableMapOf<String, Boolean>()
         bodyAttributes.forEach { attribute ->
@@ -84,8 +91,8 @@ object UserManagementController : KLogging() {
                 usernameAndBanned.put(username, true)
             }
         }
-        usersAnedBanned.add(usernameAndBanned)
-        return usersAnedBanned
+        usersAndBanned.add(usernameAndBanned)
+        return usersAndBanned
     }
 
     private fun genUserForm(request: Request, response: Response): String {

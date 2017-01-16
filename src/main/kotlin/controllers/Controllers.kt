@@ -36,6 +36,7 @@ import database.daos.DAOManager
 import database.daos.UserDAO
 import handlers.UserHandler
 import database.models.*
+import handlers.GroupHandler
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -58,11 +59,32 @@ object Web : KLogging() {
         sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }
     }
 
+    fun loadNavBar(request: Request, response: Response, model: HashMap<String, Any>): HashMap<String, Any> {
+        model.put("home_link", j2htmlPartials.pureMenuItemLink("", "/", "Home").render())
+        model.put("dashboard_link", "")
+        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/login", "Login").render())
+        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
+        model.put("sign_out_form", "")
+
+        if (UserHandler.isLoggedIn(request.session())) {
+            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
+                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("", "/dashboard", "Dashboard").render())
+            } else {
+                model.put("dashboard_link", "")
+            }
+            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/profile", UserHandler.loggedInUsername(request.session())).render())
+            model.put("sign_up_menu_link", "")
+            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
+        }
+        return model
+    }
+
     fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CREATE_PAGE page")
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("template", "/templates/create_page.vtl")
         model.put("title", "Thames Valley Furs - Create page")
+        model = loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -75,7 +97,8 @@ object Web : KLogging() {
                                         Pair("username_not_available_error", false),
                                         Pair("username_not_available", ""))
 
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
+        model = loadNavBar(request, response, model)
         model.put("template", "/templates/register.vtl")
         model.put("title", "Thames Valley Furs - Sign Up")
         model.put("full_name_error_hidden", "hidden")
@@ -108,13 +131,15 @@ object Web : KLogging() {
 
     fun post_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         val fullName = request.queryParams("full_name")
         val username = request.queryParams("username")
         val password = request.queryParams("password")
         val email = request.queryParams("email")
 
         model.put("full_name_error_hidden", true)
+
+        model = loadNavBar(request, response, model)
 
         val user = User(fullName, username, password, email, 0)
 
@@ -145,16 +170,18 @@ object Web : KLogging() {
     }
 
     fun get_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("title", "Thames Valley Furs - Dashboard (access denied)")
         model.put("template", "/templates/access_denied.vtl")
+        model = loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("title", "Thames Valley Furs - Profile (User not found)")
         model.put("template", "/templates/user_not_found.vtl")
+        model = loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 }

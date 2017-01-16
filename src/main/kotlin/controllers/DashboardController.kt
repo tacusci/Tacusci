@@ -47,10 +47,11 @@ object DashboardController : KLogging() {
     fun get_dashboard(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         Web.initSessionAttributes(request.session())
-        val model = HashMap<String, Any>()
+        var model = HashMap<String, Any>()
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
         model.put("username", UserHandler.loggedInUsername(request.session()))
+        model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 }
