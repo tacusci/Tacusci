@@ -64,8 +64,10 @@ object LoginController : KLogging() {
         val loginForm = j2htmlPartials.pureFormAligned_Login("/login", "post")
 
         if (request.session().attribute("login_incorrect_creds")) {
-            loginForm.with(br()).withText("Username or password incorrect...")
             request.session().attribute("login_incorrect_creds", false)
+            model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
+        } else {
+            model.put("username_or_password_incorrect", "")
         }
 
         model.put("login_form", h1("Login").render()+loginForm.render())

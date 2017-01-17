@@ -72,16 +72,16 @@ object j2htmlPartials {
         return form().withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
                 fieldset().with(
                         div().withClass("pure-control-group").with(
-                                label("Username").attr("for", "username"),
+                                label("Username").attr("style", "width: auto;").attr("for", "username"),
                                 usernameInput("username", "Username")
                         ),
 
                         div().withClass("pure-control-group").with(
-                                label("Password").attr("for", "password"),
+                                label("Password").attr("style", "width: auto;").attr("for", "password"),
                                 passwordInput("password", "Password")
                         ),
 
-                        div().withClass("pure-controls").with(
+                        div().withClass("pure-controls").attr("style", "margin: 1.5em 0 0 auto;").with(
                                 button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
                         )
                 )

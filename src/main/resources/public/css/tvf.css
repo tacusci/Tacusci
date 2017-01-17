@@ -7,3 +7,12 @@ div.centered {
     max-width: 768px;
     text-align: center
 }
+
+p.error-text {
+    color: red;
+    background-color: FCFCFC
+}
+
+.pure-control-group label {
+    width: auto;
+}
