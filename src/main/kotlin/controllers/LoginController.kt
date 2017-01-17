@@ -50,6 +50,7 @@ object LoginController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         Web.initSessionAttributes(request.session())
         var model = HashMap<String, Any>()
+        model = Web.loadNavBar(request, response, model)
 
         if (UserHandler.isLoggedIn(request.session())) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
@@ -58,8 +59,6 @@ object LoginController : KLogging() {
 
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
-
-        model = Web.loadNavBar(request, response, model)
 
         val loginForm = j2htmlPartials.pureFormAligned_Login("/login", "post")
 

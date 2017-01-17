@@ -132,6 +132,7 @@ object Web : KLogging() {
     fun post_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
         var model = HashMap<String, Any>()
+        model = loadNavBar(request, response, model)
         val fullName = request.queryParams("full_name")
         val username = request.queryParams("username")
         val password = request.queryParams("password")
@@ -139,7 +140,6 @@ object Web : KLogging() {
 
         model.put("full_name_error_hidden", true)
 
-        model = loadNavBar(request, response, model)
 
         val user = User(fullName, username, password, email, 0)
 
@@ -171,17 +171,17 @@ object Web : KLogging() {
 
     fun get_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
+        model = loadNavBar(request, response, model)
         model.put("title", "Thames Valley Furs - Dashboard (access denied)")
         model.put("template", "/templates/access_denied.vtl")
-        model = loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
+        model = loadNavBar(request, response, model)
         model.put("title", "Thames Valley Furs - Profile (User not found)")
         model.put("template", "/templates/user_not_found.vtl")
-        model = loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 }

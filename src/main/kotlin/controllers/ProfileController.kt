@@ -46,8 +46,9 @@ import java.util.*
  */
 object ProfileController : KLogging() {
 
-    fun genUserProfilePage(username: String): HashMap<String, Any> {
-        val model = HashMap<String, Any>()
+    fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
+        var model = HashMap<String, Any>()
+        model = Web.loadNavBar(request, response, model)
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
         model.put("username", username)
@@ -63,7 +64,7 @@ object ProfileController : KLogging() {
             val userNameOfProfileToView = request.params(":username")
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
                 if (UserHandler.userDAO.userExists(userNameOfProfileToView)) {
-                    model = genUserProfilePage(userNameOfProfileToView)
+                    model = genUserProfilePage(request, response, userNameOfProfileToView)
                 } else {
                     return Web.get_userNotFound(request, response, layoutTemplate)
                 }
