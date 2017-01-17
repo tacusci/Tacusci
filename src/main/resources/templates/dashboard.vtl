@@ -1,17 +1,12 @@
+<div class="pure-g">
+    <div class="pure-u-24-24 centered">
+        <h1>Welcome $username</h1>
+        <p>This is the dashboard page</p>
+        <form method="post" action="create_page">
+                    <button class="pure-button" name="create_page" type="submit">Create Page</button>
+                </form>
+                <a href="/profile/$username" class="pure-button">Go to profile</a>
+                <a href="/dashboard/user_management" class="pure-button">User Administration</a>
+    </div>
+<div>
 
-<div>
-<h1>Welcome $username</h1>
-</div>
-<div>
-<p>This is the dashboard page</p>
-</div>
-<div>
-<form method="post" action="create_page">
-    <button class="pure-button" name="create_page" type="submit">Create Page</button>
-</form>
-</div>
-
-<div>
-<a href="/profile/$username" class="pure-button">Go to profile</a>
-<a href="/dashboard/user_management" class="pure-button">User Administration</a>
-</div>
