@@ -1,10 +1,8 @@
 package utils
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-import handlers.UserHandler
-import j2html.tags.Tag
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
+import j2html.tags.Tag
 
 /**
  * Created by alewis on 04/01/2017.
@@ -65,14 +63,33 @@ object j2htmlPartials {
                         legend(legend),
                         usernameInput("username", "Username"),
                         passwordInput("password", "Password"),
-                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login"),
-                        a().withHref("/register").withClass("pure-button").withText("Sign Up")
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                )
+        )
+    }
+
+    fun pureFormAligned_Login(href: String, method: String): ContainerTag {
+        return form().withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+                fieldset().with(
+                        div().withClass("pure-control-group").with(
+                                label("Username").attr("for", "username"),
+                                usernameInput("username", "Username")
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Password").attr("for", "password"),
+                                passwordInput("password", "Password")
+                        ),
+
+                        div().withClass("pure-controls").with(
+                                button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                        )
                 )
         )
     }
 
     fun pureFormAligned_Register(href: String, method: String): ContainerTag {
-        return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
+        return form().withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Full Name").attr("for", "full_name"),
@@ -115,11 +132,11 @@ object j2htmlPartials {
         return a().withClass("size-chart-item $lookAndFeelClass").withHref(href).with(span().withClass("size-chart-label").with(span().withClass("size-chart-mod").withText(text)))
     }
 
-    fun pureMenuItemLink(lookAndFeelClass: String, href: String, text: String): Tag {
-        return li().withClass("pure-menu-item").with(a().withHref(href).withClass("pure-menu-link $lookAndFeelClass").withText(text))
+    fun pureMenuItemLink(href: String, text: String): Tag {
+        return li().withClass("pure-menu-item").with(a().withHref(href).withClass("pure-menu-link").withText(text))
     }
 
-    fun pureMenuItemForm(lookAndFeelClass: String, href: String, method: String, text: String): Tag {
-        return li().withClass("pure-menu-item").with(form().withClass("pure-menu-link $lookAndFeelClass").withMethod(method).withAction(href).with(submitButton(text, "pure-menu-link")))
+    fun pureMenuItemForm(href: String, method: String, text: String): Tag {
+        return li().withClass("pure-menu-item").with(form().withClass("pure-menu-link").withMethod(method).withAction(href).with(submitButton(text, "pure-menu-link")))
     }
 }

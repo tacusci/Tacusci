@@ -60,21 +60,21 @@ object Web : KLogging() {
     }
 
     fun loadNavBar(request: Request, response: Response, model: HashMap<String, Any>): HashMap<String, Any> {
-        model.put("home_link", j2htmlPartials.pureMenuItemLink("", "/", "Home").render())
+        model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
         model.put("dashboard_link", "")
-        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/login", "Login").render())
-        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("", "/register", "Sign Up").render())
+        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
+        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
         model.put("sign_out_form", "")
 
         if (UserHandler.isLoggedIn(request.session())) {
             if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
-                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("", "/dashboard", "Dashboard").render())
+                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("/dashboard", "Dashboard").render())
             } else {
                 model.put("dashboard_link", "")
             }
-            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("", "/profile", UserHandler.loggedInUsername(request.session())).render())
+            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request.session())).render())
             model.put("sign_up_menu_link", "")
-            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("", "/logout", "post", "Logout").render())
+            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("/logout", "post", "Logout").render())
         }
         return model
     }

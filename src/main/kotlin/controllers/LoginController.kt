@@ -61,14 +61,14 @@ object LoginController : KLogging() {
 
         model = Web.loadNavBar(request, response, model)
 
-        val loginForm = j2htmlPartials.pureFormStacked_Login("Login", "/login", "post")
+        val loginForm = j2htmlPartials.pureFormAligned_Login("/login", "post")
 
         if (request.session().attribute("login_incorrect_creds")) {
-            loginForm.with(br()).withClass("centered_element").withText("Username or password incorrect...")
+            loginForm.with(br()).withText("Username or password incorrect...")
             request.session().attribute("login_incorrect_creds", false)
         }
 
-        model.put("login_form", loginForm.render())
+        model.put("login_form", h1("Login").render()+loginForm.render())
         model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {

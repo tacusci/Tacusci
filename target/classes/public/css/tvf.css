@@ -1,5 +1,9 @@
-.top-right {
-    position: absolute;
-    right:0;
-    top:0;
+
+div.centered {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    max-width: 768px;
+    text-align: center
 }
