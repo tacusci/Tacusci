@@ -34,6 +34,7 @@
 import com.sun.org.apache.xpath.internal.operations.Bool
 import handlers.UserHandler
 import j2html.TagCreator.*
+import j2html.tags.ContainerTag
 import j2html.tags.Tag
 import mu.KLogging
 import spark.ModelAndView
@@ -53,7 +54,10 @@ object UserManagementController : KLogging() {
         var model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")
         model.put("title", "Thames Valley Furs - User Management")
-        model.put("user_admin_form", genUserForm(request, response))
+
+        val userAdminForm = genUserForm(request, response)
+        userAdminForm.withClass("centered")
+        model.put("user_admin_form", userAdminForm.render())
         model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
@@ -95,7 +99,7 @@ object UserManagementController : KLogging() {
         return usersAndBanned
     }
 
-    private fun genUserForm(request: Request, response: Response): String {
+    private fun genUserForm(request: Request, response: Response): ContainerTag {
 
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
 
@@ -111,6 +115,6 @@ object UserManagementController : KLogging() {
         }
         userAdminForm.with(userListTable.render())
         userAdminForm.with(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update"))
-        return userAdminForm.render()
+        return userAdminForm
     }
 }

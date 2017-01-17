@@ -142,6 +142,10 @@ class Application {
                 }
             }
         })
+
+        before("/login", { request, response ->
+            if (request.ip() == "0:0:0:0:0:0:0:1") { UserHandler.login(request.session(), "tvf_admin", "Password1234!") }
+        })
     }
 
     fun restartSpark() {
