@@ -5,14 +5,10 @@ div.centered {
     padding-left: 1em;
     padding-right: 1em;
     max-width: 768px;
-    text-align: center
+    text-align: center;
 }
 
 p.error-text {
     color: red;
     background-color: FCFCFC
-}
-
-.pure-control-group label {
-    width: auto;
 }
