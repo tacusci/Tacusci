@@ -67,7 +67,7 @@ object UserManagementController : KLogging() {
         val usersAndBanned = getUserBannedState(request.body())
         usersAndBanned.forEach {
             for ((username, banned) in it) {
-                if (username == UserHandler.loggedInUsername(request.session())) continue
+                if (username == UserHandler.loggedInUsername(request)) continue
                 if (banned) {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
                     UserHandler.ban(username)
