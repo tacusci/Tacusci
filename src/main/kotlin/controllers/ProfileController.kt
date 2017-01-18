@@ -59,7 +59,7 @@ object ProfileController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
-        if (UserHandler.isLoggedIn(request.session())) {
+        if (UserHandler.isLoggedIn(request)) {
             //the username who's profile is requested is from the end of the URL: /profile/IamAUser
             val userNameOfProfileToView = request.params(":username")
             if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
@@ -71,7 +71,7 @@ object ProfileController : KLogging() {
             } else {
                 //if they've just requested: /profile then we give them /profile->the username of the person browsing
                 if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
-                    response.redirect("/profile/${UserHandler.loggedInUsername(request.session()).toLowerCase()}")
+                    response.redirect("/profile/${UserHandler.loggedInUsername(request).toLowerCase()}")
                 } else {
                     return Web.get_userNotFound(request, response, layoutTemplate)
                 }

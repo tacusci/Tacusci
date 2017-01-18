@@ -104,7 +104,7 @@ object UserManagementController : KLogging() {
 
         val userListTable = HTMLTable(listOf("Username", "Banned"))
         userListTable.className = "pure-table"
-        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.loggedInUsername(request.session()) }) {
+        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.loggedInUsername(request) }) {
             val bannedCheckbox = input().withType("checkbox").withId(username).withValue(username).withName("banned_checkbox")
             if (UserHandler.isBanned(username)) run { bannedCheckbox.attr("checked", "") }
             userListTable.addRow(listOf(listOf<Tag>(label(username).withName(username).withId(username)),

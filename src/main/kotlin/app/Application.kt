@@ -126,8 +126,8 @@ class Application {
         //MAP BEFORES
 
         before("/dashboard", { request, response ->
-            if (!UserHandler.isLoggedIn(request.session())) {
-                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
+            if (!UserHandler.isLoggedIn(request)) {
+                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
                     logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
                     halt(401, "Access is denied")
                 }
@@ -135,8 +135,8 @@ class Application {
         })
 
         before("/dashboard/*", { request, response ->
-            if (!UserHandler.isLoggedIn(request.session())) {
-                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
+            if (!UserHandler.isLoggedIn(request)) {
+                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
                     logger.info("Client at ${request.ip()} is trying to access dashboard sub page without authentication.")
                     halt(401, "Access is denied")
                 }

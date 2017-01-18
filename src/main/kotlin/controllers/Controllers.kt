@@ -66,13 +66,13 @@ object Web : KLogging() {
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
         model.put("sign_out_form", "")
 
-        if (UserHandler.isLoggedIn(request.session())) {
-            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request.session()), "admins")) {
+        if (UserHandler.isLoggedIn(request)) {
+            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
                 model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("/dashboard", "Dashboard").render())
             } else {
                 model.put("dashboard_link", "")
             }
-            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request.session())).render())
+            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())
             model.put("sign_up_menu_link", "")
             model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("/logout", "post", "Logout").render())
         }
@@ -90,6 +90,9 @@ object Web : KLogging() {
 
     fun get_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
+
+        val session = request.session()
+
         val sessionAttributes = hashMapOf(Pair("full_name_field_error", false),
                                         Pair("username_field_error",false),
                                         Pair("password_field_error", false),
@@ -108,21 +111,21 @@ object Web : KLogging() {
         model.put("username_not_available_hidden", "hidden")
 
         sessionAttributes.forEach { attribute, defaultValue ->
-            if (!request.session().attributes().contains(attribute)) {
-                request.session().attribute(attribute, defaultValue)
+            if (!session.attributes().contains(attribute)) {
+                session.attribute(attribute, defaultValue)
             }
         }
 
-        if (request.session().attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
-        if (request.session().attribute("username_field_error")) { model.put("username_error_hidden", "") }
-        if (request.session().attribute("password_field_error")) { model.put("password_error_hidden", "") }
-        if (request.session().attribute("email_field_error")) { model.put("email_error_hidden", "") }
-        if (request.session().attribute("username_not_available_error")) {
+        if (session.attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
+        if (session.attribute("username_field_error")) { model.put("username_error_hidden", "") }
+        if (session.attribute("password_field_error")) { model.put("password_error_hidden", "") }
+        if (session.attribute("email_field_error")) { model.put("email_error_hidden", "") }
+        if (session.attribute("username_not_available_error")) {
             model.put("username_not_available_hidden", "")
-            model.put("unavailable_username", request.session().attribute("username_not_available"))
+            model.put("unavailable_username", session.attribute("username_not_available"))
         }
 
-        sessionAttributes.forEach { attribute, defaultValue -> request.session().removeAttribute(attribute) }
+        sessionAttributes.forEach { attribute, defaultValue -> session.removeAttribute(attribute) }
 
         model.put("register_form", j2htmlPartials.pureFormAligned_Register("/register", "post").render())
 

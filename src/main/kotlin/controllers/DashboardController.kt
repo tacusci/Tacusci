@@ -50,7 +50,7 @@ object DashboardController : KLogging() {
         var model = HashMap<String, Any>()
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
-        model.put("username", UserHandler.loggedInUsername(request.session()))
+        model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }

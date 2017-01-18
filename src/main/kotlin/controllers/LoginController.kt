@@ -52,7 +52,7 @@ object LoginController : KLogging() {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
 
-        if (UserHandler.isLoggedIn(request.session())) {
+        if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
             response.redirect("/")
         }
@@ -98,7 +98,7 @@ object LoginController : KLogging() {
                 email = username
                 username = UserHandler.userDAO.getUsernameFromEmail(email)
             }
-            UserHandler.login(request.session(), username, password)
+            UserHandler.login(request, username, password)
         } else {
             request.session().attribute("login_error", true)
             logger.info("Unrecognised username/password provided in form")
@@ -109,8 +109,8 @@ object LoginController : KLogging() {
     }
 
     fun post_logout(request: Request, response: Response): Response {
-        if (UserHandler.isLoggedIn(request.session())) {
-            UserHandler.logout(request.session())
+        if (UserHandler.isLoggedIn(request)) {
+            UserHandler.logout(request)
         }
         response.redirect("/")
         return response
