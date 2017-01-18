@@ -50,11 +50,13 @@ object  UserHandler : KLogging() {
     val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
     var defaultUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
 
-    fun login(session: Session, username: String, password: String): Boolean {
-        logger.info("Attempting to login $username")
+    fun login(request: Request, username: String, password: String): Boolean {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Attempting to login $username")
+
+        val session = request.session()
 
         if (UserHandler.isBanned(username)) {
-            logger.info("User $username is banned, denying login")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> User $username is banned, denying login")
             session.attribute("is_banned", true)
             return false
         } else {
@@ -82,13 +84,15 @@ object  UserHandler : KLogging() {
         return true
     }
 
-    fun logout(session: Session) {
+    fun logout(request: Request) {
+        val session = request.session()
         session.removeAttribute("logged_in")
         session.removeAttribute("username")
         session.attributes().clear()
     }
 
-    fun isLoggedIn(session: Session): Boolean {
+    fun isLoggedIn(request: Request): Boolean {
+        val session = request.session()
         if (session.attributes().isNotEmpty()) {
             if (session.attributes().contains("logged_in")) {
                 val loggedIn: Boolean = session.attribute("logged_in")
@@ -98,8 +102,9 @@ object  UserHandler : KLogging() {
         return false
     }
 
-    fun loggedInUsername(session: Session): String {
-        if (isLoggedIn(session)) {
+    fun loggedInUsername(request: Request): String {
+        val session = request.session()
+        if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {
                 return session.attribute("username")
             }
@@ -141,6 +146,6 @@ object  UserHandler : KLogging() {
     }
 
     fun getSessionIdentifier(request: Request): String {
-        return if (UserHandler.isLoggedIn(request.session())) "${request.ip()} | ${UserHandler.loggedInUsername(request.session())}" else request.ip()
+        return if (UserHandler.isLoggedIn(request)) "${request.ip()} | ${UserHandler.loggedInUsername(request)}" else request.ip()
     }
 }
