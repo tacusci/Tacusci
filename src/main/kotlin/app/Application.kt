@@ -35,19 +35,14 @@ package app/*
 
 import controllers.*
 import database.daos.DAOManager
-import database.daos.GroupDAO
+import database.models.Group
 import handlers.GroupHandler
 import handlers.UserHandler
-import database.models.Group
-import database.models.User
 import mu.KLogging
-import spark.Request
-import spark.Response
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
-import java.time.Duration
-import javax.jws.soap.SOAPBinding
+import kotlin.concurrent.thread
 
 
 class Application {
@@ -160,6 +155,8 @@ class Application {
         setupSpark()
         setupSparkRoutes()
     }
+
+    fun infoLog(message: String) { logger.info(message) }
 }
 
 fun main(args: Array<String>) {
@@ -169,5 +166,10 @@ fun main(args: Array<String>) {
     application.dbUsername = args[0]
     application.dbPassword = args[1]
     application.init()
-    Config.monitorPropertiesFile(application)
+    //Config.monitorPropertiesFile(application)
+
+    Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
+        application.infoLog("Force shut down detected, stopping Spark cleanly...")
+        stop()
+    })
 }

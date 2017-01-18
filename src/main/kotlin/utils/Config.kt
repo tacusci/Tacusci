@@ -49,6 +49,8 @@ class Config private constructor() {
 
     companion object props : Properties() {
 
+        var fileWatcher = FileWatcher(File(""))
+
         fun load() {
             val defaults: HashMap<String, String> = hashMapOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
@@ -89,9 +91,13 @@ class Config private constructor() {
         }
 
         fun monitorPropertiesFile(application: Application) {
-            val fileWatcher = FileWatcher(File(this.getProperty("properties_file")))
+            fileWatcher = FileWatcher(File(this.getProperty("properties_file")))
             fileWatcher.action = {propertiesFileUpdate(application)}
             fileWatcher.start()
+        }
+
+        fun stopMonitoringPropertiesFile() {
+            fileWatcher.stop()
         }
 
         fun propertiesFileUpdate(application: Application) {
