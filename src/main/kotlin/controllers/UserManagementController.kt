@@ -56,7 +56,6 @@ object UserManagementController : KLogging() {
         model.put("title", "Thames Valley Furs - User Management")
 
         val userAdminForm = genUserForm(request, response)
-        userAdminForm.withClass("centered")
         model.put("user_admin_form", userAdminForm.render())
         model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
