@@ -1,4 +1,6 @@
-package app/*
+package app
+
+/*
 # DON'T BE A DICK PUBLIC LICENSE
 
 > Version 1.1, December 2016
@@ -26,9 +28,8 @@ package app/*
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
+
+
 /**
  * Created by alewis on 24/10/2016.
  */
@@ -62,7 +63,7 @@ class Application {
         DAOManager.disconnect()
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
-        DAOManager.init(dbURL+"/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
+        DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
         DAOManager.connect()
     }
 
@@ -121,20 +122,16 @@ class Application {
         //MAP BEFORES
 
         before("/dashboard", { request, response ->
-            if (!UserHandler.isLoggedIn(request)) {
-                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
-                    logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
-                    halt(401, "Access is denied")
-                }
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
+                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
+                halt(401, "Access is denied")
             }
         })
 
         before("/dashboard/*", { request, response ->
-            if (!UserHandler.isLoggedIn(request)) {
-                if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
-                    logger.info("Client at ${request.ip()} is trying to access dashboard sub page without authentication.")
-                    halt(401, "Access is denied")
-                }
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
+                logger.info("Client at ${request.ip()} is trying to access dashboard sub page without authentication.")
+                halt(401, "Access is denied")
             }
         })
         /*
@@ -156,11 +153,15 @@ class Application {
         setupSparkRoutes()
     }
 
-    fun infoLog(message: String) { logger.info(message) }
+    fun infoLog(message: String) {
+        logger.info(message)
+    }
 }
 
 fun main(args: Array<String>) {
-    if (args.isEmpty() || args.size < 2) { println("No username/password args"); System.exit(1) }
+    if (args.isEmpty() || args.size < 2) {
+        println("No username/password args"); System.exit(1)
+    }
     Config.load()
     val application = Application()
     application.dbUsername = args[0]
