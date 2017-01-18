@@ -56,7 +56,7 @@ object ProfileController : KLogging() {
     }
 
     fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
         if (UserHandler.isLoggedIn(request.session())) {
