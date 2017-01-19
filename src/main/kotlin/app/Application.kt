@@ -35,6 +35,7 @@ package app
  */
 
 import controllers.*
+import database.DBPoller
 import database.daos.DAOManager
 import database.models.Group
 import handlers.GroupHandler
@@ -167,10 +168,13 @@ fun main(args: Array<String>) {
     application.dbUsername = args[0]
     application.dbPassword = args[1]
     application.init()
+    DBPoller.start()
     //Config.monitorPropertiesFile(application)
 
     Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
-        application.infoLog("Force shut down detected, stopping Spark cleanly...")
+        application.infoLog("Force shut down detected, stopping everything cleanly...")
         stop()
+        DBPoller.stop()
+        DAOManager.disconnect()
     })
 }

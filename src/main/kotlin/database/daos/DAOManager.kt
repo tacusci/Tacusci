@@ -38,6 +38,7 @@ import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
+import kotlin.concurrent.thread
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -48,6 +49,9 @@ object DAOManager : KLogging() {
     var url = ""
     var username = ""
     var password = ""
+
+    var randomPollThread = Thread()
+    var randomPollThreadRunning = false
 
     enum class TABLE {
         USERS,
