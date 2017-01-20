@@ -64,13 +64,10 @@ object Web : KLogging() {
         model.put("dashboard_link", "")
         model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
-        model.put("sign_out_form", "")
 
         if (UserHandler.isLoggedIn(request)) {
             if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
                 model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("/dashboard", "Dashboard").render())
-            } else {
-                model.put("dashboard_link", "")
             }
             model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())
             model.put("sign_up_menu_link", "")
