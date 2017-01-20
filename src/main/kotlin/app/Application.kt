@@ -110,7 +110,7 @@ class Application {
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
         post("/dashboard/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) })
         post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
 
 
@@ -124,14 +124,14 @@ class Application {
 
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
-                logger.info("Client at ${request.ip()} is trying to access dashboard without authentication.")
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
                 halt(401, "Access is denied")
             }
         })
 
         before("/dashboard/*", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
-                logger.info("Client at ${request.ip()} is trying to access dashboard sub page without authentication.")
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
                 halt(401, "Access is denied")
             }
         })
