@@ -40,6 +40,8 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.j2htmlPartials
+import java.math.BigInteger
+import java.security.SecureRandom
 import java.util.*
 
 /**
@@ -180,5 +182,15 @@ object Web : KLogging() {
         model.put("title", "Thames Valley Furs - Profile (User not found)")
         model.put("template", "/templates/user_not_found.vtl")
         return ModelAndView(model, layoutTemplate)
+    }
+
+    fun mapFormToHash(session: Session, formTitle: String): String {
+        val hash = BigInteger(130, SecureRandom()).toString(32)
+        session.attribute(formTitle, hash)
+        return hash
+    }
+
+    fun getFormHash(session: Session, formTitle: String) {
+        return session.attribute(formTitle)
     }
 }
