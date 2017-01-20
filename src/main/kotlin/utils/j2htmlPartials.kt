@@ -111,7 +111,9 @@ object j2htmlPartials {
                                 emailInput("email", "Email")
                         ),
 
-                        button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
+                        div().withClass("pure-controls").with(
+                                button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
+                        )
                 )
         )
     }
