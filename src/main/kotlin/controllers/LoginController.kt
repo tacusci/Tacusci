@@ -65,12 +65,9 @@ object LoginController : KLogging() {
         if (request.session().attribute("login_incorrect_creds")) {
             request.session().attribute("login_incorrect_creds", false)
             model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
-        } else {
-            model.put("username_or_password_incorrect", "")
         }
 
         model.put("login_form", h1("Login").render()+loginForm.render())
-        model.put("banned_message", "")
 
         if (request.session().attribute("is_banned")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> user is banned")
