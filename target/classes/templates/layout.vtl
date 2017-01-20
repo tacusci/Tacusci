@@ -26,18 +26,14 @@
                         height: 30px;
                   }
             </style>
-            <div class="pure-g">
-                <div class="pure-u">
-                    <div class="pure-menu custom-restricted-width custom-restricted-height pure-menu-horizontal">
-                        <ul class="pure-menu-list">
-                            $!home_link
-                            $!dashboard_link
-                            $!login_or_profile_link
-                            $!sign_up_menu_link
-                            $!sign_out_form
-                        </ul>
-                    </div>
-                </div>
+            <div class="pure-menu pure-menu-horizontal custom-restricted-width custom-restricted-height"">
+                <ul class="pure-menu-list pull-right">
+                    $!home_link
+                    $!dashboard_link
+                    $!login_or_profile_link
+                    $!sign_up_menu_link
+                    $!sign_out_form
+                </ul>
             </div>
             #parse($template)
         </div>
