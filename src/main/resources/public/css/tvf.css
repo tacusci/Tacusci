@@ -12,3 +12,7 @@ p.error-text {
     color: red;
     background-color: FCFCFC
 }
+
+.pull-right {
+    float: right;
+}
