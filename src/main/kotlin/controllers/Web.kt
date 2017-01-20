@@ -70,7 +70,7 @@ object Web : KLogging() {
             }
             model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())
             model.put("sign_up_menu_link", "")
-            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm("/logout", "post", "Logout").render())
+            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm(request.session(), "sign_out_form", "/logout", "post", "Logout").render())
         }
         return model
     }
@@ -123,7 +123,7 @@ object Web : KLogging() {
 
         sessionAttributes.forEach { attribute, defaultValue -> session.removeAttribute(attribute) }
 
-        model.put("register_form", j2htmlPartials.pureFormAligned_Register("/register", "post").render())
+        model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", "/register", "post").render())
 
         return ModelAndView(model, layoutTemplate)
     }
@@ -185,12 +185,11 @@ object Web : KLogging() {
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {
-        val hash = BigInteger(130, SecureRandom()).toString(32)
+        val hash = genRandomHash()
         session.attribute(formTitle, hash)
         return hash
     }
 
-    fun getFormHash(session: Session, formTitle: String) {
-        return session.attribute(formTitle)
-    }
+    fun getFormHash(session: Session, formTitle: String): String = session.attribute(formTitle)
+    fun genRandomHash(): String = BigInteger(130, SecureRandom()).toString(32)
 }

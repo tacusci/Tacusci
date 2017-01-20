@@ -60,7 +60,7 @@ object LoginController : KLogging() {
         model.put("template", "/templates/login.vtl")
         model.put("title", "Thames Valley Furs - Login")
 
-        val loginForm = j2htmlPartials.pureFormAligned_Login("/login", "post")
+        val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", "/login", "post")
 
         if (request.session().attribute("login_incorrect_creds")) {
             request.session().attribute("login_incorrect_creds", false)
@@ -80,27 +80,31 @@ object LoginController : KLogging() {
     }
 
     fun post_postLogin(request: Request, response: Response): Response {
-        val userIP = request.ip()
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
         Web.initSessionAttributes(request.session())
 
-        var username = request.queryParams("username").toLowerCase()
-        var email = ""
-        val password = request.queryParams("password")
+        if (Web.getFormHash(request.session(), "login_form") == request.queryParams("hashid")) {
+            var username = request.queryParams("username").toLowerCase()
+            var email = ""
+            val password = request.queryParams("password")
 
-        if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
-            //TODO: Need to improve email validation
-            if (username.contains("@")) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
-                email = username
-                username = UserHandler.userDAO.getUsernameFromEmail(email)
+            if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
+                //TODO: Need to improve email validation
+                if (username.contains("@")) {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
+                    email = username
+                    username = UserHandler.userDAO.getUsernameFromEmail(email)
+                }
+                UserHandler.login(request, username, password)
+            } else {
+                request.session().attribute("login_error", true)
+                logger.info("Unrecognised username/password provided in form")
             }
-            UserHandler.login(request, username, password)
         } else {
-            request.session().attribute("login_error", true)
-            logger.info("Unrecognised username/password provided in form")
+            logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid login form...")
         }
-        logger.info("$userIP -> Redirecting to login page")
+
+        logger.info("$${UserHandler.getSessionIdentifier(request)} -> Redirecting to login page")
         response.redirect("/login")
         return response
     }

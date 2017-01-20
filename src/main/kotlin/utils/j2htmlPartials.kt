@@ -1,8 +1,10 @@
 package utils
 
+import controllers.Web
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
+import spark.Session
 
 /**
  * Created by alewis on 04/01/2017.
@@ -46,8 +48,10 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun pureFormCompact_Login(legend: String, href: String): ContainerTag {
-        return form().withClass("pure-form").withHref(href).withMethod("post").with(
+    fun pureFormCompact_Login(session: Session, name: String, legend: String, href: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form").withHref(href).withMethod("post").with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 fieldset().with(
                         legend(legend),
                         input().withId("username").withPlaceholder("Username"),
@@ -57,8 +61,10 @@ object j2htmlPartials {
         )
     }
 
-    fun pureFormStacked_Login(legend: String, href: String, method: String): ContainerTag {
-        return form().withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
+    fun pureFormStacked_Login(session: Session, name: String, legend: String, href: String, method: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 fieldset().with(
                         legend(legend),
                         usernameInput("username", "Username"),
@@ -68,8 +74,10 @@ object j2htmlPartials {
         )
     }
 
-    fun pureFormAligned_Login(href: String, method: String): ContainerTag {
-        return form().withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+    fun pureFormAligned_Login(session: Session, name: String, href: String, method: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Username").attr("for", "username"),
@@ -88,8 +96,10 @@ object j2htmlPartials {
         )
     }
 
-    fun pureFormAligned_Register(href: String, method: String): ContainerTag {
-        return form().withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+    fun pureFormAligned_Register(session: Session, name: String, href: String, method: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Full Name").attr("for", "full_name"),
@@ -138,7 +148,8 @@ object j2htmlPartials {
         return li().withClass("pure-menu-item").with(a().withHref(href).withClass("pure-menu-link").withText(text))
     }
 
-    fun pureMenuItemForm(href: String, method: String, text: String): Tag {
-        return li().withClass("pure-menu-item").with(form().withClass("pure-menu-link").withMethod(method).withAction(href).with(submitButton(text, "pure-menu-link")))
+    fun pureMenuItemForm(session: Session, name: String, href: String, method: String, text: String): Tag {
+        val hash = Web.mapFormToHash(session, name)
+        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withClass("pure-menu-link").withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitButton(text, "pure-menu-link")))
     }
 }
