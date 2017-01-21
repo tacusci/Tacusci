@@ -35,15 +35,17 @@ import database.models.Group
 import mu.KLogging
 import java.sql.Connection
 import java.sql.SQLException
+import java.util.*
 
 /**
  * Created by alewis on 20/12/2016.
  */
-class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connection, tableName) {
+class GroupDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
 
     companion object : KLogging()
 
     fun getGroupID(groupName: String): Int {
+        connect()
         var groupID = -1
         try {
             val selectStatement = "SELECT IDGROUPS FROM $tableName WHERE GROUPNAME=?"
@@ -53,11 +55,14 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             if (resultSet!!.next()) {
                 groupID = resultSet.getInt(1)
             }
-        } catch (e: SQLException) { logger.error(e.message) }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        disconnect()
         return groupID
     }
 
     fun insertGroup(group: Group): Boolean {
+        connect()
         try {
             val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
@@ -65,11 +70,13 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
+            disconnect()
             return true
-        } catch (e: SQLException) { logger.error(e.message); return false }
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
     fun groupExists(groupName: String): Boolean {
+        connect()
         var count = 0
         try {
             val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE GROUPNAME=?"
@@ -79,17 +86,19 @@ class GroupDAO(connection: Connection, tableName: String) : GenericDAO(connectio
             if (resultSet!!.next()) {
                 count = resultSet.getInt(1)
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+            disconnect()
+        } catch (e: SQLException) { e.printStackTrace(); disconnect() }
+        disconnect()
         return count > 0
     }
 
     fun addUserToGroup(username: String, groupName: String): Boolean {
+        connect()
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val userID = userDAO.getUserID(username)
         val groupID = getGroupID(groupName)
         val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+        disconnect()
         return user2groupDAO.mapUserIDToGroupID(userID, groupID)
     }
 }

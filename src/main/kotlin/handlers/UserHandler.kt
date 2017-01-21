@@ -58,9 +58,11 @@ object  UserHandler : KLogging() {
         if (UserHandler.isBanned(username)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User $username is banned, denying login")
             session.attribute("is_banned", true)
+            session.attribute("banned_username", username)
             return false
         } else {
             session.attribute("is_banned", false)
+            session.attribute("banned_username", "")
         }
 
         val authHash = userDAO.getUserAuthHash(username)

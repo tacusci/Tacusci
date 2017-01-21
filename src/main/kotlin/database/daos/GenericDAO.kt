@@ -34,11 +34,12 @@
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.util.*
 
 /**
  * Created by alewis on 28/10/2016.
  */
-open class GenericDAO(connection: Connection, tableName: String) : DAO(connection, tableName) {
+open class GenericDAO(url: String, dbProperties: Properties, tableName: String) : DAO(url, dbProperties, tableName) {
 
     @Throws(SQLException::class)
     override fun count(): Int {

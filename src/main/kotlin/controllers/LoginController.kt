@@ -70,11 +70,12 @@ object LoginController : KLogging() {
         model.put("login_form", h1("Login").render()+loginForm.render())
 
         if (request.session().attribute("is_banned")) {
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> user is banned")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> User ${request.session().attribute<String>("banned_username")} is banned")
             model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
             model.put("login_form", "")
             model.put("signup_link", "")
             request.session().attribute("is_banned", false)
+            request.session().attribute("banned_username", "")
         }
         return ModelAndView(model, layoutTemplate)
     }

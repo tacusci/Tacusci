@@ -31,17 +31,18 @@
 package database.daos
 
 import mu.KLogging
-import java.sql.Connection
 import java.sql.SQLException
+import java.util.*
 
 /**
  * Created by alewis on 20/12/2016.
  */
-class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(connection, tableName) {
+class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
 
     companion object : KLogging()
 
     fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
+        connect()
         if (!userAndGroupMapped(userID, groupID)) {
             try {
                 val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
@@ -51,15 +52,16 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
                 preparedStatement?.execute()
                 connection?.commit()
                 preparedStatement?.close()
+                disconnect()
                 return true
-            } catch (e: SQLException) {
-                logger.error(e.message)
-            }
+            } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
         }
+        disconnect()
         return false
     }
 
     fun userAndGroupMapped(userID: Int, groupID: Int): Boolean {
+        connect()
         var count = 0
         try {
             val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
@@ -71,11 +73,14 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
                 count = resultSet.getInt(1)
             }
             preparedStatement?.close()
-        } catch (e: SQLException) { logger.error(e.message) }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+        disconnect()
         return count > 0
     }
 
     fun removeUserAndGroupMap(userID: Int, groupID: Int) {
+        connect()
         if (userAndGroupMapped(userID, groupID)) {
             try {
                 val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
@@ -85,7 +90,9 @@ class User2GroupDAO(connection: Connection, tableName: String) : GenericDAO(conn
                 preparedStatement?.execute()
                 connection?.commit()
                 preparedStatement?.close()
-            } catch (e: SQLException) { logger.error(e.message) }
+                disconnect()
+            } catch (e: SQLException) { logger.error(e.message); disconnect(); }
         }
+        disconnect()
     }
 }

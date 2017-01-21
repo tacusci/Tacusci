@@ -44,28 +44,28 @@ import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
+import java.util.*
 import kotlin.concurrent.thread
 
 
 class Application {
 
-    var dbUsername = ""
-    var dbPassword = ""
+    val dbProperties = Properties()
 
     companion object : KLogging()
 
     fun connectToDB() {
         val dbURL = Config.getProperty("db_url")
         //connect to root SQL server instance
-        DAOManager.init(dbURL, dbUsername, dbPassword)
+        DAOManager.init(dbURL, dbProperties)
         DAOManager.connect()
         //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
-        DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbUsername, dbPassword)
-        DAOManager.connect()
+        DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbProperties)
+        //DAOManager.connect()
     }
 
     fun setupDefaultGroups() {
@@ -165,10 +165,12 @@ fun main(args: Array<String>) {
     }
     Config.load()
     val application = Application()
-    application.dbUsername = args[0]
-    application.dbPassword = args[1]
+    application.dbProperties.setProperty("user", args[0])
+    application.dbProperties.setProperty("password", args[1])
+    application.dbProperties.setProperty("useSSL", "false")
+    application.dbProperties.setProperty("autoReconnect", "false")
     application.init()
-    DBPoller.start()
+    //DBPoller.start()
     //Config.monitorPropertiesFile(application)
 
     Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {

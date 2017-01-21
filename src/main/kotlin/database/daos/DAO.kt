@@ -31,15 +31,61 @@
  
  package database.daos
 
+import mu.KLogging
 import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
+import java.util.*
 
 /**
  * Created by tauraamui on 27/10/2016.
  */
 
-abstract class DAO(connection: Connection, var tableName: String) {
+abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String) : KLogging() {
 
-    var connection: Connection? = connection
+    var connection: Connection? = null
+
+    fun connect(): Boolean {
+        try {
+            open()
+            logger.debug("Connected DAO to $tableName")
+            return true
+        } catch (e: SQLException) { logger.error(e.message) }
+        return false
+    }
+
+    fun disconnect(): Boolean {
+        try {
+            close()
+            logger.debug("Disconnected DAO to $tableName")
+            return true
+        } catch (e: SQLException) { logger.error(e.message) }
+        return false
+    }
+
+    @Throws(SQLException::class)
+    private fun open(): Connection {
+        try {
+            if (connection == null || connection!!.isClosed) {
+                connection = DriverManager.getConnection(url, dbProperties)
+                connection?.autoCommit = false
+            }
+            return connection!!
+        } catch (e: SQLException) {
+            throw e
+        }
+    }
+
+    @Throws(SQLException::class)
+    private fun close() {
+        try {
+            if (connection != null && !connection!!.isClosed) {
+                connection!!.close()
+            }
+        } catch (e: SQLException) {
+            throw e
+        }
+    }
 
     abstract fun count(): Int
 }

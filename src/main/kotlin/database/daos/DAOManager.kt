@@ -38,6 +38,7 @@ import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
+import java.util.*
 import kotlin.concurrent.thread
 
 /**
@@ -47,8 +48,7 @@ import kotlin.concurrent.thread
 object DAOManager : KLogging() {
 
     var url = ""
-    var username = ""
-    var password = ""
+    var dbProperties = Properties()
 
     var randomPollThread = Thread()
     var randomPollThreadRunning = false
@@ -61,10 +61,10 @@ object DAOManager : KLogging() {
 
     private var connection: Connection? = null
 
-    fun init(url: String, username: String, password: String) {
+    fun init(url: String, dbProperties: Properties) {
         this.url = url
-        this.username = username
-        this.password = password
+        this.dbProperties = dbProperties
+        logger.info("Set up database settings to connect to $url")
     }
 
     fun setup() {
@@ -94,12 +94,13 @@ object DAOManager : KLogging() {
     }
 
     @Throws(SQLException::class)
-    private fun open() {
+    private fun open(): Connection {
         try {
             if (connection == null || connection!!.isClosed) {
-                connection = DriverManager.getConnection(url, username, password)
+                connection = DriverManager.getConnection(url, dbProperties)
                 connection?.autoCommit = false
             }
+            return connection!!
         } catch (e: SQLException) {
             throw e
         }
@@ -118,11 +119,11 @@ object DAOManager : KLogging() {
 
     fun getDAO(table: TABLE): DAO {
         when (table) {
-            TABLE.USERS -> return UserDAO(connection!!, "users")
-            TABLE.USER2GROUP -> return User2GroupDAO(connection!!, "user2group")
-            TABLE.GROUPS -> return GroupDAO(connection!!, "groups")
+            TABLE.USERS -> return UserDAO(url, dbProperties, "users")
+            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
+            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
             else -> {
-                return GenericDAO(connection!!, "")
+                return GenericDAO(url, dbProperties, "")
             }
         }
     }
