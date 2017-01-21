@@ -65,7 +65,6 @@ class Application {
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
         DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbProperties)
-        //DAOManager.connect()
     }
 
     fun setupDefaultGroups() {
@@ -170,13 +169,10 @@ fun main(args: Array<String>) {
     application.dbProperties.setProperty("useSSL", "false")
     application.dbProperties.setProperty("autoReconnect", "false")
     application.init()
-    //DBPoller.start()
     //Config.monitorPropertiesFile(application)
 
     Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
         application.infoLog("Force shut down detected, stopping everything cleanly...")
         stop()
-        DBPoller.stop()
-        DAOManager.disconnect()
     })
 }
