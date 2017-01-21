@@ -136,6 +136,10 @@ object j2htmlPartials {
         return a().withHref(href).withClass(lookAndFeelClass).withText(text)
     }
 
+    fun submitLink(text: String, classString: String): Tag {
+        return input().withType("submit").withClass(classString).withValue(text)
+    }
+
     fun submitButton(text: String, classString: String): Tag {
         return button().withType("submit").withClass(classString).withText(text)
     }
@@ -150,6 +154,6 @@ object j2htmlPartials {
 
     fun pureMenuItemForm(session: Session, name: String, href: String, method: String, text: String): Tag {
         val hash = Web.mapFormToHash(session, name)
-        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withClass("pure-menu-link").withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitButton(text, "pure-menu-link")))
+        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withClass("pure-menu-link").withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitLink(text, "submit-link")))
     }
 }

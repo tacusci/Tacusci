@@ -16,3 +16,16 @@ p.error-text {
 .pull-right {
     float: right;
 }
+
+.submit-link {
+  background-color: transparent;
+  text-decoration: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+}
+submit-link:focus {
+  outline: none;
+}
