@@ -13,8 +13,7 @@ To host this on a webserver JRE 8 or higher is required. To run as a service use
 * [Velocity](http://velocity.apache.org/) - Used to generate the HTML from templates
 * [Kotlin](https://kotlinlang.org/) - Alternative JVM language to Java
 * [j2html](http://j2html.com/) - Fast and fluent Java HTML5 builder
-
-## Authors
+* [Pure CSS lib] (http://purecss.io) - A set of small, responsive CSS modules that you can use in every web project.## Authors
 
 * **Adam Prakash Lewis** - *All Kotlin code and Velocity templates* - [tauraamui](https://github.com/tauraamui)
 
