@@ -35,7 +35,6 @@ package app
  */
 
 import controllers.*
-import database.DBPoller
 import database.daos.DAOManager
 import database.models.Group
 import handlers.GroupHandler
@@ -99,6 +98,7 @@ class Application {
         get("/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/dashboard/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard/log_file", { request, response -> LogFileViewerController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())

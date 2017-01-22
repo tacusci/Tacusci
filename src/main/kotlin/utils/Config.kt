@@ -58,7 +58,8 @@ class Config private constructor() {
                     Pair("schema_name", "tvf"),
                     Pair("default_admin_user", "tvf_admin"),
                     Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", "admin_tvf@tvf.net"))
+                    Pair("default_admin_email", "admin_tvf@tvf.net"),
+                    Pair("log_file", "tvf.log"))
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))

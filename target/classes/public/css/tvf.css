@@ -26,6 +26,7 @@ p.error-text {
   white-space: nowrap;
   outline: none;
 }
+
 submit-link:focus {
   outline: none;
 }
