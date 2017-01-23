@@ -1,32 +1,22 @@
+<!doctype html>
 <html>
-  <head>
-    <title>$title</title>
-    <link rel="stylesheet" href="/css/pure_css/pure-min.css">
-    <!--[if lte IE 8]>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Your page title</title>
+
+    <link rel="stylesheet" href="/css/pure_css/pure-min.css">    <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure_css/grids-responsive-old-ie-min.css">
     <![endif]-->
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure_css/grids-responsive-min.css">
-    <!--<![endif]-->
+    <!--<![endif]--></head>
     <link rel="stylesheet" type="text/css" href="/css/tvf.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <div id="layout">
-        <div id="app.main">
-            <style>
-                  .custom-restricted-width {
-                      /* To limit the menu width to the content of the menu: */
-                      display: inline-block;
-                      /* Or set the width explicitly: */
-                      /* width: 10em; */
-                  }
-
-                  .custom-restricted-height {
-                        height: 50px;
-                  }
-            </style>
-            <div class="pure-menu pure-menu-horizontal custom-restricted-width custom-restricted-height">
+<body>
+	<div id="layout">
+		<div id="menu">
+			<div class="pure-menu pure-menu-horizontal">
                 <ul class="pure-menu-list">
                     $!home_link
                     $!dashboard_link
@@ -38,8 +28,11 @@
                     $!sign_out_form
                 </ul>
             </div>
-            #parse($template)
-        </div>
-    </div>
-  </body>
+		</div>
+
+		<div id="content">
+			#parse($template)
+		</div>
+	</div>
+</body>
 </html>
