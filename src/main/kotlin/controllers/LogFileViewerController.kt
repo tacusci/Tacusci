@@ -23,7 +23,8 @@ object LogFileViewerController : KLogging() {
         model = Web.loadNavBar(request, response, model)
         model.put("template", "/templates/log_file.vtl")
         model.put("title", "Thames Valley Furs - Log File")
-        val logFileTextArea = textarea().withText(getLogFileLines()).attr("readonly", "true")
+
+        val logFileTextArea = textarea().withClass("boxsizingBorder").withText(getLogFileLines()).attr("readonly", "true")
         model.put("logFileLines", logFileTextArea.render())
         return ModelAndView(model, layoutTemplate)
     }
