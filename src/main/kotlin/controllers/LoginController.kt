@@ -105,7 +105,7 @@ object LoginController : KLogging() {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid login form...")
         }
 
-        logger.info("$${UserHandler.getSessionIdentifier(request)} -> Redirecting to login page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to login page")
         response.redirect("/login")
         return response
     }
