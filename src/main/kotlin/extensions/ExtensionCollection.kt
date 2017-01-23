@@ -31,6 +31,7 @@
  
  package extensions
 
+import spark.Request
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -53,4 +54,8 @@ fun InputStream.readTextAndClose(charset: Charset = Charsets.UTF_8): String {
 
 fun File.doesNotExist(): Boolean {
     return !this.exists()
+}
+
+fun Request.forwardedIP(): String {
+    return this.raw().getHeader("X-Forwarded-For")
 }

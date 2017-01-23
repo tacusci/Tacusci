@@ -35,6 +35,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool
 import database.daos.DAOManager
 import database.daos.UserDAO
 import database.models.User
+import extensions.forwardedIP
 import mu.KLogging
 import spark.Request
 import spark.Session
@@ -148,6 +149,8 @@ object  UserHandler : KLogging() {
     }
 
     fun getSessionIdentifier(request: Request): String {
-        return if (UserHandler.isLoggedIn(request)) "${request.ip()} | ${UserHandler.loggedInUsername(request)}" else request.ip()
+        var clientIP = request.forwardedIP()
+        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = request.ip() }
+        return if (UserHandler.isLoggedIn(request)) "$clientIP | ${UserHandler.loggedInUsername(request)}" else clientIP
     }
 }
