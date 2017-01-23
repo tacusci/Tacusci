@@ -154,6 +154,6 @@ object j2htmlPartials {
 
     fun pureMenuItemForm(session: Session, name: String, href: String, method: String, text: String): Tag {
         val hash = Web.mapFormToHash(session, name)
-        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withClass("pure-menu-link").withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitLink(text, "submit-link")))
+        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitLink(text, "submit-link")))
     }
 }

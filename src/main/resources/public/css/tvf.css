@@ -25,6 +25,7 @@ p.error-text {
   cursor: pointer;
   white-space: nowrap;
   outline: none;
+  padding: .5em 1em;
 }
 
 submit-link:focus {
