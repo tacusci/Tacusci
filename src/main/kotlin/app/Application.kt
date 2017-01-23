@@ -40,6 +40,8 @@ import database.models.Group
 import handlers.GroupHandler
 import handlers.UserHandler
 import mu.KLogging
+import org.eclipse.jetty.server.ForwardedRequestCustomizer
+import org.eclipse.jetty.server.HttpConfiguration
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
@@ -74,6 +76,8 @@ class Application {
     }
 
     fun setupSpark() {
+        val httpConfiguration = HttpConfiguration()
+        httpConfiguration.addCustomizer(ForwardedRequestCustomizer())
         val port = Config.getProperty("port")
         logger.info("Setting port to $port")
         var portNum = -1
@@ -170,7 +174,6 @@ fun main(args: Array<String>) {
     application.dbProperties.setProperty("autoReconnect", "false")
     application.init()
     //Config.monitorPropertiesFile(application)
-
     Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
         application.infoLog("Force shut down detected, stopping everything cleanly...")
         stop()
