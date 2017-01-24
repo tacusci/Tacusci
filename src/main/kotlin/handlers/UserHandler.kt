@@ -149,6 +149,7 @@ object  UserHandler : KLogging() {
     }
 
     fun getSessionIdentifier(request: Request): String {
+        //FIXME (something in this method is universally causing a silent error)
         var clientIP = request.forwardedIP()
         if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = request.ip() }
         return if (UserHandler.isLoggedIn(request)) "$clientIP | ${UserHandler.loggedInUsername(request)}" else clientIP
