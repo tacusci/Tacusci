@@ -34,7 +34,7 @@
 /**
  * Created by alewis on 20/12/2016.
  */
-data class User(val fullName: String, val username: String, val password: String, val email: String, val banned: Int) {
+data class User(var fullName: String, var username: String, var password: String, var email: String, var banned: Int) {
 
     fun isValid(): Boolean {
         if (!isUsernameValid()) { return false }
