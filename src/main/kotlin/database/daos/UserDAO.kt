@@ -145,12 +145,12 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getUsers(): MutableCollection<User> {
         connect()
-        val user = User("", "", "", "", 0)
         val userList = mutableListOf<User>()
         val selectStatement = "SELECT USERNAME, AUTHHASH, EMAIL, FULLNAME, BANNED FROM $tableName"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
+            val user = User("", "", "", "", 0)
             user.username = resultSet.getString("USERNAME")
             user.password = resultSet.getString("AUTHHASH")
             user.fullName = resultSet.getString("FULLNAME")

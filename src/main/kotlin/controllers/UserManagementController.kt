@@ -112,7 +112,6 @@ object UserManagementController : KLogging() {
                                         listOf<Tag>(label(user.email).withName(user.username).withId(user.username)),
                                         listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
-        println(userListTable.rowCount())
         userAdminForm.with(userListTable.render())
         userAdminForm.with(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm
