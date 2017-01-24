@@ -42,8 +42,8 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
     companion object : KLogging()
 
     fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
-        connect()
         if (!userAndGroupMapped(userID, groupID)) {
+            connect()
             try {
                 val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
                 val preparedStatement = connection?.prepareStatement(insertUserIntoGroupStatement)
