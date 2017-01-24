@@ -78,10 +78,9 @@ class Application {
     fun setupSpark() {
         val httpConfiguration = HttpConfiguration()
         httpConfiguration.addCustomizer(ForwardedRequestCustomizer())
-        val port = Config.getProperty("port")
-        logger.info("Setting port to $port")
         var portNum = -1
         try {
+            logger.info("Setting port to $portNum")
             portNum = Config.getProperty("port").toInt()
         } catch (e: NumberFormatException) {
             println("Port is not a valid number. Terminating...")

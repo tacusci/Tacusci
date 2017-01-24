@@ -57,5 +57,7 @@ fun File.doesNotExist(): Boolean {
 }
 
 fun Request.forwardedIP(): String {
-    return this.raw().getHeader("X-Forwarded-For")
+    try {
+        return this.raw().getHeader("X-Forwarded-For")
+    } catch (e: IllegalStateException) { return "" }
 }
