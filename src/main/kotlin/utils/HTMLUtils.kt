@@ -63,4 +63,7 @@ class HTMLTable {
         }
         return table
     }
+
+    fun rowCount(): Int { return rows.size }
+    fun columnCount(): Int { return columnNames.size }
 }

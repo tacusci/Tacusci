@@ -102,16 +102,17 @@ object UserManagementController : KLogging() {
 
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
 
-        val userListTable = HTMLTable(listOf("Username", "Banned"))
+        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email Address", "Banned"))
         userListTable.className = "pure-table"
-        for (username in UserHandler.userDAO.getUsernames().filter { it.isNotBlank() && it.isNotEmpty() && it != UserHandler.loggedInUsername(request) }) {
-            val bannedCheckbox = input().withType("checkbox").withId(username).withValue(username).withName("banned_checkbox")
-            if (UserHandler.isBanned(username)) run { bannedCheckbox.attr("checked", "") }
-            userListTable.addRow(listOf(listOf<Tag>(label(username).withName(username).withId(username)),
-                                        listOf<Tag>(input().withType("hidden").withId(username).withValue(username).withName("banned_checkbox.hidden"),
-                                                bannedCheckbox)))
-
+        UserHandler.userDAO.getUsers().filter { it.username != UserHandler.loggedInUsername(request) }.forEach { user ->
+            val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
+            if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
+            userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
+                                        listOf<Tag>(label(user.username).withName(user.username).withId(user.username)),
+                                        listOf<Tag>(label(user.email).withName(user.username).withId(user.username)),
+                                        listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
+        println(userListTable.rowCount())
         userAdminForm.with(userListTable.render())
         userAdminForm.with(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm
