@@ -41,6 +41,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import utils.HTMLTable
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -109,7 +110,7 @@ object UserManagementController : KLogging() {
             if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
             userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                                         listOf<Tag>(label(user.username).withName(user.username).withId(user.username)),
-                                        listOf<Tag>(label(user.email).withName(user.username).withId(user.username)),
+                                        listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
                                         listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
         userAdminForm.with(userListTable.render())
