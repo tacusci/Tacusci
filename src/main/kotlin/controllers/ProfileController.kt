@@ -26,10 +26,10 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package controllers
+
+
+
+package controllers
 
 import database.daos.DAOManager
 import database.daos.UserDAO
@@ -59,25 +59,21 @@ object ProfileController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
-        if (UserHandler.isLoggedIn(request)) {
-            //the username who's profile is requested is from the end of the URL: /profile/IamAUser
-            val userNameOfProfileToView = request.params(":username")
-            if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
-                if (UserHandler.userDAO.userExists(userNameOfProfileToView)) {
-                    model = genUserProfilePage(request, response, userNameOfProfileToView)
-                } else {
-                    return Web.get_userNotFound(request, response, layoutTemplate)
-                }
+        //the username who's profile is requested is from the end of the URL: /profile/IamAUser
+        val userNameOfProfileToView = request.params(":username")
+        if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {
+            if (UserHandler.userDAO.userExists(userNameOfProfileToView)) {
+                model = genUserProfilePage(request, response, userNameOfProfileToView)
             } else {
-                //if they've just requested: /profile then we give them /profile->the username of the person browsing
-                if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
-                    response.redirect("/profile/${UserHandler.loggedInUsername(request).toLowerCase()}")
-                } else {
-                    return Web.get_userNotFound(request, response, layoutTemplate)
-                }
+                return Web.get_userNotFound(request, response, layoutTemplate)
             }
         } else {
-            return Web.get_accessDeniedPage(request, response, layoutTemplate)
+            //if they've just requested: /profile then we give them /profile->the username of the person browsing
+            if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
+                response.redirect("/profile/${UserHandler.loggedInUsername(request).toLowerCase()}")
+            } else {
+                return Web.get_userNotFound(request, response, layoutTemplate)
+            }
         }
         return ModelAndView(model, layoutTemplate)
     }
