@@ -32,6 +32,7 @@
  package controllers
 
 import com.sun.org.apache.xpath.internal.operations.Bool
+import database.models.User
 import handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -65,19 +66,23 @@ object UserManagementController : KLogging() {
     fun post_userManagement(request: Request, response: Response) {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         Web.initSessionAttributes(request.session())
+        var banStatusChangedForAnyone = false
         val usersAndBanned = getUserBannedState(request.body())
         usersAndBanned.forEach {
             for ((username, banned) in it) {
                 if (username == UserHandler.loggedInUsername(request)) continue
                 if (banned) {
+                    banStatusChangedForAnyone = !UserHandler.isBanned(username)
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
                     UserHandler.ban(username)
                 } else {
+                    banStatusChangedForAnyone = UserHandler.isBanned(username)
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
                     UserHandler.unban(username)
                 }
             }
         }
+        if (banStatusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
         response.redirect("/dashboard/user_management")
     }
 
@@ -113,8 +118,13 @@ object UserManagementController : KLogging() {
                                         listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
                                         listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
+
         userAdminForm.with(userListTable.render())
-        userAdminForm.with(input().withType("submit").withName("update_user_management").withId("update_user_management").withValue("Update"))
+        if (request.session().attribute("user_management_changes_made")) {
+            userAdminForm.with(p("Changes applied..."))
+            request.session().attribute("user_management_changes_made", false)
+        } else { userAdminForm.with(br()) }
+        userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm
     }
 }
