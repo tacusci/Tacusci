@@ -128,7 +128,7 @@ object j2htmlPartials {
         )
     }
 
-    fun submitButton(text: String): Tag {
+    fun submitButton(text: String): ContainerTag {
         return button(text).withMethod("submit").withClass("pure-button pure-button-primary")
     }
 

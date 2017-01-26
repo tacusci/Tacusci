@@ -175,7 +175,8 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun get_robotstxt(request: Request, response: Response): String {
+    fun get_robotstxt(request: Request): String {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ROBOTS.txt page")
         return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
                 "User-agent: *\n"
                 +"Disallow: /dashboard/*"

@@ -67,7 +67,9 @@ object LogFileViewController : KLogging() {
                 label("Last    ").attr("for", "lines_to_show"),
                 input().withId("lines_to_show").withName("lines_to_show").withType("text").withValue(session.attribute("lines_to_show")),
                         label("    lines of ${logFile.absolutePath}. Only show lines with text    ").attr("for", "text_to_show"),
-                input().withId("text_to_show").withName("text_to_show").withType("text").withValue(session.attribute("text_to_show")), j2htmlPartials.submitButton("Refresh")
+                input().withId("text_to_show").withName("text_to_show").withType("text").withValue(session.attribute("text_to_show")),
+                        label("    ").attr("for", "refresh_button"),
+                        j2htmlPartials.submitButton("Refresh").withId("refresh_button").withName("refresh_button")
         ))
         return refreshForm
     }
