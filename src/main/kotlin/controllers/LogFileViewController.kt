@@ -35,7 +35,7 @@ object LogFileViewController : KLogging() {
 
         if (logFile.exists()) {
             val logFileTextArea = textarea().withClass("boxsizingBorder").attr("readonly", "true")
-            logFileTextArea.withText(tailFile(logFile.toPath(), getLinesToShowInt(request.session())).asString_nLines())
+            logFileTextArea.withText(getLogFileLines(request.session(), logFile))
             model.put("logFilePath", h2(logFile.absolutePath).withClass("centered"))
             model.put("refreshForm", genRefreshForm(request.session(), logFile))
             model.put("logFileLines", logFileTextArea.render())
@@ -46,6 +46,18 @@ object LogFileViewController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun getLogFileLines(session: Session, logFile: File): String {
+        val logLines = tailFile(logFile.toPath(), getLinesToShowInt(session))
+        try {
+            val textToShow: String = session.attribute("text_to_show")
+            if (textToShow.isBlank() || textToShow.isEmpty()) {
+                return logLines.asString_nLines()
+            } else {
+                return logLines.contents().filter { !it.contains(textToShow) }.joinToString("\n")
+            }
+        } catch (e: Exception) { return logLines.asString_nLines() }
+    }
+
     private fun genRefreshForm(session: Session, logFile: File): ContainerTag {
         val formName = "refresh_form"
         val hash = Web.mapFormToHash(session, formName)
@@ -53,9 +65,9 @@ object LogFileViewController : KLogging() {
                 fieldset().with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 label("Last    ").attr("for", "lines_to_show"),
-                input().withId("lines_to_show").withType("text").withPlaceholder(session.attribute("lines_to_show")),
+                input().withId("lines_to_show").withType("text").withValue(session.attribute("lines_to_show")),
                         label("    lines of ${logFile.absolutePath}. Only show lines with text    ").attr("for", "text_to_show"),
-                input().withId("text_to_show").withType("text").withPlaceholder(session.attribute("text_to_show")), j2htmlPartials.submitButton("Refresh")
+                input().withId("text_to_show").withType("text").withValue(session.attribute("text_to_show")), j2htmlPartials.submitButton("Refresh")
         ))
         return refreshForm
     }
@@ -76,7 +88,8 @@ object LogFileViewController : KLogging() {
         Web.initSessionAttributes(request.session())
 
         if (Web.getFormHash(request.session(), "refresh_form") == request.queryParams("hashid")) {
-
+            val linesToShow = request.queryParams("lines_to_show")
+            val textToShow = request.queryParams("text_to_show")
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid refresh form...")
         }

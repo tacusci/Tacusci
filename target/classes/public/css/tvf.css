@@ -4,7 +4,7 @@ div.centered {
     margin-right: auto;
     padding-left: 1em;
     padding-right: 1em;
-    max-width: 768px;
+    max-width: 3000px;
     text-align: center;
 }
 
@@ -38,3 +38,6 @@ submit-link:focus {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+textarea { resize:vertical; max-height:800px; min-height:600px; }
+textarea.horiz { resize:horizontal; min-width:300px; }
