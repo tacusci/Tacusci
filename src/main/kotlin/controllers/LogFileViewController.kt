@@ -53,7 +53,7 @@ object LogFileViewController : KLogging() {
             if (textToShow.isBlank() || textToShow.isEmpty()) {
                 return logLines.asString_nLines()
             } else {
-                return logLines.contents().filter { !it.contains(textToShow) }.joinToString("\n")
+                return logLines.contents().filter { it.contains(textToShow) }.joinToString("\n")
             }
         } catch (e: Exception) { return logLines.asString_nLines() }
     }
@@ -65,9 +65,9 @@ object LogFileViewController : KLogging() {
                 fieldset().with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 label("Last    ").attr("for", "lines_to_show"),
-                input().withId("lines_to_show").withType("text").withValue(session.attribute("lines_to_show")),
+                input().withId("lines_to_show").withName("lines_to_show").withType("text").withValue(session.attribute("lines_to_show")),
                         label("    lines of ${logFile.absolutePath}. Only show lines with text    ").attr("for", "text_to_show"),
-                input().withId("text_to_show").withType("text").withValue(session.attribute("text_to_show")), j2htmlPartials.submitButton("Refresh")
+                input().withId("text_to_show").withName("text_to_show").withType("text").withValue(session.attribute("text_to_show")), j2htmlPartials.submitButton("Refresh")
         ))
         return refreshForm
     }
@@ -90,9 +90,22 @@ object LogFileViewController : KLogging() {
         if (Web.getFormHash(request.session(), "refresh_form") == request.queryParams("hashid")) {
             val linesToShow = request.queryParams("lines_to_show")
             val textToShow = request.queryParams("text_to_show")
+
+            if (!(linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty() || linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty())) {
+                try {
+                    val linesToShowInt = linesToShow.toInt()
+                    request.session().attribute("lines_to_show", linesToShow)
+                } catch (e: Exception) { logger.error(e.message) }
+            }
+
+            if (!(textToShow.isNullOrBlank() || textToShow.isNullOrEmpty() || textToShow.isNullOrBlank() || textToShow.isNullOrEmpty())) {
+                request.session().attribute("text_to_show", textToShow)
+            }
+
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid refresh form...")
         }
+        response.redirect("/dashboard/log_file")
         return response
     }
 }

@@ -112,6 +112,7 @@ class Application {
         post("/dashboard/create_page", { request, response -> Web.post_createPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) })
         post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
+        post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
 
 
         //MAP REDIRECTS
