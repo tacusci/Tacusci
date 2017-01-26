@@ -39,6 +39,7 @@ import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -74,6 +75,15 @@ object ProfileController : KLogging() {
             } else {
                 return Web.get_userNotFound(request, response, layoutTemplate)
             }
+        }
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    fun get_resetPasswordPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        var model = HashMap<String, Any>()
+        val authHash = request.params("auth_hash")
+        if (authHash == "1234") {
+            val resetPasswordForm = j2htmlPartials.pureFormStacked_Login(request.session(), "reset_password", "Reset Password", "/profile/:${request.params("username")}/$authHash", "post")
         }
         return ModelAndView(model, layoutTemplate)
     }

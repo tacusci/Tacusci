@@ -34,6 +34,7 @@
 import database.models.User
 import handlers.GroupHandler
 import handlers.UserHandler
+import j2html.TagCreator.pre
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -84,6 +85,51 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    fun post_register(request: Request, response: Response, layoutTemplate: String): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
+        var model = HashMap<String, Any>()
+        model = loadNavBar(request, response, model)
+
+        if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {
+            val fullName = request.queryParams("full_name")
+            val username = request.queryParams("username")
+            val password = request.queryParams("password")
+            val email = request.queryParams("email")
+
+            model.put("full_name_error_hidden", true)
+
+            val user = User(fullName, username, password, email, 0)
+
+            if (!UserHandler.userDAO.userExists(user.username)) {
+                if (UserHandler.createUser(user)) {
+                    response.redirect("/login")
+                } else {
+                    if (!user.isFullnameValid()) {
+                        request.session().attribute("full_name_field_error", true)
+                    }
+                    if (!user.isUsernameValid()) {
+                        request.session().attribute("username_field_error", true)
+                    }
+                    if (!user.isPasswordValid()) {
+                        request.session().attribute("password_field_error", true)
+                    }
+                    if (!user.isEmailValid()) {
+                        request.session().attribute("email_field_error", true)
+                    }
+                    response.redirect("/register")
+                }
+            } else {
+                request.session().attribute("username_not_available_error", true)
+                request.session().attribute("username_not_available", user.username)
+                response.redirect("/register")
+            }
+        } else {
+            logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
+            response.redirect("/register")
+        }
+        return response
+    }
+
     fun get_register(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
 
@@ -129,49 +175,11 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post_register(request: Request, response: Response, layoutTemplate: String): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
-        var model = HashMap<String, Any>()
-        model = loadNavBar(request, response, model)
-
-        if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {
-            val fullName = request.queryParams("full_name")
-            val username = request.queryParams("username")
-            val password = request.queryParams("password")
-            val email = request.queryParams("email")
-
-            model.put("full_name_error_hidden", true)
-
-            val user = User(fullName, username, password, email, 0)
-
-            if (!UserHandler.userDAO.userExists(user.username)) {
-                if (UserHandler.createUser(user)) {
-                    response.redirect("/login")
-                } else {
-                    if (!user.isFullnameValid()) {
-                        request.session().attribute("full_name_field_error", true)
-                    }
-                    if (!user.isUsernameValid()) {
-                        request.session().attribute("username_field_error", true)
-                    }
-                    if (!user.isPasswordValid()) {
-                        request.session().attribute("password_field_error", true)
-                    }
-                    if (!user.isEmailValid()) {
-                        request.session().attribute("email_field_error", true)
-                    }
-                    response.redirect("/register")
-                }
-            } else {
-                request.session().attribute("username_not_available_error", true)
-                request.session().attribute("username_not_available", user.username)
-                response.redirect("/register")
-            }
-        } else {
-            logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
-            response.redirect("/register")
-        }
-        return response
+    fun get_robotstxt(request: Request, response: Response): String {
+        return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
+                "User-agent: *\n"
+                +"Disallow: /dashboard/*"
+        ).render()
     }
 
     fun get_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {

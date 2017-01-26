@@ -111,6 +111,7 @@ object LoginController : KLogging() {
     }
 
     fun post_logout(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGOUT form")
         if (UserHandler.isLoggedIn(request)) {
             UserHandler.logout(request)
         }
