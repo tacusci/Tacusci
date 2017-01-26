@@ -47,7 +47,7 @@ import java.util.*
  */
 object ProfileController : KLogging() {
 
-    fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
+    private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
         model.put("template", "/templates/profile_page.vtl")
@@ -71,7 +71,7 @@ object ProfileController : KLogging() {
         } else {
             //if they've just requested: /profile then we give them /profile->the username of the person browsing
             if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
-                response.redirect("/profile/${UserHandler.loggedInUsername(request).toLowerCase()}")
+                response.redirect("/")
             } else {
                 return Web.get_userNotFound(request, response, layoutTemplate)
             }
