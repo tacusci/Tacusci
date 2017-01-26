@@ -8,14 +8,16 @@ import spark.Request
 import spark.Response
 import utils.Config
 import j2html.TagCreator.*
+import utils.Tail.tailFile
 import java.io.File
+import java.nio.file.Paths
 import java.util.*
 
 /**
  * Created by alewis on 22/01/2017.
  */
 
-object LogFileViewerController : KLogging() {
+object LogFileViewController : KLogging() {
 
     fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
@@ -24,15 +26,14 @@ object LogFileViewerController : KLogging() {
         model.put("template", "/templates/log_file.vtl")
         model.put("title", "Thames Valley Furs - Log File")
 
-        val logFileTextArea = textarea().withClass("boxsizingBorder").withText(getLogFileLines()).attr("readonly", "true")
-        model.put("logFileLines", logFileTextArea.render())
-        return ModelAndView(model, layoutTemplate)
-    }
-
-    fun getLogFileLines(): String {
         val logFile = File(Config.getProperty("log_file"))
-        val stringBuilder = StringBuilder()
-        logFile.forEachLine { stringBuilder.appendln(it) }
-        return stringBuilder.toString()
+
+        if (logFile.exists()) {
+            val logFileTextArea = textarea().withClass("boxsizingBorder").attr("readonly", "true")
+            logFileTextArea.withText(tailFile(logFile.toPath(), 200).asString_nLines())
+            model.put("logFileLines", logFileTextArea.render())
+        } else { model.put("logFileLines", h2("Log file ${logFile.absolutePath} does not exist...")) }
+
+        return ModelAndView(model, layoutTemplate)
     }
 }
