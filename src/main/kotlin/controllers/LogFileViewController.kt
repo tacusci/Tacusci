@@ -98,7 +98,7 @@ object LogFileViewController : KLogging() {
                 } catch (e: Exception) { logger.error(e.message) }
             }
 
-            if (!(textToShow.isNullOrBlank() || textToShow.isNullOrEmpty() || textToShow.isNullOrBlank() || textToShow.isNullOrEmpty())) {
+            if (textToShow != null) {
                 request.session().attribute("text_to_show", textToShow)
             }
 
