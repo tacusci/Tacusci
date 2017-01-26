@@ -53,7 +53,7 @@ object Web : KLogging() {
     //TODO: Move most of these to their own controller classes :3
 
     val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
-                                      Pair("user_management_changes_made", false))
+                                      Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""))
 
     fun initSessionAttributes(session: Session) {
         sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }

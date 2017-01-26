@@ -129,7 +129,7 @@ object j2htmlPartials {
     }
 
     fun submitButton(text: String): Tag {
-        return button().withType("submit").withText(text)
+        return button(text).withMethod("submit").withClass("pure-button pure-button-primary")
     }
 
     fun link(lookAndFeelClass: String, href: String, text: String): Tag {
