@@ -114,7 +114,7 @@ object UserManagementController : KLogging() {
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
             if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
             userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
-                                        listOf<Tag>(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
+                                        listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                                         listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
                                         listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
