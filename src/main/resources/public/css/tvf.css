@@ -39,5 +39,14 @@ submit-link:focus {
     box-sizing: border-box;
 }
 
-textarea { resize:vertical; max-height:800px; min-height:600px; }
-textarea.horiz { resize:horizontal; min-width:300px; }
+.log-view-pane { resize:vertical; max-height:800px; min-height:600px; }
+log-view-pane.horiz { resize:horizontal; min-width:300px; }
+
+textarea.styled-text-area {
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+	background-image: url(bg.gif);
+	background-position: bottom right;
+	background-repeat: no-repeat;
+}

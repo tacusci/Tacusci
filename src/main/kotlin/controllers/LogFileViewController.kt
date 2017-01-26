@@ -34,7 +34,7 @@ object LogFileViewController : KLogging() {
         val logFile = File(Config.getProperty("log_file"))
 
         if (logFile.exists()) {
-            val logFileTextArea = textarea().withClass("boxsizingBorder").attr("readonly", "true")
+            val logFileTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area").attr("readonly", "true")
             logFileTextArea.withText(getLogFileLines(request.session(), logFile))
             model.put("logFilePath", h2(logFile.absolutePath).withClass("centered"))
             model.put("refreshForm", genRefreshForm(request.session(), logFile))
