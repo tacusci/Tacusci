@@ -43,7 +43,15 @@ submit-link:focus {
 log-view-pane.horiz { resize:horizontal; min-width:300px; }
 
 textarea.styled-text-area {
-	border: 3px solid #cccccc;
-	padding: 5px;
-	font-family: Tahoma, sans-serif;
+    -webkit-box-shadow: inset 2px 2px 2px 0px #dddddd;
+    -moz-box-shadow: inset 2px 2px 2px 0px #dddddd;
+    box-shadow: inset 0 1px 3px #ddd;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	outline: none;
+	padding: 6px 8px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	font-family: tahoma;
+	font-size: 12px;
 }

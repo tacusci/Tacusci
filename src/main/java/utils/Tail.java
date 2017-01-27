@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -15,22 +16,24 @@ import java.util.stream.Stream;
 public class Tail {
 
     public static final class RingBuffer {
-        private final int limit;
+
+        private final long limit;
         private final String[] data;
-        private int counter = 0;
+        private long totalCount = 0;
+        private long counter = 0;
 
-        RingBuffer(int limit) {
+        RingBuffer(long totalCount, long limit) {
+            this.totalCount = totalCount;
             this.limit = limit;
-            this.data = new String[limit];
+            if (limit > totalCount) { limit = totalCount; }
+            this.data = new String[Math.toIntExact(limit)];
         }
 
-        void collect(String line) {
-            data[counter++ % limit] = line;
-        }
+        void collect(String line) { data[Math.toIntExact(counter++ % limit)] = line; }
 
         public List<String> contents() {
-            return IntStream.range(counter < limit ? 0 : counter - limit, counter)
-                    .mapToObj(index -> data[index % limit])
+            return LongStream.range(counter < limit ? 0 : counter - limit, counter)
+                    .mapToObj(index -> data[Math.toIntExact(index % limit)])
                     .collect(Collectors.toList());
         }
 
@@ -39,12 +42,14 @@ public class Tail {
 
     }
 
-    public static RingBuffer tailFile(final Path source, final int limit) throws IOException {
-
-        try (Stream<String> stream = Files.lines(source)) {
-            RingBuffer buffer = new RingBuffer(limit);
+    public static RingBuffer tailFile(final Path source, final long limit) throws IOException {
+        RingBuffer buffer = null;
+        try {
+            Stream<String> stream = Files.lines(source);
+            buffer = new RingBuffer(stream.count(), limit);
+            stream = Files.lines(source);
             stream.forEach(buffer::collect);
             return buffer;
-        }
+        } catch (Exception e) { e.printStackTrace(); return buffer; }
     }
 }

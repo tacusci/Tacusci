@@ -47,7 +47,7 @@ object LogFileViewController : KLogging() {
     }
 
     private fun getLogFileLines(session: Session, logFile: File): String {
-        val logLines = tailFile(logFile.toPath(), getLinesToShowInt(session))
+        val logLines = tailFile(logFile.toPath(), getLinesToShowLong(session))
         try {
             val textToShow: String = session.attribute("text_to_show")
             if (textToShow.isBlank() || textToShow.isEmpty()) {
@@ -55,7 +55,7 @@ object LogFileViewController : KLogging() {
             } else {
                 return logLines.contents().filter { it.contains(textToShow) }.joinToString("\n")
             }
-        } catch (e: Exception) { return logLines.asString_nLines() }
+        } catch (e: Exception) { if (logLines == null) return "Index is out of bounds, try something less than 2,147,483,647..." else return logLines.asString_nLines() }
     }
 
     private fun genRefreshForm(session: Session, logFile: File): ContainerTag {
@@ -74,10 +74,10 @@ object LogFileViewController : KLogging() {
         return refreshForm
     }
 
-    private fun getLinesToShowInt(session: Session): Int {
+    private fun getLinesToShowLong(session: Session): Long {
         try {
             val linesToShowString: String = session.attribute("lines_to_show")
-            val linesToShow = linesToShowString.toInt()
+            val linesToShow = linesToShowString.toLong()
             if (linesToShow <= 0) throw Exception("Number equals or less than zero")
             return linesToShow
         } catch (e: Exception) {
@@ -97,7 +97,6 @@ object LogFileViewController : KLogging() {
 
             if (!(linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty() || linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty())) {
                 try {
-                    val linesToShowInt = linesToShow.toInt()
                     request.session().attribute("lines_to_show", linesToShow)
                 } catch (e: Exception) { logger.error(e.message) }
             }
