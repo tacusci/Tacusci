@@ -77,7 +77,9 @@ object LogFileViewController : KLogging() {
     private fun getLinesToShowInt(session: Session): Int {
         try {
             val linesToShowString: String = session.attribute("lines_to_show")
-            return linesToShowString.toInt()
+            val linesToShow = linesToShowString.toInt()
+            if (linesToShow <= 0) throw Exception("Number equals or less than zero")
+            return linesToShow
         } catch (e: Exception) {
             logger.error(e.message)
             session.attribute("lines_to_show", "20")
