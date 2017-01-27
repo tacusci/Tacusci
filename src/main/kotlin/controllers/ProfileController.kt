@@ -71,7 +71,7 @@ object ProfileController : KLogging() {
         } else {
             //if they've just requested: /profile then we give them /profile->the username of the person browsing
             if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
-                response.redirect("/")
+                if (UserHandler.isLoggedIn(request)) response.redirect("/profile/${UserHandler.loggedInUsername(request)}") else response.redirect("/")
             } else {
                 return Web.get_userNotFound(request, response, layoutTemplate)
             }
