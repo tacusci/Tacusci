@@ -96,7 +96,7 @@ object LoginController : KLogging() {
                     email = username
                     username = UserHandler.userDAO.getUsernameFromEmail(email)
                 }
-                UserHandler.login(request, username, password)
+                if (!UserHandler.login(request, username, password)) { response.redirect("/login") }
             } else {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
