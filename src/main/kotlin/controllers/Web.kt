@@ -98,7 +98,7 @@ object Web : KLogging() {
 
             model.put("full_name_error_hidden", true)
 
-            val user = User(fullName, username, password, email, 0)
+            val user = User(fullName, username, password, email, 0, 0)
 
             if (!UserHandler.userDAO.userExists(user.username)) {
                 if (UserHandler.createUser(user)) {

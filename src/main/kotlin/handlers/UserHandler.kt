@@ -49,7 +49,6 @@ import utils.PasswordStorage
 object  UserHandler : KLogging() {
 
     val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-    var defaultUser = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0)
 
     fun login(request: Request, username: String, password: String): Boolean {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Attempting to login $username")
@@ -115,8 +114,22 @@ object  UserHandler : KLogging() {
         return ""
     }
 
-    fun createDefaultUser(): Boolean {
-        return createUser(defaultUser)
+    fun createRootAdmin(): Boolean {
+        val rootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+        if (!rootAdmin.isValid()) return false
+        userDAO.insertUser(rootAdmin)
+
+        if ((userDAO.getRootAdmin().username != rootAdmin.username) || userDAO.getRootAdmin().password != PasswordStorage.createHash(rootAdmin.password)) {
+            if (userDAO.updateRootAdmin(rootAdmin)) {
+                logger.info("Root admin has been updated from properties...")
+            } else {
+                logger.info("Root admin has been changed in properties file but update has failed...")
+            }
+        }
+
+        GroupHandler.addUserToGroup(rootAdmin, "members")
+        GroupHandler.addUserToGroup(rootAdmin, "admins")
+        return true
     }
 
     fun createUser(user: User): Boolean {
@@ -129,6 +142,10 @@ object  UserHandler : KLogging() {
     fun userExists(user: User): Boolean {
         if (!user.isValid()) return false
         return userDAO.userExists(user.username)
+    }
+
+    fun getRootAdmin(): User {
+        return userDAO.getRootAdmin()
     }
 
     fun ban(username: String): Boolean {

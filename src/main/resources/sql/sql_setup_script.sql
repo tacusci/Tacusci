@@ -2,6 +2,7 @@ CREATE schema IF NOT EXISTS tvf;
 
 CREATE TABLE IF NOT EXISTS `tvf`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
+  `rootadmin` BIT(1) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `authhash` CHAR(72) NOT NULL,
   `email` VARCHAR(45) NOT NULL,

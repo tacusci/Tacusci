@@ -52,14 +52,7 @@ class Config private constructor() {
         var fileWatcher = FileWatcher(File(""))
 
         fun load() {
-            val defaults: HashMap<String, String> = hashMapOf(Pair("server_address", "localhost"),
-                    Pair("port", "1025"),
-                    Pair("db_url", "jdbc:mysql://localhost"),
-                    Pair("schema_name", "tvf"),
-                    Pair("default_admin_user", "tvf_admin"),
-                    Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", "admin_tvf@tvf.net"),
-                    Pair("log_file", "tvf.log"))
+            val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
             val propertiesFile = File(this.getProperty("properties_file"))
@@ -89,6 +82,32 @@ class Config private constructor() {
 
         override fun getProperty(key: String, defaultValue: String): String {
             return super.getProperty(key, defaultValue)
+        }
+
+        fun getDefaultProperty(key: String): String {
+            return getDefaultProperties().getProperty(key)
+        }
+
+        fun getDefaultProperty(key: String, defaultValue: String): String {
+            return getDefaultProperties().getProperty(key, defaultValue)
+        }
+
+        private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
+            return hashMapOf(Pair("server_address", "localhost"),
+                    Pair("port", "1025"),
+                    Pair("db_url", "jdbc:mysql://localhost"),
+                    Pair("schema_name", "tvf"),
+                    Pair("default_admin_user", "tvf_admin"),
+                    Pair("default_admin_password", "Password1234!"),
+                    Pair("default_admin_email", "admin_tvf@tvf.net"),
+                    Pair("log_file", "tvf.log"))
+        }
+
+        private fun getDefaultProperties(): Properties {
+            val defaultProperties = Properties()
+            val defaultPropertyKeysAndValues = getDefaultPropertiesHashMap()
+            defaultPropertyKeysAndValues.forEach { property, value -> defaultProperties.setProperty(property, value) }
+            return defaultProperties
         }
 
         fun monitorPropertiesFile(application: Application) {

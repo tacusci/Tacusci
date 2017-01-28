@@ -71,8 +71,7 @@ class Application {
     fun setupDefaultGroups() {
         GroupHandler.createGroup(Group("admins"))
         GroupHandler.createGroup(Group("members"))
-        UserHandler.createDefaultUser()
-        GroupHandler.addUserToGroup(UserHandler.defaultUser, "admins")
+        UserHandler.createRootAdmin()
     }
 
     fun setupSpark() {
