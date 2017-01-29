@@ -115,21 +115,30 @@ object  UserHandler : KLogging() {
     }
 
     fun createRootAdmin(): Boolean {
-        val rootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
-        if (!rootAdmin.isValid()) return false
-        userDAO.insertUser(rootAdmin)
+        val configRootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+        if (!configRootAdmin.isValid()) return false
+        userDAO.insertUser(configRootAdmin)
 
-        if ((userDAO.getRootAdmin().username != rootAdmin.username) || userDAO.getRootAdmin().password != PasswordStorage.createHash(rootAdmin.password)) {
-            if (userDAO.updateRootAdmin(rootAdmin)) {
-                logger.info("Root admin has been updated from properties...")
+        updateRootAdmin(configRootAdmin)
+
+        GroupHandler.addUserToGroup(configRootAdmin, "members")
+        GroupHandler.addUserToGroup(configRootAdmin, "admins")
+        return true
+    }
+
+    fun updateRootAdmin(configRootAdmin: User) {
+        if ((userDAO.getRootAdmin().username != configRootAdmin.username) || userDAO.getRootAdmin().password != PasswordStorage.createHash(configRootAdmin.password)) {
+            if (!userDAO.getUsernames().contains(configRootAdmin.username)) {
+                if (userDAO.updateRootAdmin(configRootAdmin)) {
+                    logger.info("Root admin has been updated from properties...")
+                } else {
+                    logger.info("Root admin has been changed in properties file but update has failed...")
+                }
             } else {
-                logger.info("Root admin has been changed in properties file but update has failed...")
+                Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                Config.storeAll()
             }
         }
-
-        GroupHandler.addUserToGroup(rootAdmin, "members")
-        GroupHandler.addUserToGroup(rootAdmin, "admins")
-        return true
     }
 
     fun createUser(user: User): Boolean {

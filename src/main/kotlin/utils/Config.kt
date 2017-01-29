@@ -50,12 +50,13 @@ class Config private constructor() {
     companion object props : Properties() {
 
         var fileWatcher = FileWatcher(File(""))
+        var propertiesFile = File("")
 
         fun load() {
             val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tvf.properties")
-            val propertiesFile = File(this.getProperty("properties_file"))
+            propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
                 defaults.forEach { property, value -> this.setProperty(property, value) }
                 this.store(propertiesFile.outputStream(), "")
@@ -83,6 +84,8 @@ class Config private constructor() {
         override fun getProperty(key: String, defaultValue: String): String {
             return super.getProperty(key, defaultValue)
         }
+
+        fun storeAll() { store(propertiesFile.outputStream(), "") }
 
         fun getDefaultProperty(key: String): String {
             return getDefaultProperties().getProperty(key)
