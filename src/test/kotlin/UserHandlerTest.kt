@@ -4,7 +4,6 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
 import utils.Config
-import utils.PasswordStorage
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
