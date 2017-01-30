@@ -72,6 +72,8 @@ class Application {
         GroupHandler.createGroup(Group("admins"))
         GroupHandler.createGroup(Group("members"))
         UserHandler.createRootAdmin()
+        //root admin might already exist but check for properties file changes
+        UserHandler.updateRootAdmin()
     }
 
     fun setupSpark() {

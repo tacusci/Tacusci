@@ -117,13 +117,32 @@ object  UserHandler : KLogging() {
     fun createRootAdmin(): Boolean {
         val configRootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
         if (!configRootAdmin.isValid()) return false
+        //once inserted, this won't be auto updated...
         userDAO.insertUser(configRootAdmin)
-
-        updateRootAdmin(configRootAdmin)
 
         GroupHandler.addUserToGroup(configRootAdmin, "members")
         GroupHandler.addUserToGroup(configRootAdmin, "admins")
         return true
+    }
+
+    fun updateRootAdmin() {
+        val newRootAdminUsername = Config.getProperty("default_admin_user")
+
+        //if properties file values have changed for root admin
+        if (userDAO.getRootAdmin().username != newRootAdminUsername) {
+            //username has changed?
+            //TODO: Change this to a SQL count statement (more efficient?)
+            if (userDAO.getUsernames().contains(newRootAdminUsername)) {
+                //if username is already being used then change root admin username back to default
+                logger.error("New root admin username is already in use, setting back to default...")
+                Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                Config.storeAll()
+            }
+        }
+
+        val configRootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+        userDAO.updateRootAdmin(configRootAdmin)
+
     }
 
     fun updateRootAdmin(configRootAdmin: User) {
