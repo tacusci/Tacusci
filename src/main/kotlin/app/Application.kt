@@ -40,8 +40,6 @@ import database.models.Group
 import handlers.GroupHandler
 import handlers.UserHandler
 import mu.KLogging
-import org.eclipse.jetty.server.ForwardedRequestCustomizer
-import org.eclipse.jetty.server.HttpConfiguration
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
