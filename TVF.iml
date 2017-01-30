@@ -97,6 +97,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
@@ -145,13 +146,11 @@
     <orderEntry type="library" name="Maven: com.googlecode.jarjar:jarjar:1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:6.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.htmlcompressor:htmlcompressor:1.5.2" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.spek:spek-junit-platform-engine:1.1.0-beta2" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.0.4" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.spek:spek-api:1.1.0-beta2" level="project" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-core:2.7.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.bytebuddy:byte-buddy:1.6.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.bytebuddy:byte-buddy-agent:1.6.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.objenesis:objenesis:2.5" level="project" />
     <orderEntry type="library" name="Maven: com.nhaarman:mockito-kotlin:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.0.6" level="project" />
   </component>
 </module>

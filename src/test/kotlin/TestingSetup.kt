@@ -4,6 +4,7 @@ import database.models.Group
 import handlers.GroupHandler
 import handlers.UserHandler
 import utils.Config
+import utils.InternalResourceFile
 import java.io.File
 import java.util.*
 
@@ -34,7 +35,7 @@ object TestingSetup {
         DAOManager.init(dbURL, dbProperties)
         DAOManager.connect()
         //run the set up schemas if they don't exist
-        DAOManager.setup(File("test_sql_setup_script.sql"))
+        DAOManager.setup(InternalResourceFile("/sql/test_sql_setup_script.sql"))
         DAOManager.disconnect()
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema

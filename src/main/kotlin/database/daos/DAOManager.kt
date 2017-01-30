@@ -75,6 +75,12 @@ object DAOManager : KLogging() {
         sqlScript.executeStatements(connection!!)
     }
 
+    fun setup(internalScriptFile: InternalResourceFile) {
+        val sqlScript = SQLScript(internalScriptFile.inputStream)
+        sqlScript.parse()
+        sqlScript.executeStatements(connection!!)
+    }
+
     fun setup(scriptFile: File) {
         val sqlScript = SQLScript(scriptFile.inputStream())
         sqlScript.parse()
