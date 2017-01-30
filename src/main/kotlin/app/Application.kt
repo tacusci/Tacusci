@@ -104,8 +104,6 @@ class Application {
         get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        get("/profile/:username/reset_password/:auth_hash", { request, response -> println(request.params("username")+" "+request.params("authHash"))})
-
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
         //MAP POST ROUTES
