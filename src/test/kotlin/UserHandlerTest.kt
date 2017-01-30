@@ -18,7 +18,7 @@ object UserHandlerTest : Spek({
     describe("Logging in as default admin") {
         val fakeRequest = FakeRequest()
         on("login") {
-            val loginSuccessful = UserHandler.login(fakeRequest, Config.getProperty("default_admin_user"), PasswordStorage.createHash(Config.getProperty("default_admin_password")))
+            val loginSuccessful = UserHandler.login(fakeRequest, Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"))
             it("Should have signed in successfully") {
                 assertTrue(loginSuccessful, "Logging as default admin was successful")
             }
