@@ -45,7 +45,7 @@ import java.util.*
  * Created by alewis on 29/11/2016.
  */
 
-class Config private constructor() {
+open class Config {
 
     companion object props : Properties() {
 
@@ -111,6 +111,28 @@ class Config private constructor() {
             val defaultPropertyKeysAndValues = getDefaultPropertiesHashMap()
             defaultPropertyKeysAndValues.forEach { property, value -> defaultProperties.setProperty(property, value) }
             return defaultProperties
+        }
+
+        fun loadFromPropertiesFile(propertiesFile: File) {
+            val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
+            File(this.getProperty("properties_file"))
+            if (propertiesFile.doesNotExist()) {
+                defaults.forEach { property, value -> this.setProperty(property, value) }
+                this.store(propertiesFile.outputStream(), "")
+            } else {
+                try {
+                    //logger.info("Loading properties from tvf.properties")
+                    this.load(propertiesFile.inputStream())
+                    defaults.forEach { property, value ->
+                        if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
+                            this.setProperty(property, value)
+                        }
+                    }
+                    this.store(propertiesFile.outputStream(), "")
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
         }
 
         fun monitorPropertiesFile(application: Application) {

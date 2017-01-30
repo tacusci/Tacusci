@@ -31,14 +31,12 @@
  
 package handlers
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import database.daos.DAOManager
 import database.daos.UserDAO
 import database.models.User
 import extensions.forwardedIP
 import mu.KLogging
 import spark.Request
-import spark.Session
 import utils.Config
 import utils.PasswordStorage
 
@@ -94,7 +92,7 @@ object  UserHandler : KLogging() {
     }
 
     fun isLoggedIn(request: Request): Boolean {
-        val session = request.session()
+        val session = request.session() ?: return false
         if (session.attributes().isNotEmpty()) {
             if (session.attributes().contains("logged_in")) {
                 val loggedIn: Boolean = session.attribute("logged_in")

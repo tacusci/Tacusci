@@ -1,36 +1,12 @@
 package utils
 
 import j2html.TagCreator.*
-import j2html.tags.ContainerTag
 import j2html.tags.Tag
-import org.w3c.tidy.Tidy
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.util.stream.Collectors
 
 /**
  * Created by alewis on 04/01/2017.
  */
 
-object HTMLUtils {
-
-    fun formatMarkup(html: String): String {
-        val tidy = Tidy()
-        //tidy.xhtml = true
-        tidy.indentContent = true
-        tidy.tidyMark = false
-        tidy.quiet = true
-        tidy.showWarnings = false
-
-        // HTML to DOM
-        val htmlDOM = tidy.parseDOM(ByteArrayInputStream(html.toByteArray()), null)
-
-        // Pretty Print
-        val out = ByteArrayOutputStream()
-        tidy.pprint(htmlDOM, out)
-        return out.toString()
-    }
-}
 
 class HTMLTable {
 

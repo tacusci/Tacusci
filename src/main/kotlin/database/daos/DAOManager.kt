@@ -34,6 +34,7 @@
 import database.SQLScript
 import mu.KLogging
 import utils.InternalResourceFile
+import java.io.File
 import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
@@ -59,7 +60,7 @@ object DAOManager : KLogging() {
         GROUPS
     }
 
-    private var connection: Connection? = null
+    public var connection: Connection? = null
 
     fun init(url: String, dbProperties: Properties) {
         this.url = url
@@ -70,6 +71,12 @@ object DAOManager : KLogging() {
     fun setup() {
         val sqlScriptData = InternalResourceFile("/sql/sql_setup_script.sql")
         val sqlScript = SQLScript(sqlScriptData.inputStream)
+        sqlScript.parse()
+        sqlScript.executeStatements(connection!!)
+    }
+
+    fun setup(scriptFile: File) {
+        val sqlScript = SQLScript(scriptFile.inputStream())
         sqlScript.parse()
         sqlScript.executeStatements(connection!!)
     }

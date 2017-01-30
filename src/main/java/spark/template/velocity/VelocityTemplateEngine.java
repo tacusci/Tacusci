@@ -16,19 +16,17 @@
  */
 package spark.template.velocity;
 
-import java.io.StringWriter;
-import java.util.Map;
-import java.util.Properties;
-
 import com.googlecode.htmlcompressor.compressor.Compressor;
 import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
-import utils.HTMLUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
 import spark.ModelAndView;
 import spark.TemplateEngine;
+
+import java.io.StringWriter;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Template Engine based on Apache Velocity.

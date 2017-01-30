@@ -1,30 +1,24 @@
+import com.nhaarman.mockito_kotlin.whenever
 import handlers.UserHandler
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import org.mockito.Mockito.mock
+import spark.Request
+import spark.Session
 import utils.Config
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import utils.PasswordStorage
 
 /**
  * Created by alewis on 30/01/2017.
  */
-
-
-object UserHandlerTest : Spek({
-
-    describe("Logging in as default admin") {
-        val fakeRequest = FakeRequest()
-        on("login") {
-            val loginSuccessful = UserHandler.login(fakeRequest, Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"))
-            it("Should have signed in successfully") {
-                assertTrue(loginSuccessful, "Logging as default admin was successful")
-            }
-
-            it ("Should contain default admin username in session as attribute 'username'") {
-                assertEquals(Config.getProperty("default_admin_user"), fakeRequest.session().attribute("username"))
-            }
-        }
+class UserHandlerTest {
+    @Test
+    fun login() {
+        TestingSetup.setupSetEnv()
+        val mockRequest = mock(Request::class.java)
+        whenever(mockRequest.ip()).thenReturn("0.0.0.0:80")
+        whenever(mockRequest.session()).thenReturn(mock(Session::class.java))
+        val loginSuccessful = UserHandler.login(mockRequest, Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"))
+        assertTrue(loginSuccessful)
     }
-})
+}
