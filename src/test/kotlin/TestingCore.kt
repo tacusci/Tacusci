@@ -8,7 +8,6 @@ import spark.Request
 import spark.Session
 import utils.Config
 import utils.InternalResourceFile
-import java.io.File
 import java.util.*
 
 /**
@@ -31,8 +30,8 @@ object TestingCore {
 
         val dbProperties = Properties()
         val dbURL = Config.getProperty("db_url")
-        dbProperties.setProperty("user", "root")
-        dbProperties.setProperty("password", "")
+        dbProperties.setProperty("user", "tvf_admin")
+        dbProperties.setProperty("password", "testing1234")
         dbProperties.setProperty("useSSL", "false")
         dbProperties.setProperty("autoReconnect", "false")
         DAOManager.init(dbURL, dbProperties)
