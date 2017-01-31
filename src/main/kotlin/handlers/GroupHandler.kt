@@ -47,6 +47,7 @@ object GroupHandler : KLogging() {
     val groupDAO: GroupDAO = DAOManager.getDAO(DAOManager.TABLE.GROUPS) as GroupDAO
 
     fun createGroup(group: Group): Boolean {
+        println("some generic change")
         if (!group.isValid()) return false
         groupDAO.insertGroup(group)
         return true
