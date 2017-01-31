@@ -3,6 +3,9 @@ import database.daos.DAOManager
 import database.models.Group
 import handlers.GroupHandler
 import handlers.UserHandler
+import org.mockito.Mockito
+import spark.Request
+import spark.Session
 import utils.Config
 import utils.InternalResourceFile
 import java.io.File
@@ -12,7 +15,7 @@ import java.util.*
  * Created by alewis on 30/01/2017.
  */
 
-object TestingSetup {
+object TestingCore {
 
     fun setupSetEnv() {
 
@@ -28,8 +31,8 @@ object TestingSetup {
 
         val dbProperties = Properties()
         val dbURL = Config.getProperty("db_url")
-        dbProperties.setProperty("user", "root")
-        dbProperties.setProperty("password", "")
+        dbProperties.setProperty("user", "tvf_admin")
+        dbProperties.setProperty("password", "testing1234")
         dbProperties.setProperty("useSSL", "false")
         dbProperties.setProperty("autoReconnect", "false")
         DAOManager.init(dbURL, dbProperties)
@@ -44,5 +47,12 @@ object TestingSetup {
         GroupHandler.createGroup(Group("admins"))
         GroupHandler.createGroup(Group("members"))
         UserHandler.createRootAdmin()
+    }
+
+    fun mockRequest(): Request {
+        val mockRequest = Mockito.mock(Request::class.java)
+        whenever(mockRequest.ip()).thenReturn("0.0.0.0:80")
+        whenever(mockRequest.session()).thenReturn(Mockito.mock(Session::class.java))
+        return mockRequest
     }
 }

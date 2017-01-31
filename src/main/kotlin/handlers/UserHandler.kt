@@ -84,11 +84,13 @@ object  UserHandler : KLogging() {
         return true
     }
 
-    fun logout(request: Request) {
+    fun logout(request: Request): Boolean {
         val session = request.session()
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Logout successful")
         session.removeAttribute("logged_in")
         session.removeAttribute("username")
         session.attributes().clear()
+        return true
     }
 
     fun isLoggedIn(request: Request): Boolean {
