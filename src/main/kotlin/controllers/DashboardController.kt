@@ -44,7 +44,7 @@ import java.util.*
 
 object DashboardController : KLogging() {
 
-    fun get_dashboard(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/dashboard.vtl")

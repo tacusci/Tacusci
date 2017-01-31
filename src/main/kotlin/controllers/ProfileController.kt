@@ -56,7 +56,7 @@ object ProfileController : KLogging() {
         return model
     }
 
-    fun get_profilePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
@@ -75,15 +75,6 @@ object ProfileController : KLogging() {
             } else {
                 return Web.get_userNotFound(request, response, layoutTemplate)
             }
-        }
-        return ModelAndView(model, layoutTemplate)
-    }
-
-    fun get_resetPasswordPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        var model = HashMap<String, Any>()
-        val authHash = request.params("auth_hash")
-        if (authHash == "1234") {
-            val resetPasswordForm = j2htmlPartials.pureFormStacked_Login(request.session(), "reset_password", "Reset Password", "/profile/:${request.params("username")}/$authHash", "post")
         }
         return ModelAndView(model, layoutTemplate)
     }

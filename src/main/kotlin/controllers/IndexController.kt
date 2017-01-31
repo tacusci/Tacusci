@@ -43,7 +43,7 @@ import java.util.*
  */
 object IndexController : KLogging() {
 
-    fun get_indexPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")

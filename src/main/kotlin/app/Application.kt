@@ -94,16 +94,16 @@ class Application {
 
         //MAP GET ROUTES
 
-        get("/", { request, response -> IndexController.get_indexPage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/dashboard", { request, response -> DashboardController.get_dashboard(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/", { request, response -> IndexController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard", { request, response -> DashboardController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        get("/dashboard/user_management", { request, response -> UserManagementController.get_getUserManagement(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard/user_management", { request, response -> UserManagementController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard/log_file", { request, response -> LogFileViewController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        get("/login", { request, response -> LoginController.get_login(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/profile/:username", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/profile", { request, response -> ProfileController.get_profilePage(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/login", { request, response -> LoginController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/profile/:username", { request, response -> ProfileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/profile", { request, response -> ProfileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 

@@ -51,7 +51,7 @@ import java.util.*
 
 object UserManagementController : KLogging() {
 
-    fun get_getUserManagement(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")

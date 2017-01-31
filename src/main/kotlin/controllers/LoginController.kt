@@ -46,7 +46,7 @@ import java.util.*
 
 object LoginController : KLogging() {
 
-    fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
