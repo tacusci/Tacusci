@@ -24,7 +24,6 @@ object LogFileViewController : KLogging() {
     fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
-        Web.initSessionAttributes(request.session())
 
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
@@ -89,7 +88,6 @@ object LogFileViewController : KLogging() {
 
     fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOG_FILE page")
-        Web.initSessionAttributes(request.session())
 
         if (Web.getFormHash(request.session(), "refresh_form") == request.queryParams("hashid")) {
             val linesToShow = request.queryParams("lines_to_show")

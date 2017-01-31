@@ -48,7 +48,6 @@ object LoginController : KLogging() {
 
     fun get_login(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
-        Web.initSessionAttributes(request.session())
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
 
@@ -82,7 +81,6 @@ object LoginController : KLogging() {
 
     fun post_postLogin(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
-        Web.initSessionAttributes(request.session())
 
         if (Web.getFormHash(request.session(), "login_form") == request.queryParams("hashid")) {
             var username = request.queryParams("username").toLowerCase()

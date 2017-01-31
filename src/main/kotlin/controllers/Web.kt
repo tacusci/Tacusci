@@ -53,13 +53,6 @@ object Web : KLogging() {
 
     //TODO: Move most of these to their own controller classes :3
 
-    val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
-                                      Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""))
-
-    fun initSessionAttributes(session: Session) {
-        sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }
-    }
-
     fun loadNavBar(request: Request, response: Response, model: HashMap<String, Any>): HashMap<String, Any> {
         model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
         model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())

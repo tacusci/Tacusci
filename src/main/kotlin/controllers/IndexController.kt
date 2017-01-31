@@ -45,7 +45,6 @@ object IndexController : KLogging() {
 
     fun get_indexPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
-        Web.initSessionAttributes(request.session())
         var model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")

@@ -138,11 +138,16 @@ class Application {
                 halt(401, "Access is denied")
             }
         })
-        /*
-        before("/login", { request, response ->
-            if (request.ip() == "0:0:0:0:0:0:0:1") { UserHandler.login(request.session(), "tvf_admin", "Password1234!") }
+
+        //MAP AFTERS
+
+        after("/*", { request, response ->
+            val session = request.session()
+            val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
+                                                Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""))
+            sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }
+            session.maxInactiveInterval(20*60)
         })
-        */
     }
 
     fun restartSpark() {
