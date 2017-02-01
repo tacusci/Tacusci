@@ -129,43 +129,43 @@ object j2htmlPartials {
                                 fullNameInput("full_name", "Full Name")
                         ),
 
-                        label("Full Name Invalid").withCondHidden(session.attribute("full_name_field_error")),
+                        label("Full Name Invalid").withCondHidden(!session.attribute<Boolean>("full_name_field_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Username").attr("for", "username"),
                                 usernameInput("username", "Username")
                         ),
 
-                        label("Username is invalid").withCondHidden(session.attribute("username_field_error")),
-                        label("Username is not available").withCondHidden(session.attribute("username_not_available_error")),
+                        label("Username is invalid").withCondHidden(!session.attribute<Boolean>("username_field_error")),
+                        label("Username is not available").withCondHidden(!session.attribute<Boolean>("username_not_available_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
                                 registerPasswordInput("password", "Password")
                         ),
 
-                        label("Password is invalid").withCondHidden(session.attribute("password_field_error")),
+                        label("Password is invalid").withCondHidden(!session.attribute<Boolean>("password_field_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Repeat Password").attr("for", "repeat_password"),
                                 registerPasswordInput("repeat_password", "Repeat Password")
                         ),
 
-                        label("Repeat password is invalid").withCondHidden(session.attribute("repeated_password_field_error")),
-                        label("Passwords do not match").withCondHidden(session.attribute("passwords_mismatch_error")),
+                        label("Repeat password is invalid").withCondHidden(!session.attribute<Boolean>("repeated_password_field_error")),
+                        label("Passwords do not match").withCondHidden(!session.attribute<Boolean>("passwords_mismatch_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Email").attr("for", "email"),
                                 emailInput("email", "Email")
                         ),
 
-                        label("Email is invalid").withCondHidden(session.attribute("email_field_error")),
+                        label("Email is invalid").withCondHidden(!session.attribute<Boolean>("email_field_error")),
 
                         div().withClass("pure-controls").with(
                                 button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
                         ),
 
-                        label("User created successfully").withCondHidden(session.attribute("user_created_successfully"))
+                        label("User created successfully").withCondHidden(!session.attribute<Boolean>("user_created_successfully"))
                 )
         )
     }

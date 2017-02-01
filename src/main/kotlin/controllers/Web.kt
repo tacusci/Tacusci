@@ -96,15 +96,11 @@ object Web : KLogging() {
             val repeatedPasswordIsValid = Validation.matchPasswordPattern(repeatedPassword)
             val emailIsValid = Validation.matchEmailPattern(email)
             
-            val session = request.session()
-
-            session.attribute("user_created_successfully", false)
-
-            if (!fullNameInputIsValid) session.attribute("full_name_field_error", true) else session.attribute("full_name_field_error", false)
-            if (!usernameInputIsValid) session.attribute("username_field_error", true) else session.attribute("username_field_error", false)
-            if (!passwordInputIsValid) session.attribute("password_field_error", true) else session.attribute("password_field_error", false)
-            if (!repeatedPasswordIsValid) session.attribute("repeated_password_field_error", true) else session.attribute("repeated_password_field_error", false)
-            if (!emailIsValid) session.attribute("email_field_error", true) else session.attribute("email_field_error", false)
+            if (!fullNameInputIsValid) request.session().attribute("full_name_field_error", true) else request.session().attribute("full_name_field_error", false)
+            if (!usernameInputIsValid) request.session().attribute("username_field_error", true) else request.session().attribute("username_field_error", false)
+            if (!passwordInputIsValid) request.session().attribute("password_field_error", true) else request.session().attribute("password_field_error", false)
+            if (!repeatedPasswordIsValid) request.session().attribute("repeated_password_field_error", true) else request.session().attribute("repeated_password_field_error", false)
+            if (!emailIsValid) request.session().attribute("email_field_error", true) else request.session().attribute("email_field_error", false)
 
             if (usernameInputIsValid) {
                 if (UserHandler.userExists(username)) {
@@ -119,9 +115,9 @@ object Web : KLogging() {
 
             if (fullNameInputIsValid && usernameInputIsValid && passwordInputIsValid && repeatedPasswordIsValid && emailIsValid && (password == repeatedPassword)) {
                 val user = User(fullName, username, password, email, 0, 0)
-                session.attribute("user_created_successfully", UserHandler.createUser(user))
+                request.session().attribute("user_created_successfully", true)
+                UserHandler.createUser(user)
             }
-
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
         }
