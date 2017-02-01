@@ -118,7 +118,7 @@ object  UserHandler : KLogging() {
         val configRootAdmin = User(Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
         if (!configRootAdmin.isValid()) return false
         //once inserted, this won't be auto updated...
-        userDAO.insertUser(configRootAdmin)
+        if (userDAO.insertUser(configRootAdmin)) logger.info("Created root admin successfully")
 
         GroupHandler.addUserToGroup(configRootAdmin, "members")
         GroupHandler.addUserToGroup(configRootAdmin, "admins")
