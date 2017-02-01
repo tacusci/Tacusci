@@ -140,10 +140,14 @@ class Application {
 
         //MAP AFTERS
 
+        //TODO: Seperate these out to their own after routes...
         after("/*", { request, response ->
             val session = request.session()
             val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
-                                                Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""))
+                                                Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""),
+                                                Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),
+                                                Pair("repeated_password_field_error", false), Pair("email_field_error", false), Pair("username_not_available_error", false),
+                                                Pair("username_not_available", ""), Pair("user_created_successfully", false), Pair("passwords_mismatch_error", false))
             sessionAttributes.forEach { pair -> if (!session.attributes().contains(pair.key)) session.attribute(pair.key, pair.value) }
             session.maxInactiveInterval(20*60)
         })

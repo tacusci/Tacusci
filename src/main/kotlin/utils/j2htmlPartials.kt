@@ -5,6 +5,7 @@ import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
 import spark.Session
+import java.util.*
 import javax.validation.Valid
 
 /**
@@ -128,29 +129,43 @@ object j2htmlPartials {
                                 fullNameInput("full_name", "Full Name")
                         ),
 
+                        label("Full Name Invalid").withCondHidden(session.attribute("full_name_field_error")),
+
                         div().withClass("pure-control-group").with(
                                 label("Username").attr("for", "username"),
                                 usernameInput("username", "Username")
                         ),
+
+                        label("Username is invalid").withCondHidden(session.attribute("username_field_error")),
+                        label("Username is not available").withCondHidden(session.attribute("username_not_available_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
                                 registerPasswordInput("password", "Password")
                         ),
 
+                        label("Password is invalid").withCondHidden(session.attribute("password_field_error")),
+
                         div().withClass("pure-control-group").with(
                                 label("Repeat Password").attr("for", "repeat_password"),
                                 registerPasswordInput("repeat_password", "Repeat Password")
                         ),
+
+                        label("Repeat password is invalid").withCondHidden(session.attribute("repeated_password_field_error")),
+                        label("Passwords do not match").withCondHidden(session.attribute("passwords_mismatch_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Email").attr("for", "email"),
                                 emailInput("email", "Email")
                         ),
 
+                        label("Email is invalid").withCondHidden(session.attribute("email_field_error")),
+
                         div().withClass("pure-controls").with(
                                 button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
-                        )
+                        ),
+
+                        label("User created successfully").withCondHidden(session.attribute("user_created_successfully"))
                 )
         )
     }
@@ -182,5 +197,14 @@ object j2htmlPartials {
     fun pureMenuItemForm(session: Session, name: String, href: String, method: String, text: String): Tag {
         val hash = Web.mapFormToHash(session, name)
         return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitLink(text, "submit-link")))
+    }
+
+    fun findElementIndexByID(containerTag: ContainerTag, idToFind: String): Int {
+        containerTag.children.forEachIndexed { i, tag ->
+            if (tag.render().contains(idToFind)) {
+                return i
+            }
+        }
+        return -1
     }
 }

@@ -98,11 +98,13 @@ object Web : KLogging() {
             
             val session = request.session()
 
+            session.attribute("user_created_successfully", false)
+
             if (!fullNameInputIsValid) session.attribute("full_name_field_error", true) else session.attribute("full_name_field_error", false)
-            if (!usernameInputIsValid) session.attribute("username_field_error", true) else session.attribute("username_field_error", true)
-            if (!passwordInputIsValid) session.attribute("password_field_error", true) else session.attribute("password_field_error", true)
-            if (!repeatedPasswordIsValid) session.attribute("repeated_password_field_error", true) else session.attribute("repeated_password_field_error", true)
-            if (!emailIsValid) session.attribute("email_field_error", true) else session.attribute("email_field_error", true)
+            if (!usernameInputIsValid) session.attribute("username_field_error", true) else session.attribute("username_field_error", false)
+            if (!passwordInputIsValid) session.attribute("password_field_error", true) else session.attribute("password_field_error", false)
+            if (!repeatedPasswordIsValid) session.attribute("repeated_password_field_error", true) else session.attribute("repeated_password_field_error", false)
+            if (!emailIsValid) session.attribute("email_field_error", true) else session.attribute("email_field_error", false)
 
             if (usernameInputIsValid) {
                 if (UserHandler.userExists(username)) {
@@ -112,8 +114,14 @@ object Web : KLogging() {
             }
 
             if (passwordInputIsValid && repeatedPasswordIsValid) {
-                if (password != repeatedPassword) request.session().attribute("passwords_mismatch", true) else request.session().attribute("passwords_mismatch", false)
+                if (password != repeatedPassword) request.session().attribute("passwords_mismatch_error", true) else request.session().attribute("passwords_mismatch_error", false)
             }
+
+            if (fullNameInputIsValid && usernameInputIsValid && passwordInputIsValid && repeatedPasswordIsValid && emailIsValid && (password == repeatedPassword)) {
+                val user = User(fullName, username, password, email, 0, 0)
+                session.attribute("user_created_successfully", UserHandler.createUser(user))
+            }
+
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
         }
@@ -129,7 +137,6 @@ object Web : KLogging() {
 
         model.put("template", "/templates/register.vtl")
         model.put("title", "Thames Valley Furs - Sign Up")
-
         model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", "/register", "post").render())
 
         return ModelAndView(model, layoutTemplate)

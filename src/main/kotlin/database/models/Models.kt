@@ -31,6 +31,8 @@
  
  package database.models
 
+import utils.Validation
+
 /**
  * Created by alewis on 20/12/2016.
  */
@@ -45,19 +47,19 @@ data class User(var fullName: String, var username: String, var password: String
     }
 
     fun isUsernameValid(): Boolean {
-        return !(username.isBlank() || username.isEmpty())
+        return !(username.isBlank() || username.isEmpty()) && Validation.matchUsernamePattern(username)
     }
 
     fun isFullnameValid(): Boolean {
-        return !(fullName.isBlank() || fullName.isEmpty())
+        return !(fullName.isBlank() || fullName.isEmpty()) && Validation.matchFullNamePattern(fullName)
     }
 
     fun isPasswordValid(): Boolean {
-        return !(password.isBlank() || password.isEmpty())
+        return !(password.isBlank() || password.isEmpty()) && Validation.matchPasswordPattern(password)
     }
 
     fun isEmailValid(): Boolean {
-        return !(email.isBlank() || email.isEmpty())
+        return !(email.isBlank() || email.isEmpty()) && Validation.matchEmailPattern(email)
     }
 }
 
