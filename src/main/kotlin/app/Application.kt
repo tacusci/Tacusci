@@ -116,7 +116,6 @@ class Application {
         post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
         post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
 
-
         //MAP REDIRECTS
 
         redirect.get("/profile/", "/profile")

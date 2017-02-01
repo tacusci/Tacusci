@@ -40,10 +40,12 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Validation
 import utils.j2htmlPartials
 import java.math.BigInteger
 import java.security.SecureRandom
 import java.util.*
+import javax.validation.Valid
 
 /**
  * Created by alewis on 25/10/2016.
@@ -80,46 +82,42 @@ object Web : KLogging() {
 
     fun post_register(request: Request, response: Response, layoutTemplate: String): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
-        var model = HashMap<String, Any>()
-        model = loadNavBar(request, response, model)
 
         if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {
             val fullName = request.queryParams("full_name")
             val username = request.queryParams("username")
             val password = request.queryParams("password")
+            val repeatedPassword = request.queryParams("repeat_password")
             val email = request.queryParams("email")
 
-            model.put("full_name_error_hidden", true)
+            val fullNameInputIsValid = Validation.matchFullNamePattern(fullName)
+            val usernameInputIsValid = Validation.matchUsernamePattern(username)
+            val passwordInputIsValid = Validation.matchPasswordPattern(password)
+            val repeatedPasswordIsValid = Validation.matchPasswordPattern(repeatedPassword)
+            val emailIsValid = Validation.matchEmailPattern(email)
+            
+            val session = request.session()
 
-            val user = User(fullName, username, password, email, 0, 0)
+            if (!fullNameInputIsValid) session.attribute("full_name_field_error", true) else session.attribute("full_name_field_error", false)
+            if (!usernameInputIsValid) session.attribute("username_field_error", true) else session.attribute("username_field_error", true)
+            if (!passwordInputIsValid) session.attribute("password_field_error", true) else session.attribute("password_field_error", true)
+            if (!repeatedPasswordIsValid) session.attribute("repeated_password_field_error", true) else session.attribute("repeated_password_field_error", true)
+            if (!emailIsValid) session.attribute("email_field_error", true) else session.attribute("email_field_error", true)
 
-            if (!UserHandler.userDAO.userExists(user.username)) {
-                if (UserHandler.createUser(user)) {
-                    response.redirect("/login")
-                } else {
-                    if (!user.isFullnameValid()) {
-                        request.session().attribute("full_name_field_error", true)
-                    }
-                    if (!user.isUsernameValid()) {
-                        request.session().attribute("username_field_error", true)
-                    }
-                    if (!user.isPasswordValid()) {
-                        request.session().attribute("password_field_error", true)
-                    }
-                    if (!user.isEmailValid()) {
-                        request.session().attribute("email_field_error", true)
-                    }
-                    response.redirect("/register")
+            if (usernameInputIsValid) {
+                if (UserHandler.userExists(username)) {
+                    request.session().attribute("username_not_available_error", true)
+                    request.session().attribute("username_not_available", username)
                 }
-            } else {
-                request.session().attribute("username_not_available_error", true)
-                request.session().attribute("username_not_available", user.username)
-                response.redirect("/register")
+            }
+
+            if (passwordInputIsValid && repeatedPasswordIsValid) {
+                if (password != repeatedPassword) request.session().attribute("passwords_mismatch", true) else request.session().attribute("passwords_mismatch", false)
             }
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
-            response.redirect("/register")
         }
+        response.redirect("/register")
         return response
     }
 
@@ -129,39 +127,8 @@ object Web : KLogging() {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, response, model)
 
-        val session = request.session()
-
-        val sessionAttributes = hashMapOf(Pair("full_name_field_error", false),
-                                        Pair("username_field_error",false),
-                                        Pair("password_field_error", false),
-                                        Pair("email_field_error", false),
-                                        Pair("username_not_available_error", false),
-                                        Pair("username_not_available", ""))
-
         model.put("template", "/templates/register.vtl")
         model.put("title", "Thames Valley Furs - Sign Up")
-        model.put("full_name_error_hidden", "hidden")
-        model.put("username_error_hidden", "hidden")
-        model.put("password_error_hidden", "hidden")
-        model.put("email_error_hidden", "hidden")
-        model.put("username_not_available_hidden", "hidden")
-
-        sessionAttributes.forEach { attribute, defaultValue ->
-            if (!session.attributes().contains(attribute)) {
-                session.attribute(attribute, defaultValue)
-            }
-        }
-
-        if (session.attribute("full_name_field_error")) { model.put("full_name_error_hidden", "") }
-        if (session.attribute("username_field_error")) { model.put("username_error_hidden", "") }
-        if (session.attribute("password_field_error")) { model.put("password_error_hidden", "") }
-        if (session.attribute("email_field_error")) { model.put("email_error_hidden", "") }
-        if (session.attribute("username_not_available_error")) {
-            model.put("username_not_available_hidden", "")
-            model.put("unavailable_username", session.attribute("username_not_available"))
-        }
-
-        sessionAttributes.forEach { attribute, defaultValue -> session.removeAttribute(attribute) }
 
         model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", "/register", "post").render())
 
@@ -200,4 +167,5 @@ object Web : KLogging() {
 
     fun getFormHash(session: Session, formTitle: String): String = session.attribute(formTitle)
     fun genRandomHash(): String = BigInteger(130, SecureRandom()).toString(32)
+
 }

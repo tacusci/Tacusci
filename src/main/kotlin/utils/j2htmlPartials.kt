@@ -5,6 +5,7 @@ import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
 import spark.Session
+import javax.validation.Valid
 
 /**
  * Created by alewis on 04/01/2017.
@@ -18,6 +19,9 @@ object j2htmlPartials {
                 .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
+                .attr("pattern", Validation.fullNameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getFullNameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
                 .isRequired
     }
 
@@ -27,6 +31,9 @@ object j2htmlPartials {
                 .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
+                .attr("pattern", Validation.usernameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getUsernameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
                 .isRequired
     }
 
@@ -39,12 +46,27 @@ object j2htmlPartials {
                 .isRequired
     }
 
+    fun registerPasswordInput(identifier: String, placeholder: String): Tag {
+        return input()
+                .withType("password")
+                .withId(identifier)
+                .withName(identifier)
+                .withPlaceholder(placeholder)
+                .attr("pattern", Validation.passwordRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getPasswordValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
     fun emailInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
+                .attr("pattern", Validation.emailRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
                 .isRequired
     }
 
@@ -113,7 +135,12 @@ object j2htmlPartials {
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
-                                passwordInput("password", "Password")
+                                registerPasswordInput("password", "Password")
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Repeat Password").attr("for", "repeat_password"),
+                                registerPasswordInput("repeat_password", "Repeat Password")
                         ),
 
                         div().withClass("pure-control-group").with(
