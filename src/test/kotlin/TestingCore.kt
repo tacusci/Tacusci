@@ -19,7 +19,7 @@ object TestingCore {
     fun setupSetEnv() {
 
         Config.setProperty("default_admin_user", "tvf_admin")
-        Config.setProperty("default_admin_password", "testing1234")
+        Config.setProperty("default_admin_password", "Password1234!")
         Config.setProperty("server_address", "localhost")
         Config.setProperty("schema_name", "tvf_testing")
         Config.setProperty("port", "80")
