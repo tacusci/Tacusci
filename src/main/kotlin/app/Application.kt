@@ -96,7 +96,7 @@ class Application {
 
         get("/", { request, response -> IndexController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard", { request, response -> DashboardController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/register", { request, response -> Web.get_register(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/register", { request, response -> RegisterController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/dashboard/user_management", { request, response -> UserManagementController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
         get("/dashboard/log_file", { request, response -> LogFileViewController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -111,7 +111,7 @@ class Application {
 
         post("/login", { request, response -> LoginController.post_postLogin(request, response) })
         post("/logout", { request, response -> LoginController.post_logout(request, response) })
-        post("/register", { request, response -> Web.post_register(request, response, layoutTemplate) })
+        post("/register", { request, response -> RegisterController.post(request, response, layoutTemplate) })
         post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
         post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
 
