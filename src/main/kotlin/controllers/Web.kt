@@ -71,15 +71,6 @@ object Web : KLogging() {
         return model
     }
 
-    fun post_createPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CREATE_PAGE page")
-        var model = HashMap<String, Any>()
-        model.put("template", "/templates/create_page.vtl")
-        model.put("title", "Thames Valley Furs - Create page")
-        model = loadNavBar(request, response, model)
-        return ModelAndView(model, layoutTemplate)
-    }
-
     fun post_register(request: Request, response: Response, layoutTemplate: String): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
