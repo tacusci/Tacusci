@@ -39,11 +39,11 @@ import utils.Validation
 data class User(var fullName: String, var username: String, var password: String, var email: String, var banned: Int, var rootAdmin: Int) {
 
     fun isValid(): Boolean {
-        if (!isUsernameValid()) { return false }
-        if (!isFullnameValid()) { return false }
-        if (!isPasswordValid()) { return false }
-        if (!isEmailValid()) { return false }
-        return true
+        if (isUsernameValid()) { return true }
+        if (isFullnameValid()) { return true }
+        if (isPasswordValid()) { return true }
+        if (isEmailValid()) { return true }
+        return false
     }
 
     fun isUsernameValid(): Boolean {

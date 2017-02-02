@@ -16,8 +16,7 @@ import java.util.*
 
 object TestingCore {
 
-    fun setupSetEnv() {
-
+    fun setupConfig() {
         Config.setProperty("default_admin_user", "tvf_admin")
         Config.setProperty("default_admin_password", "Password1234!")
         Config.setProperty("server_address", "localhost")
@@ -28,10 +27,15 @@ object TestingCore {
         Config.setProperty("properties_file", "tvf_testing.properties")
         Config.setProperty("db_url", "jdbc:mysql://localhost")
 
+    }
+
+    fun setupSetEnv() {
+
+        setupConfig()
         val dbProperties = Properties()
         val dbURL = Config.getProperty("db_url")
-        dbProperties.setProperty("user", "root")
-        dbProperties.setProperty("password", "")
+        dbProperties.setProperty("user", "tvf_admin")
+        dbProperties.setProperty("password", "testing1234")
         dbProperties.setProperty("useSSL", "false")
         dbProperties.setProperty("autoReconnect", "false")
         DAOManager.init(dbURL, dbProperties)
