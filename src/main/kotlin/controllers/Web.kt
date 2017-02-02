@@ -53,8 +53,6 @@ import javax.validation.Valid
 
 object Web : KLogging() {
 
-    //TODO: Move most of these to their own controller classes :3
-
     fun loadNavBar(request: Request, response: Response, model: HashMap<String, Any>): HashMap<String, Any> {
         model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
         model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
