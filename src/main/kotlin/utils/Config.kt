@@ -26,12 +26,13 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
+
+
+
  package utils
 
 import app.Application
+
 import extensions.doesNotExist
 import mu.KLoggable
 import utils.Config.props.propertiesFileUpdate
@@ -40,7 +41,6 @@ import java.io.IOException
 import java.security.InvalidParameterException
 import java.text.MessageFormat
 import java.util.*
-
 /**
  * Created by alewis on 29/11/2016.
  */
@@ -51,6 +51,19 @@ open class Config {
 
         var fileWatcher = FileWatcher(File(""))
         var propertiesFile = File("")
+
+        private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
+            return hashMapOf(Pair("server_address", "localhost"),
+                    Pair("port", "1025"),
+                    Pair("db_url", "jdbc:mysql://localhost"),
+                    Pair("schema_name", "tvf"),
+                    Pair("default_admin_user", "tvf_admin"),
+                    Pair("default_admin_password", "Password1234!"),
+                    Pair("default_admin_email", "admin_tvf@tvf.net"),
+                    Pair("log_file", "tvf.log"),
+                    Pair("ssl_cert_location", ""),
+                    Pair("use_ssl", ""))
+        }
 
         fun load() {
             val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
@@ -93,19 +106,6 @@ open class Config {
 
         fun getDefaultProperty(key: String, defaultValue: String): String {
             return getDefaultProperties().getProperty(key, defaultValue)
-        }
-
-        private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
-            return hashMapOf(Pair("server_address", "localhost"),
-                    Pair("port", "1025"),
-                    Pair("db_url", "jdbc:mysql://localhost"),
-                    Pair("schema_name", "tvf"),
-                    Pair("default_admin_user", "tvf_admin"),
-                    Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", "admin_tvf@tvf.net"),
-                    Pair("log_file", "tvf.log"),
-                    Pair("ssl_cert_location", ""),
-                    Pair("use_ssl", ""))
         }
 
         private fun getDefaultProperties(): Properties {
