@@ -86,7 +86,7 @@ class Application {
         port(portNum)
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
-        secure("keystore.jks", "&D0c?5pOnEV'", null, null)
+        secure("www.thamesvalleyfurs.co.uk.jks", "&D0c?5pOnEV'", null, null)
     }
 
     fun setupSparkRoutes() {
