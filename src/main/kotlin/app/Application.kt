@@ -43,7 +43,6 @@ import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.Config
-import utils.PasswordStorage
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -87,6 +86,7 @@ class Application {
         port(portNum)
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
+        secure("keystore.jks", "&D0c?5pOnEV'", null, null)
     }
 
     fun setupSparkRoutes() {

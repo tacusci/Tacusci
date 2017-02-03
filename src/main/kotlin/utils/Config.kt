@@ -103,7 +103,9 @@ open class Config {
                     Pair("default_admin_user", "tvf_admin"),
                     Pair("default_admin_password", "Password1234!"),
                     Pair("default_admin_email", "admin_tvf@tvf.net"),
-                    Pair("log_file", "tvf.log"))
+                    Pair("log_file", "tvf.log"),
+                    Pair("ssl_cert_location", ""),
+                    Pair("use_ssl", ""))
         }
 
         private fun getDefaultProperties(): Properties {
