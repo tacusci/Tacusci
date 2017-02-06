@@ -110,9 +110,11 @@ class Application {
 
         //MAP BEFORES
 
-        before("/*/", { request, response ->
-            response.managedRedirect(request, request.uri().removeSuffix("/"))
-        })
+        before { request, response ->
+            if (request.uri() != "/" && request.uri().endsWith("/")) {
+                response.managedRedirect(request, request.uri().removeSuffix("/"))
+            }
+        }
 
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
