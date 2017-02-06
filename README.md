@@ -1,6 +1,6 @@
 # TVF
 
-TVF is a website for (Thames Valley Furs). It will be created using a custom CMS which will also load and host connections to the site.
+A custom CMS which also loads and host connections to the hosted website. I have absolutely no intention of using Javascript for anything.
 
 ## Deployment
 
