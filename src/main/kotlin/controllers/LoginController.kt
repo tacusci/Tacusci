@@ -31,6 +31,7 @@
 
 package controllers
 
+import extensions.managedRedirect
 import handlers.UserHandler
 import j2html.TagCreator.*
 import mu.KLogging
@@ -53,7 +54,7 @@ object LoginController : KLogging() {
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
-            response.redirect("/")
+            response.managedRedirect(request, "/")
         }
 
         model.put("template", "/templates/login.vtl")
@@ -94,7 +95,7 @@ object LoginController : KLogging() {
                     email = username
                     username = UserHandler.userDAO.getUsernameFromEmail(email)
                 }
-                if (!UserHandler.login(request, username, password)) { response.redirect("/login") }
+                if (!UserHandler.login(request, username, password)) { response.managedRedirect(request, "/login") }
             } else {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
@@ -104,7 +105,7 @@ object LoginController : KLogging() {
         }
 
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to login page")
-        response.redirect("/login")
+        response.managedRedirect(request, "/login")
         return response
     }
 
@@ -113,7 +114,7 @@ object LoginController : KLogging() {
         if (UserHandler.isLoggedIn(request)) {
             UserHandler.logout(request)
         }
-        response.redirect("/")
+        response.managedRedirect(request, "/")
         return response
     }
 }

@@ -34,6 +34,8 @@
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
 import spark.Request
+import spark.Response
+import utils.Config
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -64,4 +66,16 @@ fun Request.forwardedIP(): String {
         forwardedIP = this.raw().getHeader("X-Forwarded-For")
     } catch (e: Exception) { return forwardedIP }
     return forwardedIP
+}
+
+fun Response.managedRedirect(request: Request, urlSuffix: String) {
+    if (Config.getProperty("using_ssl").toBoolean()) {
+        httpsRedirect(request, urlSuffix)
+    } else {
+        redirect(urlSuffix)
+    }
+}
+
+fun Response.httpsRedirect(request: Request, urlSuffix: String) {
+    redirect(request.url().replace(request.uri(), "").replace("http", "https") + urlSuffix)
 }

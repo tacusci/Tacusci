@@ -33,6 +33,7 @@
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 import database.models.User
+import extensions.managedRedirect
 import handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -82,7 +83,7 @@ object UserManagementController : KLogging() {
             }
         }
         if (banStatusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
-        response.redirect("/dashboard/user_management")
+        response.managedRedirect(request, "/dashboard/user_management")
     }
 
     private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {

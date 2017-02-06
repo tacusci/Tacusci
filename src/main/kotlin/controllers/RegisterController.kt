@@ -1,6 +1,7 @@
 package controllers
 
 import database.models.User
+import extensions.managedRedirect
 import handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
@@ -70,7 +71,7 @@ object RegisterController : KLogging() {
         } else {
             Web.logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
         }
-        response.redirect("/register")
+        response.managedRedirect(request, "/register")
         return response
     }
 }

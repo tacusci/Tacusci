@@ -33,6 +33,8 @@ package controllers
 
 import database.daos.DAOManager
 import database.daos.UserDAO
+import extensions.httpsRedirect
+import extensions.managedRedirect
 import handlers.UserHandler
 import mu.KLogger
 import mu.KLogging
@@ -71,7 +73,7 @@ object ProfileController : KLogging() {
         } else {
             //if they've just requested: /profile then we give them /profile->the username of the person browsing
             if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
-                if (UserHandler.isLoggedIn(request)) response.redirect("/profile/${UserHandler.loggedInUsername(request)}") else response.redirect("/")
+                if (UserHandler.isLoggedIn(request)) response.managedRedirect(request, "/profile/${UserHandler.loggedInUsername(request)}") else response.managedRedirect(request, "/")
             } else {
                 return Web.get_userNotFound(request, response, layoutTemplate)
             }

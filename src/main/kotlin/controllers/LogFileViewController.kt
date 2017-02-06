@@ -1,5 +1,6 @@
 package controllers
 
+import extensions.managedRedirect
 import handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -106,7 +107,7 @@ object LogFileViewController : KLogging() {
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid refresh form...")
         }
-        response.redirect("/dashboard/log_file")
+        response.managedRedirect(request, "/dashboard/log_file")
         return response
     }
 }
