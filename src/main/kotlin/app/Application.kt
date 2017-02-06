@@ -37,6 +37,7 @@ package app
 import controllers.*
 import database.daos.DAOManager
 import database.models.Group
+import extensions.managedRedirect
 import handlers.GroupHandler
 import handlers.UserHandler
 import mu.KLogging
@@ -114,13 +115,11 @@ class Application {
         post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
         post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
 
-        //MAP REDIRECTS
-
-        redirect.get("/profile/", "/profile")
-        redirect.get("/login/", "/login")
-        redirect.get("/dashboard/create_page/", "/dashboard/create_page")
-
         //MAP BEFORES
+
+        before("/*/", { request, response ->
+            response.managedRedirect(request, request.uri().removeSuffix("/"))
+        })
 
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
