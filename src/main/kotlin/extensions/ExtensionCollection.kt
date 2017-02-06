@@ -69,7 +69,7 @@ fun Request.forwardedIP(): String {
 }
 
 fun Response.managedRedirect(request: Request, urlSuffix: String) {
-    if (Config.getProperty("using_ssl").toBoolean()) {
+    if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
         httpsRedirect(request, urlSuffix)
     } else {
         redirect(urlSuffix)

@@ -32,15 +32,11 @@
  package utils
 
 import app.Application
-
 import extensions.doesNotExist
-import mu.KLoggable
-import utils.Config.props.propertiesFileUpdate
 import java.io.File
 import java.io.IOException
-import java.security.InvalidParameterException
-import java.text.MessageFormat
 import java.util.*
+
 /**
  * Created by alewis on 29/11/2016.
  */
@@ -61,8 +57,7 @@ open class Config {
                     Pair("default_admin_password", "Password1234!"),
                     Pair("default_admin_email", "admin_tvf@tvf.net"),
                     Pair("log_file", "tvf.log"),
-                    Pair("ssl_cert_location", ""),
-                    Pair("use_ssl", ""))
+                    Pair("using_ssl_on_proxy", "false"))
         }
 
         fun load() {
