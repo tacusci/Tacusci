@@ -94,25 +94,33 @@ class Application {
 
         //MAP GET ROUTES
 
-        get("/", { request, response -> IndexController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/dashboard", { request, response -> DashboardController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/register", { request, response -> RegisterController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        val indexController = IndexController()
+        val dashboardController = DashboardController()
+        val registerController = RegisterController()
+        val userManagementController = UserManagementController()
+        val logFileViewController = LogFileViewController()
+        val loginController = LoginController()
+        val profileController = ProfileController()
 
-        get("/dashboard/user_management", { request, response -> UserManagementController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/dashboard/log_file", { request, response -> LogFileViewController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/", { request, response -> indexController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard", { request, response -> dashboardController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/register", { request, response -> registerController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
-        get("/login", { request, response -> LoginController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/profile/:username", { request, response -> ProfileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-        get("/profile", { request, response -> ProfileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard/user_management", { request, response -> userManagementController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/dashboard/log_file", { request, response -> logFileViewController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+
+        get("/login", { request, response -> loginController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/profile/:username", { request, response -> profileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+        get("/profile", { request, response -> profileController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
 
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
         //MAP POST ROUTES
 
-        post("/login", { request, response -> LoginController.post(request, response) })
-        post("/register", { request, response -> RegisterController.post(request, response) })
-        post("/dashboard/user_management", { request, response -> UserManagementController.post(request, response) })
-        post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
+        post("/login", { request, response -> loginController.post(request, response) })
+        post("/register", { request, response -> registerController.post(request, response) })
+        post("/dashboard/user_management", { request, response -> userManagementController.post(request, response) })
+        post("/dashboard/log_file", { request, response -> logFileViewController.post(request, response) })
 
         //MAP BEFORES
 

@@ -1,5 +1,6 @@
 package controllers
 
+import spark.ModelAndView
 import spark.Request
 import spark.Response
 
@@ -8,6 +9,6 @@ import spark.Response
  */
 interface Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String)
-    fun post(request: Request, response: Response)
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView
+    fun post(request: Request, response: Response): Response
 }

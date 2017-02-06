@@ -15,9 +15,11 @@ import java.util.*
  * Created by alewis on 02/02/2017.
  */
 
-object RegisterController : KLogging() {
+class RegisterController : Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    companion object : KLogging()
+
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
 
         var model = HashMap<String, Any>()
@@ -30,7 +32,7 @@ object RegisterController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post(request: Request, response: Response): Response {
+    override fun post(request: Request, response: Response): Response {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
         if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {

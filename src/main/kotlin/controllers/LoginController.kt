@@ -45,9 +45,11 @@ import java.util.*
  * Created by alewis on 27/10/2016.
  */
 
-object LoginController : KLogging() {
+class LoginController : Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    companion object : KLogging()
+
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
@@ -80,7 +82,7 @@ object LoginController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post(request: Request, response: Response): Response {
+    override fun post(request: Request, response: Response): Response {
         when (request.queryParams("formName")) {
             "login_form" -> return post_postLogin(request, response)
             "sign_out_form" -> return post_logout(request, response)

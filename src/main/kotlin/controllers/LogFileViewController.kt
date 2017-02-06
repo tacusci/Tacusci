@@ -20,9 +20,11 @@ import java.util.*
  * Created by alewis on 22/01/2017.
  */
 
-object LogFileViewController : KLogging() {
+class LogFileViewController : Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    companion object : KLogging()
+
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
 
@@ -87,7 +89,7 @@ object LogFileViewController : KLogging() {
         }
     }
 
-    fun post(request: Request, response: Response): Response {
+    override fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOG_FILE page")
 
         if (Web.getFormHash(request.session(), "refresh_form") == request.queryParams("hashid")) {

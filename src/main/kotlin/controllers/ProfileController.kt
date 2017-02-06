@@ -47,7 +47,8 @@ import java.util.*
 /**
  * Created by alewis on 04/11/2016.
  */
-object ProfileController : KLogging() {
+class ProfileController : Controller {
+    companion object : KLogging()
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
@@ -58,7 +59,7 @@ object ProfileController : KLogging() {
         return model
     }
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
@@ -79,5 +80,9 @@ object ProfileController : KLogging() {
             }
         }
         return ModelAndView(model, layoutTemplate)
+    }
+
+    override fun post(request: Request, response: Response): Response {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

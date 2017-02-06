@@ -42,15 +42,22 @@ import java.util.*
  * Created by tauraamui on 27/10/2016.
  */
 
-object DashboardController : KLogging() {
+class DashboardController : Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    companion object : KLogging()
+
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
+        listOf("djeifjwe", "ifei", "fjgiirt").forEach(::println)
         model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
+    }
+
+    override fun post(request: Request, response: Response): Response {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

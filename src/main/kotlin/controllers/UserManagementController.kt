@@ -50,9 +50,11 @@ import java.util.*
  * Created by alewis on 07/11/2016.
  */
 
-object UserManagementController : KLogging() {
+class UserManagementController : Controller {
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    companion object : KLogging()
+
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/user_management.vtl")
@@ -64,7 +66,7 @@ object UserManagementController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post(request: Request, response: Response) {
+    override fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         var banStatusChangedForAnyone = false
         val usersAndBanned = getUserBannedState(request.body())
@@ -84,6 +86,7 @@ object UserManagementController : KLogging() {
         }
         if (banStatusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
         response.managedRedirect(request, "/dashboard/user_management")
+        return response
     }
 
     private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {

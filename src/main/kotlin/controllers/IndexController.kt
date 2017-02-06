@@ -41,14 +41,19 @@ import java.util.*
 /**
  * Created by tauraamui on 15/12/2016.
  */
-object IndexController : KLogging() {
+class IndexController : Controller {
+    companion object : KLogging()
 
-    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
         model = Web.loadNavBar(request, response, model)
         return ModelAndView(model, layoutTemplate)
+    }
+
+    override fun post(request: Request, response: Response): Response {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
