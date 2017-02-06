@@ -42,6 +42,8 @@ class RegisterController : Controller {
             val repeatedPassword = request.queryParams("repeat_password")
             val email = request.queryParams("email")
 
+            request.session().attribute("user_created_successfully", false)
+
             val fullNameInputIsValid = Validation.matchFullNamePattern(fullName)
             val usernameInputIsValid = Validation.matchUsernamePattern(username)
             val passwordInputIsValid = Validation.matchPasswordPattern(password)
