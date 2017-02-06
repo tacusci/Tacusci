@@ -109,10 +109,9 @@ class Application {
 
         //MAP POST ROUTES
 
-        post("/login", { request, response -> LoginController.post_postLogin(request, response) })
-        post("/logout", { request, response -> LoginController.post_logout(request, response) })
-        post("/register", { request, response -> RegisterController.post(request, response, layoutTemplate) })
-        post("/dashboard/user_management", { request, response -> UserManagementController.post_userManagement(request, response) })
+        post("/login", { request, response -> LoginController.post(request, response) })
+        post("/register", { request, response -> RegisterController.post(request, response) })
+        post("/dashboard/user_management", { request, response -> UserManagementController.post(request, response) })
         post("/dashboard/log_file", { request, response -> LogFileViewController.post(request, response) })
 
         //MAP BEFORES
@@ -138,7 +137,7 @@ class Application {
         //MAP AFTERS
 
         //TODO: Seperate these out to their own after routes...
-        after("/*", { request, response ->
+        after("*", { request, response ->
             val session = request.session()
             val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
                                                 Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""),

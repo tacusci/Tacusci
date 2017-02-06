@@ -64,7 +64,7 @@ object Web : KLogging() {
             }
             model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())
             model.put("sign_up_menu_link", "")
-            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm(request.session(), "sign_out_form", "/logout", "post", "Logout").render())
+            model.put("sign_out_form", j2htmlPartials.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render())
         }
         return model
     }

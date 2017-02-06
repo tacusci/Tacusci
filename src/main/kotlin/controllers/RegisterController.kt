@@ -30,7 +30,7 @@ object RegisterController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post(request: Request, response: Response, layoutTemplate: String): Response {
+    fun post(request: Request, response: Response): Response {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
         if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {

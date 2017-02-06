@@ -80,7 +80,16 @@ object LoginController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post_postLogin(request: Request, response: Response): Response {
+    fun post(request: Request, response: Response): Response {
+        when (request.queryParams("formName")) {
+            "login_form" -> return post_postLogin(request, response)
+            "sign_out_form" -> return post_logout(request, response)
+        }
+        response.managedRedirect(request, "/login")
+        return response
+    }
+
+    private fun post_postLogin(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
 
         if (Web.getFormHash(request.session(), "login_form") == request.queryParams("hashid")) {
@@ -109,10 +118,12 @@ object LoginController : KLogging() {
         return response
     }
 
-    fun post_logout(request: Request, response: Response): Response {
+    private fun post_logout(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGOUT form")
-        if (UserHandler.isLoggedIn(request)) {
-            UserHandler.logout(request)
+        if (Web.getFormHash(request.session(), "sign_out_form") == request.queryParams("hashid")) {
+            if (UserHandler.isLoggedIn(request)) {
+                UserHandler.logout(request)
+            }
         }
         response.managedRedirect(request, "/")
         return response

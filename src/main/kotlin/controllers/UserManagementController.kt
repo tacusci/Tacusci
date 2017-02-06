@@ -64,7 +64,7 @@ object UserManagementController : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post_userManagement(request: Request, response: Response) {
+    fun post(request: Request, response: Response) {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         var banStatusChangedForAnyone = false
         val usersAndBanned = getUserBannedState(request.body())

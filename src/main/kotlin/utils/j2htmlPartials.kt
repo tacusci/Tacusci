@@ -75,6 +75,7 @@ object j2htmlPartials {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form").withHref(href).withMethod("post").with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withName("formName").withValue(name).isHidden,
                 fieldset().with(
                         legend(legend),
                         input().withId("username").withPlaceholder("Username"),
@@ -88,6 +89,7 @@ object j2htmlPartials {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withId("formName").withName(name).isHidden,
                 fieldset().with(
                         legend(legend),
                         usernameInput("username", "Username"),
@@ -101,6 +103,7 @@ object j2htmlPartials {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withName("formName").withValue(name).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Username").attr("for", "username"),
@@ -123,6 +126,7 @@ object j2htmlPartials {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withName("formName").withValue(name).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Full Name").attr("for", "full_name"),
@@ -196,7 +200,7 @@ object j2htmlPartials {
 
     fun pureMenuItemForm(session: Session, name: String, href: String, method: String, text: String): Tag {
         val hash = Web.mapFormToHash(session, name)
-        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, submitLink(text, "submit-link")))
+        return li().withClass("pure-menu-item").with(form().withId(name).withName(name).withMethod(method).withAction(href).with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden, input().withName("formName").withValue(name).isHidden, submitLink(text, "submit-link")))
     }
 
     fun findElementIndexByID(containerTag: ContainerTag, idToFind: String): Int {
