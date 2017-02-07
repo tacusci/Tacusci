@@ -15,7 +15,7 @@ object Validation {
 
     fun matchUsernamePattern(username: String) = Regex(usernameRegexStruct()).matches(username)
     fun usernameRegexStruct() = "^[a-zA-Z0-9_]{2,20}$"
-    fun getUsernameValidationMessage(): String = "Username must be between 2 and 20 characters amd cam only contain underscores"
+    fun getUsernameValidationMessage(): String = "Username must be between 2 and 20 characters and can only contain underscores"
 
     fun matchFullNamePattern(fullName: String) = Regex(fullNameRegexStruct()).matches(fullName)
     fun fullNameRegexStruct() = "^[ \\da-zA-Z,.'-]{2,30}$"
