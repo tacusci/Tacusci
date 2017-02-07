@@ -7,14 +7,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import javax.xml.bind.DatatypeConverter;
 
-public class PasswordStorage
-{
+public class PasswordStorage {
 
     @SuppressWarnings("serial")
     static private class InvalidHashException extends Exception {
         private InvalidHashException(String message) {
             super(message);
         }
+
         private InvalidHashException(String message, Throwable source) {
             super(message, source);
         }
@@ -25,6 +25,7 @@ public class PasswordStorage
         private CannotPerformOperationException(String message) {
             super(message);
         }
+
         private CannotPerformOperationException(String message, Throwable source) {
             super(message, source);
         }
@@ -45,15 +46,12 @@ public class PasswordStorage
     private static final int SALT_INDEX = 3;
     private static final int PBKDF2_INDEX = 4;
 
-    public static String createHash(String password)
-            throws CannotPerformOperationException
-    {
+    public static String createHash(String password) throws CannotPerformOperationException {
         return createHash(password.toCharArray());
     }
 
     private static String createHash(char[] password)
-            throws CannotPerformOperationException
-    {
+            throws CannotPerformOperationException {
         // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[SALT_BYTE_SIZE];
@@ -74,14 +72,12 @@ public class PasswordStorage
     }
 
     public static boolean verifyPassword(String password, String correctHash)
-            throws CannotPerformOperationException, InvalidHashException
-    {
+            throws CannotPerformOperationException, InvalidHashException {
         return verifyPassword(password.toCharArray(), correctHash);
     }
 
     private static boolean verifyPassword(char[] password, String correctHash)
-            throws CannotPerformOperationException, InvalidHashException
-    {
+            throws CannotPerformOperationException, InvalidHashException {
         // Decode the hash into its parameters
         String[] params = correctHash.split(":");
         if (params.length != HASH_SECTIONS) {
@@ -159,17 +155,15 @@ public class PasswordStorage
         return slowEquals(hash, testHash);
     }
 
-    private static boolean slowEquals(byte[] a, byte[] b)
-    {
+    private static boolean slowEquals(byte[] a, byte[] b) {
         int diff = a.length ^ b.length;
-        for(int i = 0; i < a.length && i < b.length; i++)
+        for (int i = 0; i < a.length && i < b.length; i++)
             diff |= a[i] ^ b[i];
         return diff == 0;
     }
 
     private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes)
-            throws CannotPerformOperationException
-    {
+            throws CannotPerformOperationException {
         try {
             PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
             SecretKeyFactory skf = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
@@ -188,13 +182,11 @@ public class PasswordStorage
     }
 
     private static byte[] fromBase64(String hex)
-            throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         return DatatypeConverter.parseBase64Binary(hex);
     }
 
-    private static String toBase64(byte[] array)
-    {
+    private static String toBase64(byte[] array) {
         return DatatypeConverter.printBase64Binary(array);
     }
 
