@@ -71,6 +71,7 @@ class UserManagementController : Controller {
         var banStatusChangedForAnyone = false
         val usersAndBanned = getUserBannedState(request.body())
         usersAndBanned.forEach {
+            //FIXME: This logic is broken...
             for ((username, banned) in it) {
                 if (username == UserHandler.loggedInUsername(request)) continue
                 if (banned) {
