@@ -13,6 +13,12 @@ import java.util.*
  */
 class PageManagementController : Controller {
 
+    /*
+
+    The premise for page management is to have a branch for every subpage
+
+     */
+
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         DashboardController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PAGE_MANAGEMENT page")
         var model = HashMap<String, Any>()
@@ -34,7 +40,7 @@ class PageManagementController : Controller {
                 li("/events").with(
                         ul().with(
                                 li("London Furs"),
-                                li("Oxford Bowlplex")
+                                li("Oxford")
                         )
                 ),
                 li("/info").with(
