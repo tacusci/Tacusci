@@ -1,8 +1,7 @@
 package controllers
 
 import handlers.UserHandler
-import j2html.TagCreator.li
-import j2html.TagCreator.ul
+import j2html.TagCreator.link
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -24,31 +23,14 @@ class PageManagementController : Controller {
         var model = HashMap<String, Any>()
         model.put("template", "/templates/page_management.vtl")
         model.put("title", "Thames Valley Furs - Page Management")
+        model.put("alt_css_link", link().withRel("stylesheet").withHref("/css/pure_css/side-menu.css"))
+        model.put("side_menu", "/templates/side_menu.vtl")
         model = Web.loadNavBar(request, response, model)
-
-        model.put("pages_list", genPagesList())
 
         return ModelAndView(model, layoutTemplate)
     }
 
     override fun post(request: Request, response: Response): Response {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun genPagesList(): String {
-        return ul().with(
-                li("/events").with(
-                        ul().with(
-                                li("London Furs"),
-                                li("Oxford")
-                        )
-                ),
-                li("/info").with(
-                        ul().with(
-                                li("About Us"),
-                                li("Contact Us")
-                        )
-                )
-        ).render()
     }
 }

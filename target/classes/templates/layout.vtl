@@ -6,30 +6,28 @@
 
     <title>$title</title>
 
-    <link rel="stylesheet" href="/css/pure_css/pure-min.css">    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="/css/pure_css/pure-min.css">
+    <!--[if lte IE 8]>
         <link rel="stylesheet" href="/css/pure_css/grids-responsive-old-ie-min.css">
     <![endif]-->
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure_css/grids-responsive-min.css">
     <!--<![endif]--></head>
     <link rel="stylesheet" type="text/css" href="/css/tvf.css">
+    $!alt_css_link
 <body>
-	<div id="layout">
-		<div id="menu">
-			<div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
-                <ul class="pure-menu-list">
-                    $!home_link
-                    $!dashboard_link
-                    $!login_or_profile_link
-                    $!sign_up_menu_link
-                    $!sign_out_form
-                </ul>
-            </div>
-		</div>
+    <div id="nav_menu">
+        <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+            <ul class="pure-menu-list">
+                $!home_link
+                $!dashboard_link
+                $!login_or_profile_link
+                $!sign_up_menu_link
+                $!sign_out_form
+            </ul>
+        </div>
+    </div>
 
-		<div id="content">
-			#parse($template)
-		</div>
-	</div>
+    #parse($template)
 </body>
 </html>
