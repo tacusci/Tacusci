@@ -1,6 +1,6 @@
 # TVF
 
-A custom CMS which also loads and host connections to the hosted website. I have absolutely no intention of using Javascript for anything.
+A custom CMS which also loads and host connections to the hosted website. I have absolutely no intention of using Javascript for anything (apart from making page management content work)
 
 ## Deployment
 
