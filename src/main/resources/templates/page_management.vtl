@@ -1,12 +1,12 @@
-<div id="layout">
-
-    #parse($!side_menu)
-
-    <div id="main">
+<div class="pure-g">
+    <div class="pure-u-24-24">
         <div class="header">
             <h1>Page Management</h1>
         </div>
+    </div>
 
+    <div id="layout" class="pure-u-24-24">
+        #parse($!page_menu)
         <div class="content">
             <p>This is the management page for $insert_page_name_here</p>
         </div>
@@ -14,3 +14,11 @@
 </div>
 
 <script src="/js/ui.js"></script>
+
+<script type="text/javascript">
+    $('#tree_content')
+    .on('select_node.jstree', function(e, data) {
+        console.log(data.node.text);
+    })
+    .jstree();
+</script>

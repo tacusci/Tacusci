@@ -29,12 +29,12 @@ This is the parent `<div>` that contains the menu and the content area.
     padding-left: 0;
 }
     #layout.active #collapsing-side-menu {
-        left: 170px;
-        width: 170px;
+        left: 200px;
+        width: 200px;
     }
 
     #layout.active .menu-link {
-        left: 170px;
+        left: 200px;
     }
 
 
@@ -44,12 +44,10 @@ appears on the left side of the page.
 */
 
 #collapsing-side-menu {
-    margin-left: -170px; /* "#menu" width */
-    width: 170px;
+    margin-left: -200px; /* "#menu" width */
+    width: 200px;
     position: fixed;
-    top: 50px;
     left: 0;
-    bottom: 0;
     z-index: 1000; /* so the menu or its navicon stays above all content */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -123,7 +121,6 @@ small screens.
 .menu-link {
     position: fixed;
     display: block; /* show this only on small screens */
-    top: 50px;
     left: 0; /* "#collapsing-side-menu width" */
     background: #000;
     background: rgba(0,0,0,0.7);
@@ -178,21 +175,21 @@ Hides the menu at `48em`, but modify this based on your app's needs.
     }
 
     #layout {
-        padding-left: 170px; /* left col width "#menu" */
+        padding-left: 200px; /* left col width "#menu" */
         left: 0;
     }
     #collapsing-side-menu {
-        left: 170px;
+        left: 200px;
     }
 
     .menu-link {
         position: fixed;
-        left: 170px;
+        left: 200px;
         display: none;
     }
 
     #layout.active .menu-link {
-        left: 170px;
+        left: 200px;
     }
 }
 
@@ -205,6 +202,6 @@ Hides the menu at `48em`, but modify this based on your app's needs.
     */
     #layout.active {
         position: relative;
-        left: 170px;
+        left: 200px;
     }
 }

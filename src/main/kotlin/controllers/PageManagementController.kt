@@ -24,7 +24,7 @@ class PageManagementController : Controller {
         model.put("template", "/templates/page_management.vtl")
         model.put("title", "Thames Valley Furs - Page Management")
         model.put("alt_css_link", link().withRel("stylesheet").withHref("/css/pure_css/side-menu.css"))
-        model.put("side_menu", "/templates/side_menu.vtl")
+        model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
         val pageTree = ul().with(li("/events").with(ul()
