@@ -1,7 +1,7 @@
 package controllers
 
 import handlers.UserHandler
-import j2html.TagCreator.link
+import j2html.TagCreator.*
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -26,6 +26,13 @@ class PageManagementController : Controller {
         model.put("alt_css_link", link().withRel("stylesheet").withHref("/css/pure_css/side-menu.css"))
         model.put("side_menu", "/templates/side_menu.vtl")
         model = Web.loadNavBar(request, response, model)
+
+        val pageTree = ul().with(li("/events").with(ul()
+                        .with(li("Oxford Darts"),
+                              li("Reading Bus Riding"))
+        ))
+
+        model.put("tree", pageTree.render())
 
         return ModelAndView(model, layoutTemplate)
     }
