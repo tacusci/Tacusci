@@ -28,8 +28,8 @@ class PageManagementController : Controller {
         model = Web.loadNavBar(request, response, model)
 
         val pageTree = ul().with(li("/events").with(ul()
-                        .with(li("Oxford Darts"),
-                              li("Reading Bus Riding"))
+                .with(li("Oxford Darts"),
+                        li("Reading Bus Riding"))
         ))
 
         model.put("tree", pageTree.render())

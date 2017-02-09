@@ -77,3 +77,7 @@ fun Response.managedRedirect(request: Request, urlSuffix: String) {
 fun Response.httpsRedirect(request: Request, urlSuffix: String) {
     redirect(request.url().replace(request.uri(), "").replace("http", "https") + urlSuffix)
 }
+
+fun String.leftPad(padding: String): String {
+    return padding+this
+}

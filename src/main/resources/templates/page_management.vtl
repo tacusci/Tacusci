@@ -16,9 +16,16 @@
 <script src="/js/ui.js"></script>
 
 <script type="text/javascript">
-    $('#tree_content')
-    .on('select_node.jstree', function(e, data) {
+    $("#tree_content")
+    .on("select_node.jstree", function(e, data) {
         console.log(data.node.text);
     })
-    .jstree();
+    .jstree({
+        "core" : {
+                    "check_callback" : true,
+                    "themes" : { "stripes" : true },
+                    "plugins" : ["contextmenu"]
+                }
+    });
+
 </script>
