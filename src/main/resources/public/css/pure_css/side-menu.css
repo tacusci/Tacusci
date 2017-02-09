@@ -81,7 +81,7 @@ appears on the left side of the page.
         */
         #collapsing-side-menu .pure-menu li a:hover,
         #collapsing-side-menu .pure-menu li a:focus {
-            background: #E8FCFF;
+            background: #beebff;
         }
 
     /*
@@ -89,7 +89,7 @@ appears on the left side of the page.
     */
     #collapsing-side-menu .pure-menu-selected,
     #collapsing-side-menu .pure-menu-heading {
-        background: #1f8dd6;
+        background: #beebff;
     }
         /*
         This styles a link within a selected menu item `<li>`.

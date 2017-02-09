@@ -16,16 +16,48 @@
 <script src="/js/ui.js"></script>
 
 <script type="text/javascript">
-    $("#tree_content")
-    .on("select_node.jstree", function(e, data) {
-        console.log(data.node.text);
-    })
-    .jstree({
+
+    var originalNodeText = "text";
+
+    $(function() {$('#tree_content').jstree({
         "core" : {
-                    "check_callback" : true,
-                    "themes" : { "stripes" : true },
-                    "plugins" : ["contextmenu"]
-                }
+            "check_callback" : true
+        },
+        "plugins" : ["contextmenu", "wholerow", "unique"],
+        contextmenu: {items: customMenu}
+        });
     });
+
+    function customMenu($node) {
+        var tree = $("#tree_content").jstree(true);
+        return {
+            "Create": {
+                "separator_before": false,
+                "separator_after": false,
+                "label": "Create",
+                "action": function (obj) {
+                    $node = tree.create_node($node);
+                    tree.edit($node);
+                }
+            },
+            "Rename": {
+                "separator_before": false,
+                "separator_after": false,
+                "label": "Rename",
+                "action": function (obj) {
+                    console.log($node.data.text);
+                    tree.edit($node);
+                }
+            },
+            "Remove": {
+                "separator_before": false,
+                "separator_after": false,
+                "label": "Remove",
+                "action": function (obj) {
+                    tree.delete_node($node);
+                }
+            }
+        };
+    }
 
 </script>
