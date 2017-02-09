@@ -26,9 +26,10 @@ class PageManagementController : Controller {
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
-        val pageTree = ul().with(li("/events").with(ul()
-                .with(li("Oxford Darts"),
-                        li("Reading Bus Riding"))
+        val pageTree = ul().with(li("Pages").with(ul()
+                .with(li("/").with(ul().with(
+                        li("events")
+                )))
         ))
 
         model.put("tree", pageTree.render())

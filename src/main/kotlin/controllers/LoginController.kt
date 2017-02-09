@@ -38,6 +38,7 @@ import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Spark
 import utils.j2htmlPartials
 import java.util.*
 
@@ -50,6 +51,7 @@ class LoginController : Controller {
     companion object : KLogging()
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
