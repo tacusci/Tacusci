@@ -29,7 +29,7 @@
  
  
  
-package handlers
+package app.handlers
 
 import database.daos.DAOManager
 import database.daos.GroupDAO

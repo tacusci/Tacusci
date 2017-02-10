@@ -29,9 +29,9 @@
  
  
  
- package controllers
+ package app.controllers
 
-import handlers.UserHandler
+import app.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request

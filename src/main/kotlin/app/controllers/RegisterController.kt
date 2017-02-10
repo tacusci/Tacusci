@@ -1,8 +1,8 @@
-package controllers
+package app.controllers
 
 import database.models.User
 import extensions.managedRedirect
-import handlers.UserHandler
+import app.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request

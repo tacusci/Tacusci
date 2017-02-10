@@ -1,5 +1,5 @@
 import TestingCore.mockRequest
-import handlers.UserHandler
+import app.handlers.UserHandler
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import utils.Config

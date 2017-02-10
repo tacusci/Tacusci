@@ -1,4 +1,4 @@
-package controllers
+package app.controllers
 
 import spark.ModelAndView
 import spark.Request

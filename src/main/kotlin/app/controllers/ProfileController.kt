@@ -29,13 +29,13 @@
 
 
 
-package controllers
+package app.controllers
 
 import database.daos.DAOManager
 import database.daos.UserDAO
 import extensions.httpsRedirect
 import extensions.managedRedirect
-import handlers.UserHandler
+import app.handlers.UserHandler
 import mu.KLogger
 import mu.KLogging
 import spark.ModelAndView

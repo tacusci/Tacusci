@@ -34,13 +34,13 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
-import controllers.*
+import app.controllers.*
 import database.daos.DAOManager
 import database.models.Group
 import extensions.leftPad
 import extensions.managedRedirect
-import handlers.GroupHandler
-import handlers.UserHandler
+import app.handlers.GroupHandler
+import app.handlers.UserHandler
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
@@ -118,7 +118,7 @@ class Application {
             }
 
             val session = request.session()
-            //TODO: Need to move these to their respective controllers
+            //TODO: Need to move these to their respective app.controllers
             val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
                     Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""),
                     Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),

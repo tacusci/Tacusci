@@ -29,12 +29,12 @@
  
  
  
- package controllers
+ package app.controllers
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 import database.models.User
 import extensions.managedRedirect
-import handlers.UserHandler
+import app.handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag

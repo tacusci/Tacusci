@@ -1,7 +1,7 @@
-package controllers
+package app.controllers
 
 import extensions.managedRedirect
-import handlers.UserHandler
+import app.handlers.UserHandler
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import mu.KLogging

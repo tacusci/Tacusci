@@ -29,10 +29,10 @@
 
 
 
-package controllers
+package app.controllers
 
 import extensions.managedRedirect
-import handlers.UserHandler
+import app.handlers.UserHandler
 import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView

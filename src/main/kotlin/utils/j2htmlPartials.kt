@@ -1,6 +1,6 @@
 package utils
 
-import controllers.Web
+import app.controllers.Web
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag

@@ -29,11 +29,11 @@
  
  
  
- package controllers
+ package app.controllers
 
 import database.models.User
-import handlers.GroupHandler
-import handlers.UserHandler
+import app.handlers.GroupHandler
+import app.handlers.UserHandler
 import j2html.TagCreator.pre
 import mu.KLogging
 import spark.ModelAndView

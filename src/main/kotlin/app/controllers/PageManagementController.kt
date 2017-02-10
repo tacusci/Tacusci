@@ -1,6 +1,6 @@
-package controllers
+package app.controllers
 
-import handlers.UserHandler
+import app.handlers.UserHandler
 import j2html.TagCreator.*
 import spark.ModelAndView
 import spark.Request

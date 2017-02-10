@@ -1,8 +1,8 @@
 import com.nhaarman.mockito_kotlin.whenever
 import database.daos.DAOManager
 import database.models.Group
-import handlers.GroupHandler
-import handlers.UserHandler
+import app.handlers.GroupHandler
+import app.handlers.UserHandler
 import org.mockito.Mockito
 import spark.Request
 import spark.Session
