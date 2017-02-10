@@ -28,7 +28,8 @@ class PageManagementController : Controller {
 
         val pageTree = ul().with(li("Pages").with(ul()
                 .with(li("/").with(ul().with(
-                        li("events")
+                        li("events"),
+                        li("about_us")
                 )))
         ))
 
