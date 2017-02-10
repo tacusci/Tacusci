@@ -57,7 +57,8 @@ object DAOManager : KLogging() {
     enum class TABLE {
         USERS,
         USER2GROUP,
-        GROUPS
+        GROUPS,
+        ROUTE_ELEMENTS
     }
 
     public var connection: Connection? = null
@@ -135,6 +136,7 @@ object DAOManager : KLogging() {
             TABLE.USERS -> return UserDAO(url, dbProperties, "users")
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
+            TABLE.ROUTE_ELEMENTS -> return RouteElementDAO(url, dbProperties, "routeelements")
             else -> {
                 return GenericDAO(url, dbProperties, "")
             }

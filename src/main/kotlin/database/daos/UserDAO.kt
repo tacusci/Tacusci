@@ -45,20 +45,42 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     companion object : KLogging()
 
+    fun getUser(userID: Int): User {
+        connect()
+        var user = User(-1, "", "", "", "", 0, 0)
+        try {
+            val selectStatement = "SELECT * FROM $tableName WHERE IDUSERS=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, userID.toString())
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                user.id = resultSet.getInt("IDUSERS")
+                user.fullName = resultSet.getString("FULLNAME")
+                user.username = resultSet.getString("USERNAME")
+                user.password = resultSet.getString("PASSWORD")
+                user.email = resultSet.getString("EMAIL")
+                user.banned = resultSet.getInt("BANNED")
+                user.rootAdmin = resultSet.getInt("ROOTADMIN")
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return user
+    }
+
     fun getUserID(username: String): Int {
         connect()
-        var groupID = -1
+        var userID = -1
         try {
             val selectStatement = "SELECT IDUSERS FROM $tableName WHERE USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                groupID = resultSet.getInt(1)
+                userID = resultSet.getInt(1)
             }
             disconnect()
-        } catch (e: SQLException) { GroupDAO.logger.error(e.message); disconnect() }
-        return groupID
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return userID
     }
 
     fun insertUser(user: User): Boolean {
@@ -151,7 +173,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
-            val user = User("", "", "", "", 0, 0)
+            val user = User(-1, "", "", "", "", 0, 0)
             user.rootAdmin = resultSet.getInt("ROOTADMIN")
             user.username = resultSet.getString("USERNAME")
             user.password = resultSet.getString("AUTHHASH")
@@ -166,7 +188,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getRootAdmin(): User {
         connect()
-        val user = User("", "", "", "", 0, 1)
+        val user = User(-1, "", "", "", "", 0, 1)
         val selectStatement = "SELECT ROOTADMIN, USERNAME, EMAIL, FULLNAME, BANNED FROM $tableName WHERE ROOTADMIN=?"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         preparedStatement?.setInt(1, user.rootAdmin)
