@@ -6,6 +6,10 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import java.util.*
+import com.sun.javafx.robot.impl.FXRobotHelper.getChildren
+import java.util.ArrayList
+
+
 
 /**
  * Created by alewis on 06/02/2017.
