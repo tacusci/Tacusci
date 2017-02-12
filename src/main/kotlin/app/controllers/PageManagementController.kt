@@ -1,14 +1,12 @@
 package app.controllers
 
 import app.handlers.UserHandler
-import j2html.TagCreator.*
+import j2html.TagCreator.li
+import j2html.TagCreator.ul
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import java.util.*
-import com.sun.javafx.robot.impl.FXRobotHelper.getChildren
-import java.util.ArrayList
-
 
 
 /**
