@@ -3,6 +3,8 @@ package app.controllers
 import app.handlers.RouteElementHandler
 import app.handlers.UserHandler
 import database.models.RouteElement
+import database.models.RouteElementNode
+import database.models.RouteElementTree
 import j2html.TagCreator.li
 import j2html.TagCreator.ul
 import spark.ModelAndView
@@ -32,17 +34,14 @@ class PageManagementController : Controller {
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
-        val eventsPages = Node<RouteElement>()
-        eventsPages.data = RouteElement("events", RouteElementHandler.ROUTE_ELEMENT.PATH)
-        val oxfordBowlplexPageNode = Node<RouteElement>()
-        oxfordBowlplexPageNode.data = RouteElement("oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE)
-        val readingFursPageNode = Node<RouteElement>()
-        readingFursPageNode.data = RouteElement("reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE)
+        val eventsPages = RouteElementNode(RouteElement("events", RouteElementHandler.ROUTE_ELEMENT.PATH))
+        val oxfordBowlplexPageNode = RouteElementNode(RouteElement("oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE))
+        val readingFursPageNode = RouteElementNode(RouteElement("reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE))
+
         eventsPages.addChild(readingFursPageNode)
         eventsPages.addChild(oxfordBowlplexPageNode)
 
-        val routesAndPages = Tree<RouteElement>()
-        routesAndPages.rootElement = eventsPages
+        val routesAndPages = RouteElementTree(eventsPages)
 
         println(routesAndPages)
 

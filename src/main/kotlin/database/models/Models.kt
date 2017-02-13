@@ -34,6 +34,8 @@
 import app.handlers.RouteElementHandler
 import database.daos.RouteElementDAO
 import utils.Validation
+import utils.tree.Node
+import utils.tree.Tree
 
 /**
  * Created by alewis on 20/12/2016.
@@ -79,3 +81,16 @@ data class Group(val name: String) {
 }
 
 data class RouteElement(var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT)
+
+class RouteElementTree() : Tree<RouteElement>() {
+
+    constructor(routeElementNode: RouteElementNode) : this() {
+        this.rootElement = routeElementNode
+    }
+}
+
+class RouteElementNode() : Node<RouteElement>() {
+    constructor(routeElement: RouteElement) : this() {
+        this.nodeData = routeElement
+    }
+}
