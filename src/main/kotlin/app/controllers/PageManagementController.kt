@@ -10,8 +10,6 @@ import j2html.TagCreator.ul
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-import utils.tree.Node
-import utils.tree.Tree
 import java.util.*
 
 
@@ -34,16 +32,12 @@ class PageManagementController : Controller {
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
-        val eventsPages = RouteElementNode(RouteElement("events", RouteElementHandler.ROUTE_ELEMENT.PATH))
-        val oxfordBowlplexPageNode = RouteElementNode(RouteElement("oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE))
-        val readingFursPageNode = RouteElementNode(RouteElement("reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE))
+        val eventsPages = RouteElementNode(RouteElement(-1, -1, "events", RouteElementHandler.ROUTE_ELEMENT.PATH))
 
-        eventsPages.addChild(readingFursPageNode)
-        eventsPages.addChild(oxfordBowlplexPageNode)
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE)))
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE)))
 
         val routesAndPages = RouteElementTree(eventsPages)
-
-        println(routesAndPages)
 
         val pageTree = ul().with(li("Pages").with(ul()
                 .with(li("/").with(ul().with(

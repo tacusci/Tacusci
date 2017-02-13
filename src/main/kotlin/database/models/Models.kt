@@ -32,7 +32,6 @@
  package database.models
 
 import app.handlers.RouteElementHandler
-import database.daos.RouteElementDAO
 import utils.Validation
 import utils.tree.Node
 import utils.tree.Tree
@@ -40,7 +39,7 @@ import utils.tree.Tree
 /**
  * Created by alewis on 20/12/2016.
  */
-data class User(var id: Int, var fullName: String, var username: String, var password: String, var email: String, var banned: Int, var rootAdmin: Int) {
+data class User(var id: Long, var fullName: String, var username: String, var password: String, var email: String, var banned: Int, var rootAdmin: Int) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }
@@ -80,7 +79,7 @@ data class Group(val name: String) {
     }
 }
 
-data class RouteElement(var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT)
+data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT)
 
 class RouteElementTree() : Tree<RouteElement>() {
 
