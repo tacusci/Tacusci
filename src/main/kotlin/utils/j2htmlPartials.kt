@@ -1,12 +1,11 @@
 package utils
 
 import app.controllers.Web
+import database.models.RouteElementNode
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
 import spark.Session
-import java.util.*
-import javax.validation.Valid
 
 /**
  * Created by alewis on 04/01/2017.
@@ -210,5 +209,9 @@ object j2htmlPartials {
             }
         }
         return -1
+    }
+
+    fun generateListFromRouteElementNode(routeElementNode: RouteElementNode) {
+        val listHeader = li(routeElementNode.nodeData.name)
     }
 }

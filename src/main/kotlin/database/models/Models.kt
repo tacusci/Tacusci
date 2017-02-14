@@ -79,7 +79,7 @@ data class Group(val name: String) {
     }
 }
 
-data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT)
+data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT, var pageId: Long)
 
 class RouteElementTree() : Tree<RouteElement>() {
 
@@ -93,3 +93,5 @@ class RouteElementNode() : Node<RouteElement>() {
         this.nodeData = routeElement
     }
 }
+
+data class Page(var id: Long, var title: String, var content: String)
