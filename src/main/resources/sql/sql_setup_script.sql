@@ -1,7 +1,7 @@
 CREATE schema IF NOT EXISTS tvf;
 
 CREATE TABLE IF NOT EXISTS `tvf`.`users` (
-  `idusers` LONG NOT NULL AUTO_INCREMENT,
+  `idusers` INT NOT NULL AUTO_INCREMENT,
   `rootadmin` BIT(1) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `authhash` CHAR(72) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `tvf`.`users` (
 
 
 CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
-  `idgroups` LONG NOT NULL AUTO_INCREMENT,
+  `idgroups` INT NOT NULL AUTO_INCREMENT,
   `groupname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idgroups`),
   UNIQUE INDEX `idgroups_UNIQUE` (`idgroups` ASC),
@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
 
 
 CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
-  `idusers` LONG NOT NULL,
-  `idgroups` LONG NOT NULL);
+  `idusers` INT NOT NULL,
+  `idgroups` INT NOT NULL);

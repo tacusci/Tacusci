@@ -12,6 +12,7 @@ import j2html.tags.ContainerTag
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.tree.Node
 import java.util.*
 
 
@@ -34,12 +35,25 @@ class PageManagementController : Controller {
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
+        val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
+        val eventsPages = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
+        val readingFursPage = Page(0, "Reading Furs", "Some content")
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
+        root.addChild(eventsPages)
+        val routesAndPagesTree = RouteElementTree(root)
+
         val pageTree = ul().with(li("Pages").with(ul()
-                .with(li("/").with(ul().with(
-                        li("events"),
-                        li("about_us")
+                .with(li("events").with(ul().with(
+                        li("reading_furs"),
+                        li("oxford_bowlplex")
                 )))
         ))
+
+        routesAndPagesTree.rootElement.children.map(::println)
+
+        val routeTree = createRouteTree(ul(), routesAndPagesTree.rootElement.children)
+        println(routeTree)
 
         model.put("tree", pageTree.render())
 
@@ -50,24 +64,17 @@ class PageManagementController : Controller {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun buildRouteTree() {
-        val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val eventsPages = RouteElementNode(RouteElement(-1, -1, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
-        val readingFursPage = Page(0, "Reading Furs", "Some content")
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
-        root.addChild(eventsPages)
-        val routesAndPagesTree = RouteElementTree(root)
-
-        val routeTree = ul().with(li(routesAndPagesTree.rootElement.nodeData.name).with(
-                ul().with(routesAndPagesTree.toList().map { node -> nodeChildrenToLis(ul(), node as RouteElementNode) })
-        ))
-    }
-
-    fun nodeChildrenToLis(rootTag: ContainerTag, routeElementNode: RouteElementNode): ContainerTag {
-        //I know this makes no sense but it's 1 in the morning I'll check it tomorrow
-        rootTag.with(routeElementNode.children.map { li(it.nodeData.name) })
-        routeElementNode.children.forEach { nodeChildrenToLis(rootTag, it as RouteElementNode) }
-        return rootTag
+    private fun createRouteTree(rootContainer: ContainerTag, routeElementNodeList: MutableList<Node<RouteElement>>): ContainerTag {
+        val final = rootContainer.with(
+                routeElementNodeList.map { node ->
+                    li(node.nodeData.name).with(
+                            ul().with(node.children.map { child ->
+                                val newRoot = li(child.nodeData.name)
+                                createRouteTree(newRoot, child.children)
+                            })
+                    )
+                }
+        )
+        return final
     }
 }
