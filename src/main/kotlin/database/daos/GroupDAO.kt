@@ -64,7 +64,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
-            val createGroupStatementString = "INSERT INTO $tableName (groupname) VALUES (?)"
+            val createGroupStatementString = "INSERT INTO $tableName (GROUPNAME) VALUES (?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setString(1, group.name)
             preparedStatement?.execute()

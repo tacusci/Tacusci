@@ -63,6 +63,8 @@ public class Node<T> {
         return children.size();
     }
 
+    public boolean hasChildren() { return getNumberOfChildren() > 0; }
+
     /**
      * Adds a child to the list of children for this Node<T>. The addition of
      * the first child will create a new List<Node<T>>.

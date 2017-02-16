@@ -39,23 +39,17 @@ class PageManagementController : Controller {
         val eventsPages = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
         eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
         val readingFursPage = Page(0, "Reading Furs", "Some content")
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, -1, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
         root.addChild(eventsPages)
         val routesAndPagesTree = RouteElementTree(root)
 
-        val pageTree = ul().with(li("Pages").with(ul()
-                .with(li("events").with(ul().with(
-                        li("reading_furs"),
-                        li("oxford_bowlplex")
+        val pageTree = ul().with(li("Pages").with(ul().with(li("events").with(ul().with(li("reading_furs"), li("oxford_bowlplex")
                 )))
         ))
 
-        routesAndPagesTree.rootElement.children.map(::println)
-
-        val routeTree = createRouteTree(ul(), routesAndPagesTree.rootElement.children)
-        println(routeTree)
-
         model.put("tree", pageTree.render())
+
+        println(createRouteTree(routesAndPagesTree))
 
         return ModelAndView(model, layoutTemplate)
     }
@@ -64,17 +58,19 @@ class PageManagementController : Controller {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun createRouteTree(rootContainer: ContainerTag, routeElementNodeList: MutableList<Node<RouteElement>>): ContainerTag {
-        val final = rootContainer.with(
-                routeElementNodeList.map { node ->
-                    li(node.nodeData.name).with(
-                            ul().with(node.children.map { child ->
-                                val newRoot = li(child.nodeData.name)
-                                createRouteTree(newRoot, child.children)
-                            })
-                    )
-                }
-        )
-        return final
+    private fun createRouteTree(routeElementTree: RouteElementTree): ContainerTag {
+        var rootLi = li(routeElementTree.rootElement.nodeData.name)
+        routeElementTree.rootElement.children.forEach { child ->
+            var childLi = addChildBranch(rootLi, child as RouteElementNode)
+            child.children.forEach { child2 ->
+                childLi = addChildBranch(childLi, child2 as RouteElementNode)
+            }
+            rootLi = childLi
+        }
+        return ul().with(rootLi)
+    }
+
+    private fun addChildBranch(containerTag: ContainerTag, routeElementNode: RouteElementNode): ContainerTag {
+        return containerTag.with(ul().with(li(routeElementNode.nodeData.name)))
     }
 }

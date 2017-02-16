@@ -92,6 +92,11 @@ class RouteElementNode() : Node<RouteElement>() {
     constructor(routeElement: RouteElement) : this() {
         this.nodeData = routeElement
     }
+
+    override fun addChild(node: Node<RouteElement>) {
+        node.nodeData.parentId = this.nodeData.id
+        super.addChild(node)
+    }
 }
 
 data class Page(var id: Long, var title: String, var content: String)
