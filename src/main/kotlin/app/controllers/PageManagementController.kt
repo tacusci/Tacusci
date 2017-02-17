@@ -12,7 +12,6 @@ import j2html.tags.ContainerTag
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-import utils.tree.Node
 import java.util.*
 
 
@@ -38,8 +37,10 @@ class PageManagementController : Controller {
         val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
         val eventsPages = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
         eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
-        val readingFursPage = Page(0, "Reading Furs", "Some content")
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
+        val thames = Page(1, "Thames", "Some content again")
+        val reading = RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
+        reading.addChild(RouteElementNode(RouteElement(-1, reading.nodeData.parentId, "sub child", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
+        eventsPages.addChild(reading)
         root.addChild(eventsPages)
         val routesAndPagesTree = RouteElementTree(root)
 
@@ -59,18 +60,12 @@ class PageManagementController : Controller {
     }
 
     private fun createRouteTree(routeElementTree: RouteElementTree): ContainerTag {
-        var rootLi = li(routeElementTree.rootElement.nodeData.name)
-        routeElementTree.rootElement.children.forEach { child ->
-            var childLi = addChildBranch(rootLi, child as RouteElementNode)
-            child.children.forEach { child2 ->
-                childLi = addChildBranch(childLi, child2 as RouteElementNode)
-            }
-            rootLi = childLi
-        }
-        return ul().with(rootLi)
-    }
-
-    private fun addChildBranch(containerTag: ContainerTag, routeElementNode: RouteElementNode): ContainerTag {
-        return containerTag.with(ul().with(li(routeElementNode.nodeData.name)))
+        return ul().with(li(routeElementTree.rootElement.nodeData.name).with(
+                ul().with(routeElementTree.rootElement.children.map { child ->
+                    ul().with(li(child.nodeData.name).with(ul().with(child.children.map { child2 ->
+                        li(child2.nodeData.name)
+                    })))
+                })
+        ))
     }
 }
