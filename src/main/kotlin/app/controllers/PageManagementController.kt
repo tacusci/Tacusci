@@ -2,7 +2,6 @@ package app.controllers
 
 import app.handlers.RouteElementHandler
 import app.handlers.UserHandler
-import database.models.Page
 import database.models.RouteElement
 import database.models.RouteElementNode
 import database.models.RouteElementTree
@@ -12,6 +11,7 @@ import j2html.tags.ContainerTag
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import utils.tree.Node
 import java.util.*
 
 
@@ -36,11 +36,10 @@ class PageManagementController : Controller {
 
         val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
         val eventsPages = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
-        val thames = Page(1, "Thames", "Some content again")
-        val reading = RouteElementNode(RouteElement(-1, eventsPages.nodeData.parentId, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
-        reading.addChild(RouteElementNode(RouteElement(-1, reading.nodeData.parentId, "sub child", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
-        eventsPages.addChild(reading)
+        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.id, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
+        val oxford = RouteElementNode(RouteElement(-1, eventsPages.nodeData.id, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
+        oxford.addChild(RouteElementNode(RouteElement(-1, oxford.nodeData.id, "sub child", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
+        eventsPages.addChild(oxford)
         root.addChild(eventsPages)
         val routesAndPagesTree = RouteElementTree(root)
 
@@ -48,9 +47,7 @@ class PageManagementController : Controller {
                 )))
         ))
 
-        model.put("tree", pageTree.render())
-
-        println(createRouteTree(routesAndPagesTree))
+        model.put("tree", createRouteTree(routesAndPagesTree).render())
 
         return ModelAndView(model, layoutTemplate)
     }
@@ -60,12 +57,24 @@ class PageManagementController : Controller {
     }
 
     private fun createRouteTree(routeElementTree: RouteElementTree): ContainerTag {
-        return ul().with(li(routeElementTree.rootElement.nodeData.name).with(
-                ul().with(routeElementTree.rootElement.children.map { child ->
-                    ul().with(li(child.nodeData.name).with(ul().with(child.children.map { child2 ->
-                        li(child2.nodeData.name)
-                    })))
-                })
-        ))
+        val rootTag = ul()
+        val innerTag = li(routeElementTree.rootElement.nodeData.name)
+        println(routeElementTree)
+        if (routeElementTree.rootElement.hasChildren()) {
+            addChild(innerTag, routeElementTree.rootElement.children)
+        }
+        return rootTag.with(innerTag)
+    }
+
+    private fun addChild(rootTagz: ContainerTag, routeElementNode: MutableList<Node<RouteElement>>): ContainerTag {
+        routeElementNode.forEach { node ->
+            val rootTag = ul()
+            val innerTag = li(node.nodeData.name)
+            if (node.hasChildren()) {
+                addChild(innerTag, node.children)
+            }
+            rootTagz.with(rootTag.with(innerTag))
+        }
+        return rootTagz
     }
 }
