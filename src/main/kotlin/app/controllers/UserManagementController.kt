@@ -26,15 +26,13 @@
  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes 
  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package app.controllers
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-import database.models.User
-import extensions.managedRedirect
+
+
+package app.controllers
+
 import app.handlers.UserHandler
+import extensions.managedRedirect
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
@@ -42,10 +40,10 @@ import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Session
 import utils.HTMLTable
 import utils.j2htmlPartials
 import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Created by alewis on 07/11/2016.
@@ -54,6 +52,8 @@ import kotlin.properties.Delegates
 class UserManagementController : Controller {
 
     companion object : KLogging()
+
+    override fun initSessionAttributes(session: Session) {/* not using any session values in this controller */}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
@@ -119,16 +119,18 @@ class UserManagementController : Controller {
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
             if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
             userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
-                                        listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
-                                        listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
-                                        listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
+                    listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
+                    listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
         }
 
         userAdminForm.with(userListTable.render())
         if (request.session().attribute("user_management_changes_made")) {
             userAdminForm.with(p("Changes applied..."))
             request.session().attribute("user_management_changes_made", false)
-        } else { userAdminForm.with(br()) }
+        } else {
+            userAdminForm.with(br())
+        }
         userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm
     }

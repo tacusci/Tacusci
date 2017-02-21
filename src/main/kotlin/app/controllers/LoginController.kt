@@ -31,14 +31,14 @@
 
 package app.controllers
 
-import extensions.managedRedirect
 import app.handlers.UserHandler
+import extensions.managedRedirect
 import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-import spark.Spark
+import spark.Session
 import utils.j2htmlPartials
 import java.util.*
 
@@ -49,6 +49,11 @@ import java.util.*
 class LoginController : Controller {
 
     companion object : KLogging()
+
+    override fun initSessionAttributes(session: Session) {
+        hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
+                    Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> session.attribute(key, value) }
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
 

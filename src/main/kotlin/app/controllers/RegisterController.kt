@@ -1,12 +1,13 @@
 package app.controllers
 
+import app.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
-import app.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Session
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
@@ -18,6 +19,10 @@ import java.util.*
 class RegisterController : Controller {
 
     companion object : KLogging()
+
+    override fun initSessionAttributes(session: Session) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")

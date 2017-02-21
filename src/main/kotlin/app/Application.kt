@@ -34,13 +34,13 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
-import app.controllers.*
-import database.daos.DAOManager
-import database.models.Group
-import extensions.leftPad
-import extensions.managedRedirect
+import app.controllers.ControllerManager
+import app.controllers.Web
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
+import database.daos.DAOManager
+import database.models.Group
+import extensions.managedRedirect
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
@@ -93,17 +93,7 @@ class Application {
     fun setupSparkRoutes() {
         val layoutTemplate = "/templates/layout.vtl"
 
-        val routeAndController = mapOf<String, Controller>(Pair("/", IndexController()),
-                                         Pair("/dashboard", DashboardController()),
-                                         Pair("/register", RegisterController()),
-                                         Pair("/dashboard/user_management", UserManagementController()),
-                                         Pair("/dashboard/log_file", LogFileViewController()),
-                                         Pair("/dashboard/page_management", PageManagementController()),
-                                         Pair("/login", LoginController()),
-                                         Pair("/profile", ProfileController()),
-                                         Pair("/profile/:username", ProfileController()))
-
-        routeAndController.forEach {
+        ControllerManager.routesAndControllers.forEach {
             get(it.key, { request, response -> it.value.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             post(it.key, { request, response -> it.value.post(request, response) })
         }
@@ -118,8 +108,11 @@ class Application {
             }
 
             val session = request.session()
+
+            ControllerManager.routesAndControllers.forEach { it.value.initSessionAttributes(session) }
+
             //TODO: Need to move these to their respective app.controllers
-            val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
+            val sessionAttributes = hashMapOf(
                     Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""),
                     Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),
                     Pair("repeated_password_field_error", false), Pair("email_field_error", false), Pair("username_not_available_error", false),

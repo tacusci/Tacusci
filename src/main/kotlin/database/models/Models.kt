@@ -97,6 +97,8 @@ class RouteElementNode() : Node<RouteElement>() {
         node.nodeData.parentId = this.nodeData.id
         super.addChild(node)
     }
+
+    fun addChildren(nodeList: List<Node<RouteElement>>) = nodeList.forEach { addChild(it) }
 }
 
 data class Page(var id: Long, var title: String, var content: String)

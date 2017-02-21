@@ -36,6 +36,7 @@ import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Session
 import java.util.*
 
 /**
@@ -45,6 +46,10 @@ import java.util.*
 class DashboardController : Controller {
 
     companion object : KLogging()
+
+    override fun initSessionAttributes(session: Session) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")

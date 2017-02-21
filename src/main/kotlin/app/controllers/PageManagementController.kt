@@ -11,6 +11,7 @@ import j2html.tags.ContainerTag
 import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Session
 import utils.tree.Node
 import java.util.*
 
@@ -19,6 +20,10 @@ import java.util.*
  * Created by alewis on 06/02/2017.
  */
 class PageManagementController : Controller {
+
+    override fun initSessionAttributes(session: Session) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     /*
 
@@ -35,17 +40,17 @@ class PageManagementController : Controller {
         model = Web.loadNavBar(request, response, model)
 
         val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val eventsPages = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        eventsPages.addChild(RouteElementNode(RouteElement(-1, eventsPages.nodeData.id, "reading_furs", RouteElementHandler.ROUTE_ELEMENT.PAGE, 0)))
-        val oxford = RouteElementNode(RouteElement(-1, eventsPages.nodeData.id, "oxford_bowlplex", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
-        oxford.addChild(RouteElementNode(RouteElement(-1, oxford.nodeData.id, "sub child", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1)))
-        eventsPages.addChild(oxford)
-        root.addChild(eventsPages)
+        val events = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
+        val reading = RouteElementNode(RouteElement(-1, events.nodeData.id, "reading", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
+        val oxford = RouteElementNode(RouteElement(-1, events.nodeData.id, "oxford", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
+        val oxfordChild = RouteElementNode(RouteElement(-1, oxford.nodeData.id, "I should come under oxford", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
+        val readingChild = RouteElementNode(RouteElement(-1, reading.nodeData.id, "I should come under reading", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
+        oxford.addChild(oxfordChild)
+        reading.addChild(readingChild)
+        events.addChild(reading)
+        events.addChild(oxford)
+        root.addChild(events)
         val routesAndPagesTree = RouteElementTree(root)
-
-        val pageTree = ul().with(li("Pages").with(ul().with(li("events").with(ul().with(li("reading_furs"), li("oxford_bowlplex")
-                )))
-        ))
 
         model.put("tree", createRouteTree(routesAndPagesTree).render())
 
@@ -59,7 +64,6 @@ class PageManagementController : Controller {
     private fun createRouteTree(routeElementTree: RouteElementTree): ContainerTag {
         val rootTag = ul()
         val innerTag = li(routeElementTree.rootElement.nodeData.name)
-        println(routeElementTree)
         if (routeElementTree.rootElement.hasChildren()) {
             addChild(innerTag, routeElementTree.rootElement.children)
         }

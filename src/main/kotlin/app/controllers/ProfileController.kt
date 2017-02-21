@@ -31,17 +31,13 @@
 
 package app.controllers
 
-import database.daos.DAOManager
-import database.daos.UserDAO
-import extensions.httpsRedirect
-import extensions.managedRedirect
 import app.handlers.UserHandler
-import mu.KLogger
+import extensions.managedRedirect
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
-import utils.j2htmlPartials
+import spark.Session
 import java.util.*
 
 /**
@@ -49,6 +45,10 @@ import java.util.*
  */
 class ProfileController : Controller {
     companion object : KLogging()
+
+    override fun initSessionAttributes(session: Session) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
