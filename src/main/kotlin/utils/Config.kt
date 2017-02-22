@@ -63,7 +63,7 @@ open class Config {
         fun load() {
             val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
             //TODO: this could probably be cleaned up more
-            this.setProperty("properties_file", "tvf.properties")
+            this.setProperty("properties_file", "tacusci.properties")
             propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
                 defaults.forEach { property, value -> this.setProperty(property, value) }
