@@ -52,11 +52,11 @@ open class Config {
             return hashMapOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
                     Pair("db_url", "jdbc:mysql://localhost"),
-                    Pair("schema_name", "tvf"),
-                    Pair("default_admin_user", "tvf_admin"),
+                    Pair("schema_name", "tacusci"),
+                    Pair("default_admin_user", "tacusci_admin"),
                     Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", "admin_tvf@tvf.net"),
-                    Pair("log_file", "tvf.log"),
+                    Pair("default_admin_email", "admin_tacusci@tacusci.net"),
+                    Pair("log_file", "tacusci.log"),
                     Pair("using_ssl_on_proxy", "false"))
         }
 
