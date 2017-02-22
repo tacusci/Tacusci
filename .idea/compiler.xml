@@ -6,11 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="TVF" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="TVF" target="1.8" />
+      <module name="Tasusci" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
