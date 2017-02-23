@@ -31,7 +31,7 @@
  
  package database.models
 
-import app.handlers.RouteElementHandler
+import app.handlers.RouteEntityHandler
 import utils.Validation
 import utils.tree.Node
 import utils.tree.Tree
@@ -79,26 +79,26 @@ data class Group(val name: String) {
     }
 }
 
-class RouteElementTree() : Tree<RouteElement>() {
+class RouteEntityTree() : Tree<RouteEntity>() {
 
-    constructor(routeElementNode: RouteElementNode) : this() {
-        this.rootElement = routeElementNode
+    constructor(routeEntityNode: RouteEntityNode) : this() {
+        this.rootElement = routeEntityNode
     }
 
 }
-class RouteElementNode() : Node<RouteElement>() {
+class RouteEntityNode() : Node<RouteEntity>() {
 
-    constructor(routeElement: RouteElement) : this() {
-        this.nodeData = routeElement
+    constructor(routeEntity: RouteEntity) : this() {
+        this.data = routeEntity
     }
-    override fun addChild(node: Node<RouteElement>) {
-        node.nodeData.parentId = this.nodeData.id
+    override fun addChild(node: Node<RouteEntity>) {
+        node.data.parentId = this.data.id
         super.addChild(node)
     }
 
-    fun addChildren(nodeList: List<Node<RouteElement>>) = nodeList.forEach { addChild(it) }
+    fun addChildren(nodeList: List<Node<RouteEntity>>) = nodeList.forEach { addChild(it) }
 
 }
 
-data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT, var pageId: Long)
+data class RouteEntity(var id: Long, var parentId: Long, var name: String, var routeENTITYTYPEType: RouteEntityHandler.ROUTE_ENTITY_TYPE, var pageId: Long)
 data class Page(var id: Long, var title: String, var content: String)

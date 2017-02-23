@@ -136,7 +136,7 @@ object DAOManager : KLogging() {
             TABLE.USERS -> return UserDAO(url, dbProperties, "users")
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
-            TABLE.ROUTE_ELEMENTS -> return RouteElementDAO(url, dbProperties, "routeelements")
+            TABLE.ROUTE_ELEMENTS -> return RouteEntityDAO(url, dbProperties, "routeelements")
             else -> {
                 return GenericDAO(url, dbProperties, "")
             }

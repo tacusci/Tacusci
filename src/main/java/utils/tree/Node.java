@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Node<T> {
 
-    public T nodeData;
+    public T data;
     public List<Node<T>> children;
 
     /**
@@ -22,11 +22,11 @@ public class Node<T> {
 
     /**
      * Convenience ctor to create a Node<T> with an instance of T.
-     * @param nodeData an instance of T.
+     * @param data an instance of T.
      */
-    public Node(T nodeData) {
+    public Node(T data) {
         this();
-        setNodeData(nodeData);
+        setData(data);
     }
 
     /**
@@ -87,7 +87,6 @@ public class Node<T> {
         if (index == getNumberOfChildren()) {
             // this is really an append
             addChild(child);
-            return;
         } else {
             children.get(index); //just to throw the exception, and stop here
             children.add(index, child);
@@ -103,23 +102,23 @@ public class Node<T> {
         children.remove(index);
     }
 
-    public T getNodeData() {
-        return this.nodeData;
+    public T getData() {
+        return this.data;
     }
 
-    public void setNodeData(T nodeData) {
-        this.nodeData = nodeData;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("{").append(getNodeData().toString()).append(",[");
+        sb.append("{").append(getData().toString()).append(",[");
         int i = 0;
         for (Node<T> e : getChildren()) {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(e.getNodeData().toString());
+            sb.append(e.getData().toString());
             i++;
         }
         sb.append("]").append("}");

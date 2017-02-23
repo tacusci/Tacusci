@@ -1,7 +1,7 @@
 package utils
 
 import app.controllers.Web
-import database.models.RouteElementNode
+import database.models.RouteEntityNode
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import j2html.tags.Tag
@@ -211,7 +211,7 @@ object j2htmlPartials {
         return -1
     }
 
-    fun generateListFromRouteElementNode(routeElementNode: RouteElementNode) {
-        val listHeader = li(routeElementNode.nodeData.name)
+    fun generateListFromRouteElementNode(routeEntityNode: RouteEntityNode) {
+        val listHeader = li(routeEntityNode.data.name)
     }
 }

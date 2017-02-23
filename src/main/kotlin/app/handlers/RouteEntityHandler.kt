@@ -1,16 +1,15 @@
 package app.handlers
 
 import database.daos.DAOManager
-import database.daos.RouteElementDAO
 import mu.KLogging
 
 /**
  * Created by alewis on 10/02/2017.
  */
 
-object RouteElementHandler : KLogging() {
+object RouteEntityHandler : KLogging() {
 
-    enum class ROUTE_ELEMENT {
+    enum class ROUTE_ENTITY_TYPE {
         PATH,
         PAGE
     }

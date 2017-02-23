@@ -1,10 +1,10 @@
 package app.controllers
 
-import app.handlers.RouteElementHandler
+import app.handlers.RouteEntityHandler
 import app.handlers.UserHandler
-import database.models.RouteElement
-import database.models.RouteElementNode
-import database.models.RouteElementTree
+import database.models.RouteEntity
+import database.models.RouteEntityNode
+import database.models.RouteEntityTree
 import j2html.TagCreator.li
 import j2html.TagCreator.ul
 import j2html.tags.ContainerTag
@@ -39,18 +39,18 @@ class PageManagementController : Controller {
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, response, model)
 
-        val root = RouteElementNode(RouteElement(-1, -1, "Pages", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val events = RouteElementNode(RouteElement(-1, root.nodeData.id, "events", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val reading = RouteElementNode(RouteElement(-1, events.nodeData.id, "reading", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val oxford = RouteElementNode(RouteElement(-1, events.nodeData.id, "oxford", RouteElementHandler.ROUTE_ELEMENT.PATH, -1))
-        val oxfordChild = RouteElementNode(RouteElement(-1, oxford.nodeData.id, "I should come under oxford", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
-        val readingChild = RouteElementNode(RouteElement(-1, reading.nodeData.id, "I should come under reading", RouteElementHandler.ROUTE_ELEMENT.PAGE, -1))
+        val root = RouteEntityNode(RouteEntity(-1, -1, "Pages", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
+        val events = RouteEntityNode(RouteEntity(-1, root.data.id, "events", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
+        val reading = RouteEntityNode(RouteEntity(-1, events.data.id, "reading", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
+        val oxford = RouteEntityNode(RouteEntity(-1, events.data.id, "oxford", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
+        val oxfordChild = RouteEntityNode(RouteEntity(-1, oxford.data.id, "I should come under oxford", RouteEntityHandler.ROUTE_ENTITY_TYPE.PAGE, -1))
+        val readingChild = RouteEntityNode(RouteEntity(-1, reading.data.id, "I should come under reading", RouteEntityHandler.ROUTE_ENTITY_TYPE.PAGE, -1))
         oxford.addChild(oxfordChild)
         reading.addChild(readingChild)
         events.addChild(reading)
         events.addChild(oxford)
         root.addChild(events)
-        val routesAndPagesTree = RouteElementTree(root)
+        val routesAndPagesTree = RouteEntityTree(root)
 
         model.put("tree", createRouteTree(routesAndPagesTree).render())
 
@@ -61,19 +61,19 @@ class PageManagementController : Controller {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun createRouteTree(routeElementTree: RouteElementTree): ContainerTag {
+    private fun createRouteTree(routeEntityTree: RouteEntityTree): ContainerTag {
         val rootTag = ul()
-        val innerTag = li(routeElementTree.rootElement.nodeData.name)
-        if (routeElementTree.rootElement.hasChildren()) {
-            addChild(innerTag, routeElementTree.rootElement.children)
+        val innerTag = li(routeEntityTree.rootElement.data.name)
+        if (routeEntityTree.rootElement.hasChildren()) {
+            addChild(innerTag, routeEntityTree.rootElement.children)
         }
         return rootTag.with(innerTag)
     }
 
-    private fun addChild(rootTagz: ContainerTag, routeElementNode: MutableList<Node<RouteElement>>): ContainerTag {
-        routeElementNode.forEach { node ->
+    private fun addChild(rootTagz: ContainerTag, routeEntityNode: MutableList<Node<RouteEntity>>): ContainerTag {
+        routeEntityNode.forEach { node ->
             val rootTag = ul()
-            val innerTag = li(node.nodeData.name)
+            val innerTag = li(node.data.name)
             if (node.hasChildren()) {
                 addChild(innerTag, node.children)
             }

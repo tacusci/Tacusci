@@ -25,3 +25,8 @@ CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
 CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
   `idusers` INT NOT NULL,
   `idgroups` INT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS `tvf`.`routeelements` (
+  `idrouteelements` INT NOT NULL,
+  `parentid` INT
+);
