@@ -79,26 +79,26 @@ data class Group(val name: String) {
     }
 }
 
-data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT, var pageId: Long)
-
 class RouteElementTree() : Tree<RouteElement>() {
 
     constructor(routeElementNode: RouteElementNode) : this() {
         this.rootElement = routeElementNode
     }
-}
 
+}
 class RouteElementNode() : Node<RouteElement>() {
+
     constructor(routeElement: RouteElement) : this() {
         this.nodeData = routeElement
     }
-
     override fun addChild(node: Node<RouteElement>) {
         node.nodeData.parentId = this.nodeData.id
         super.addChild(node)
     }
 
     fun addChildren(nodeList: List<Node<RouteElement>>) = nodeList.forEach { addChild(it) }
+
 }
 
+data class RouteElement(var id: Long, var parentId: Long, var name: String, var routeElementType: RouteElementHandler.ROUTE_ELEMENT, var pageId: Long)
 data class Page(var id: Long, var title: String, var content: String)
