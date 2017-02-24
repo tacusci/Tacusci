@@ -51,7 +51,7 @@ class LoginController : Controller {
     companion object : KLogging()
 
     override fun initSessionAttributes(session: Session) {
-        hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
+        hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""), Pair("password", ""),
                     Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> session.attribute(key, value) }
     }
 

@@ -35,6 +35,7 @@ package app
  */
 
 import app.controllers.ControllerManager
+import app.controllers.LoginController
 import app.controllers.Web
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
@@ -110,10 +111,14 @@ class Application {
             val session = request.session()
 
             //TODO: Need to fix this later
-            //ControllerManager.routesAndControllers.forEach { it.value.initSessionAttributes(session) }
+            ControllerManager.routesAndControllers.forEach {
+                if (it.value is LoginController) {
+                    it.value.initSessionAttributes(session)
+                }
+            }
 
             //TODO: Need to move these to their respective app.controllers
-            val sessionAttributes = hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""),
+            val sessionAttributes = hashMapOf(
                     Pair("user_management_changes_made", false), Pair("lines_to_show", "20"), Pair("text_to_show", ""),
                     Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),
                     Pair("repeated_password_field_error", false), Pair("email_field_error", false), Pair("username_not_available_error", false),
