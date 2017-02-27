@@ -53,7 +53,9 @@ class UserManagementController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {/* not using any session values in this controller */}
+    override fun initSessionAttributes(session: Session) {
+        hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> session.attribute(key, value) }
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")

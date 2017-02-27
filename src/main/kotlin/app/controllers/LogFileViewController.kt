@@ -1,7 +1,7 @@
 package app.controllers
 
-import extensions.managedRedirect
 import app.handlers.UserHandler
+import extensions.managedRedirect
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import mu.KLogging
@@ -9,7 +9,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import utils.Config
 import utils.Tail.tailFile
 import utils.j2htmlPartials
@@ -25,6 +24,7 @@ class LogFileViewController : Controller {
     companion object : KLogging()
 
     override fun initSessionAttributes(session: Session) {
+        hashMapOf(Pair("lines_to_show", "20"), Pair("text_to_show", "")).forEach { key, value -> session.attribute(key, value) }
         //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
