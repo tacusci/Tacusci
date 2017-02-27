@@ -1,5 +1,7 @@
 package app.controllers
 
+import spark.Session
+
 /**
  * Created by alewis on 21/02/2017.
  */
@@ -14,4 +16,6 @@ object ControllerManager {
             Pair("/login", LoginController()),
             Pair("/profile", ProfileController()),
             Pair("/profile/:username", ProfileController()))
+
+    fun initSessionAttributes(session: Session) = routesAndControllers.forEach { it.value.initSessionAttributes(session) }
 }

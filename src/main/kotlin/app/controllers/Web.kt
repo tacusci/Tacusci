@@ -31,7 +31,6 @@
  
  package app.controllers
 
-import database.models.User
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import j2html.TagCreator.pre
@@ -40,12 +39,10 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Validation
 import utils.j2htmlPartials
 import java.math.BigInteger
 import java.security.SecureRandom
 import java.util.*
-import javax.validation.Valid
 
 /**
  * Created by alewis on 25/10/2016.

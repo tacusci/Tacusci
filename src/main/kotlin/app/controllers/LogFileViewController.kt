@@ -24,8 +24,7 @@ class LogFileViewController : Controller {
     companion object : KLogging()
 
     override fun initSessionAttributes(session: Session) {
-        hashMapOf(Pair("lines_to_show", "20"), Pair("text_to_show", "")).forEach { key, value -> session.attribute(key, value) }
-        //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        hashMapOf(Pair("lines_to_show", "20"), Pair("text_to_show", "")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {

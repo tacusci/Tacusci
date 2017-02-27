@@ -54,7 +54,7 @@ class UserManagementController : Controller {
     companion object : KLogging()
 
     override fun initSessionAttributes(session: Session) {
-        hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> session.attribute(key, value) }
+        hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {

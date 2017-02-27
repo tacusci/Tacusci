@@ -52,7 +52,7 @@ class LoginController : Controller {
 
     override fun initSessionAttributes(session: Session) {
         hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""), Pair("password", ""),
-                    Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> session.attribute(key, value) }
+                    Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {

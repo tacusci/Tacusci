@@ -108,7 +108,7 @@ object  UserHandler : KLogging() {
         val session = request.session()
         if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {
-                return session.attribute("username")
+                return session.attribute("username") ?: ""
             }
         }
         return ""
