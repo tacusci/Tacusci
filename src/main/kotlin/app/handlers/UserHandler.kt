@@ -68,8 +68,8 @@ object  UserHandler : KLogging() {
         if (authHash.isNotBlank() && authHash.isNotEmpty()) {
             if (PasswordStorage.verifyPassword(password, authHash)) {
                 session.attribute("logged_in", true)
-                session.attribute("username", username)
                 session.attribute("login_incorrect_creds", false)
+                session.attribute("username", username)
                 logger.info("Login successful")
             } else {
                 session.attribute("login_incorrect_creds", true)
