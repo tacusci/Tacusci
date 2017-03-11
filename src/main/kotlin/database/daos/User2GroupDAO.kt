@@ -42,7 +42,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
     companion object : KLogging()
 
     fun mapUserIDToGroupID(userID: Int, groupID: Int): Boolean {
-        if (!userAndGroupMapped(userID, groupID)) {
+        if (!areUserAndGroupMapped(userID, groupID)) {
             connect()
             try {
                 val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
@@ -60,7 +60,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         return false
     }
 
-    fun userAndGroupMapped(userID: Int, groupID: Int): Boolean {
+    fun areUserAndGroupMapped(userID: Int, groupID: Int): Boolean {
         connect()
         var count = 0
         try {
@@ -81,7 +81,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
 
     fun removeUserAndGroupMap(userID: Int, groupID: Int) {
         connect()
-        if (userAndGroupMapped(userID, groupID)) {
+        if (areUserAndGroupMapped(userID, groupID)) {
             try {
                 val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
                 val preparedStatement = connection?.prepareStatement(removeUserFromGroupStatement)

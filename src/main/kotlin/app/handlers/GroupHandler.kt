@@ -37,7 +37,6 @@ import database.daos.User2GroupDAO
 import database.models.Group
 import database.models.User
 import mu.KLogging
-import spark.Session
 
 /**
  * Created by alewis on 22/12/2016.
@@ -93,7 +92,7 @@ object GroupHandler : KLogging() {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
                 val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                return user2GroupDAO.userAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                return user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
             }
         }
         return false
