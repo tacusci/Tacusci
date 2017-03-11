@@ -1,6 +1,6 @@
-CREATE schema IF NOT EXISTS tvf;
+CREATE schema IF NOT EXISTS tacusci;
 
-CREATE TABLE IF NOT EXISTS `tvf`.`users` (
+CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `rootadmin` BIT(1) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `tvf`.`users` (
   UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 
-CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
+CREATE TABLE IF NOT EXISTS  `tacusci`.`groups` (
   `idgroups` INT NOT NULL AUTO_INCREMENT,
   `groupname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idgroups`),
@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS  `tvf`.`groups` (
   UNIQUE INDEX `groupname_UNIQUE` (`groupname` ASC));
 
 
-CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
+CREATE TABLE IF NOT EXISTS `tacusci`.`user2group` (
   `idusers` INT NOT NULL,
   `idgroups` INT NOT NULL);
 
-CREATE TABLE IF NOT EXISTS `tvf`.`routeentities` (
+CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
   `idrouteentities` INT NOT NULL,
   `parentid` INT,
   `name` VARCHAR(45) NOT NULL,
