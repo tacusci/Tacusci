@@ -12,6 +12,7 @@ class RouteEntityDAO(url: String, dbProperties: Properties, tableName: String) :
     companion object : KLogging()
 
     fun saveOrUpdate(routeEntity: RouteEntity) {
+        connect()
 
     }
 }

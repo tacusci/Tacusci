@@ -26,7 +26,12 @@ CREATE TABLE IF NOT EXISTS `tvf`.`user2group` (
   `idusers` INT NOT NULL,
   `idgroups` INT NOT NULL);
 
-CREATE TABLE IF NOT EXISTS `tvf`.`routeelements` (
-  `idrouteelements` INT NOT NULL,
-  `parentid` INT
+CREATE TABLE IF NOT EXISTS `tvf`.`routeentities` (
+  `idrouteentities` INT NOT NULL,
+  `parentid` INT,
+  `name` VARCHAR(45) NOT NULL,
+  `type` INT NOT NULL,
+  `pageid` INT,
+  PRIMARY KEY (`idrouteentities`),
+  UNIQUE INDEX `idrouteentities_UNIQUE` (`idrouteenties` ASC));
 );
