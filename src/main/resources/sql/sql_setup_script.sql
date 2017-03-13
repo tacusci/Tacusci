@@ -34,3 +34,12 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
   `pageid` INT,
   PRIMARY KEY (`idrouteentities`),
   UNIQUE INDEX `idrouteentities_UNIQUE` (`idrouteentities` ASC));
+
+CREATE TABLE IF NOT EXISTS `tacusci`.`resetpassword` (
+  `idresetpasswords` INT NOT NULL AUTO_INCREMENT,
+  `idusers` INT NOT NULL,
+  `authhash` VARCHAR(72) NOT NULL,
+  PRIMARY KEY (`idresetpasswords`),
+  UNIQUE INDEX `idresetpasswords_UNIQUE (`idresetpasswords` ASC),
+  UNIQUE INDEX `idusers_UNIQUE` (`idusers`, ASC));
+)

@@ -33,5 +33,4 @@ class ResetPasswordController : Controller {
     override fun post(request: Request, response: Response): Response {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }
