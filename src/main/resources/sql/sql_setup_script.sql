@@ -33,5 +33,4 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
   `type` INT NOT NULL,
   `pageid` INT,
   PRIMARY KEY (`idrouteentities`),
-  UNIQUE INDEX `idrouteentities_UNIQUE` (`idrouteenties` ASC));
-);
+  UNIQUE INDEX `idrouteentities_UNIQUE` (`idrouteentities` ASC));

@@ -50,12 +50,15 @@ class ProfileController : Controller {
         //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    private fun setupEditableElements(model: HashMap<String, Any>) {}
+
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, response, model)
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
         model.put("username", username)
+        if (UserHandler.loggedInUsername(request) == username) setupEditableElements(model)
         return model
     }
 

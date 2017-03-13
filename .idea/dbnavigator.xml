@@ -26,22 +26,9 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="0261cb09-88fd-4119-9a60-f49c0a9968c5">
-      <console name="tvf" type="STANDARD"><![CDATA[drop database tvf]]></console>
+    <connection id="0115c00a-34cb-42b8-bb39-aae55af48b79">
+      <console name="TVF" type="STANDARD" />
     </connection>
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.users" active-filter-id="EMPTY_FILTER" />
-    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.user2group" active-filter-id="EMPTY_FILTER">
-      <filter id="92b82577-a340-4b64-bc42-251893b5ec1c" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="idusers" operator="=" value="" active="true" />
-      </filter>
-    </filter-list>
-    <filter-list connection-id="0261cb09-88fd-4119-9a60-f49c0a9968c5" dataset="tvf.groups" active-filter-id="eb70e59e-a501-4a96-a50a-9c5c1e3fc425">
-      <filter id="eb70e59e-a501-4a96-a50a-9c5c1e3fc425" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="idgroups" operator="=" value="" active="true" />
-      </filter>
-    </filter-list>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -68,9 +55,9 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="0261cb09-88fd-4119-9a60-f49c0a9968c5" active="true">
+      <connection id="0115c00a-34cb-42b8-bb39-aae55af48b79" active="true">
         <database>
-          <name value="tvf" />
+          <name value="TVF" />
           <description value="" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />
@@ -81,7 +68,7 @@
           <url-type value="DATABASE" />
           <host value="localhost" />
           <port value="3306" />
-          <database value="tvf" />
+          <database value="tacusci" />
           <os-authentication value="false" />
           <empty-password value="false" />
           <user value="root" />
@@ -103,7 +90,7 @@
         <details>
           <charset value="UTF-8" />
           <ddl-file-binding value="true" />
-          <database-logging value="true" />
+          <database-logging value="false" />
           <connect-automatically value="true" />
           <restore-workspace value="true" />
           <environment-type value="default" />

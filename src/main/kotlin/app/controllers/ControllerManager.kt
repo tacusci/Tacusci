@@ -7,6 +7,8 @@ import spark.Session
  */
 
 object ControllerManager {
+    val profileController = ProfileController()
+    val resetPasswordController = ResetPasswordController()
     val routesAndControllers = mapOf<String, Controller>(Pair("/", IndexController()),
             Pair("/dashboard", DashboardController()),
             Pair("/register", RegisterController()),
@@ -14,8 +16,10 @@ object ControllerManager {
             Pair("/dashboard/log_file", LogFileViewController()),
             Pair("/dashboard/page_management", PageManagementController()),
             Pair("/login", LoginController()),
-            Pair("/profile", ProfileController()),
-            Pair("/profile/:username", ProfileController()))
+            Pair("/profile", profileController),
+            Pair("/profile/:username", profileController),
+            Pair("/reset_password/:username", resetPasswordController),
+            Pair("/reset_password/:username/:authhash", resetPasswordController))
 
     fun initSessionAttributes(session: Session) = routesAndControllers.forEach { it.value.initSessionAttributes(session) }
 }

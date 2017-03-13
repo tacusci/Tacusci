@@ -2,6 +2,7 @@ package database.daos
 
 import database.models.RouteEntity
 import mu.KLogging
+import java.sql.SQLException
 import java.util.*
 
 /**
@@ -12,7 +13,13 @@ class RouteEntityDAO(url: String, dbProperties: Properties, tableName: String) :
     companion object : KLogging()
 
     fun saveOrUpdate(routeEntity: RouteEntity) {
-        connect()
+    }
 
+    fun insertRouteEntity(routeEntity: RouteEntity): Boolean {
+        connect()
+        try {
+            val createRouteEntityStatement = "INSERT INTO $tableName (parentid, name)"
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 }
