@@ -18,6 +18,7 @@ class ResetPasswordController : Controller {
     override fun initSessionAttributes(session: Session) {}
 
     private fun generateResetAuthHash(username: String) {
+
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {

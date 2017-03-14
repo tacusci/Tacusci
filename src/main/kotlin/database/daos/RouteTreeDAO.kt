@@ -11,7 +11,7 @@ class RouteTreeDAO {
 
     companion object : KLogging()
 
-    var routeEntityDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_ELEMENTS) as RouteEntityDAO
+    var routeEntityDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_ENTITIES) as RouteEntityDAO
 
     fun saveOrUpdate(routeEntityTree: RouteEntityTree) {
         val routeEntities = routeEntityTree.toList()

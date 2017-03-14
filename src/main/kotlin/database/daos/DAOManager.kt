@@ -35,12 +35,10 @@ import database.SQLScript
 import mu.KLogging
 import utils.InternalResourceFile
 import java.io.File
-import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -58,7 +56,7 @@ object DAOManager : KLogging() {
         USERS,
         USER2GROUP,
         GROUPS,
-        ROUTE_ELEMENTS
+        ROUTE_ENTITIES
     }
 
     public var connection: Connection? = null
@@ -136,7 +134,7 @@ object DAOManager : KLogging() {
             TABLE.USERS -> return UserDAO(url, dbProperties, "users")
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
-            TABLE.ROUTE_ELEMENTS -> return RouteEntityDAO(url, dbProperties, "routeelements")
+            TABLE.ROUTE_ENTITIES -> return RouteEntityDAO(url, dbProperties, "routeentities")
             else -> {
                 return GenericDAO(url, dbProperties, "")
             }

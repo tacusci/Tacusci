@@ -14,5 +14,5 @@ object RouteEntityHandler : KLogging() {
         PAGE
     }
 
-    val routeElementDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_ELEMENTS)
+    val routeElementDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_ENTITIES)
 }
