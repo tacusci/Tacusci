@@ -1,6 +1,7 @@
 package database.daos
 
 import mu.KLogging
+import utils.Utils
 import java.sql.SQLException
 import java.util.*
 
@@ -11,13 +12,38 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
 
     companion object : KLogging()
 
-    fun createOrUpdateAuthHash(userId: Int) {
+    fun createOrUpdateAuthHash(userId: Int): String {
+        val authHash = Utils.randomHash()
+        if (!authHashExists(userId)) insertAuthHash(userId, authHash) else updateAuthHash(userId, authHash)
+        return authHash
+    }
+
+     fun insertAuthHash(userId: Int, authHash: String) {
         connect()
         try {
-            var actionString = ""
-            if (authHashExists(userId)) actionString = "INSERT" else actionString = "UPDATE"
-            val statement = "$actionString $tableName SET IDUSERS=?"
+            val insertAuthHashStatement = "INSERT INTO $tableName (idusers, authhash) VALUES (?,?)"
+            val preparedStatement = connection?.prepareStatement(insertAuthHashStatement)
+            preparedStatement?.setInt(1, userId)
+            preparedStatement?.setString(2, authHash)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
+    }
+
+     fun updateAuthHash(userId: Int, authHash: String) {
+        connect()
+        try {
+            val updateAuthHashStatement = "UPDATE $tableName SET AUTHHASH=? WHERE IDUSERS=?"
+            val preparedStatement = connection?.prepareStatement(updateAuthHashStatement)
+            preparedStatement?.setString(1, authHash)
+            preparedStatement?.setInt(2, userId)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+        }  catch (e: SQLException) { logger.error(e.message); disconnect() }
     }
 
     fun authHashExists(userId: Int): Boolean {
@@ -35,5 +61,21 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         disconnect()
         return count > 0
+    }
+
+    fun getAuthHash(userId: Int): String {
+        connect()
+        var authHash = ""
+        try {
+            val selectStatement = "SELECT AUTHHASH FROM $tableName WHERE IDUSERS=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setInt(1, userId)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                authHash = resultSet.getString("AUTHHASH")
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return authHash
     }
 }

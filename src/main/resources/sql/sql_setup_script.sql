@@ -40,6 +40,5 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`resetpassword` (
   `idusers` INT NOT NULL,
   `authhash` VARCHAR(72) NOT NULL,
   PRIMARY KEY (`idresetpasswords`),
-  UNIQUE INDEX `idresetpasswords_UNIQUE (`idresetpasswords` ASC),
-  UNIQUE INDEX `idusers_UNIQUE` (`idusers`, ASC));
-)
+  UNIQUE INDEX `idresetpasswords_UNIQUE` (`idresetpasswords` ASC),
+  UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC));

@@ -56,7 +56,8 @@ object DAOManager : KLogging() {
         USERS,
         USER2GROUP,
         GROUPS,
-        ROUTE_ENTITIES
+        ROUTE_ENTITIES,
+        RESET_PASSWORD
     }
 
     public var connection: Connection? = null
@@ -135,6 +136,7 @@ object DAOManager : KLogging() {
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
             TABLE.ROUTE_ENTITIES -> return RouteEntityDAO(url, dbProperties, "routeentities")
+            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "resetpassword")
             else -> {
                 return GenericDAO(url, dbProperties, "")
             }

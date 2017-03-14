@@ -43,7 +43,7 @@ import java.util.*
 
 abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String) : KLogging() {
 
-    var connection: Connection? = null
+    protected var connection: Connection? = null
 
     fun connect(): Boolean {
         try {

@@ -16,19 +16,37 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
-      <charset value="UTF-8" />
+      <charset value="windows-1252" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79">
+        <schema name="tacusci" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="0115c00a-34cb-42b8-bb39-aae55af48b79">
       <console name="TVF" type="STANDARD" />
     </connection>
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-list connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" dataset="tacusci.users" active-filter-id="e0d0dde8-9176-43bd-9546-4af4569032bd">
+      <filter id="e0d0dde8-9176-43bd-9546-4af4569032bd" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="idusers" operator="is not null" value="" active="true" />
+      </filter>
+    </filter-list>
+    <filter-list connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" dataset="tacusci.groups" active-filter-id="EMPTY_FILTER" />
+    <filter-list connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" dataset="tacusci.routeentities" active-filter-id="EMPTY_FILTER" />
+    <filter-list connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" dataset="tacusci.resetpassword" active-filter-id="EMPTY_FILTER">
+      <filter id="abae370f-e835-48e3-9a29-635e3e5a493f" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="idresetpasswords" operator="is not null" value="" active="true" />
+      </filter>
+    </filter-list>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -94,12 +112,13 @@
           <charset value="UTF-8" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
+          <connect-automatically value="true" />
+          <restore-workspace value="true" />
           <environment-type value="default" />
           <idle-time-to-disconnect value="30" />
           <password-expiry-time value="10" />
           <max-connection-pool-size value="7" />
           <alternative-statement-delimiter value="" />
-          <connect-automatically value="true" />
         </details>
         <object-filters hide-empty-schemas="false">
           <object-type-filter use-master-settings="true">
