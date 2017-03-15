@@ -33,11 +33,13 @@ package app.controllers
 
 import app.handlers.UserHandler
 import extensions.managedRedirect
+import j2html.TagCreator.h1
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.j2htmlPartials
 import java.util.*
 
 /**
@@ -57,7 +59,8 @@ class ProfileController : Controller {
         model = Web.loadNavBar(request, response, model)
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
-        model.put("username", username)
+        model.put("username_header", h1(username))
+        model.put("reset_password_link", j2htmlPartials.link("pure-button", "/reset_password/$username", "Reset Password"))
         if (UserHandler.loggedInUsername(request) == username) setupEditableElements(model)
         return model
     }
