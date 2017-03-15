@@ -32,7 +32,6 @@
 package app.controllers
 
 import app.handlers.UserHandler
-import database.models.User
 import extensions.managedRedirect
 import j2html.TagCreator.h1
 import mu.KLogging
