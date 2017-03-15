@@ -32,27 +32,32 @@ class ResetPasswordController : Controller {
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
-        if (authHash == null) {
-            if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
-                val newAuthHash = Utils.randomHash()
-                val userId = userDAO.getUserID(username)
-                if (resetPasswordDAO.authHashExists(userId)) resetPasswordDAO.updateAuthHash(userId, newAuthHash) else resetPasswordDAO.insertAuthHash(userId, newAuthHash)
-                response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
-            }
-        } else {
-            if (userDAO.userExists(username)) {
-                val userId = userDAO.getUserID(username)
-                if (resetPasswordDAO.authHashExists(userId)) {
-                    if (resetPasswordDAO.getAuthHash(userId) == authHash) {
-                        model.put("title", "Reached reset password page")
+
+        if (username != null) {
+            if (authHash == null) {
+                if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
+                    val newAuthHash = Utils.randomHash()
+                    val userId = userDAO.getUserID(username)
+                    if (resetPasswordDAO.authHashExists(userId)) {
+                        resetPasswordDAO.updateAuthHash(userId, newAuthHash)
                     } else {
-                        model.put("title", "Incorrect authhash")
+                        resetPasswordDAO.insertAuthHash(userId, newAuthHash)
                     }
+                    response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
                 } else {
-                    model.put("title", "Incorrect authhash")
+                    model.put("title", "Unathorised new auth hash request")
                 }
             } else {
-                model.put("title", "Unrecognised username")
+                if (resetPasswordDAO.authHashExists(userDAO.getUserID(username))) {
+                    if (resetPasswordDAO.getAuthHash(userDAO.getUserID(username)) == authHash) {
+                        println("Reached reset password form")
+                        model.put("title", "Reached reset password form")
+                    } else {
+                        response.managedRedirect(request, "/reset_password/$username")
+                    }
+                } else {
+                    response.managedRedirect(request, "/reset_password/$username")
+                }
             }
         }
         return ModelAndView(model, layoutTemplate)

@@ -14,7 +14,7 @@ class Utils {
         val secureRandom = SecureRandom()
 
         fun randomHash(): String {
-            return BigInteger(130, secureRandom).toString(32)
+            return BigInteger(260, secureRandom).toString(32)
         }
     }
 }
