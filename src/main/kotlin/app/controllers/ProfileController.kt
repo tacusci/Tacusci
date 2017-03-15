@@ -32,6 +32,7 @@
 package app.controllers
 
 import app.handlers.UserHandler
+import database.models.User
 import extensions.managedRedirect
 import j2html.TagCreator.h1
 import mu.KLogging
@@ -52,7 +53,9 @@ class ProfileController : Controller {
         //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun setupEditableElements(model: HashMap<String, Any>) {}
+    private fun setupAuthorisedElements(model: HashMap<String, Any>, username: String) {
+        model.put("reset_password_link", j2htmlPartials.link("pure-button", "/reset_password/$username", "Reset Password"))
+    }
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
@@ -60,8 +63,7 @@ class ProfileController : Controller {
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
         model.put("username_header", h1(username))
-        model.put("reset_password_link", j2htmlPartials.link("pure-button", "/reset_password/$username", "Reset Password"))
-        if (UserHandler.loggedInUsername(request) == username) setupEditableElements(model)
+        if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)
         return model
     }
 
