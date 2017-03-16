@@ -39,9 +39,8 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Utils
 import utils.j2htmlPartials
-import java.math.BigInteger
-import java.security.SecureRandom
 import java.util.*
 
 /**
@@ -83,12 +82,10 @@ object Web : KLogging() {
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {
-        val hash = genRandomHash()
+        val hash = Utils.randomHash()
         session.attribute(formTitle, hash)
         return hash
     }
 
     fun getFormHash(session: Session, formTitle: String): String = session.attribute(formTitle)
-    fun genRandomHash(): String = BigInteger(130, SecureRandom()).toString(32)
-
 }

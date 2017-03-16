@@ -46,7 +46,7 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun registerPasswordInput(identifier: String, placeholder: String): Tag {
+    fun validatedPasswordInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withType("password")
                 .withId(identifier)
@@ -78,7 +78,7 @@ object j2htmlPartials {
                 fieldset().with(
                         legend(legend),
                         input().withId("username").withPlaceholder("Username"),
-                        passwordInput("password", "Password"),
+                        validatedPasswordInput("password", "Password"),
                         button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
                 )
         )
@@ -92,7 +92,7 @@ object j2htmlPartials {
                 fieldset().with(
                         legend(legend),
                         usernameInput("username", "Username"),
-                        passwordInput("password", "Password"),
+                        validatedPasswordInput("password", "Password"),
                         button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
                 )
         )
@@ -111,7 +111,7 @@ object j2htmlPartials {
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
-                                passwordInput("password", "Password")
+                                validatedPasswordInput("password", "Password")
                         ),
 
                         div().withClass("pure-controls").attr("style", "margin: 1.5em 0 0 auto;").with(
@@ -144,14 +144,14 @@ object j2htmlPartials {
 
                         div().withClass("pure-control-group").with(
                                 label("Password").attr("for", "password"),
-                                registerPasswordInput("password", "Password")
+                                validatedPasswordInput("password", "Password")
                         ),
 
                         label("Password is invalid").withCondHidden(!session.attribute<Boolean>("password_field_error")),
 
                         div().withClass("pure-control-group").with(
                                 label("Repeat Password").attr("for", "repeat_password"),
-                                registerPasswordInput("repeat_password", "Repeat Password")
+                                validatedPasswordInput("repeat_password", "Repeat Password")
                         ),
 
                         label("Repeat password is invalid").withCondHidden(!session.attribute<Boolean>("repeated_password_field_error")),
@@ -169,6 +169,29 @@ object j2htmlPartials {
                         ),
 
                         label("User created successfully").withCondHidden(!session.attribute<Boolean>("user_created_successfully"))
+                )
+        )
+    }
+
+    fun pureFormAligned_ResetPassword(session: Session, name: String, href: String, method: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withName("formName").withValue(name).isHidden,
+                fieldset().with(
+                        div().withClass("pure-control-group").with(
+                                label("Type new password").attr("for", "new_password"),
+                                validatedPasswordInput("new_password", "New password")
+                        ),
+
+                        div().withClass("pure-control-group").with(
+                                label("Retype new password").attr("for", "new_password_repeated"),
+                                validatedPasswordInput("repeated_new_password", "Retype new password")
+                        ),
+
+                        div().withClass("pure-controls").with(
+                                button("Reset").withMethod("submit").withClass("pure-button pure-button-primary")
+                        )
                 )
         )
     }
