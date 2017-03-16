@@ -154,7 +154,7 @@ object j2htmlPartials {
                                 validatedPasswordInput("repeat_password", "Repeat Password")
                         ),
 
-                        label("Repeat password is invalid").withCondHidden(!session.attribute<Boolean>("repeated_password_field_error")),
+                        label("Repeated password is invalid").withCondHidden(!session.attribute<Boolean>("repeated_password_field_error")),
                         label("Passwords do not match").withCondHidden(!session.attribute<Boolean>("passwords_mismatch_error")),
 
                         div().withClass("pure-control-group").with(
@@ -184,10 +184,14 @@ object j2htmlPartials {
                                 validatedPasswordInput("new_password", "New password")
                         ),
 
+                        label("New password is invalid").withCondHidden(!session.attribute<Boolean>("new_password_field_error")),
+
                         div().withClass("pure-control-group").with(
                                 label("Retype new password").attr("for", "new_password_repeated"),
-                                validatedPasswordInput("repeated_new_password", "Retype new password")
+                                validatedPasswordInput("new_password_repeated", "Retype new password")
                         ),
+
+                        label("Repeated new password is invalid").withCondHidden(!session.attribute<Boolean>("new_password_repeated_field_error")),
 
                         div().withClass("pure-controls").with(
                                 button("Reset").withMethod("submit").withClass("pure-button pure-button-primary")

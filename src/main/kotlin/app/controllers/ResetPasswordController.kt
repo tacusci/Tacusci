@@ -12,6 +12,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Utils
+import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
 
@@ -22,14 +23,16 @@ class ResetPasswordController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {}
+    override fun initSessionAttributes(session: Session) {
+        hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
+    }
 
     fun generateResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
         if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
             Web.loadNavBar(request, model)
         }
         val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", "/reset_password/$username/$authHash", "post")
-        model.put("reset_password_form", h1("Reset Password").render()+resetPasswordForm.render())
+        model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
     }
 
     fun generateAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
@@ -79,8 +82,28 @@ class ResetPasswordController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun post_resetPassword(request: Request, response: Response): Response {
+        if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
+            val newPassword = request.queryParams("new_password")
+            val newPasswordRepeated = request.queryParams("new_password_repeated")
+
+            val newPasswordInputIsValid = Validation.matchPasswordPattern(newPassword)
+            val newRepeatedPasswordIsValid = Validation.matchPasswordPattern(newPasswordRepeated)
+
+            if (!newPasswordInputIsValid) request.session().attribute("new_password_field_error", true) else request.session().attribute("new_password_field_error", false)
+            if (!newRepeatedPasswordIsValid) request.session().attribute("new_password_repeated_field_error", true) else request.session().attribute("new_password_repeated_field_error", false)
+
+            if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
+                if (newPassword == newPasswordRepeated) { println("Passwords match") }
+            }
+        }
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
-        if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {}
+        when (request.queryParams("formName")) {
+            "reset_password_form" -> return post_resetPassword(request, response)
+        }
         return response
     }
 }
