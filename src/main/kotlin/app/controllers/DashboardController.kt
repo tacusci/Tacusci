@@ -57,7 +57,7 @@ class DashboardController : Controller {
         model.put("template", "/templates/dashboard.vtl")
         model.put("title", "Thames Valley Furs - Dashboard")
         model.put("username", UserHandler.loggedInUsername(request))
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

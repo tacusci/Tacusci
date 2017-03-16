@@ -59,7 +59,7 @@ class LoginController : Controller {
 
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")

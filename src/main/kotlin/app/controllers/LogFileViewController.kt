@@ -32,7 +32,7 @@ class LogFileViewController : Controller {
 
 
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         model.put("template", "/templates/log_file.vtl")
         model.put("title", "Thames Valley Furs - Log File")
 

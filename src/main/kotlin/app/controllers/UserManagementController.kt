@@ -65,7 +65,7 @@ class UserManagementController : Controller {
 
         val userAdminForm = genUserForm(request, response)
         model.put("user_admin_form", userAdminForm.render())
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

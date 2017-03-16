@@ -37,7 +37,7 @@ class PageManagementController : Controller {
         model.put("template", "/templates/page_management.vtl")
         model.put("title", "Thames Valley Furs - Page Management")
         model.put("page_menu", "/templates/page_menu.vtl")
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
 
         val root = RouteEntityNode(RouteEntity(-1, -1, "Pages", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
         val events = RouteEntityNode(RouteEntity(-1, root.data.id, "events", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))

@@ -22,8 +22,15 @@ class ResetPasswordController : Controller {
 
     override fun initSessionAttributes(session: Session) {}
 
+    fun generateResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>) {
+        if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
+            Web.loadNavBar(request, model)
+        }
+    }
+
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
+        model.put("title", "Reset password")
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
 
         val username = request.params(":username")
@@ -45,13 +52,13 @@ class ResetPasswordController : Controller {
                     }
                     response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
                 } else {
-                    model.put("title", "Unathorised new auth hash request")
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")
                 }
             } else {
                 if (resetPasswordDAO.authHashExists(userDAO.getUserID(username))) {
                     if (resetPasswordDAO.getAuthHash(userDAO.getUserID(username)) == authHash) {
-                        println("Reached reset password form")
-                        model.put("title", "Reached reset password form")
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
+                        generateResetPasswordPageContent(request, username, model)
                     } else {
                         response.managedRedirect(request, "/reset_password/$username")
                     }

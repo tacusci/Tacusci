@@ -58,7 +58,7 @@ class ProfileController : Controller {
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         model.put("template", "/templates/profile_page.vtl")
         model.put("title", "Thames Valley Furs $username")
         model.put("username_header", h1(username))
@@ -69,7 +69,7 @@ class ProfileController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         //the username who's profile is requested is from the end of the URL: /profile/IamAUser
         val userNameOfProfileToView = request.params(":username")
         if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {

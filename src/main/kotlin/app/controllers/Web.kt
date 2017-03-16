@@ -50,7 +50,7 @@ import java.util.*
 
 object Web : KLogging() {
 
-    fun loadNavBar(request: Request, response: Response, model: HashMap<String, Any>): HashMap<String, Any> {
+    fun loadNavBar(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
         model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
         model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
@@ -76,7 +76,7 @@ object Web : KLogging() {
 
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
-        model = loadNavBar(request, response, model)
+        model = loadNavBar(request, model)
         model.put("title", "Thames Valley Furs - Profile (User not found)")
         model.put("template", "/templates/user_not_found.vtl")
         return ModelAndView(model, layoutTemplate)

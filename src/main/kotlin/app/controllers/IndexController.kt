@@ -54,7 +54,7 @@ class IndexController : Controller {
         var model = HashMap<String, Any>()
         model.put("template", "/templates/index.vtl")
         model.put("title", "Thames Valley Furs - Homepage")
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

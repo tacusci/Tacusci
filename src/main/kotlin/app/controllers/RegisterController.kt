@@ -30,7 +30,7 @@ class RegisterController : Controller {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
 
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, response, model)
+        model = Web.loadNavBar(request, model)
 
         model.put("template", "/templates/register.vtl")
         model.put("title", "Thames Valley Furs - Sign Up")
