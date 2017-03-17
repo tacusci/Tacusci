@@ -10,7 +10,7 @@ import spark.Session
  */
 interface Controller {
 
-    fun initSessionAttributes(session: Session)
+    fun initSessionBoolAttributes(session: Session)
     fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView
     fun post(request: Request, response: Response): Response
 }

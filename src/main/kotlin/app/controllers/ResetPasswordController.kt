@@ -6,11 +6,13 @@ import database.daos.ResetPasswordDAO
 import database.daos.UserDAO
 import extensions.managedRedirect
 import j2html.TagCreator.h1
+import j2html.TagCreator.h2
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.Utils
 import utils.Validation
 import utils.j2htmlPartials
@@ -23,16 +25,19 @@ class ResetPasswordController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {
-        hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
+    override fun initSessionBoolAttributes(session: Session) {
+        hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false),
+                    Pair("reset_password_successfully", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
     }
 
     fun generateResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
-        if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
-            Web.loadNavBar(request, model)
-        }
-        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", "/reset_password/$username/$authHash", "post")
+        Web.loadNavBar(request, model)
+        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "/reset_password/$username/$authHash", "post")
         model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
+        if (request.session().attribute("reset_password_successfully")) {
+            model.put("password_reset_successful", h2("Password reset successfully"))
+            request.session().attribute("reset_password_successfully", false)
+        }
     }
 
     fun generateAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
@@ -84,6 +89,7 @@ class ResetPasswordController : Controller {
 
     private fun post_resetPassword(request: Request, response: Response): Response {
         if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
+            val usernameOfPasswordToReset = request.queryParams("username")
             val newPassword = request.queryParams("new_password")
             val newPasswordRepeated = request.queryParams("new_password_repeated")
 
@@ -94,7 +100,22 @@ class ResetPasswordController : Controller {
             if (!newRepeatedPasswordIsValid) request.session().attribute("new_password_repeated_field_error", true) else request.session().attribute("new_password_repeated_field_error", false)
 
             if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
-                if (newPassword == newPasswordRepeated) { println("Passwords match") }
+                if (newPassword == newPasswordRepeated) {
+                    if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
+                        Config.props.setProperty("default_admin_password", newPassword)
+                        Config.storeAll()
+                        UserHandler.updateRootAdmin()
+                    } else {
+                        val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+                        val userToUpdate = userDAO.getUser(usernameOfPasswordToReset)
+                        userToUpdate.password = newPassword
+                        if (userDAO.updateUser(userToUpdate)) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
+                            request.session().attribute("reset_password_successfully", true)
+                            response.managedRedirect(request, request.uri())
+                        } else request.attribute("reset_password_successfully", false)
+                    }
+                }
             }
         }
         return response

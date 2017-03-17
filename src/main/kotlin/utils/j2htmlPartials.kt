@@ -173,11 +173,12 @@ object j2htmlPartials {
         )
     }
 
-    fun pureFormAligned_ResetPassword(session: Session, name: String, href: String, method: String): ContainerTag {
+    fun pureFormAligned_ResetPassword(session: Session, name: String, username: String, href: String, method: String): ContainerTag {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 input().withName("formName").withValue(name).isHidden,
+                input().withName("username").withValue(username).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
                                 label("Type new password").attr("for", "new_password"),

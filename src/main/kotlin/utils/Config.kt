@@ -67,7 +67,7 @@ open class Config {
             propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
                 defaults.forEach { property, value -> this.setProperty(property, value) }
-                this.store(propertiesFile.outputStream(), "")
+                storeAll()
             } else {
                 try {
                     //logger.info("Loading properties from tvf.properties")

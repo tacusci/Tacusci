@@ -20,7 +20,7 @@ class RegisterController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {
+    override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),
                 Pair("repeated_password_field_error", false), Pair("email_field_error", false), Pair("username_not_available_error", false),
                 Pair("username_not_available", ""), Pair("user_created_successfully", false), Pair("passwords_mismatch_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }

@@ -53,7 +53,7 @@ class UserManagementController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {
+    override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 

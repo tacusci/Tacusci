@@ -57,7 +57,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
                 user.id = resultSet.getLong("IDUSERS")
                 user.fullName = resultSet.getString("FULLNAME")
                 user.username = resultSet.getString("USERNAME")
-                user.password = resultSet.getString("PASSWORD")
+                user.password = resultSet.getString("AUTHHASH")
                 user.email = resultSet.getString("EMAIL")
                 user.banned = resultSet.getInt("BANNED")
                 user.rootAdmin = resultSet.getInt("ROOTADMIN")
@@ -65,6 +65,10 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return user
+    }
+
+    fun getUser(username: String): User {
+        return getUser(getUserID(username))
     }
 
     fun getUserID(username: String): Int {
@@ -212,6 +216,22 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             preparedStatement?.setString(1, user.username)
             preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
             preparedStatement?.setInt(3, user.rootAdmin)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
+    fun updateUser(user: User): Boolean {
+        connect()
+        try {
+            val updateStatement = "UPDATE $tableName SET USERNAME=?, AUTHHASH=? WHERE USERNAME=?"
+            val preparedStatement = connection?.prepareStatement(updateStatement)
+            preparedStatement?.setString(1, user.username)
+            preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
+            preparedStatement?.setString(3, user.username)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

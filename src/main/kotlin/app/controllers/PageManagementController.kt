@@ -21,7 +21,7 @@ import java.util.*
  */
 class PageManagementController : Controller {
 
-    override fun initSessionAttributes(session: Session) {
+    override fun initSessionBoolAttributes(session: Session) {
         //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

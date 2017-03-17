@@ -48,7 +48,7 @@ import java.util.*
 class ProfileController : Controller {
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {
+    override fun initSessionBoolAttributes(session: Session) {
         //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

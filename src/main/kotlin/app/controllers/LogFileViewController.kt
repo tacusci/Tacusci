@@ -23,7 +23,7 @@ class LogFileViewController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionAttributes(session: Session) {
+    override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("lines_to_show", "20"), Pair("text_to_show", "")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 
