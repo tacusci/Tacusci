@@ -58,6 +58,21 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         return count > 0
     }
 
+    fun authHashExpired(authHash: String): Boolean {
+        var expired = 0
+        connect()
+        try {
+            val selectStatement = "SELECT EXPIRED FROM $tableName WHERE AUTHHASH=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, authHash)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                expired = resultSet.getInt("EXPIRED")
+            }
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return expired > 0
+    }
+
     fun getAuthHash(userId: Int): String {
         connect()
         var authHash = ""

@@ -30,18 +30,26 @@ class ResetPasswordController : Controller {
                     Pair("reset_password_successfully", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
     }
 
-    fun generateResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
+    fun genResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
         Web.loadNavBar(request, model)
         val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "/reset_password/$username/$authHash", "post")
+        val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+        val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
         if (request.session().attribute("reset_password_successfully")) {
             model.put("password_reset_successful", h2("Password reset successfully"))
             request.session().attribute("reset_password_successfully", false)
+            val userId = userDAO.getUserID(username)
+            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
         }
     }
 
-    fun generateAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
+    fun genAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
         model.put("unauthorised_reset_request_message", h1("Access Denied"))
+    }
+
+    fun genAccessExpiredContent(request: Request, model: HashMap<String, Any>) {
+        model.put("access_expired_message", h1("Access has expired"))
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
@@ -62,20 +70,24 @@ class ResetPasswordController : Controller {
                     val newAuthHash = Utils.randomHash()
                     val userId = userDAO.getUserID(username)
                     if (resetPasswordDAO.authHashExists(userId)) {
-                        resetPasswordDAO.updateAuthHash(userId, newAuthHash)
+                        resetPasswordDAO.updateAuthHash(userId, newAuthHash, 0)
                     } else {
                         resetPasswordDAO.insertAuthHash(userId, newAuthHash)
                     }
                     response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
                 } else {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")
-                    generateAccessDeniedContent(request, model)
+                    genAccessDeniedContent(request, model)
                 }
             } else {
                 if (resetPasswordDAO.authHashExists(userDAO.getUserID(username))) {
                     if (resetPasswordDAO.getAuthHash(userDAO.getUserID(username)) == authHash) {
                         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
-                        generateResetPasswordPageContent(request, username, model, authHash)
+                        if (!resetPasswordDAO.authHashExpired(authHash)) {
+                            genResetPasswordPageContent(request, username, model, authHash)
+                        } else {
+                            genAccessExpiredContent(request, model)
+                        }
                     } else {
                         response.managedRedirect(request, "/reset_password/$username")
                     }
@@ -107,7 +119,6 @@ class ResetPasswordController : Controller {
                         UserHandler.updateRootAdmin()
                     } else {
                         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-                        val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
                         val userToUpdate = userDAO.getUser(usernameOfPasswordToReset)
                         userToUpdate.password = newPassword
                         if (userDAO.updateUser(userToUpdate)) {
