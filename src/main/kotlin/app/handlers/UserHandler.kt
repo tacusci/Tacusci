@@ -125,7 +125,7 @@ object  UserHandler : KLogging() {
         return true
     }
 
-    fun updateRootAdmin() {
+    fun updateRootAdmin(): Boolean {
         val newRootAdminUsername = Config.getProperty("default_admin_user")
 
         //if properties file values have changed for root admin
@@ -141,8 +141,7 @@ object  UserHandler : KLogging() {
         }
 
         val configRootAdmin = User(-1, Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
-        userDAO.updateRootAdmin(configRootAdmin)
-
+        return userDAO.updateRootAdmin(configRootAdmin)
     }
 
     fun updateRootAdmin(configRootAdmin: User) {

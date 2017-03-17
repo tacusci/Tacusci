@@ -116,7 +116,10 @@ class ResetPasswordController : Controller {
                     if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
                         Config.props.setProperty("default_admin_password", newPassword)
                         Config.storeAll()
-                        UserHandler.updateRootAdmin()
+                        if (UserHandler.updateRootAdmin()) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
+                            request.session().attribute("reset_password_successfully", true)
+                        } else request.attribute("reset_password_successfully", false)
                     } else {
                         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
                         val userToUpdate = userDAO.getUser(usernameOfPasswordToReset)
