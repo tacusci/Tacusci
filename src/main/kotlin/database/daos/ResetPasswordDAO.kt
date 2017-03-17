@@ -1,7 +1,6 @@
 package database.daos
 
 import mu.KLogging
-import utils.Utils
 import java.sql.SQLException
 import java.util.*
 
@@ -11,12 +10,6 @@ import java.util.*
 class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
 
     companion object : KLogging()
-
-    fun createOrUpdateAuthHash(userId: Int): String {
-        val authHash = Utils.randomHash()
-        if (!authHashExists(userId)) insertAuthHash(userId, authHash) else updateAuthHash(userId, authHash)
-        return authHash
-    }
 
      fun insertAuthHash(userId: Int, authHash: String) {
         connect()
