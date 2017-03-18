@@ -45,10 +45,12 @@ class ResetPasswordController : Controller {
     }
 
     fun genAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
+        Web.loadNavBar(request, model)
         model.put("unauthorised_reset_request_message", h1("Access Denied"))
     }
 
     fun genAccessExpiredContent(request: Request, model: HashMap<String, Any>) {
+        Web.loadNavBar(request, model)
         model.put("access_expired_message", h1("Access has expired"))
     }
 
