@@ -151,7 +151,7 @@ class UserManagementController : Controller {
 
         val userListTable = HTMLTable(listOf("Full Name", "Username", "Email Address", "Banned", "Moderator"))
         userListTable.className = "pure-table"
-        UserHandler.userDAO.getUsers().filter { it.username != UserHandler.loggedInUsername(request) }.forEach { user ->
+        UserHandler.userDAO.getUsers().filter { it.username != UserHandler.loggedInUsername(request) && it.rootAdmin <= 0 }.forEach { user ->
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
             val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
             if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
