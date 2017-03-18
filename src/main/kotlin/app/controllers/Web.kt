@@ -55,7 +55,8 @@ object Web : KLogging() {
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
 
         if (UserHandler.isLoggedIn(request)) {
-            if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
+            val username = UserHandler.loggedInUsername(request)
+            if (GroupHandler.userInGroup(username, "admins") || GroupHandler.userInGroup(username, "moderators")) {
                 model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("/dashboard", "Dashboard").render())
             }
             model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())

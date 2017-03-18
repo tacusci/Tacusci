@@ -75,13 +75,12 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
             preparedStatement?.close()
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
-        disconnect()
         return count > 0
     }
 
     fun removeUserAndGroupMap(userID: Int, groupID: Int) {
-        connect()
         if (areUserAndGroupMapped(userID, groupID)) {
+            connect()
             try {
                 val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
                 val preparedStatement = connection?.prepareStatement(removeUserFromGroupStatement)
@@ -93,6 +92,5 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
                 disconnect()
             } catch (e: SQLException) { logger.error(e.message); disconnect(); }
         }
-        disconnect()
     }
 }
