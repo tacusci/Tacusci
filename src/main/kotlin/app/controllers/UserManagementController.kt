@@ -77,6 +77,7 @@ class UserManagementController : Controller {
         val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
         usersAndBanned.forEach {
             for ((username, banned) in it) {
+                if (username == UserHandler.getRootAdmin().username) continue
                 if (username == UserHandler.loggedInUsername(request)) continue
                 if (banned && !UserHandler.isBanned(username)) {
                     statusChangedForAnyone = true
@@ -92,6 +93,7 @@ class UserManagementController : Controller {
 
         usersAndIsModeratorState.forEach {
             for ((username, moderator) in it) {
+                if (username == UserHandler.getRootAdmin().username) continue
                 if (username == UserHandler.loggedInUsername(request)) continue
                 if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
                     statusChangedForAnyone = true
