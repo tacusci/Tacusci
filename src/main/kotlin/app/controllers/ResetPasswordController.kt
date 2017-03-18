@@ -26,7 +26,7 @@ class ResetPasswordController : Controller {
     companion object : KLogging()
 
     override fun initSessionBoolAttributes(session: Session) {
-        hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false),
+        hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false), Pair("passwords_dont_match", false),
                     Pair("reset_password_successfully", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
     }
 
@@ -41,6 +41,11 @@ class ResetPasswordController : Controller {
             request.session().attribute("reset_password_successfully", false)
             val userId = userDAO.getUserID(username)
             resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+        } else {
+            if (request.session().attribute("passwords_dont_match")) {
+                model.put("passwords_dont_match", h2("Passwords don't match"))
+                request.session().attribute("passwords_dont_match", true)
+            }
         }
     }
 
@@ -131,8 +136,11 @@ class ResetPasswordController : Controller {
                         if (userDAO.updateUser(userToUpdate)) {
                             logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
                             request.session().attribute("reset_password_successfully", true)
-                        } else request.attribute("reset_password_successfully", false)
+                        } else request.session().attribute("reset_password_successfully", false)
                     }
+                } else {
+                    request.session().attribute("reset_password_successfully", false)
+                    request.session().attribute("passwords_dont_match", true)
                 }
             }
             response.managedRedirect(request, request.uri())
