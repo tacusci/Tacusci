@@ -114,14 +114,14 @@ class Application {
         }
 
         before("/dashboard", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
                 halt(401, "Access is denied")
             }
         })
 
         before("/dashboard/*", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) {
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
                 halt(401, "Access is denied")
             }

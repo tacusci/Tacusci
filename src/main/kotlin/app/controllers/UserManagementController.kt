@@ -31,6 +31,7 @@
 
 package app.controllers
 
+import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import extensions.managedRedirect
 import j2html.TagCreator.*
@@ -71,59 +72,95 @@ class UserManagementController : Controller {
 
     override fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
-        var banStatusChangedForAnyone = false
-        val usersAndBanned = getUserBannedStateFromForm(request.body())
+        var statusChangedForAnyone = false
+        val usersAndBanned = getUserIsBannedStateFromForm(request.body())
+        val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
         usersAndBanned.forEach {
-            //FIXME: This logic is broken...
             for ((username, banned) in it) {
                 if (username == UserHandler.loggedInUsername(request)) continue
-                if (banned) {
-                    banStatusChangedForAnyone = !UserHandler.isBanned(username)
+                if (banned && !UserHandler.isBanned(username)) {
+                    statusChangedForAnyone = true
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
                     UserHandler.ban(username)
-                } else {
-                    banStatusChangedForAnyone = UserHandler.isBanned(username)
+                } else if (!banned && UserHandler.isBanned(username)) {
+                    statusChangedForAnyone = true
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
                     UserHandler.unban(username)
                 }
             }
         }
-        if (banStatusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
+
+        usersAndIsModeratorState.forEach {
+            for ((username, moderator) in it) {
+                if (username == UserHandler.loggedInUsername(request)) continue
+                if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
+                    statusChangedForAnyone = true
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
+                    GroupHandler.addUserToGroup(username, "moderators")
+                } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
+                    statusChangedForAnyone = true
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
+                    GroupHandler.removeUserFromGroup(username, "moderators")
+                }
+            }
+        }
+        if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
         response.managedRedirect(request, "/dashboard/user_management")
         return response
     }
 
-    private fun getUserBannedStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAndBanned = mutableListOf<MutableMap<String, Boolean>>()
+    private fun getUserIsBannedStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
+        val usersAndBannedState = mutableListOf<MutableMap<String, Boolean>>()
         val bodyAttributes = body.split("&")
-        val usernameAndBanned = mutableMapOf<String, Boolean>()
+        val usernameAndBannedState = mutableMapOf<String, Boolean>()
         bodyAttributes.forEach { attribute ->
             if (attribute.contains("banned_checkbox.hidden")) {
                 val username = attribute.split("=")[1]
-                usernameAndBanned.put(username, false)
+                usernameAndBannedState.put(username, false)
             }
             if (attribute.contains("banned_checkbox") && !attribute.contains(".hidden")) {
                 val username = attribute.split("=")[1]
-                usernameAndBanned.put(username, true)
+                usernameAndBannedState.put(username, true)
             }
         }
-        usersAndBanned.add(usernameAndBanned)
-        return usersAndBanned
+        usersAndBannedState.add(usernameAndBannedState)
+        return usersAndBannedState
+    }
+
+    private fun getUserIsModeratorStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
+        val usersAndModeratorState = mutableListOf<MutableMap<String, Boolean>>()
+        val bodyAttributes = body.split("&")
+        val usernameAndModeratorState = mutableMapOf<String, Boolean>()
+        bodyAttributes.forEach { attribute ->
+            if (attribute.contains("moderator_checkbox.hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndModeratorState.put(username, false)
+            }
+            if (attribute.contains("moderator_checkbox") && !attribute.contains(".hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndModeratorState.put(username, true)
+            }
+        }
+        usersAndModeratorState.add(usernameAndModeratorState)
+        return usersAndModeratorState
     }
 
     private fun genUserForm(request: Request, response: Response): ContainerTag {
 
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
 
-        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email Address", "Banned"))
+        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email Address", "Banned", "Moderator"))
         userListTable.className = "pure-table"
         UserHandler.userDAO.getUsers().filter { it.username != UserHandler.loggedInUsername(request) }.forEach { user ->
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
+            val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
             if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
+            if (GroupHandler.userInGroup(user, "moderators")) run { moderatorCheckbox.attr("checked", "") }
             userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox)))
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
         }
 
         userAdminForm.with(userListTable.render())
