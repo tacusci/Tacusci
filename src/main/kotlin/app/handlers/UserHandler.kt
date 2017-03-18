@@ -159,6 +159,16 @@ object  UserHandler : KLogging() {
         }
     }
 
+    fun addUserToModerators(user: User) {
+        if (user.isValid()) GroupHandler.addUserToGroup(user, "moderators")
+    }
+
+    fun getModerators(): List<User> {
+        return userDAO.getUsers().filter { user ->
+            GroupHandler.userInGroup(user, "moderators")
+        }
+    }
+
     fun createUser(user: User): Boolean {
         if (!user.isValid()) return false
         userDAO.insertUser(user)

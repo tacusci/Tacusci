@@ -70,6 +70,7 @@ class Application {
 
     fun setupDefaultGroups() {
         GroupHandler.createGroup(Group("admins"))
+        GroupHandler.createGroup(Group("moderators"))
         GroupHandler.createGroup(Group("members"))
         UserHandler.createRootAdmin()
         //root admin might already exist but check for properties file changes

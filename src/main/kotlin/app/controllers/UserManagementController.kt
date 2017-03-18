@@ -72,7 +72,7 @@ class UserManagementController : Controller {
     override fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
         var banStatusChangedForAnyone = false
-        val usersAndBanned = getUserBannedState(request.body())
+        val usersAndBanned = getUserBannedStateFromForm(request.body())
         usersAndBanned.forEach {
             //FIXME: This logic is broken...
             for ((username, banned) in it) {
@@ -93,7 +93,7 @@ class UserManagementController : Controller {
         return response
     }
 
-    private fun getUserBannedState(body: String): MutableList<MutableMap<String, Boolean>> {
+    private fun getUserBannedStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
         val usersAndBanned = mutableListOf<MutableMap<String, Boolean>>()
         val bodyAttributes = body.split("&")
         val usernameAndBanned = mutableMapOf<String, Boolean>()

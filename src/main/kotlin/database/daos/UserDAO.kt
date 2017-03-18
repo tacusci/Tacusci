@@ -54,7 +54,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             preparedStatement?.setString(1, userID.toString())
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                user.id = resultSet.getLong("IDUSERS")
+                user.id = resultSet.getInt("IDUSERS")
                 user.fullName = resultSet.getString("FULLNAME")
                 user.username = resultSet.getString("USERNAME")
                 user.password = resultSet.getString("AUTHHASH")
