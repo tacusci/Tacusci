@@ -64,7 +64,7 @@ class UserManagementController : Controller {
         model.put("template", "/templates/user_management.vtl")
         model.put("title", "Thames Valley Furs - User Management")
 
-        val userAdminForm = genUserForm(request, response)
+        val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
         model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
@@ -184,7 +184,7 @@ class UserManagementController : Controller {
         return usersAndModeratorState
     }
 
-    private fun genUserFormForAdmin(request: Request, response: Response): ContainerTag {
+    private fun genUserFormForAdmin(request: Request): ContainerTag {
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
         val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
@@ -230,7 +230,7 @@ class UserManagementController : Controller {
         return userAdminForm
     }
 
-    private fun genUserFormForModerators(request: Request, response: Response): ContainerTag {
+    private fun genUserFormForModerators(request: Request): ContainerTag {
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
         val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Moderator"))
         userListTable.className = "pure-table"
@@ -270,9 +270,9 @@ class UserManagementController : Controller {
         return userAdminForm
     }
 
-    private fun genUserForm(request: Request, response: Response): ContainerTag {
-        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) return genUserFormForAdmin(request, response)
-        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) return genUserFormForModerators(request, response)
+    private fun genUserForm(request: Request): ContainerTag {
+        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) return genUserFormForAdmin(request)
+        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) return genUserFormForModerators(request)
         return h2("Access denied")
     }
 }
