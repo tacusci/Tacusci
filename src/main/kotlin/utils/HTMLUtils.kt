@@ -21,6 +21,8 @@ class HTMLTable {
         this.columnNames = columnNames
     }
 
+    fun setColumnNames(columnNames: List<String>) { this.columnNames = columnNames }
+
     fun addRow(rowContent: List<List<Tag>>) {
         rows.add(rowContent)
     }

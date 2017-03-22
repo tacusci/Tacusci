@@ -75,6 +75,8 @@ class UserManagementController : Controller {
         var statusChangedForAnyone = false
         val usersAndBanned = getUserIsBannedStateFromForm(request.body())
         val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
+        val usersAndIsAdminState = getUserIsAdminStateFromForm(request.body())
+
         usersAndBanned.forEach {
             for ((username, banned) in it) {
                 if (username == UserHandler.getRootAdmin().username) continue
@@ -87,6 +89,22 @@ class UserManagementController : Controller {
                     statusChangedForAnyone = true
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
                     UserHandler.unban(username)
+                }
+            }
+        }
+
+        usersAndIsAdminState.forEach {
+            for ((username, admin) in it) {
+                if (username == UserHandler.getRootAdmin().username) continue
+                if (username == UserHandler.loggedInUsername(request)) continue
+                if (admin && !GroupHandler.userInGroup(username, "admins")) {
+                    statusChangedForAnyone = true
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
+                    GroupHandler.addUserToGroup(username, "admins")
+                } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
+                    statusChangedForAnyone = true
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
+                    GroupHandler.removeUserFromGroup(username, "admins")
                 }
             }
         }
@@ -106,6 +124,7 @@ class UserManagementController : Controller {
                 }
             }
         }
+
         if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
         response.managedRedirect(request, "/dashboard/user_management")
         return response
@@ -147,17 +166,92 @@ class UserManagementController : Controller {
         return usersAndModeratorState
     }
 
-    private fun genUserForm(request: Request, response: Response): ContainerTag {
+    private fun getUserIsAdminStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
+        val usersAndModeratorState = mutableListOf<MutableMap<String, Boolean>>()
+        val bodyAttributes = body.split("&")
+        val usernameAndModeratorState = mutableMapOf<String, Boolean>()
+        bodyAttributes.forEach { attribute ->
+            if (attribute.contains("admin_checkbox.hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndModeratorState.put(username, false)
+            }
+            if (attribute.contains("admin_checkbox") && !attribute.contains(".hidden")) {
+                val username = attribute.split("=")[1]
+                usernameAndModeratorState.put(username, true)
+            }
+        }
+        usersAndModeratorState.add(usernameAndModeratorState)
+        return usersAndModeratorState
+    }
 
+    private fun genUserFormForAdmin(request: Request, response: Response): ContainerTag {
         val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
-
-        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email Address", "Banned", "Moderator"))
+        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
-        UserHandler.userDAO.getUsers().filter { it.username != UserHandler.loggedInUsername(request) && it.rootAdmin <= 0 }.forEach { user ->
+
+        val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        val currentUser = UserHandler.userDAO.getUser(currentUserId)
+
+        UserHandler.userDAO.getUsers().filter {
+            it.username != currentUser.username && it.rootAdmin <= 0
+        }.forEach { user ->
+            val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
+            val adminCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("admin_checkbox")
+            val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
+
+            if (UserHandler.isBanned(user.username)) {
+                bannedCheckbox.attr("checked", "")
+            }
+
+            if (GroupHandler.userInGroup(user, "admins")) {
+                adminCheckbox.attr("checked", "")
+            }
+
+            if (GroupHandler.userInGroup(user, "moderators")) {
+                moderatorCheckbox.attr("checked", "")
+            }
+
+            userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
+                    listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
+                    listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("admin_checkbox.hidden"), adminCheckbox),
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
+        }
+
+        userAdminForm.with(userListTable.render())
+        if (request.session().attribute("user_management_changes_made")) {
+            userAdminForm.with(p("Changes applied..."))
+            request.session().attribute("user_management_changes_made", false)
+        } else {
+            userAdminForm.with(br())
+        }
+        userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
+        return userAdminForm
+    }
+
+    private fun genUserFormForModerators(request: Request, response: Response): ContainerTag {
+        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Moderator"))
+        userListTable.className = "pure-table"
+
+        val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        val currentUser = UserHandler.userDAO.getUser(currentUserId)
+
+        UserHandler.userDAO.getUsers().filter {
+            it.username != currentUser.username && it.rootAdmin <= 0
+        }.forEach { user ->
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
             val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
-            if (UserHandler.isBanned(user.username)) run { bannedCheckbox.attr("checked", "") }
-            if (GroupHandler.userInGroup(user, "moderators")) run { moderatorCheckbox.attr("checked", "") }
+
+            if (UserHandler.isBanned(user.username)) {
+                bannedCheckbox.attr("checked", "")
+            }
+
+            if (GroupHandler.userInGroup(user, "moderators")) {
+                moderatorCheckbox.attr("checked", "")
+            }
+
             userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
@@ -174,5 +268,11 @@ class UserManagementController : Controller {
         }
         userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
         return userAdminForm
+    }
+
+    private fun genUserForm(request: Request, response: Response): ContainerTag {
+        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) return genUserFormForAdmin(request, response)
+        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) return genUserFormForModerators(request, response)
+        return h2("Access denied")
     }
 }
