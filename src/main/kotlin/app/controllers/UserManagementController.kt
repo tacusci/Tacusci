@@ -71,61 +71,73 @@ class UserManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received post submission for user management page")
-        var statusChangedForAnyone = false
-        val usersAndBanned = getUserIsBannedStateFromForm(request.body())
-        val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
-        val usersAndIsAdminState = getUserIsAdminStateFromForm(request.body())
 
-        usersAndBanned.forEach {
-            for ((username, banned) in it) {
-                if (username == UserHandler.getRootAdmin().username) continue
-                if (username == UserHandler.loggedInUsername(request)) continue
-                if (banned && !UserHandler.isBanned(username)) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
-                    UserHandler.ban(username)
-                } else if (!banned && UserHandler.isBanned(username)) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
-                    UserHandler.unban(username)
+        if (Web.getFormHash(request.session(), "user_management_form") == request.queryParams("hashid")) {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
+
+            val currentUserUsername = UserHandler.loggedInUsername(request)
+
+            if (GroupHandler.userInGroup(currentUserUsername, "admins") || GroupHandler.userInGroup(currentUserUsername, "moderators")) {
+                var statusChangedForAnyone = false
+                val usersAndBanned = getUserIsBannedStateFromForm(request.body())
+                val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
+                val usersAndIsAdminState = getUserIsAdminStateFromForm(request.body())
+
+                usersAndBanned.forEach {
+                    for ((username, banned) in it) {
+                        if (username == UserHandler.getRootAdmin().username) continue
+                        if (username == UserHandler.loggedInUsername(request)) continue
+                        if (banned && !UserHandler.isBanned(username)) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
+                            UserHandler.ban(username)
+                        } else if (!banned && UserHandler.isBanned(username)) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
+                            UserHandler.unban(username)
+                        }
+                    }
                 }
-            }
-        }
 
-        usersAndIsAdminState.forEach {
-            for ((username, admin) in it) {
-                if (username == UserHandler.getRootAdmin().username) continue
-                if (username == UserHandler.loggedInUsername(request)) continue
-                if (admin && !GroupHandler.userInGroup(username, "admins")) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
-                    GroupHandler.addUserToGroup(username, "admins")
-                } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
-                    GroupHandler.removeUserFromGroup(username, "admins")
+                usersAndIsAdminState.forEach {
+                    for ((username, admin) in it) {
+                        if (username == UserHandler.getRootAdmin().username) continue
+                        if (username == UserHandler.loggedInUsername(request)) continue
+                        if (admin && !GroupHandler.userInGroup(username, "admins")) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
+                            GroupHandler.addUserToGroup(username, "admins")
+                        } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
+                            GroupHandler.removeUserFromGroup(username, "admins")
+                        }
+                    }
                 }
-            }
-        }
 
-        usersAndIsModeratorState.forEach {
-            for ((username, moderator) in it) {
-                if (username == UserHandler.getRootAdmin().username) continue
-                if (username == UserHandler.loggedInUsername(request)) continue
-                if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
-                    GroupHandler.addUserToGroup(username, "moderators")
-                } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
-                    statusChangedForAnyone = true
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
-                    GroupHandler.removeUserFromGroup(username, "moderators")
+                usersAndIsModeratorState.forEach {
+                    for ((username, moderator) in it) {
+                        if (username == UserHandler.getRootAdmin().username) continue
+                        if (username == UserHandler.loggedInUsername(request)) continue
+                        if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
+                            GroupHandler.addUserToGroup(username, "moderators")
+                        } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
+                            statusChangedForAnyone = true
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
+                            GroupHandler.removeUserFromGroup(username, "moderators")
+                        }
+                    }
                 }
-            }
-        }
 
-        if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
+                if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
+            } else {
+                logger.warn("${UserHandler.getSessionIdentifier(request)} -> has no right to submit user management form...")
+            }
+        } else {
+            logger.warn("${UserHandler.getSessionIdentifier(request)} -> Has submitted an invalid user management form...")
+        }
         response.managedRedirect(request, "/dashboard/user_management")
         return response
     }
@@ -185,7 +197,9 @@ class UserManagementController : Controller {
     }
 
     private fun genUserFormForAdmin(request: Request): ContainerTag {
-        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val hash = Web.mapFormToHash(request.session(), "user_management_form")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
 
@@ -219,19 +233,21 @@ class UserManagementController : Controller {
                     listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
         }
 
-        userAdminForm.with(userListTable.render())
+        userManagementForm.with(userListTable.render())
         if (request.session().attribute("user_management_changes_made")) {
-            userAdminForm.with(p("Changes applied..."))
+            userManagementForm.with(p("Changes applied..."))
             request.session().attribute("user_management_changes_made", false)
         } else {
-            userAdminForm.with(br())
+            userManagementForm.with(br())
         }
-        userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
-        return userAdminForm
+        userManagementForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
+        return userManagementForm
     }
 
     private fun genUserFormForModerators(request: Request): ContainerTag {
-        val userAdminForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val hash = Web.mapFormToHash(request.session(), "user_management_form")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Moderator"))
         userListTable.className = "pure-table"
 
@@ -259,15 +275,15 @@ class UserManagementController : Controller {
                     listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
         }
 
-        userAdminForm.with(userListTable.render())
+        userManagementForm.with(userListTable.render())
         if (request.session().attribute("user_management_changes_made")) {
-            userAdminForm.with(p("Changes applied..."))
+            userManagementForm.with(p("Changes applied..."))
             request.session().attribute("user_management_changes_made", false)
         } else {
-            userAdminForm.with(br())
+            userManagementForm.with(br())
         }
-        userAdminForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
-        return userAdminForm
+        userManagementForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
+        return userManagementForm
     }
 
     private fun genUserForm(request: Request): ContainerTag {
