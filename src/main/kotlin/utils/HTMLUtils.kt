@@ -28,8 +28,10 @@ class HTMLTable {
     }
 
     fun render(): Tag {
+        //create the table string stuct with the column names mapped to -> trs
         val table = table().withClass(className).attr("align", "center").with(thead().with(tr().with(columnNames.map(::th))))
 
+        //for each row, make a column entry for each non-empty element
         rows.filter { it.isNotEmpty() }.forEach { row ->
             val tableRow = tr()
             row.filter { it.isNotEmpty() }.forEach { column ->

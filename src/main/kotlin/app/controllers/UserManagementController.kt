@@ -79,6 +79,9 @@ class UserManagementController : Controller {
 
             if (GroupHandler.userInGroup(currentUserUsername, "admins") || GroupHandler.userInGroup(currentUserUsername, "moderators")) {
                 var statusChangedForAnyone = false
+
+                println(request.body())
+
                 val usersAndBanned = getUserIsBannedStateFromForm(request.body())
                 val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
                 val usersAndIsAdminState = getUserIsAdminStateFromForm(request.body())
@@ -130,7 +133,6 @@ class UserManagementController : Controller {
                         }
                     }
                 }
-
                 if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
             } else {
                 logger.warn("${UserHandler.getSessionIdentifier(request)} -> has no right to submit user management form...")
@@ -147,6 +149,7 @@ class UserManagementController : Controller {
         val bodyAttributes = body.split("&")
         val usernameAndBannedState = mutableMapOf<String, Boolean>()
         bodyAttributes.forEach { attribute ->
+            println(attribute)
             if (attribute.contains("banned_checkbox.hidden")) {
                 val username = attribute.split("=")[1]
                 usernameAndBannedState.put(username, false)

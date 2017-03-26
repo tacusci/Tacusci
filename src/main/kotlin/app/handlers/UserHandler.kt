@@ -159,13 +159,21 @@ object  UserHandler : KLogging() {
         }
     }
 
-    fun addUserToModerators(user: User) {
-        if (user.isValid()) GroupHandler.addUserToGroup(user, "moderators")
+    fun getRegularUsers(): List<User> {
+        return userDAO.getUsers().filter { user ->
+            !GroupHandler.userInGroup(user, "moderators") && !GroupHandler.userInGroup(user, "admins") && user.username != getRootAdmin().username
+        }
     }
 
     fun getModerators(): List<User> {
         return userDAO.getUsers().filter { user ->
             GroupHandler.userInGroup(user, "moderators")
+        }
+    }
+
+    fun getAdmins(): List<User> {
+        return userDAO.getUsers().filter { user ->
+            GroupHandler.userInGroup(user, "admins") && user.username != getRootAdmin().username
         }
     }
 
