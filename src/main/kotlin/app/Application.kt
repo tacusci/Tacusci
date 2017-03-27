@@ -41,6 +41,7 @@ import app.handlers.UserHandler
 import database.daos.DAOManager
 import database.models.Group
 import extensions.managedRedirect
+import j2html.TagCreator.h2
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
@@ -116,14 +117,14 @@ class Application {
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
-                halt(401, "Access is denied")
+                halt(401, h2("Access is denied").render())
             }
         })
 
         before("/dashboard/*", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
-                halt(401, "Access is denied")
+                halt(401, h2("Access is denied").render())
             }
         })
     }

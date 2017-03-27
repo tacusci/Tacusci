@@ -73,6 +73,8 @@ class UserManagementController : Controller {
     override fun post(request: Request, response: Response): Response {
 
         if (Web.getFormHash(request.session(), "user_management_form") == request.queryParams("hashid")) {
+            println(request.queryParams("hashid"))
+            println(request.queryParams())
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
 
             val currentUserUsername = UserHandler.loggedInUsername(request)
@@ -200,6 +202,7 @@ class UserManagementController : Controller {
     }
 
     private fun genUserFormForAdmin(request: Request): ContainerTag {
+        //match this form instance with a random ID in the server side session
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
         val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
