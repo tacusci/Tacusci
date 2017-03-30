@@ -73,8 +73,6 @@ class UserManagementController : Controller {
     override fun post(request: Request, response: Response): Response {
 
         if (Web.getFormHash(request.session(), "user_management_form") == request.queryParams("hashid")) {
-            println(request.queryParams("hashid"))
-            println(request.queryParams())
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
 
             val currentUserUsername = UserHandler.loggedInUsername(request)
@@ -82,11 +80,9 @@ class UserManagementController : Controller {
             if (GroupHandler.userInGroup(currentUserUsername, "admins") || GroupHandler.userInGroup(currentUserUsername, "moderators")) {
                 var statusChangedForAnyone = false
 
-                println(request.body())
-
-                val usersAndBanned = getUserIsBannedStateFromForm(request.body())
-                val usersAndIsModeratorState = getUserIsModeratorStateFromForm(request.body())
-                val usersAndIsAdminState = getUserIsAdminStateFromForm(request.body())
+                val usersAndBanned = getUserIsBanned(request)
+                val usersAndIsModeratorState = getUserIsModerator(request)
+                val usersAndIsAdminState = getUserIsAdminStateFromForm(request)
 
                 usersAndBanned.forEach {
                     for ((username, banned) in it) {
@@ -146,59 +142,50 @@ class UserManagementController : Controller {
         return response
     }
 
-    private fun getUserIsBannedStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAndBannedState = mutableListOf<MutableMap<String, Boolean>>()
-        val bodyAttributes = body.split("&")
-        val usernameAndBannedState = mutableMapOf<String, Boolean>()
-        bodyAttributes.forEach { attribute ->
-            println(attribute)
-            if (attribute.contains("banned_checkbox.hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndBannedState.put(username, false)
-            }
-            if (attribute.contains("banned_checkbox") && !attribute.contains(".hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndBannedState.put(username, true)
-            }
+    private fun getUserIsBanned(request: Request): MutableList<MutableMap<String, Boolean>> {
+        val usersAndBanStates = mutableListOf<MutableMap<String, Boolean>>()
+        val userAndBanState = mutableMapOf<String, Boolean>()
+
+        if (request.queryParams().contains("banned_checkbox.hidden")) {
+            request.queryParamsValues("banned_checkbox.hidden").forEach { user -> userAndBanState.put(user, false) }
         }
-        usersAndBannedState.add(usernameAndBannedState)
-        return usersAndBannedState
+
+        if (request.queryParams().contains("banned_checkbox")) {
+            request.queryParamsValues("banned_checkbox").forEach { user -> userAndBanState.put(user, true) }
+        }
+
+        usersAndBanStates.add(userAndBanState)
+        return usersAndBanStates
     }
 
-    private fun getUserIsModeratorStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAndModeratorState = mutableListOf<MutableMap<String, Boolean>>()
-        val bodyAttributes = body.split("&")
-        val usernameAndModeratorState = mutableMapOf<String, Boolean>()
-        bodyAttributes.forEach { attribute ->
-            if (attribute.contains("moderator_checkbox.hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndModeratorState.put(username, false)
-            }
-            if (attribute.contains("moderator_checkbox") && !attribute.contains(".hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndModeratorState.put(username, true)
-            }
+    private fun getUserIsModerator(request: Request): MutableList<MutableMap<String, Boolean>> {
+        val usersAndModeratorStates = mutableListOf<MutableMap<String, Boolean>>()
+        val userAndModeratorState = mutableMapOf<String, Boolean>()
+
+        if (request.queryParams().contains("moderator_checkbox.hidden")) {
+            request.queryParamsValues("moderator_checkbox.hidden").forEach { user -> userAndModeratorState.put(user, false) }
         }
-        usersAndModeratorState.add(usernameAndModeratorState)
-        return usersAndModeratorState
+
+        if (request.queryParams().contains("moderator_checkbox")) {
+            request.queryParamsValues("moderator_checkbox").forEach { user -> userAndModeratorState.put(user, true) }
+        }
+        usersAndModeratorStates.add(userAndModeratorState)
+        return usersAndModeratorStates
     }
 
-    private fun getUserIsAdminStateFromForm(body: String): MutableList<MutableMap<String, Boolean>> {
-        val usersAndModeratorState = mutableListOf<MutableMap<String, Boolean>>()
-        val bodyAttributes = body.split("&")
-        val usernameAndModeratorState = mutableMapOf<String, Boolean>()
-        bodyAttributes.forEach { attribute ->
-            if (attribute.contains("admin_checkbox.hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndModeratorState.put(username, false)
-            }
-            if (attribute.contains("admin_checkbox") && !attribute.contains(".hidden")) {
-                val username = attribute.split("=")[1]
-                usernameAndModeratorState.put(username, true)
-            }
+    private fun getUserIsAdminStateFromForm(request: Request): MutableList<MutableMap<String, Boolean>> {
+        val usersAndAdminState = mutableListOf<MutableMap<String, Boolean>>()
+        val userAndAdminState = mutableMapOf<String, Boolean>()
+
+        if (request.queryParams().contains("admin_checkbox.hidden")) {
+            request.queryParamsValues("admin_checkbox.hidden").forEach { user -> userAndAdminState.put(user, false) }
         }
-        usersAndModeratorState.add(usernameAndModeratorState)
-        return usersAndModeratorState
+
+        if (request.queryParams().contains("admin_checkbox")) {
+            request.queryParamsValues("admin_checkbox").forEach { user -> userAndAdminState.put(user, true) }
+        }
+        usersAndAdminState.add(userAndAdminState)
+        return usersAndAdminState
     }
 
     private fun genUserFormForAdmin(request: Request): ContainerTag {
@@ -261,7 +248,7 @@ class UserManagementController : Controller {
         val currentUser = UserHandler.userDAO.getUser(currentUserId)
 
         UserHandler.userDAO.getUsers().filter {
-            it.username != currentUser.username && it.rootAdmin <= 0
+            it.username != currentUser.username && it.rootAdmin <= 0 && !GroupHandler.userInGroup(it, "admins")
         }.forEach { user ->
             val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
             val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
