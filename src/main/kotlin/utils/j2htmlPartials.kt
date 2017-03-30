@@ -13,6 +13,11 @@ import spark.Session
 
 object j2htmlPartials {
 
+    enum class HeaderType {
+        h1,
+        h2
+    }
+
     fun fullNameInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)
@@ -68,6 +73,17 @@ object j2htmlPartials {
                 .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
                 .isRequired
+    }
+
+    fun centeredMessage(message: String, headerTypeType: HeaderType): ContainerTag {
+        var header = h1(message)
+        when (headerTypeType) {
+            HeaderType.h1 -> header = h1(message)
+            HeaderType.h2 -> header = h2(message)
+        }
+        return div().withClass("pure-g").with(
+                div().withClass("pure-u-24-24 centered").with(header)
+        )
     }
 
     fun pureFormCompact_Login(session: Session, name: String, legend: String, href: String): ContainerTag {

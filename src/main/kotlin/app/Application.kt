@@ -41,7 +41,6 @@ import app.handlers.UserHandler
 import database.daos.DAOManager
 import database.models.Group
 import extensions.managedRedirect
-import j2html.TagCreator.h2
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
@@ -53,6 +52,7 @@ import kotlin.concurrent.thread
 class Application {
 
     val dbProperties = Properties()
+    val layoutTemplate = "/templates/layout.vtl"
 
     companion object : KLogging()
 
@@ -93,7 +93,6 @@ class Application {
     }
 
     fun setupSparkRoutes() {
-        val layoutTemplate = "/templates/layout.vtl"
 
         ControllerManager.routesAndControllers.forEach {
             get(it.key, { request, response -> it.value.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
@@ -117,14 +116,14 @@ class Application {
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
-                halt(401, h2("Access is denied").render())
+                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
             }
         })
 
         before("/dashboard/*", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
-                halt(401, h2("Access is denied").render())
+                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
             }
         })
     }

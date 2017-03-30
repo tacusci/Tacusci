@@ -82,6 +82,15 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        var model = HashMap<String, Any>()
+        model.put("title", "Thames Valley Furs - Access Denied")
+        model.put("template", "/templates/access_denied.vtl")
+        model = loadNavBar(request, model)
+        model.put("access_denied_message", j2htmlPartials.centeredMessage("Access is denied", j2htmlPartials.HeaderType.h1).render())
+        return ModelAndView(model, layoutTemplate)
+    }
+
     fun mapFormToHash(session: Session, formTitle: String): String {
         val hash = Utils.randomHash()
         session.attribute(formTitle, hash)
