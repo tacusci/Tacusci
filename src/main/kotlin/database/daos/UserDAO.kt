@@ -75,7 +75,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         connect()
         var userID = -1
         try {
-            val selectStatement = "SELECT IDUSERS FROM $tableName WHERE USERNAME=?"
+            val selectStatement = "SELECT IDUSERS FROM $tableName WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
@@ -111,7 +111,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         connect()
         var authHash: String = ""
         try {
-            val selectStatement = "SELECT AUTHHASH FROM $tableName WHERE USERNAME=?"
+            val selectStatement = "SELECT AUTHHASH FROM $tableName WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
@@ -127,7 +127,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         connect()
         var count = 0
         try {
-            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE USERNAME=?"
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
@@ -143,7 +143,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         connect()
         var username: String = ""
         try {
-            val selectStatement = "SELECT USERNAME FROM ? WHERE EMAIL=?"
+            val selectStatement = "SELECT USERNAME FROM $tableName WHERE EMAIL=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             preparedStatement?.setString(2, email)
@@ -227,7 +227,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun updateUser(user: User): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET USERNAME=?, AUTHHASH=? WHERE USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET USERNAME=?, AUTHHASH=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setString(1, user.username)
             preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
@@ -243,7 +243,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun ban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 1)
             preparedStatement?.setString(2, username)
@@ -258,7 +258,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun unban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 0)
             preparedStatement?.setString(2, username)
@@ -274,7 +274,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         connect()
         var banned = 0
         try {
-            val selectStatement = "SELECT BANNED FROM $tableName WHERE USERNAME=?"
+            val selectStatement = "SELECT BANNED FROM $tableName WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
