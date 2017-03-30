@@ -57,7 +57,8 @@ open class Config {
                     Pair("default_admin_password", "Password1234!"),
                     Pair("default_admin_email", "admin_tacusci@tacusci.net"),
                     Pair("log_file", "tacusci.log"),
-                    Pair("using_ssl_on_proxy", "false"))
+                    Pair("using_ssl_on_proxy", "false"),
+                    Pair("robots_file", ""))
         }
 
         fun load() {

@@ -39,8 +39,10 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
+import java.io.File
 import java.util.*
 
 /**
@@ -68,10 +70,17 @@ object Web : KLogging() {
 
     fun get_robotstxt(request: Request): String {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ROBOTS.txt page")
-        return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
-                "User-agent: *\n"
-                +"Disallow: /dashboard/*"
-        ).render()
+        val robotsFile = File(Config.getProperty("robots_file"))
+        if (robotsFile.exists()) {
+            return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
+                    robotsFile.readText()
+            ).render()
+        } else {
+            return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
+                    "User-agent: *\n"
+                            +"Disallow: /dashboard/*"
+            ).render()
+        }
     }
 
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
