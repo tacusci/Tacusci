@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Velocity" pattern="src:spark.template.velocity.VelocityTemplateEngine" />
+</component>
