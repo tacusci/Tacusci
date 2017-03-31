@@ -31,6 +31,8 @@ package utils
 
 import java.math.BigInteger
 import java.security.SecureRandom
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by alewis on 14/03/2017.
@@ -44,6 +46,26 @@ class Utils {
 
         fun randomHash(): String {
             return BigInteger(260, secureRandom).toString(32)
+        }
+
+        fun getDateTimeNow(): String = convertMillisToDataTime(System.currentTimeMillis())
+        fun getDateNow(): String = convertMillisToDate(System.currentTimeMillis())
+
+        fun convertMillisToDate(millis: Long): String {
+            val formatter = SimpleDateFormat("dd-MM-yyyy")
+            return formatter.format(Date(millis))
+        }
+
+        fun convertMillisToDataTime(millis: Long): String {
+            val formatter = SimpleDateFormat("HH:mm dd-MM-yyyy")
+            return formatter.format(millis)
+        }
+
+        //TODO use regex to get this function to infer the format type from a list
+        fun convertDateToMillis(dateToConvert: String, dateStringFormat: String): Long {
+            val simpleDateFormat = SimpleDateFormat(dateStringFormat)
+            val date = simpleDateFormat.parse(dateToConvert)
+            return date.time
         }
     }
 }

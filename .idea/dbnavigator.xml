@@ -26,7 +26,6 @@
     <loaded-nodes>
       <connection connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79">
         <schema name="tacusci" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
-        <schema name="tvf" object-types="function, procedure, table, view" />
       </connection>
     </loaded-nodes>
   </component>
