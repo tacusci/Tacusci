@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
   `authhash` CHAR(72) NOT NULL,
   `rootadmin` BIT(1) NOT NULL,
   `banned`  BIT(1) NOT NULL,
+  `banneddatetime` LONG,
   PRIMARY KEY (`idusers`),
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
