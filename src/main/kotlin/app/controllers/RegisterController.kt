@@ -104,7 +104,7 @@ class RegisterController : Controller {
             }
 
             if (fullNameInputIsValid && usernameInputIsValid && passwordInputIsValid && repeatedPasswordIsValid && emailIsValid && (password == repeatedPassword)) {
-                val user = User(-1, fullName, username, password, email, 0, 0)
+                val user = User(-1, -1, -1, fullName, username, password, email, 0, 0)
                 request.session().attribute("user_created_successfully", true)
                 UserHandler.createUser(user)
             }

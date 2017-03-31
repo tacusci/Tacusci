@@ -45,10 +45,11 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         if (!areUserAndGroupMapped(userID, groupID)) {
             connect()
             try {
-                val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, IDGROUPS) VALUES (?,?)"
+                val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, LASTUPDATEDDATETIME, IDGROUPS) VALUES (?,?,?)"
                 val preparedStatement = connection?.prepareStatement(insertUserIntoGroupStatement)
                 preparedStatement?.setInt(1, userID)
-                preparedStatement?.setInt(2, groupID)
+                preparedStatement?.setLong(2, System.currentTimeMillis())
+                preparedStatement?.setInt(3, groupID)
                 preparedStatement?.execute()
                 connection?.commit()
                 preparedStatement?.close()

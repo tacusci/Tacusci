@@ -43,11 +43,12 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
      fun insertAuthHash(userId: Int, authHash: String) {
         connect()
         try {
-            val insertAuthHashStatement = "INSERT INTO $tableName (idusers, authhash, expired) VALUES (?,?,?)"
+            val insertAuthHashStatement = "INSERT INTO $tableName (CREATEDDATETIME, IDUSERS, AUTHHASH, EXPIRED) VALUES (?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(insertAuthHashStatement)
-            preparedStatement?.setInt(1, userId)
-            preparedStatement?.setString(2, authHash)
-            preparedStatement?.setInt(3, 0)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setInt(2, userId)
+            preparedStatement?.setString(3, authHash)
+            preparedStatement?.setInt(4, 0)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -58,11 +59,12 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
      fun updateAuthHash(userId: Int, authHash: String, expired: Int) {
         connect()
         try {
-            val updateAuthHashStatement = "UPDATE $tableName SET AUTHHASH=?, EXPIRED=? WHERE IDUSERS=?"
+            val updateAuthHashStatement = "UPDATE $tableName SET LASTUPDATEDDATETIME=?, AUTHHASH=?, EXPIRED=? WHERE IDUSERS=?"
             val preparedStatement = connection?.prepareStatement(updateAuthHashStatement)
-            preparedStatement?.setString(1, authHash)
-            preparedStatement?.setInt(2, expired)
-            preparedStatement?.setInt(3, userId)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setString(2, authHash)
+            preparedStatement?.setInt(3, expired)
+            preparedStatement?.setInt(4, userId)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

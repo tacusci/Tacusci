@@ -39,7 +39,9 @@ import utils.tree.Tree
 /**
  * Created by alewis on 20/12/2016.
  */
-data class User(var id: Int, var fullName: String, var username: String, var password: String, var email: String, var banned: Int, var rootAdmin: Int) {
+data class User(var id: Int, var createdDateTime: Long, var lastUpdatedDateTime: Long,
+                var fullName: String, var username: String, var password: String, var email: String,
+                var banned: Int, var rootAdmin: Int) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }

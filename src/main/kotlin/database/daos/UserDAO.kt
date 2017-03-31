@@ -47,7 +47,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getUser(userID: Int): User {
         connect()
-        var user = User(-1, "", "", "", "", 0, 0)
+        var user = User(-1, -1, -1, "", "", "", "", 0, 0)
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE IDUSERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
@@ -55,6 +55,8 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
                 user.id = resultSet.getInt("IDUSERS")
+                user.createdDateTime = resultSet.getLong("CREATEDDATETIME")
+                user.lastUpdatedDateTime = resultSet.getLong("LASTUPDATEDDATETIME")
                 user.fullName = resultSet.getString("FULLNAME")
                 user.username = resultSet.getString("USERNAME")
                 user.password = resultSet.getString("AUTHHASH")
@@ -90,15 +92,17 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun insertUser(user: User): Boolean {
         connect()
         try {
-            val createUserStatementString = "INSERT INTO $tableName (rootadmin, username, authhash, email, fullname, banned) VALUES (?,?,?,?,?,?)"
+            val createUserStatementString = "INSERT INTO $tableName (CREATEDDATETIME, LASTUPDATEDDATETIME, ROOTADMIN, USERNAME, AUTHHASH, EMAIL, FULLNAME, BANNED) VALUES (?,?,?,?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
-            preparedStatement?.setInt(1, user.rootAdmin)
-            preparedStatement?.setString(2, user.username)
-            preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
-            preparedStatement?.setString(4, user.email)
-            preparedStatement?.setString(5, user.fullName)
-            preparedStatement?.setInt(6, user.banned)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setInt(3, user.rootAdmin)
+            preparedStatement?.setString(4, user.username)
+            preparedStatement?.setString(5, PasswordStorage.createHash(user.password))
+            preparedStatement?.setString(6, user.email)
+            preparedStatement?.setString(7, user.fullName)
+            preparedStatement?.setInt(8, user.banned)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -173,11 +177,13 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun getUsers(): MutableCollection<User> {
         connect()
         val userList = mutableListOf<User>()
-        val selectStatement = "SELECT ROOTADMIN, USERNAME, AUTHHASH, EMAIL, FULLNAME, BANNED FROM $tableName"
+        val selectStatement = "SELECT CREATEDDATETIME, LASTUPDATEDDATETIME, ROOTADMIN, USERNAME, AUTHHASH, EMAIL, FULLNAME, BANNED FROM $tableName"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
-            val user = User(-1, "", "", "", "", 0, 0)
+            val user = User(-1, -1, -1, "", "", "", "", 0, 0)
+            user.createdDateTime = resultSet.getLong("CREATEDDATETIME")
+            user.lastUpdatedDateTime = resultSet.getLong("LASTUPDATEDDATETIME")
             user.rootAdmin = resultSet.getInt("ROOTADMIN")
             user.username = resultSet.getString("USERNAME")
             user.password = resultSet.getString("AUTHHASH")
@@ -192,12 +198,14 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getRootAdmin(): User {
         connect()
-        val user = User(-1, "", "", "", "", 0, 1)
-        val selectStatement = "SELECT ROOTADMIN, USERNAME, EMAIL, FULLNAME, BANNED FROM $tableName WHERE ROOTADMIN=?"
+        val user = User(-1, -1, -1, "", "", "", "", 0, 1)
+        val selectStatement = "SELECT CREATEDDATETIME, LASTUPDATEDDATETIME, ROOTADMIN, USERNAME, EMAIL, FULLNAME, BANNED FROM $tableName WHERE ROOTADMIN=?"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         preparedStatement?.setInt(1, user.rootAdmin)
         val resultSet = preparedStatement?.executeQuery()
         if (resultSet!!.next()) {
+            user.createdDateTime = resultSet.getLong("CREATEDDATETIME")
+            user.lastUpdatedDateTime = resultSet.getLong("LASTUPDATEDDATETIME")
             user.rootAdmin = resultSet.getInt("ROOTADMIN")
             user.username = resultSet.getString("USERNAME")
             user.email = resultSet.getString("EMAIL")
@@ -211,11 +219,12 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun updateRootAdmin(user: User): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET USERNAME=?, AUTHHASH=? WHERE ROOTADMIN=?"
+            val updateStatement = "UPDATE $tableName SET LASTUPDATEDDATETIME=?, USERNAME=?, AUTHHASH=? WHERE ROOTADMIN=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
-            preparedStatement?.setString(1, user.username)
-            preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
-            preparedStatement?.setInt(3, user.rootAdmin)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setString(2, user.username)
+            preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
+            preparedStatement?.setInt(4, user.rootAdmin)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -227,11 +236,12 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun updateUser(user: User): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET USERNAME=?, AUTHHASH=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET LASTUPDATEDDATETIME=?, USERNAME=?, AUTHHASH=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
-            preparedStatement?.setString(1, user.username)
-            preparedStatement?.setString(2, PasswordStorage.createHash(user.password))
-            preparedStatement?.setString(3, user.username)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setString(2, user.username)
+            preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
+            preparedStatement?.setString(4, user.username)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -243,10 +253,11 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun ban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNEDDATETIME=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 1)
-            preparedStatement?.setString(2, username)
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setString(3, username)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -258,10 +269,11 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun unban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNEDDATETIME=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 0)
-            preparedStatement?.setString(2, username)
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setString(3, username)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
