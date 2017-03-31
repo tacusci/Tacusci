@@ -43,6 +43,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.HTMLTable
+import utils.Utils
 import utils.j2htmlPartials
 import java.util.*
 
@@ -193,7 +194,7 @@ class UserManagementController : Controller {
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
         val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
-        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
+        val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
 
         val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
@@ -218,12 +219,15 @@ class UserManagementController : Controller {
                 moderatorCheckbox.attr("checked", "")
             }
 
-            userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
+            userListTable.addRow(listOf (
+                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
                     listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
                     listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("admin_checkbox.hidden"), adminCheckbox),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox))
+            )
         }
 
         userManagementForm.with(userListTable.render())
@@ -241,7 +245,7 @@ class UserManagementController : Controller {
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
         val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
-        val userListTable = HTMLTable(listOf("Full Name", "Username", "Email", "Banned", "Moderator"))
+        val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Moderator"))
         userListTable.className = "pure-table"
 
         val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
@@ -261,11 +265,14 @@ class UserManagementController : Controller {
                 moderatorCheckbox.attr("checked", "")
             }
 
-            userListTable.addRow(listOf(listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
+            userListTable.addRow(listOf(
+                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
                     listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox)))
+                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox))
+            )
         }
 
         userManagementForm.with(userListTable.render())

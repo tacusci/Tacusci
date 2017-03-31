@@ -43,12 +43,13 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
      fun insertAuthHash(userId: Int, authHash: String) {
         connect()
         try {
-            val insertAuthHashStatement = "INSERT INTO $tableName (CREATEDDATETIME, IDUSERS, AUTHHASH, EXPIRED) VALUES (?,?,?,?)"
+            val insertAuthHashStatement = "INSERT INTO $tableName (CREATEDDATETIME, LASTUPDATEDDATETIME, IDUSERS, AUTHHASH, EXPIRED) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(insertAuthHashStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
-            preparedStatement?.setInt(2, userId)
-            preparedStatement?.setString(3, authHash)
-            preparedStatement?.setInt(4, 0)
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setInt(3, userId)
+            preparedStatement?.setString(4, authHash)
+            preparedStatement?.setInt(5, 0)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
