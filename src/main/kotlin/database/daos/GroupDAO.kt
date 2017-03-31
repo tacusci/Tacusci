@@ -33,7 +33,6 @@
 
 import database.models.Group
 import mu.KLogging
-import java.sql.Connection
 import java.sql.SQLException
 import java.util.*
 
