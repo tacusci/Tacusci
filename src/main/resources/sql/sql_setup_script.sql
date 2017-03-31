@@ -2,11 +2,12 @@ CREATE schema IF NOT EXISTS tacusci;
 
 CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
-  `rootadmin` BIT(1) NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
-  `authhash` CHAR(72) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
+  `createdtime` LONG NOT NULL,
   `fullname` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `authhash` CHAR(72) NOT NULL,
+  `rootadmin` BIT(1) NOT NULL,
   `banned`  BIT(1) NOT NULL,
   PRIMARY KEY (`idusers`),
   UNIQUE INDEX `idusers_UNIQUE` (`idusers` ASC),
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
 
 CREATE TABLE IF NOT EXISTS  `tacusci`.`groups` (
   `idgroups` INT NOT NULL AUTO_INCREMENT,
+  `createdtime` LONG NOT NULL,
   `groupname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idgroups`),
   UNIQUE INDEX `idgroups_UNIQUE` (`idgroups` ASC),
@@ -24,6 +26,7 @@ CREATE TABLE IF NOT EXISTS  `tacusci`.`groups` (
 
 CREATE TABLE IF NOT EXISTS `tacusci`.`user2group` (
   `idusers` INT NOT NULL,
+  `createdtime` LONG NOT NULL,
   `idgroups` INT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
@@ -37,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
 
 CREATE TABLE IF NOT EXISTS `tacusci`.`resetpassword` (
   `idresetpasswords` INT NOT NULL AUTO_INCREMENT,
+  `createdtime` LONG NOT NULL,
   `idusers` INT NOT NULL,
   `authhash` VARCHAR(72) NOT NULL,
   `expired` BIT(1) NOT NULL,
