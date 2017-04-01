@@ -49,6 +49,7 @@ import java.util.*
  * Created by alewis on 25/10/2016.
  */
 
+//TODO need to rename this class
 object Web : KLogging() {
 
     fun loadNavBar(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
