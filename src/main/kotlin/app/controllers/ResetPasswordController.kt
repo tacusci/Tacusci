@@ -69,6 +69,7 @@ class ResetPasswordController : Controller {
             model.put("password_reset_successful", h2("Password reset successfully"))
             request.session().attribute("reset_password_successfully", false)
             val userId = userDAO.getUserID(username)
+            //update hash to mark it as expired
             resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
         } else {
             if (request.session().attribute("passwords_dont_match")) {
@@ -118,9 +119,21 @@ class ResetPasswordController : Controller {
                     genAccessDeniedContent(request, model)
                 }
             } else {
-                if (resetPasswordDAO.authHashExists(userDAO.getUserID(username))) {
-                    if (resetPasswordDAO.getAuthHash(userDAO.getUserID(username)) == authHash) {
+                val userId = userDAO.getUserID(username)
+                if (resetPasswordDAO.authHashExists(userId)) {
+                    if (resetPasswordDAO.getAuthHash(userId) == authHash) {
                         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
+
+                        //check if auth hash has timed out to expire
+                        var timeoutInSeconds = 1000
+                        val secondsTimeout = Config.getProperty("reset_password_authhash_timeout_seconds")
+                        try {
+                            timeoutInSeconds *= Integer.parseInt(secondsTimeout)
+                        } catch (e: Exception) { timeoutInSeconds = 60000; logger.error("Reset password timeout setting has not been set, defaulting to 60 seconds") }
+
+                        if (System.currentTimeMillis() - resetPasswordDAO.getLastUpdatedDateTime(authHash) > timeoutInSeconds) {
+                            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+                        }
                         if (!resetPasswordDAO.authHashExpired(authHash)) {
                             genResetPasswordPageContent(request, username, model, authHash)
                         } else {

@@ -120,4 +120,20 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return authHash
     }
+
+    fun getLastUpdatedDateTime(authHash: String): Long {
+        connect()
+        var lastUpdatedDateTime = -1L
+        try {
+            val selectStatement = "SELECT LASTUPDATEDDATETIME FROM $tableName WHERE AUTHHASH=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, authHash)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                lastUpdatedDateTime = resultSet.getLong("LASTUPDATEDDATETIME")
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return lastUpdatedDateTime
+    }
 }
