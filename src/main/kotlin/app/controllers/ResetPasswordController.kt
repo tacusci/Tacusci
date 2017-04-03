@@ -147,14 +147,28 @@ class ResetPasswordController : Controller {
     private fun post_resetPassword(request: Request, response: Response): Response {
         if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
 
-            /*
-            val userId = userDAO.getUserID(request.params(":username"))
-            if (checkAuthHashExpired(request.params(":authhash"))) {
-                resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
-                response.managedRedirect(request, request.uri())
-            }
-            */
+        }
+        /*
+        val userId = userDAO.getUserID(request.params(":username"))
+        if (checkAuthHashExpired(request.params(":authhash"))) {
+            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+            response.managedRedirect(request, request.uri())
+        }
+        */
 
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for reset password form")
+
+        val username = request.params(":username")
+        val authHash = request.params(":authhash")
+
+        if (username != null && authHash != null) {
+            val userId = userDAO.getUserID(username)
+            if (resetPasswordDAO.authHashExists(userId)) {
+                if (checkAuthHashExpired(authHash)) { resetPasswordDAO.updateAuthHash(userId, authHash, 1) }
+            }
+        }
+
+        if (!resetPasswordDAO.authHashExpired(authHash)) {
             val usernameOfPasswordToReset = request.queryParams("username")
             val newPassword = request.queryParams("new_password")
             val newPasswordRepeated = request.queryParams("new_password_repeated")
@@ -188,8 +202,11 @@ class ResetPasswordController : Controller {
                     request.session().attribute("passwords_dont_match", true)
                 }
             }
-            response.managedRedirect(request, request.uri())
+        } else {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST submission for expired reset password form")
         }
+
+        response.managedRedirect(request, request.uri())
         return response
     }
 
