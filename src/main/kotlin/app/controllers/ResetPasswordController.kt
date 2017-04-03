@@ -54,6 +54,9 @@ class ResetPasswordController : Controller {
 
     companion object : KLogging()
 
+    private val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
+    private val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("new_password_field_error", false), Pair("new_password_repeated_field_error", false), Pair("passwords_dont_match", false),
                     Pair("reset_password_successfully", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
@@ -100,9 +103,6 @@ class ResetPasswordController : Controller {
         val username = request.params(":username")
         val authHash = request.params(":authhash")
 
-        val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
-        val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-
         if (username != null) {
             if (authHash == null) {
                 if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
@@ -124,16 +124,10 @@ class ResetPasswordController : Controller {
                     if (resetPasswordDAO.getAuthHash(userId) == authHash) {
                         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
 
-                        //check if auth hash has timed out to expire
-                        var timeoutInSeconds = 1000
-                        val secondsTimeout = Config.getProperty("reset_password_authhash_timeout_seconds")
-                        try {
-                            timeoutInSeconds *= Integer.parseInt(secondsTimeout)
-                        } catch (e: Exception) { timeoutInSeconds = 60000; logger.error("Reset password timeout setting has not been set, defaulting to 60 seconds") }
+                        //if authhash has gone past expired time limit, mark as expired
+                        if (checkAuthHashExpired(authHash)) resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
 
-                        if (System.currentTimeMillis() - resetPasswordDAO.getLastUpdatedDateTime(authHash) > timeoutInSeconds) {
-                            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
-                        }
+                        //check if the authhash is marked as expired
                         if (!resetPasswordDAO.authHashExpired(authHash)) {
                             genResetPasswordPageContent(request, username, model, authHash)
                         } else {
@@ -152,6 +146,15 @@ class ResetPasswordController : Controller {
 
     private fun post_resetPassword(request: Request, response: Response): Response {
         if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
+
+            /*
+            val userId = userDAO.getUserID(request.params(":username"))
+            if (checkAuthHashExpired(request.params(":authhash"))) {
+                resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+                response.managedRedirect(request, request.uri())
+            }
+            */
+
             val usernameOfPasswordToReset = request.queryParams("username")
             val newPassword = request.queryParams("new_password")
             val newPasswordRepeated = request.queryParams("new_password_repeated")
@@ -195,5 +198,20 @@ class ResetPasswordController : Controller {
             "reset_password_form" -> return post_resetPassword(request, response)
         }
         return response
+    }
+
+    private fun checkAuthHashExpired(authHash: String): Boolean {
+        var timeoutInSeconds = 1000
+        val secondsTimeout = Config.getProperty("reset_password_authhash_timeout_seconds")
+        try {
+            timeoutInSeconds *= Integer.parseInt(secondsTimeout)
+        } catch (e: Exception) {
+            timeoutInSeconds = 60000
+            logger.error("Reset password timeout setting has not been set, defaulting to 60 seconds")
+        }
+
+        if (System.currentTimeMillis() - resetPasswordDAO.getLastUpdatedDateTime(authHash) > timeoutInSeconds) return true
+
+        return false
     }
 }
