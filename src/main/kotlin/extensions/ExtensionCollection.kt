@@ -66,6 +66,13 @@ fun Request.forwardedIP(): String {
     return forwardedIP
 }
 
+//this isn't low level enough to show up in IDE but hopefully will be good reminder
+@Deprecated("This function won't work for services with a proxy, use managed re-direct instead")
+fun Response.redirect(location: String) {}
+
+@Deprecated("This function won't work for services with a proxy, use managed re-direct instead")
+fun Response.redirect(location: String, htmlStatus: Int) {}
+
 fun Response.managedRedirect(request: Request, urlSuffix: String) {
     if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
         httpsRedirect(request, urlSuffix)

@@ -198,7 +198,6 @@ class ResetPasswordController : Controller {
         } else {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST submission for expired reset password form")
         }
-
         response.managedRedirect(request, request.uri())
         return response
     }
