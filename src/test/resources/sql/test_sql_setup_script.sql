@@ -1,6 +1,6 @@
-CREATE schema IF NOT EXISTS tacusci;
+CREATE schema IF NOT EXISTS tvf_testing;
 
-CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
+CREATE TABLE IF NOT EXISTS `tvf_testing`.`users` (
   `idusers` INT NOT NULL AUTO_INCREMENT,
   `createddatetime` LONG NOT NULL,
   `lastupdateddatetime` LONG NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`users` (
   UNIQUE INDEX `email_UNIQUE` (`email` ASC));
 
 
-CREATE TABLE IF NOT EXISTS  `tacusci`.`groups` (
+CREATE TABLE IF NOT EXISTS  `tvf_testing`.`groups` (
   `idgroups` INT NOT NULL AUTO_INCREMENT,
   `createddatetime` LONG NOT NULL,
   `lastupdateddatetime` LONG NOT NULL,
@@ -27,12 +27,12 @@ CREATE TABLE IF NOT EXISTS  `tacusci`.`groups` (
   UNIQUE INDEX `groupname_UNIQUE` (`groupname` ASC));
 
 
-CREATE TABLE IF NOT EXISTS `tacusci`.`user2group` (
+CREATE TABLE IF NOT EXISTS `tvf_testing`.`user2group` (
   `idusers` INT NOT NULL,
   `lastupdateddatetime` LONG NOT NULL,
   `idgroups` INT NOT NULL);
 
-CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
+CREATE TABLE IF NOT EXISTS `tvf_testing`.`routeentities` (
   `idrouteentities` INT NOT NULL,
   `parentid` INT,
   `name` VARCHAR(45) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`routeentities` (
   PRIMARY KEY (`idrouteentities`),
   UNIQUE INDEX `idrouteentities_UNIQUE` (`idrouteentities` ASC));
 
-CREATE TABLE IF NOT EXISTS `tacusci`.`resetpassword` (
+CREATE TABLE IF NOT EXISTS `tvf_testing`.`resetpassword` (
   `idresetpasswords` INT NOT NULL AUTO_INCREMENT,
   `createddatetime` LONG NOT NULL,
   `lastupdateddatetime` LONG NOT NULL,

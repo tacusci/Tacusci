@@ -148,13 +148,6 @@ class ResetPasswordController : Controller {
         if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
 
         }
-        /*
-        val userId = userDAO.getUserID(request.params(":username"))
-        if (checkAuthHashExpired(request.params(":authhash"))) {
-            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
-            response.managedRedirect(request, request.uri())
-        }
-        */
 
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for reset password form")
 
