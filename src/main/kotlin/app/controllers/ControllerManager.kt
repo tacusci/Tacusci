@@ -48,7 +48,8 @@ object ControllerManager {
             Pair("/profile", profileController),
             Pair("/profile/:username", profileController),
             Pair("/reset_password/:username", resetPasswordController),
-            Pair("/reset_password/:username/:authhash", resetPasswordController))
+            Pair("/reset_password/:username/:authhash", resetPasswordController),
+            Pair("/forgotten_password", ForgottenPasswordController()))
 
     fun initSessionAttributes(session: Session) = routesAndControllers.forEach { it.value.initSessionBoolAttributes(session) }
 }

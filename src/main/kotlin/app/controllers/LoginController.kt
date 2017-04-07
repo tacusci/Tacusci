@@ -40,7 +40,6 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.j2htmlPartials
-import java.util.*
 
 /**
  * Created by alewis on 27/10/2016.
@@ -56,10 +55,9 @@ class LoginController : Controller {
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
-        var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, model)
+        val model = hashMapOf<String, Any>()
+        Web.loadNavBar(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
@@ -94,6 +92,7 @@ class LoginController : Controller {
             "login_form" -> return post_postLogin(request, response)
             "sign_out_form" -> return post_logout(request, response)
         }
+        //if none of the form names match go back to this page...
         response.managedRedirect(request, "/login")
         return response
     }

@@ -133,12 +133,13 @@ object j2htmlPartials {
         val hash = Web.mapFormToHash(session, name)
         return form().withId(name).withName(name).withClass("pure-form pure-form-stacked").withHref(href).withMethod(method).with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
-                input().withId("formName").withName(name).isHidden,
+                input().withId("formName").withValue(name).isHidden,
                 fieldset().with(
                         legend(legend),
                         usernameInput("username", "Username"),
                         validatedPasswordInput("password", "Password"),
-                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                        button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login"),
+                        div().with(j2htmlPartials.link("", "/forgotten_password", "Forgotten Password?"))
                 )
         )
     }
@@ -161,6 +162,29 @@ object j2htmlPartials {
 
                         div().withClass("pure-controls").attr("style", "margin: 1.5em 0 0 auto;").with(
                                 button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Login")
+                        )
+                ),
+                div().with(j2htmlPartials.link("", "/forgotten_password", "Forgotten Password?"))
+        )
+    }
+
+    fun pureFormAligned_ForgottenPassword(session: Session, name: String, href: String, method: String): ContainerTag {
+        val hash = Web.mapFormToHash(session, name)
+        return form().withId(name).withName(name).withClass("pure-form pure-form-aligned").withHref(href).withMethod(method).with(
+                input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
+                input().withName("formName").withValue(name).isHidden,
+                fieldset().with(
+                        div().withClass("pure-control-group").with(
+                                label("Username").attr("for", "username"),
+                                usernameInput("username", "Username")
+                        ),
+                        div().withClass("pure-control-group").with(
+                                label("Email").attr("for", "email"),
+                                emailInput("email", "Email")
+                        ),
+
+                        div().withClass("pure-controls").attr("style", "margin 1.5em 0 0 auto;").with(
+                                button().withMethod("submit").withClass("pure-button pure-button-primary").withText("Submit")
                         )
                 )
         )
