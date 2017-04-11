@@ -30,6 +30,7 @@
 package app.controllers
 
 import app.handlers.UserHandler
+import database.models.User
 import extensions.managedRedirect
 import mu.KLogging
 import spark.ModelAndView
@@ -72,7 +73,7 @@ class ForgottenPasswordController : Controller {
     }
 
     fun post_postForgottenPassword(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> received POST submission for forgotten password form")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for forgotten password form")
         if (Web.getFormHash(request.session(), "forgotten_password_form") == request.queryParams("hashid")) {
             val username = request.queryParams("username")
             val email = request.queryParams("email")
@@ -81,17 +82,19 @@ class ForgottenPasswordController : Controller {
                 if (UserHandler.userExists(username)) {
                     val user = UserHandler.userDAO.getUser(username)
                     if (user.email == email) {
-                        sendResetPasswordLink()
+                        sendResetPasswordLink(user, request)
                     }
                 }
             }
             request.session().attribute("email_sent", true)
+        } else {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Received invalid POST form for forgotten password")
         }
         response.managedRedirect(request, request.uri())
         return response
     }
 
-    fun sendResetPasswordLink() { println("sent reset password email") }
+    private fun sendResetPasswordLink(user: User, request: Request) { println("sent reset password email") }
 
     override fun post(request: Request, response: Response): Response {
         when (request.queryParams("formName")) {
