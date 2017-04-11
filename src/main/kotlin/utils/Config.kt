@@ -147,7 +147,7 @@ open class Config {
         fun propertiesFileUpdate(application: Application) {
             if (File(this.getProperty("properties_file")).exists()) {
                 this.load(File(this.getProperty("properties_file")).inputStream())
-                application.restartSpark()
+                application.restartServer()
             }
         }
     }

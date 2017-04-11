@@ -62,6 +62,7 @@ class DashboardController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO: IMPLEMENT THIS
+        return response
     }
 }

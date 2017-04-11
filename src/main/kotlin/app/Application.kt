@@ -109,7 +109,7 @@ class Application {
 
             val session = request.session()
             ControllerManager.initSessionAttributes(session)
-            session.maxInactiveInterval(20*60)
+            session.maxInactiveInterval(20 * 60)
         }
 
         before("/dashboard", { request, response ->
@@ -127,7 +127,7 @@ class Application {
         })
     }
 
-    fun restartSpark() {
+    fun restartServer() {
         stop()
         init()
     }

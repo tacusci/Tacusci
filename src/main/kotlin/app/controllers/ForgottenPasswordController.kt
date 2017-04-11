@@ -86,8 +86,6 @@ class ForgottenPasswordController : Controller {
                 }
             }
             request.session().attribute("email_sent", true)
-            val emailSentValue: Boolean = request.session().attribute("email_sent")
-            println(emailSentValue)
         }
         response.managedRedirect(request, request.uri())
         return response
@@ -99,7 +97,7 @@ class ForgottenPasswordController : Controller {
         when (request.queryParams("formName")) {
             "forgotten_password_form" -> return post_postForgottenPassword(request, response)
         }
-        response.managedRedirect(request, "/forgotten_password")
+        response.managedRedirect(request, request.uri())
         return response
     }
 }
