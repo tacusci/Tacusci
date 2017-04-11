@@ -46,7 +46,7 @@ class ForgottenPasswordController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> session.attribute(key, value) } }
+    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
@@ -68,7 +68,6 @@ class ForgottenPasswordController : Controller {
         } else {
             model.put("forgotten_password_form", forgottenPasswordForm.render())
         }
-
         return ModelAndView(model, layoutTemplate)
     }
 

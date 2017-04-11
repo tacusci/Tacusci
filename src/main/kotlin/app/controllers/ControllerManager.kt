@@ -38,7 +38,7 @@ import spark.Session
 object ControllerManager {
     val profileController = ProfileController()
     val resetPasswordController = ResetPasswordController()
-    val routesAndControllers = mapOf<String, Controller>(Pair("/", IndexController()),
+    val routesAndControllers = mapOf(Pair("/", IndexController()),
             Pair("/dashboard", DashboardController()),
             Pair("/register", RegisterController()),
             Pair("/dashboard/user_management", UserManagementController()),
