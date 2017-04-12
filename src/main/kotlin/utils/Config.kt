@@ -59,7 +59,12 @@ open class Config {
                     Pair("log_file", "tacusci.log"),
                     Pair("using_ssl_on_proxy", "false"),
                     Pair("robots_file", ""),
-                    Pair("reset_password_authhash_timeout_seconds", ""))
+                    Pair("reset_password_authhash_timeout_seconds", ""),
+                    Pair("smtp_server_host", ""),
+                    Pair("smtp_server_port", ""),
+                    Pair("smtp_account_username", ""),
+                    Pair("smtp_account_password", ""),
+                    Pair("smtp_use_ttls", "false"))
         }
 
         fun load() {

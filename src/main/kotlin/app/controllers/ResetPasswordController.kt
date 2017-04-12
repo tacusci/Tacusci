@@ -145,58 +145,56 @@ class ResetPasswordController : Controller {
     }
 
     private fun post_resetPassword(request: Request, response: Response): Response {
-        if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
-
-        }
-
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for reset password form")
 
-        val username = request.params(":username")
-        val authHash = request.params(":authhash")
+        if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
+            val username = request.params(":username")
+            val authHash = request.params(":authhash")
 
-        if (username != null && authHash != null) {
-            val userId = userDAO.getUserID(username)
-            if (resetPasswordDAO.authHashExists(userId)) {
-                if (checkAuthHashExpired(authHash)) { resetPasswordDAO.updateAuthHash(userId, authHash, 1) }
-            }
-        }
-
-        if (!resetPasswordDAO.authHashExpired(authHash)) {
-            val usernameOfPasswordToReset = request.queryParams("username")
-            val newPassword = request.queryParams("new_password")
-            val newPasswordRepeated = request.queryParams("new_password_repeated")
-
-            val newPasswordInputIsValid = Validation.matchPasswordPattern(newPassword)
-            val newRepeatedPasswordIsValid = Validation.matchPasswordPattern(newPasswordRepeated)
-
-            if (!newPasswordInputIsValid) request.session().attribute("new_password_field_error", true) else request.session().attribute("new_password_field_error", false)
-            if (!newRepeatedPasswordIsValid) request.session().attribute("new_password_repeated_field_error", true) else request.session().attribute("new_password_repeated_field_error", false)
-
-            if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
-                if (newPassword == newPasswordRepeated) {
-                    if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
-                        Config.props.setProperty("default_admin_password", newPassword)
-                        Config.storeAll()
-                        if (UserHandler.updateRootAdmin()) {
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
-                            request.session().attribute("reset_password_successfully", true)
-                        } else request.attribute("reset_password_successfully", false)
-                    } else {
-                        val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
-                        val userToUpdate = userDAO.getUser(usernameOfPasswordToReset)
-                        userToUpdate.password = newPassword
-                        if (userDAO.updateUser(userToUpdate)) {
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
-                            request.session().attribute("reset_password_successfully", true)
-                        } else request.session().attribute("reset_password_successfully", false)
-                    }
-                } else {
-                    request.session().attribute("reset_password_successfully", false)
-                    request.session().attribute("passwords_dont_match", true)
+            if (username != null && authHash != null) {
+                val userId = userDAO.getUserID(username)
+                if (resetPasswordDAO.authHashExists(userId)) {
+                    if (checkAuthHashExpired(authHash)) { resetPasswordDAO.updateAuthHash(userId, authHash, 1) }
                 }
             }
-        } else {
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST submission for expired reset password form")
+
+            if (!resetPasswordDAO.authHashExpired(authHash)) {
+                val usernameOfPasswordToReset = request.queryParams("username")
+                val newPassword = request.queryParams("new_password")
+                val newPasswordRepeated = request.queryParams("new_password_repeated")
+
+                val newPasswordInputIsValid = Validation.matchPasswordPattern(newPassword)
+                val newRepeatedPasswordIsValid = Validation.matchPasswordPattern(newPasswordRepeated)
+
+                if (!newPasswordInputIsValid) request.session().attribute("new_password_field_error", true) else request.session().attribute("new_password_field_error", false)
+                if (!newRepeatedPasswordIsValid) request.session().attribute("new_password_repeated_field_error", true) else request.session().attribute("new_password_repeated_field_error", false)
+
+                if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
+                    if (newPassword == newPasswordRepeated) {
+                        if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
+                            Config.props.setProperty("default_admin_password", newPassword)
+                            Config.storeAll()
+                            if (UserHandler.updateRootAdmin()) {
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
+                                request.session().attribute("reset_password_successfully", true)
+                            } else request.attribute("reset_password_successfully", false)
+                        } else {
+                            val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
+                            val userToUpdate = userDAO.getUser(usernameOfPasswordToReset)
+                            userToUpdate.password = newPassword
+                            if (userDAO.updateUser(userToUpdate)) {
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
+                                request.session().attribute("reset_password_successfully", true)
+                            } else request.session().attribute("reset_password_successfully", false)
+                        }
+                    } else {
+                        request.session().attribute("reset_password_successfully", false)
+                        request.session().attribute("passwords_dont_match", true)
+                    }
+                }
+            } else {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST submission for expired reset password form")
+            }
         }
         response.managedRedirect(request, request.uri())
         return response
