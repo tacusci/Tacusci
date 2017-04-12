@@ -96,6 +96,7 @@ class ForgottenPasswordController : Controller {
     }
 
     private fun sendResetPasswordLink(user: User, request: Request) {
+        //TODO: need to move this to seperate thread since it's going to show the same result page regardless
         val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink)
     }
