@@ -79,7 +79,6 @@ open class Config {
                 storeAll()
             } else {
                 try {
-                    //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
                     defaults.forEach { property, value ->
                         if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
@@ -91,6 +90,7 @@ open class Config {
                     e.printStackTrace()
                 }
             }
+            propertiesFile.inputStream().close()
         }
 
         override fun getProperty(key: String): String {
