@@ -52,11 +52,15 @@ object Email : KLogging() {
 
     fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String) {
 
+        //Config.load()
+
         host = Config.getProperty("smtp_server_host")
         port = Config.getProperty("smtp_server_port")
         username = Config.getProperty("smtp_account_username")
         password = Config.getProperty("smtp_account_password")
         useTtls = Config.getProperty("smtp_use_ttls")
+
+        //Config.storeAll()
 
         val properties = System.getProperties()
         properties.put("mail.smtp.starttls.enable", useTtls)

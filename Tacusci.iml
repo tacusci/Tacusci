@@ -17,10 +17,14 @@
               <CompilerSettings />
             </option>
             <option name="k2jsCompilerArguments">
-              <K2JSCompilerArguments />
+              <K2JSCompilerArguments>
+                <option name="moduleKind" value="plain" />
+              </K2JSCompilerArguments>
             </option>
             <option name="k2jvmCompilerArguments">
-              <K2JVMCompilerArguments />
+              <K2JVMCompilerArguments>
+                <option name="jvmTarget" value="1.6" />
+              </K2JVMCompilerArguments>
             </option>
             <option name="_commonCompilerArguments">
               <DummyImpl>
@@ -63,8 +67,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mysql-connector-java-5.1.40-bin" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.40-bin1" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-reflect:1.1.1" level="project" />
     <orderEntry type="library" name="org.jetbrains.kotlin:kotlin-runtime:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: com.sparkjava:spark-core:2.5" level="project" />
@@ -114,5 +116,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="javax.activation:activation:1.1.1" level="project" />
+    <orderEntry type="library" name="com.sun.mail:javax.mail:1.5.6" level="project" />
   </component>
 </module>

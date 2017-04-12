@@ -95,7 +95,6 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
