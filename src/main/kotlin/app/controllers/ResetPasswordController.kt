@@ -42,7 +42,6 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
-import utils.Utils
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
@@ -106,13 +105,7 @@ class ResetPasswordController : Controller {
         if (username != null) {
             if (authHash == null) {
                 if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
-                    val newAuthHash = Utils.randomHash()
-                    val userId = userDAO.getUserID(username)
-                    if (resetPasswordDAO.authHashExists(userId)) {
-                        resetPasswordDAO.updateAuthHash(userId, newAuthHash, 0)
-                    } else {
-                        resetPasswordDAO.insertAuthHash(userId, newAuthHash)
-                    }
+                    val newAuthHash = UserHandler.updateResetPasswordHash(username)
                     response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
                 } else {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")

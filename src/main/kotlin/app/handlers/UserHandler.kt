@@ -32,6 +32,7 @@
 package app.handlers
 
 import database.daos.DAOManager
+import database.daos.ResetPasswordDAO
 import database.daos.UserDAO
 import database.models.User
 import extensions.forwardedIP
@@ -39,6 +40,7 @@ import mu.KLogging
 import spark.Request
 import utils.Config
 import utils.PasswordStorage
+import utils.Utils
 
 /**
  * Created by tauraamui on 24/10/2016.
@@ -175,6 +177,18 @@ object  UserHandler : KLogging() {
         return userDAO.getUsers().filter { user ->
             GroupHandler.userInGroup(user, "admins") && user.username != getRootAdmin().username
         }
+    }
+
+    fun updateResetPasswordHash(username: String): String {
+        val newAuthHash = Utils.randomHash()
+        val userId = userDAO.getUserID(username)
+        val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
+        if (resetPasswordDAO.authHashExists(userId)) {
+            resetPasswordDAO.updateAuthHash(userId, newAuthHash, 0)
+        } else {
+            resetPasswordDAO.insertAuthHash(userId, newAuthHash)
+        }
+        return newAuthHash
     }
 
     fun createUser(user: User): Boolean {
