@@ -64,7 +64,9 @@ open class Config {
                     Pair("smtp_server_port", ""),
                     Pair("smtp_account_username", ""),
                     Pair("smtp_account_password", ""),
-                    Pair("smtp_use_ttls", "false"))
+                    Pair("smtp_use_ttls", "false"),
+                    Pair("reset_password_from_address", ""),
+                    Pair("reset_password_email_subject", ""))
         }
 
         fun load() {

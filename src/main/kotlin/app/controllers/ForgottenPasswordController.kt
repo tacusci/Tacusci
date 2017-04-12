@@ -32,11 +32,13 @@ package app.controllers
 import app.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
+import mail.Email
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.j2htmlPartials
 
 /**
@@ -93,7 +95,10 @@ class ForgottenPasswordController : Controller {
         return response
     }
 
-    private fun sendResetPasswordLink(user: User, request: Request) { println("sent reset password email") }
+    private fun sendResetPasswordLink(user: User, request: Request) {
+        val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
+        Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink)
+    }
 
     override fun post(request: Request, response: Response): Response {
         when (request.queryParams("formName")) {
