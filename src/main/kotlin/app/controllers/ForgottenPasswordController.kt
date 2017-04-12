@@ -101,6 +101,7 @@ class ForgottenPasswordController : Controller {
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink.replace("http", "https")
         }
+        println(resetPasswordLink)
         Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink)
     }
 
