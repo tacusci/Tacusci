@@ -30,6 +30,8 @@
 package app.controllers
 
 import spark.Session
+import spark.Spark
+import spark.template.velocity.VelocityTemplateEngine
 
 /**
  * Created by alewis on 21/02/2017.
@@ -38,6 +40,8 @@ import spark.Session
 object ControllerManager {
     val profileController = ProfileController()
     val resetPasswordController = ResetPasswordController()
+    val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
+                                    PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val routesAndControllers = mapOf(Pair("/", IndexController()),
             Pair("/dashboard", DashboardController()),
             Pair("/register", RegisterController()),
@@ -52,4 +56,16 @@ object ControllerManager {
             Pair("/forgotten_password", ForgottenPasswordController()))
 
     fun initSessionAttributes(session: Session) = routesAndControllers.forEach { it.value.initSessionBoolAttributes(session) }
+    fun initControllers(session: Session) {
+        baseControllers.forEach {
+            it.initSessionBoolAttributes(session)
+            if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, it.templatePath) }, VelocityTemplateEngine())
+            if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
+
+            it.childUris.forEach { childUri ->
+                if (it.handlesGets) Spark.get(childUri, { request, response -> it.get(request, response, it.templatePath) }, VelocityTemplateEngine())
+                if (it.handlesPosts) Spark.post(childUri, { request, response -> it.post(request, response) })
+            }
+        }
+    }
 }

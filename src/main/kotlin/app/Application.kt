@@ -150,6 +150,7 @@ fun main(args: Array<String>) {
     }
     Config.load()
     val application = Application()
+
     application.dbProperties.setProperty("user", args[0])
     application.dbProperties.setProperty("password", args[1])
     application.dbProperties.setProperty("useSSL", "false")
