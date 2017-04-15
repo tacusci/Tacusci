@@ -49,7 +49,7 @@ class ForgottenPasswordController : Controller {
 
     companion object : KLogging()
 
-    override var rootUri = "/reset_password"
+    override var rootUri = "/forgotten_password"
     override var childUris = mutableListOf<String>()
     override val templatePath: String = "/templates/forgotten_password.vtl"
     override val pageTitleSubstring: String = "Forgotten Password"
