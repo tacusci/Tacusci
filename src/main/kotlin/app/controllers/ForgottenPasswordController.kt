@@ -97,7 +97,6 @@ class ForgottenPasswordController : Controller {
     }
 
     private fun sendResetPasswordLink(user: User, request: Request) {
-        //TODO: need to move this to separate thread since it's going to show the same result page regardless
         val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink.replace("http", "https")
