@@ -49,6 +49,12 @@ class ForgottenPasswordController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri = "/reset_password"
+    override var childUris = mutableListOf<String>()
+    override val templatePath: String = "/templates/forgotten_password.vtl"
+    override val pageTitleSubstring: String = "Forgotten Password"
+
+
     override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
@@ -57,11 +63,11 @@ class ForgottenPasswordController : Controller {
         Web.loadNavBar(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
-            response.managedRedirect(request, "/reset_password")
+            response.managedRedirect(request, rootUri)
         }
 
-        model.put("template", "/templates/forgotten_password.vtl")
-        model.put("title", "Thames Valley Furs - Forgotten Password")
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
 
         val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", "/forgotten_password", "post")
 
