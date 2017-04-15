@@ -47,15 +47,18 @@ class DashboardController : Controller {
 
     companion object : KLogging()
 
-    override fun initSessionBoolAttributes(session: Session) {
-        //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override var rootUri: String = "/dashboard"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/dashboard.vtl"
+    override val pageTitleSubstring: String = "Dashboard"
+
+    override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
-        model.put("template", "/templates/dashboard.vtl")
-        model.put("title", "Thames Valley Furs - Dashboard")
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
         model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)

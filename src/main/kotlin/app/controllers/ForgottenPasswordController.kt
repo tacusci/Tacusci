@@ -69,7 +69,7 @@ class ForgottenPasswordController : Controller {
         model.put("template", templatePath)
         model.put("title", "Thames Valley Furs | $pageTitleSubstring")
 
-        val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", "/forgotten_password", "post")
+        val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 
         if (request.session().attribute("email_sent")) {
             model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())

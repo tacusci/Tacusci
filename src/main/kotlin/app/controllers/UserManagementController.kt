@@ -55,6 +55,11 @@ class UserManagementController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/dashboard/user_management"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/user_management.vtl"
+    override val pageTitleSubstring: String = "User Management"
+
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
@@ -62,8 +67,8 @@ class UserManagementController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
-        model.put("template", "/templates/user_management.vtl")
-        model.put("title", "Thames Valley Furs - User Management")
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs ! $pageTitleSubstring")
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
@@ -139,7 +144,7 @@ class UserManagementController : Controller {
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> Has submitted an invalid user management form...")
         }
-        response.managedRedirect(request, "/dashboard/user_management")
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -192,7 +197,7 @@ class UserManagementController : Controller {
     private fun genUserFormForAdmin(request: Request): ContainerTag {
         //match this form instance with a random ID in the server side session
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
@@ -243,7 +248,7 @@ class UserManagementController : Controller {
 
     private fun genUserFormForModerators(request: Request): ContainerTag {
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Moderator"))
         userListTable.className = "pure-table"
