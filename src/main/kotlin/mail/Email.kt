@@ -51,7 +51,6 @@ object Email : KLogging() {
     var useTtls = ""
 
     fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String) {
-
         host = Config.getProperty("smtp_server_host")
         port = Config.getProperty("smtp_server_port")
         username = Config.getProperty("smtp_account_username")
@@ -79,9 +78,12 @@ object Email : KLogging() {
             mimeMessage.setText(body)
 
             val transport = session.getTransport("smtp")
+
             transport.connect(host, username, password)
             transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
             transport.close()
-        } catch (e: Exception) { logger.error(e.message) }
+        } catch (e: Exception) {
+            logger.error(e.message)
+        }
     }
 }

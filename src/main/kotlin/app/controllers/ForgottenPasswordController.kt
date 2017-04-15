@@ -40,6 +40,7 @@ import spark.Response
 import spark.Session
 import utils.Config
 import utils.j2htmlPartials
+import kotlin.concurrent.thread
 
 /**
  * Created by alewis on 07/04/2017.
@@ -101,7 +102,7 @@ class ForgottenPasswordController : Controller {
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink.replace("http", "https")
         }
-        Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink)
+        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink) }
     }
 
     override fun post(request: Request, response: Response): Response {
