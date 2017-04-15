@@ -42,6 +42,8 @@ object ControllerManager {
     val resetPasswordController = ResetPasswordController()
     val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
+    val layoutTemplate = "/templates/layout.vtl"
+
     val routesAndControllers = mapOf(Pair("/", IndexController()),
             Pair("/dashboard", DashboardController()),
             Pair("/register", RegisterController()),
@@ -59,11 +61,11 @@ object ControllerManager {
     fun initControllers(session: Session) {
         baseControllers.forEach {
             it.initSessionBoolAttributes(session)
-            if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, it.templatePath) }, VelocityTemplateEngine())
+            if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
 
             it.childUris.forEach { childUri ->
-                if (it.handlesGets) Spark.get(childUri, { request, response -> it.get(request, response, it.templatePath) }, VelocityTemplateEngine())
+                if (it.handlesGets) Spark.get(childUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
                 if (it.handlesPosts) Spark.post(childUri, { request, response -> it.post(request, response) })
             }
         }

@@ -59,6 +59,8 @@ class UserManagementController : Controller {
     override val childUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/user_management.vtl"
     override val pageTitleSubstring: String = "User Management"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }

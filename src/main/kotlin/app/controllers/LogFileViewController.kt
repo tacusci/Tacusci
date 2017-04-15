@@ -52,6 +52,13 @@ class LogFileViewController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/dashboard/log_file"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/log_file.vtl"
+    override val pageTitleSubstring: String = "Log File"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("lines_to_show", "20"), Pair("text_to_show", "")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
@@ -62,8 +69,8 @@ class LogFileViewController : Controller {
 
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, model)
-        model.put("template", "/templates/log_file.vtl")
-        model.put("title", "Thames Valley Furs - Log File")
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
 
         val logFile = File(Config.getProperty("log_file"))
 
@@ -95,7 +102,7 @@ class LogFileViewController : Controller {
     private fun genRefreshForm(session: Session, logFile: File): ContainerTag {
         val formName = "refresh_form"
         val hash = Web.mapFormToHash(session, formName)
-        val refreshForm = form().withId(formName).withName(formName).withClass("pure-form").withHref("/dashboard/log_file").withMethod("post").with(
+        val refreshForm = form().withId(formName).withName(formName).withClass("pure-form").withHref(rootUri).withMethod("post").with(
                 fieldset().with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
                 label("Last    ").attr("for", "lines_to_show"),
@@ -141,7 +148,7 @@ class LogFileViewController : Controller {
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid refresh form...")
         }
-        response.managedRedirect(request, "/dashboard/log_file")
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
