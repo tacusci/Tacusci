@@ -51,6 +51,8 @@ class DashboardController : Controller {
     override val childUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/dashboard.vtl"
     override val pageTitleSubstring: String = "Dashboard"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {}
 

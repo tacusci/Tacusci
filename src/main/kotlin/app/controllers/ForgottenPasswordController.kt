@@ -53,6 +53,8 @@ class ForgottenPasswordController : Controller {
     override var childUris = mutableListOf<String>()
     override val templatePath: String = "/templates/forgotten_password.vtl"
     override val pageTitleSubstring: String = "Forgotten Password"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
 
 
     override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }

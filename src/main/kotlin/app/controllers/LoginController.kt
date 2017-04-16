@@ -54,7 +54,7 @@ class LoginController : Controller {
     override val templatePath: String = "/templates/login.vtl"
     override val pageTitleSubstring: String = "Login"
     override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""), Pair("password", ""),
