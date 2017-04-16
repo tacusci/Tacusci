@@ -38,12 +38,13 @@ import spark.template.velocity.VelocityTemplateEngine
  */
 
 object ControllerManager {
-    val profileController = ProfileController()
-    val resetPasswordController = ResetPasswordController()
+    //val profileController = ProfileController()
+    //val resetPasswordController = ResetPasswordController()
     val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val layoutTemplate = "/templates/layout.vtl"
 
+    /*
     val routesAndControllers = mapOf(Pair("/", IndexController()),
             Pair("/dashboard", DashboardController()),
             Pair("/register", RegisterController()),
@@ -56,11 +57,11 @@ object ControllerManager {
             Pair("/reset_password/:username", resetPasswordController),
             Pair("/reset_password/:username/:authhash", resetPasswordController),
             Pair("/forgotten_password", ForgottenPasswordController()))
+    */
 
-    fun initSessionAttributes(session: Session) = routesAndControllers.forEach { it.value.initSessionBoolAttributes(session) }
-    fun initControllers(session: Session) {
+    fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
+    fun initBaseControllers() {
         baseControllers.forEach {
-            it.initSessionBoolAttributes(session)
             if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
 

@@ -93,11 +93,14 @@ class Application {
 
     fun setupSparkRoutes() {
 
+        ControllerManager.initBaseControllers()
+
+        /*
         ControllerManager.routesAndControllers.forEach {
             get(it.key, { request, response -> it.value.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             post(it.key, { request, response -> it.value.post(request, response) })
         }
-
+        */
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
         //MAP BEFORES
