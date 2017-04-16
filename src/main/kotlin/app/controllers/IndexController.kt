@@ -48,7 +48,7 @@ class IndexController : Controller {
 
     override var rootUri: String = "/"
     override val childUris: MutableList<String> = mutableListOf()
-    override val pageTitleSubstring: String = "Dashboard"
+    override val pageTitleSubstring: String = "Homepage"
     override val templatePath: String = "/templates/index.vtl"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = false
@@ -59,7 +59,7 @@ class IndexController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs - Homepage")
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
         model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
     }
