@@ -53,6 +53,13 @@ class ResetPasswordController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/reset_password"
+    override val childUris: MutableList<String> = mutableListOf("/:username", "/:username/:authhash")
+    override val templatePath: String = "/templates/reset_password.vtl"
+    override val pageTitleSubstring: String = "Reset Password"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
     private val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
     private val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
@@ -63,7 +70,7 @@ class ResetPasswordController : Controller {
 
     fun genResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
         Web.loadNavBar(request, model)
-        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "/reset_password/$username/$authHash", "post")
+        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "$rootUri/$username/$authHash", "post")
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
@@ -95,8 +102,8 @@ class ResetPasswordController : Controller {
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
-        model.put("template", "/templates/reset_password.vtl")
-        model.put("title", "Thames Valley Furs - Reset password")
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
 
         val username = request.params(":username")
@@ -106,7 +113,7 @@ class ResetPasswordController : Controller {
             if (authHash == null) {
                 if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
                     val newAuthHash = UserHandler.updateResetPasswordHash(username)
-                    response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
+                    response.managedRedirect(request, "$rootUri/$username/$newAuthHash")
                 } else {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")
                     genAccessDeniedContent(request, model)
@@ -127,10 +134,10 @@ class ResetPasswordController : Controller {
                             genAccessExpiredContent(request, model)
                         }
                     } else {
-                        response.managedRedirect(request, "/reset_password/$username")
+                        response.managedRedirect(request, "$rootUri/$username")
                     }
                 } else {
-                    response.managedRedirect(request, "/reset_password/$username")
+                    response.managedRedirect(request, "$rootUri/$username")
                 }
             }
         }

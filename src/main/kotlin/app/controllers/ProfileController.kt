@@ -53,6 +53,8 @@ class ProfileController : Controller {
     override val childUris: MutableList<String> = mutableListOf("/profile:username")
     override val templatePath: String = "/templates/profile_page.vtl"
     override val pageTitleSubstring: String = "Profile"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {}
 

@@ -65,8 +65,8 @@ object ControllerManager {
             if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
 
             it.childUris.forEach { childUri ->
-                if (it.handlesGets) Spark.get(childUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-                if (it.handlesPosts) Spark.post(childUri, { request, response -> it.post(request, response) })
+                if (it.handlesGets) Spark.get(it.rootUri+childUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+                if (it.handlesPosts) Spark.post(it.rootUri+childUri, { request, response -> it.post(request, response) })
             }
         }
     }

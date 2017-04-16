@@ -49,6 +49,13 @@ class RegisterController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/register"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/register.vtl"
+    override val pageTitleSubstring: String = "Sign Up"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("full_name_field_error", false), Pair("username_field_error", false), Pair("password_field_error", false),
                 Pair("repeated_password_field_error", false), Pair("email_field_error", false), Pair("username_not_available_error", false),
@@ -61,9 +68,9 @@ class RegisterController : Controller {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, model)
 
-        model.put("template", "/templates/register.vtl")
-        model.put("title", "Thames Valley Furs - Sign Up")
-        model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", "/register", "post").render())
+        model.put("template", templatePath)
+        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", rootUri, "post").render())
 
         return ModelAndView(model, layoutTemplate)
     }
@@ -111,7 +118,7 @@ class RegisterController : Controller {
         } else {
             Web.logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
         }
-        response.managedRedirect(request, "/register")
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
