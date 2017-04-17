@@ -38,8 +38,6 @@ import spark.template.velocity.VelocityTemplateEngine
  */
 
 object ControllerManager {
-    //val profileController = ProfileController()
-    //val resetPasswordController = ResetPasswordController()
     val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val layoutTemplate = "/templates/layout.vtl"
