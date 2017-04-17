@@ -74,8 +74,10 @@ class ResetPasswordController : Controller {
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
 
-        val username = request.params(":username")
+        var username = request.params(":username")
         val authHash = request.params(":authhash")
+
+        if (username == null && UserHandler.isLoggedIn(request)) username = UserHandler.loggedInUsername(request)
 
         if (username != null) {
             if (authHash == null) {

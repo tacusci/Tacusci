@@ -65,7 +65,7 @@ class ForgottenPasswordController : Controller {
         Web.loadNavBar(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
-            response.managedRedirect(request, rootUri)
+            response.managedRedirect(request, "/reset_password")
         }
 
         model.put("template", templatePath)
@@ -105,6 +105,7 @@ class ForgottenPasswordController : Controller {
     }
 
     private fun sendResetPasswordLink(user: User, request: Request) {
+        //change the latest reset password hash in the DB and append it to the address to send
         val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink.replace("http", "https")

@@ -180,7 +180,7 @@ object  UserHandler : KLogging() {
     }
 
     fun updateResetPasswordHash(username: String): String {
-        val newAuthHash = Utils.randomHash()
+        val newAuthHash = Utils.randomHash(80)
         val userId = userDAO.getUserID(username)
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         if (resetPasswordDAO.authHashExists(userId)) {

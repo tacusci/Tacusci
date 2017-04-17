@@ -29,7 +29,6 @@
 
 package utils
 
-import java.math.BigInteger
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,9 +42,15 @@ class Utils {
     companion object {
 
         val secureRandom = SecureRandom()
+        val charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-        fun randomHash(): String {
-            return BigInteger(260, secureRandom).toString(32)
+
+        fun randomHash(length: Int): String {
+            val stringBuilder = StringBuilder(length)
+            for (index in 0..length) {
+                stringBuilder.append(charSet[secureRandom.nextInt(charSet.length)])
+            }
+            return stringBuilder.toString()
         }
 
         fun getDateTimeNow(): String = convertMillisToDataTime(System.currentTimeMillis())

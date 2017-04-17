@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `tacusci`.`resetpassword` (
   `lastupdateddatetime` LONG NOT NULL,
   `banneddatetime` LONG,
   `idusers` INT NOT NULL,
-  `authhash` VARCHAR(72) NOT NULL,
+  `authhash` VARCHAR(100) NOT NULL,
   `expired` BIT(1) NOT NULL,
   PRIMARY KEY (`idresetpasswords`),
   UNIQUE INDEX `idresetpasswords_UNIQUE` (`idresetpasswords` ASC),

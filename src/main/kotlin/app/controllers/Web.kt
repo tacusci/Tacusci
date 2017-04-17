@@ -102,7 +102,7 @@ object Web : KLogging() {
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {
-        val hash = Utils.randomHash()
+        val hash = Utils.randomHash(80)
         session.attribute(formTitle, hash)
         return hash
     }
