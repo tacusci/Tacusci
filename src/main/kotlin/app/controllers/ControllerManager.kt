@@ -44,21 +44,6 @@ object ControllerManager {
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val layoutTemplate = "/templates/layout.vtl"
 
-    /*
-    val routesAndControllers = mapOf(Pair("/", IndexController()),
-            Pair("/dashboard", DashboardController()),
-            Pair("/register", RegisterController()),
-            Pair("/dashboard/user_management", UserManagementController()),
-            Pair("/dashboard/log_file", LogFileViewController()),
-            Pair("/dashboard/page_management", PageManagementController()),
-            Pair("/login", LoginController()),
-            Pair("/profile", profileController),
-            Pair("/profile/:username", profileController),
-            Pair("/reset_password/:username", resetPasswordController),
-            Pair("/reset_password/:username/:authhash", resetPasswordController),
-            Pair("/forgotten_password", ForgottenPasswordController()))
-    */
-
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
     fun initBaseControllers() {
         baseControllers.forEach {

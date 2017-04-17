@@ -50,7 +50,7 @@ class ProfileController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/profile"
-    override val childUris: MutableList<String> = mutableListOf("/profile:username")
+    override val childUris: MutableList<String> = mutableListOf("/:username")
     override val templatePath: String = "/templates/profile_page.vtl"
     override val pageTitleSubstring: String = "Profile"
     override val handlesGets: Boolean = true
