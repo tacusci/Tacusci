@@ -66,11 +66,10 @@ class LogFileViewController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
-
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, model)
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
         val logFile = File(Config.getProperty("log_file"))
 

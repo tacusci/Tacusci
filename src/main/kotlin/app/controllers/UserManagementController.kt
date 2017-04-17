@@ -42,6 +42,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
@@ -60,7 +61,7 @@ class UserManagementController : Controller {
     override val templatePath: String = "/templates/user_management.vtl"
     override val pageTitleSubstring: String = "User Management"
     override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
@@ -70,7 +71,7 @@ class UserManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs ! $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())

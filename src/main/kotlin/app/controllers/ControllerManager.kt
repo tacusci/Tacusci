@@ -29,6 +29,7 @@
 
 package app.controllers
 
+import mu.KLogging
 import spark.Session
 import spark.Spark
 import spark.template.velocity.VelocityTemplateEngine
@@ -37,7 +38,8 @@ import spark.template.velocity.VelocityTemplateEngine
  * Created by alewis on 21/02/2017.
  */
 
-object ControllerManager {
+object ControllerManager : KLogging() {
+
     val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val layoutTemplate = "/templates/layout.vtl"
@@ -45,10 +47,12 @@ object ControllerManager {
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
     fun initBaseControllers() {
         baseControllers.forEach {
+            logger.debug("Mapping route: ${it.rootUri}")
             if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
 
             it.childUris.forEach { childUri ->
+                logger.debug("Mapping route: ${it.rootUri+childUri}")
                 if (it.handlesGets) Spark.get(it.rootUri+childUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
                 if (it.handlesPosts) Spark.post(it.rootUri+childUri, { request, response -> it.post(request, response) })
             }

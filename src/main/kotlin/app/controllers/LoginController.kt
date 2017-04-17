@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.j2htmlPartials
 
 /**
@@ -72,7 +73,7 @@ class LoginController : Controller {
         }
 
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
         val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", rootUri, "post")
 

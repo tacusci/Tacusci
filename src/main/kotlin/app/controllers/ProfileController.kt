@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.j2htmlPartials
 import java.util.*
 
@@ -66,7 +67,7 @@ class ProfileController : Controller {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, model)
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $username $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("username_header", h1(username))
         if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)
         return model

@@ -37,6 +37,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
@@ -69,7 +70,7 @@ class RegisterController : Controller {
         model = Web.loadNavBar(request, model)
 
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("register_form", j2htmlPartials.pureFormAligned_Register(request.session(), "register_form", rootUri, "post").render())
 
         return ModelAndView(model, layoutTemplate)

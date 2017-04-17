@@ -69,7 +69,7 @@ class ForgottenPasswordController : Controller {
         }
 
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
         val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 

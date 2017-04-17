@@ -37,6 +37,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import java.util.*
 
 /**
@@ -60,7 +61,7 @@ class DashboardController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
-        model.put("title", "Thames Valley Furs | $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
