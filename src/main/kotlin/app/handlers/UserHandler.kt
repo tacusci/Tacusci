@@ -226,7 +226,7 @@ object  UserHandler : KLogging() {
 
     fun getSessionIdentifier(request: Request): String {
         var clientIP = request.forwardedIP()
-        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = request.ip() }
+        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = "${request.ip()} [${request.userAgent()}]" }
         return if (UserHandler.isLoggedIn(request)) "$clientIP | ${UserHandler.loggedInUsername(request)}" else clientIP
     }
 }
