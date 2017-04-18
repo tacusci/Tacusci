@@ -40,6 +40,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
 import kotlin.concurrent.thread
@@ -124,6 +125,7 @@ class ForgottenPasswordController : Controller {
 
         var emailContent = emailContentFile.readText().replace("\$reset_password_link", resetPasswordLink)
         emailContent = emailContent.replace("\$username", user.username)
+        emailContent = emailContent.replace("\$time_stamp", Utils.getDateTimeNow())
 
         thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
     }

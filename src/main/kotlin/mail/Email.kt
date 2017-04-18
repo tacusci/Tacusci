@@ -85,6 +85,7 @@ object Email : KLogging() {
             transport.close()
         } catch (e: Exception) {
             logger.error(e.message)
+            logger.debug("Full stack trace: ${e.printStackTrace()}")
         }
     }
 }
