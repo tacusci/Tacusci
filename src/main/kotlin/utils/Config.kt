@@ -68,7 +68,8 @@ open class Config {
                     Pair("reset_password_from_address", ""),
                     Pair("reset_password_email_subject", ""),
                     Pair("page_title", "Tacusci Website"),
-                    Pair("page_title_divider", "|"))
+                    Pair("page_title_divider", "|"),
+                    Pair("reset_password_email_content_file", "reset_password_email_content.txt"))
         }
 
         fun load() {

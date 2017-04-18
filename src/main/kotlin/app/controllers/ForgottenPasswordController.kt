@@ -31,6 +31,7 @@ package app.controllers
 
 import app.handlers.UserHandler
 import database.models.User
+import extensions.doesNotExist
 import extensions.managedRedirect
 import mail.Email
 import mu.KLogging
@@ -40,6 +41,7 @@ import spark.Response
 import spark.Session
 import utils.Config
 import utils.j2htmlPartials
+import java.io.File
 import kotlin.concurrent.thread
 
 /**
@@ -92,7 +94,7 @@ class ForgottenPasswordController : Controller {
                 if (UserHandler.userExists(username)) {
                     val user = UserHandler.userDAO.getUser(username)
                     if (user.email == email) {
-                        sendResetPasswordLink(user, request)
+                        sendResetPasswordEmail(user, request)
                     }
                 }
             }
@@ -104,13 +106,26 @@ class ForgottenPasswordController : Controller {
         return response
     }
 
-    private fun sendResetPasswordLink(user: User, request: Request) {
+    private fun sendResetPasswordEmail(user: User, request: Request) {
         //change the latest reset password hash in the DB and append it to the address to send
         var resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink = resetPasswordLink.replace("http", "https")
         }
-        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink) }
+
+        val emailContentFile = File(Config.getProperty("reset_password_email_content_file"))
+
+        if (emailContentFile.doesNotExist()) {
+            emailContentFile.createNewFile()
+            emailContentFile.bufferedWriter().use { out ->
+                out.write("\$reset_password_link")
+            }
+        }
+
+        var emailContent = emailContentFile.readText().replace("\$reset_password_link", resetPasswordLink)
+        emailContent = emailContent.replace("\$username", user.username)
+
+        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
     }
 
     override fun post(request: Request, response: Response): Response {

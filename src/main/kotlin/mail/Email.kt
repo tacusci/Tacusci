@@ -75,12 +75,13 @@ object Email : KLogging() {
             toAddresses.forEach { mimeMessage.addRecipient(Message.RecipientType.TO, it) }
 
             mimeMessage.subject = subject
-            mimeMessage.setText(body)
+            mimeMessage.setContent(body, "text/html; charset=utf-8")
 
             val transport = session.getTransport("smtp")
 
             transport.connect(host, username, password)
             transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
+            logger.info("Sent reset password email to $toAddresses from $sender")
             transport.close()
         } catch (e: Exception) {
             logger.error(e.message)
