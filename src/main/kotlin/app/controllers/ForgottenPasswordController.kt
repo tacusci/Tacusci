@@ -106,9 +106,9 @@ class ForgottenPasswordController : Controller {
 
     private fun sendResetPasswordLink(user: User, request: Request) {
         //change the latest reset password hash in the DB and append it to the address to send
-        val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
+        var resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
-            resetPasswordLink.replace("http", "https")
+            resetPasswordLink = resetPasswordLink.replace("http", "https")
         }
         thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink) }
     }
