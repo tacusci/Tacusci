@@ -39,7 +39,10 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import utils.Utils
 import utils.j2htmlPartials
+import java.io.File
+import kotlin.concurrent.thread
 
 /**
  * Created by alewis on 07/04/2017.
@@ -47,6 +50,14 @@ import utils.j2htmlPartials
 class ForgottenPasswordController : Controller {
 
     companion object : KLogging()
+
+    override var rootUri = "/forgotten_password"
+    override var childUris = mutableListOf<String>()
+    override val templatePath: String = "/templates/forgotten_password.vtl"
+    override val pageTitleSubstring: String = "Forgotten Password"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
 
     override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
@@ -59,10 +70,10 @@ class ForgottenPasswordController : Controller {
             response.managedRedirect(request, "/reset_password")
         }
 
-        model.put("template", "/templates/forgotten_password.vtl")
-        model.put("title", "Thames Valley Furs - Forgotten Password")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
-        val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", "/forgotten_password", "post")
+        val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 
         if (request.session().attribute("email_sent")) {
             model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())
@@ -83,7 +94,7 @@ class ForgottenPasswordController : Controller {
                 if (UserHandler.userExists(username)) {
                     val user = UserHandler.userDAO.getUser(username)
                     if (user.email == email) {
-                        sendResetPasswordLink(user, request)
+                        sendResetPasswordEmail(user, request)
                     }
                 }
             }
@@ -95,13 +106,24 @@ class ForgottenPasswordController : Controller {
         return response
     }
 
-    private fun sendResetPasswordLink(user: User, request: Request) {
-        //TODO: need to move this to separate thread since it's going to show the same result page regardless
-        val resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
+    private fun sendResetPasswordEmail(user: User, request: Request) {
+        //change the latest reset password hash in the DB and append it to the address to send
+        var resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
-            resetPasswordLink.replace("http", "https")
+            resetPasswordLink = resetPasswordLink.replace("http", "https")
         }
-        Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), resetPasswordLink)
+
+        val emailContentFile = File(Config.getProperty("reset_password_email_content_file"))
+        var emailContent = "${Utils.getDateTimeNow()} $resetPasswordLink"
+
+        if (emailContentFile.exists()) {
+            emailContent = emailContentFile.readText().replace("\$reset_password_link", resetPasswordLink)
+            emailContent = emailContent.replace("\$username", user.username)
+            emailContent = emailContent.replace("\$time_stamp", Utils.getDateTimeNow())
+        }
+
+
+        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
     }
 
     override fun post(request: Request, response: Response): Response {

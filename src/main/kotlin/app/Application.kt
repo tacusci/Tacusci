@@ -83,7 +83,7 @@ class Application {
             portNum = Config.getProperty("port").toInt()
             logger.info("Setting port to $portNum")
         } catch (e: NumberFormatException) {
-            println("Port is not a valid number. Terminating...")
+            logger.error("Port is not a valid number. Terminating...")
             System.exit(1)
         }
         port(portNum)
@@ -93,11 +93,14 @@ class Application {
 
     fun setupSparkRoutes() {
 
+        ControllerManager.initBaseControllers()
+
+        /*
         ControllerManager.routesAndControllers.forEach {
             get(it.key, { request, response -> it.value.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
             post(it.key, { request, response -> it.value.post(request, response) })
         }
-
+        */
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
         //MAP BEFORES
@@ -150,6 +153,7 @@ fun main(args: Array<String>) {
     }
     Config.load()
     val application = Application()
+
     application.dbProperties.setProperty("user", args[0])
     application.dbProperties.setProperty("password", args[1])
     application.dbProperties.setProperty("useSSL", "false")

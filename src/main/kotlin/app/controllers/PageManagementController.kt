@@ -37,10 +37,12 @@ import database.models.RouteEntityTree
 import j2html.TagCreator.li
 import j2html.TagCreator.ul
 import j2html.tags.ContainerTag
+import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.tree.Node
 import java.util.*
 
@@ -50,21 +52,22 @@ import java.util.*
  */
 class PageManagementController : Controller {
 
-    override fun initSessionBoolAttributes(session: Session) {
-        //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    companion object : KLogging()
 
-    /*
+    override var rootUri: String = "/dashboard/page_management"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/page_management.vtl"
+    override val pageTitleSubstring: String = "Page Management"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
 
-    The premise for page management is to have a branch for every subpage
-
-     */
+    override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         DashboardController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PAGE_MANAGEMENT page")
         var model = HashMap<String, Any>()
-        model.put("template", "/templates/page_management.vtl")
-        model.put("title", "Thames Valley Furs - Page Management")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("page_menu", "/templates/page_menu.vtl")
         model = Web.loadNavBar(request, model)
 

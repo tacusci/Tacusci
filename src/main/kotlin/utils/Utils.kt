@@ -29,7 +29,6 @@
 
 package utils
 
-import java.math.BigInteger
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,21 +42,37 @@ class Utils {
     companion object {
 
         val secureRandom = SecureRandom()
+        val charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-        fun randomHash(): String {
-            return BigInteger(260, secureRandom).toString(32)
+
+        fun randomHash(length: Int): String {
+            val stringBuilder = StringBuilder(length)
+            for (index in 0..length) {
+                stringBuilder.append(charSet[secureRandom.nextInt(charSet.length)])
+            }
+            return stringBuilder.toString()
         }
 
-        fun getDateTimeNow(): String = convertMillisToDataTime(System.currentTimeMillis())
+        fun getDateTimeNow(): String = convertMillisToDateTime(System.currentTimeMillis())
+        fun getDateTimeNow(format: String): String = convertMillisToDateTime(System.currentTimeMillis(), format)
         fun getDateNow(): String = convertMillisToDate(System.currentTimeMillis())
+        fun getDateNow(format: String): String = convertMillisToDate(System.currentTimeMillis(), format)
 
         fun convertMillisToDate(millis: Long): String {
-            val formatter = SimpleDateFormat("dd-MM-yyyy")
+            return convertMillisToDate(millis, "dd-MM-yyyy")
+        }
+
+        fun convertMillisToDate(millis: Long, format: String): String {
+            val formatter = SimpleDateFormat(format)
             return formatter.format(Date(millis))
         }
 
-        fun convertMillisToDataTime(millis: Long): String {
-            val formatter = SimpleDateFormat("HH:mm dd-MM-yyyy")
+        fun convertMillisToDateTime(millis: Long): String {
+            return convertMillisToDateTime(millis, "HH:mm dd:MM:yyyy")
+        }
+
+        fun convertMillisToDateTime(millis: Long, format: String): String {
+            val formatter = SimpleDateFormat(format)
             return formatter.format(millis)
         }
 

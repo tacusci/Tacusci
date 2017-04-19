@@ -53,6 +53,13 @@ class ResetPasswordController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/reset_password"
+    override val childUris: MutableList<String> = mutableListOf("/:username", "/:username/:authhash")
+    override val templatePath: String = "/templates/reset_password.vtl"
+    override val pageTitleSubstring: String = "Reset Password"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
     private val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
     private val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
 
@@ -61,9 +68,55 @@ class ResetPasswordController : Controller {
                     Pair("reset_password_successfully", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value)}
     }
 
+    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
+
+        var username = request.params(":username")
+        val authHash = request.params(":authhash")
+
+        if (username == null && UserHandler.isLoggedIn(request)) username = UserHandler.loggedInUsername(request)
+
+        if (username != null) {
+            if (authHash == null) {
+                if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
+                    val newAuthHash = UserHandler.updateResetPasswordHash(username)
+                    response.managedRedirect(request, "$rootUri/$username/$newAuthHash")
+                } else {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")
+                    genAccessDeniedContent(request, model)
+                }
+            } else {
+                val userId = userDAO.getUserID(username)
+                if (resetPasswordDAO.authHashExists(userId)) {
+                    if (resetPasswordDAO.getAuthHash(userId) == authHash) {
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
+
+                        //if authhash has gone past expired time limit, mark as expired
+                        if (checkAuthHashExpired(authHash)) resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+
+                        //check if the authhash is marked as expired
+                        if (!resetPasswordDAO.authHashExpired(authHash)) {
+                            genResetPasswordPageContent(request, username, model, authHash)
+                        } else {
+                            genAccessExpiredContent(request, model)
+                        }
+                    } else {
+                        response.managedRedirect(request, "$rootUri/$username")
+                    }
+                } else {
+                    response.managedRedirect(request, "$rootUri/$username")
+                }
+            }
+        }
+        return ModelAndView(model, layoutTemplate)
+    }
+
     fun genResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
         Web.loadNavBar(request, model)
-        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "/reset_password/$username/$authHash", "post")
+        val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "$rootUri/$username/$authHash", "post")
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
@@ -91,50 +144,6 @@ class ResetPasswordController : Controller {
         Web.loadNavBar(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Tried accessing an expired reset password form address")
         model.put("access_expired_message", h1("Access has expired"))
-    }
-
-    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        val model = HashMap<String, Any>()
-        model.put("template", "/templates/reset_password.vtl")
-        model.put("title", "Thames Valley Furs - Reset password")
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
-
-        val username = request.params(":username")
-        val authHash = request.params(":authhash")
-
-        if (username != null) {
-            if (authHash == null) {
-                if (UserHandler.isLoggedIn(request) && UserHandler.loggedInUsername(request) == username) {
-                    val newAuthHash = UserHandler.updateResetPasswordHash(username)
-                    response.managedRedirect(request, "/reset_password/$username/$newAuthHash")
-                } else {
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Received unauthorised reset password request for user $username")
-                    genAccessDeniedContent(request, model)
-                }
-            } else {
-                val userId = userDAO.getUserID(username)
-                if (resetPasswordDAO.authHashExists(userId)) {
-                    if (resetPasswordDAO.getAuthHash(userId) == authHash) {
-                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
-
-                        //if authhash has gone past expired time limit, mark as expired
-                        if (checkAuthHashExpired(authHash)) resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
-
-                        //check if the authhash is marked as expired
-                        if (!resetPasswordDAO.authHashExpired(authHash)) {
-                            genResetPasswordPageContent(request, username, model, authHash)
-                        } else {
-                            genAccessExpiredContent(request, model)
-                        }
-                    } else {
-                        response.managedRedirect(request, "/reset_password/$username")
-                    }
-                } else {
-                    response.managedRedirect(request, "/reset_password/$username")
-                }
-            }
-        }
-        return ModelAndView(model, layoutTemplate)
     }
 
     private fun post_resetPassword(request: Request, response: Response): Response {

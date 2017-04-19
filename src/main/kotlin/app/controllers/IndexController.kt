@@ -37,28 +37,33 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import java.util.*
 
 /**
  * Created by tauraamui on 15/12/2016.
  */
 class IndexController : Controller {
+
     companion object : KLogging()
 
-    override fun initSessionBoolAttributes(session: Session) {
-        //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override var rootUri: String = "/"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val pageTitleSubstring: String = "Homepage"
+    override val templatePath: String = "/templates/index.vtl"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
+
+    override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
-        model.put("template", "/templates/index.vtl")
-        model.put("title", "Thames Valley Furs - Homepage")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model = Web.loadNavBar(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 
-    override fun post(request: Request, response: Response): Response {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun post(request: Request, response: Response): Response { throw UnsupportedOperationException("not implemented") }
 }

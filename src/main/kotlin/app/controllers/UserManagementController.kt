@@ -42,6 +42,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
@@ -55,6 +56,13 @@ class UserManagementController : Controller {
 
     companion object : KLogging()
 
+    override var rootUri: String = "/dashboard/user_management"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/user_management.vtl"
+    override val pageTitleSubstring: String = "User Management"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
+
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("user_management_changes_made", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
@@ -62,8 +70,8 @@ class UserManagementController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
-        model.put("template", "/templates/user_management.vtl")
-        model.put("title", "Thames Valley Furs - User Management")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
@@ -139,7 +147,7 @@ class UserManagementController : Controller {
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> Has submitted an invalid user management form...")
         }
-        response.managedRedirect(request, "/dashboard/user_management")
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -192,7 +200,7 @@ class UserManagementController : Controller {
     private fun genUserFormForAdmin(request: Request): ContainerTag {
         //match this form instance with a random ID in the server side session
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"
@@ -220,7 +228,7 @@ class UserManagementController : Controller {
             }
 
             userListTable.addRow(listOf (
-                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
                     listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
@@ -243,7 +251,7 @@ class UserManagementController : Controller {
 
     private fun genUserFormForModerators(request: Request): ContainerTag {
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction("/dashboard/user_management").withMethod("post")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Moderator"))
         userListTable.className = "pure-table"
@@ -266,7 +274,7 @@ class UserManagementController : Controller {
             }
 
             userListTable.addRow(listOf(
-                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
                     listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),

@@ -33,6 +33,7 @@
 
 import database.SQLScript
 import mu.KLogging
+import utils.Config
 import utils.InternalResourceFile
 import java.io.File
 import java.sql.Connection
@@ -72,6 +73,7 @@ object DAOManager : KLogging() {
         val sqlScriptData = InternalResourceFile("/sql/sql_setup_script.sql")
         val sqlScript = SQLScript(sqlScriptData.inputStream)
         sqlScript.parse()
+        sqlScript.replace("\$schema_name", Config.getProperty("schema_name"))
         sqlScript.executeStatements(connection!!)
     }
 

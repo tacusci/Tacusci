@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.j2htmlPartials
 
 /**
@@ -48,6 +49,13 @@ import utils.j2htmlPartials
 class LoginController : Controller {
 
     companion object : KLogging()
+
+    override var rootUri: String = "/login"
+    override val childUris: MutableList<String> = mutableListOf()
+    override val templatePath: String = "/templates/login.vtl"
+    override val pageTitleSubstring: String = "Login"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""), Pair("password", ""),
@@ -64,10 +72,10 @@ class LoginController : Controller {
             response.managedRedirect(request, "/")
         }
 
-        model.put("template", "/templates/login.vtl")
-        model.put("title", "Thames Valley Furs - Login")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
-        val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", "/login", "post")
+        val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", rootUri, "post")
 
         if (request.session().attribute("login_incorrect_creds")) {
             request.session().attribute("login_incorrect_creds", false)
@@ -93,7 +101,7 @@ class LoginController : Controller {
             "sign_out_form" -> return post_logout(request, response)
         }
         //if none of the form names match go back to this page...
-        response.managedRedirect(request, "/login")
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -112,7 +120,7 @@ class LoginController : Controller {
                     email = username
                     username = UserHandler.userDAO.getUsernameFromEmail(email)
                 }
-                if (!UserHandler.login(request, username, password)) { response.managedRedirect(request, "/login") }
+                if (!UserHandler.login(request, username, password)) { response.managedRedirect(request, rootUri) }
             } else {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
@@ -122,7 +130,7 @@ class LoginController : Controller {
         }
 
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to login page")
-        response.managedRedirect(request, "/login")
+        response.managedRedirect(request, rootUri)
         return response
     }
 

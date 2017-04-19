@@ -39,6 +39,13 @@ import spark.Session
  */
 interface Controller {
 
+    var rootUri: String
+    val childUris: MutableList<String>
+    val templatePath: String
+    val pageTitleSubstring: String
+    val handlesGets: Boolean
+    val handlesPosts: Boolean
+
     fun initSessionBoolAttributes(session: Session)
     fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView
     fun post(request: Request, response: Response): Response

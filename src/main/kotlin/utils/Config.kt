@@ -66,7 +66,10 @@ open class Config {
                     Pair("smtp_account_password", ""),
                     Pair("smtp_use_ttls", "false"),
                     Pair("reset_password_from_address", ""),
-                    Pair("reset_password_email_subject", ""))
+                    Pair("reset_password_email_subject", ""),
+                    Pair("page_title", "Tacusci Website"),
+                    Pair("page_title_divider", "|"),
+                    Pair("reset_password_email_content_file", ""))
         }
 
         fun load() {

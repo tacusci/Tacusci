@@ -180,7 +180,7 @@ object  UserHandler : KLogging() {
     }
 
     fun updateResetPasswordHash(username: String): String {
-        val newAuthHash = Utils.randomHash()
+        val newAuthHash = Utils.randomHash(80)
         val userId = userDAO.getUserID(username)
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         if (resetPasswordDAO.authHashExists(userId)) {
@@ -225,8 +225,8 @@ object  UserHandler : KLogging() {
     }
 
     fun getSessionIdentifier(request: Request): String {
-        var clientIP = request.forwardedIP()
-        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = request.ip() }
+        var clientIP = "${request.forwardedIP()} [${request.userAgent()}]"
+        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = "${request.ip()} [${request.userAgent()}]" }
         return if (UserHandler.isLoggedIn(request)) "$clientIP | ${UserHandler.loggedInUsername(request)}" else clientIP
     }
 }

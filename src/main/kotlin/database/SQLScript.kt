@@ -67,6 +67,15 @@ class SQLScript() {
         }
     }
 
+    fun replace(placeholder: String, newValue: String) {
+        if (statements.isNotEmpty()) {
+            statements.forEachIndexed { index, statement ->
+                val newStatement = statement.replace(placeholder, newValue, ignoreCase = true)
+                statements[index] = newStatement
+            }
+        }
+    }
+
     fun executeStatements(connection: Connection) {
         statements.forEach { statement ->
             val preparedStatement = connection.prepareStatement("$statement;")

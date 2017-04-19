@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.j2htmlPartials
 import java.util.*
 
@@ -46,11 +47,17 @@ import java.util.*
  * Created by alewis on 04/11/2016.
  */
 class ProfileController : Controller {
+
     companion object : KLogging()
 
-    override fun initSessionBoolAttributes(session: Session) {
-        //throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override var rootUri: String = "/profile"
+    override val childUris: MutableList<String> = mutableListOf("/:username")
+    override val templatePath: String = "/templates/profile_page.vtl"
+    override val pageTitleSubstring: String = "Profile"
+    override val handlesGets: Boolean = true
+    override val handlesPosts: Boolean = false
+
+    override fun initSessionBoolAttributes(session: Session) {}
 
     private fun setupAuthorisedElements(model: HashMap<String, Any>, username: String) {
         model.put("reset_password_link", j2htmlPartials.link("pure-button", "/reset_password/$username", "Reset Password"))
@@ -59,8 +66,8 @@ class ProfileController : Controller {
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         var model = HashMap<String, Any>()
         model = Web.loadNavBar(request, model)
-        model.put("template", "/templates/profile_page.vtl")
-        model.put("title", "Thames Valley Furs $username")
+        model.put("template", templatePath)
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("username_header", h1(username))
         if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)
         return model
