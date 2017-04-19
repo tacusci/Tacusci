@@ -228,7 +228,7 @@ class UserManagementController : Controller {
             }
 
             userListTable.addRow(listOf (
-                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
                     listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
@@ -274,7 +274,7 @@ class UserManagementController : Controller {
             }
 
             userListTable.addRow(listOf(
-                    listOf<Tag>(label(Utils.convertMillisToDataTime(user.createdDateTime))),
+                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
                     listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
                     listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
                     listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),

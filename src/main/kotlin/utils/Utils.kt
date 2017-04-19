@@ -53,16 +53,26 @@ class Utils {
             return stringBuilder.toString()
         }
 
-        fun getDateTimeNow(): String = convertMillisToDataTime(System.currentTimeMillis())
+        fun getDateTimeNow(): String = convertMillisToDateTime(System.currentTimeMillis())
+        fun getDateTimeNow(format: String): String = convertMillisToDateTime(System.currentTimeMillis(), format)
         fun getDateNow(): String = convertMillisToDate(System.currentTimeMillis())
+        fun getDateNow(format: String): String = convertMillisToDate(System.currentTimeMillis(), format)
 
         fun convertMillisToDate(millis: Long): String {
-            val formatter = SimpleDateFormat("dd-MM-yyyy")
+            return convertMillisToDate(millis, "dd-MM-yyyy")
+        }
+
+        fun convertMillisToDate(millis: Long, format: String): String {
+            val formatter = SimpleDateFormat(format)
             return formatter.format(Date(millis))
         }
 
-        fun convertMillisToDataTime(millis: Long): String {
-            val formatter = SimpleDateFormat("HH:mm dd-MM-yyyy")
+        fun convertMillisToDateTime(millis: Long): String {
+            return convertMillisToDateTime(millis, "HH:mm dd:MM:yyyy")
+        }
+
+        fun convertMillisToDateTime(millis: Long, format: String): String {
+            val formatter = SimpleDateFormat(format)
             return formatter.format(millis)
         }
 

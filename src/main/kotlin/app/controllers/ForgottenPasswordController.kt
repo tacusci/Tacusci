@@ -31,7 +31,6 @@ package app.controllers
 
 import app.handlers.UserHandler
 import database.models.User
-import extensions.doesNotExist
 import extensions.managedRedirect
 import mail.Email
 import mu.KLogging
@@ -115,17 +114,14 @@ class ForgottenPasswordController : Controller {
         }
 
         val emailContentFile = File(Config.getProperty("reset_password_email_content_file"))
+        var emailContent = "${Utils.getDateTimeNow()} $resetPasswordLink"
 
-        if (emailContentFile.doesNotExist()) {
-            emailContentFile.createNewFile()
-            emailContentFile.bufferedWriter().use { out ->
-                out.write("\$reset_password_link")
-            }
+        if (emailContentFile.exists()) {
+            emailContent = emailContentFile.readText().replace("\$reset_password_link", resetPasswordLink)
+            emailContent = emailContent.replace("\$username", user.username)
+            emailContent = emailContent.replace("\$time_stamp", Utils.getDateTimeNow())
         }
 
-        var emailContent = emailContentFile.readText().replace("\$reset_password_link", resetPasswordLink)
-        emailContent = emailContent.replace("\$username", user.username)
-        emailContent = emailContent.replace("\$time_stamp", Utils.getDateTimeNow())
 
         thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
     }
