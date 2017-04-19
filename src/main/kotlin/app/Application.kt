@@ -83,7 +83,7 @@ class Application {
             portNum = Config.getProperty("port").toInt()
             logger.info("Setting port to $portNum")
         } catch (e: NumberFormatException) {
-            println("Port is not a valid number. Terminating...")
+            logger.error("Port is not a valid number. Terminating...")
             System.exit(1)
         }
         port(portNum)
