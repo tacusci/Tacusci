@@ -71,20 +71,10 @@ class PageManagementController : Controller {
         model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
         model = Web.loadNavBar(request, model)
 
-        val root = RouteEntityNode(RouteEntity(-1, -1, "Pages", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
-        val events = RouteEntityNode(RouteEntity(-1, root.data.id, "events", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
-        val reading = RouteEntityNode(RouteEntity(-1, events.data.id, "reading", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
-        val oxford = RouteEntityNode(RouteEntity(-1, events.data.id, "oxford", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
-        val oxfordChild = RouteEntityNode(RouteEntity(-1, oxford.data.id, "I should come under oxford", RouteEntityHandler.ROUTE_ENTITY_TYPE.PAGE, -1))
-        val readingChild = RouteEntityNode(RouteEntity(-1, reading.data.id, "I should come under reading", RouteEntityHandler.ROUTE_ENTITY_TYPE.PAGE, -1))
-        oxford.addChild(oxfordChild)
-        reading.addChild(readingChild)
-        events.addChild(reading)
-        events.addChild(oxford)
-        root.addChild(events)
-        val routesAndPagesTree = RouteEntityTree(root)
+        val pageFooterCodeTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area")
 
-        model.put("tree", createRouteTree(routesAndPagesTree).render())
+        model.put("page_footer_edit_box", pageFooterCodeTextArea.render())
+
 
         return ModelAndView(model, layoutTemplate)
     }
