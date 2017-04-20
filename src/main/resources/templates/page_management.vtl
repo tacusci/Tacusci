@@ -1,61 +1,54 @@
 <div class="pure-g">
     <div class="pure-u-24-24">
         <div class="header">
-            <h1>Page Management</h1>
+            <h2>Page Management</h2>
         </div>
     </div>
 
     <div id="layout" class="pure-u-5-24">
-        #parse($!page_menu)
-        <div class="content"></div>
+        <div class="tab">
+          <button class="tablinks" onclick="openCity(event, 'London')">London</button>
+          <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+          <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+        </div>
+
+        <div id="London" class="tabcontent">
+          <h3>London</h3>
+          <p>London is the capital city of England.</p>
+        </div>
+
+        <div id="Paris" class="tabcontent">
+          <h3>Paris</h3>
+          <p>Paris is the capital of France.</p>
+        </div>
+
+        <div id="Tokyo" class="tabcontent">
+          <h3>Tokyo</h3>
+          <p>Tokyo is the capital of Japan.</p>
+        </div>
     </div>
 </div>
 
-<script src="/js/ui.js"></script>
+<script>
 
-<script type="text/javascript">
+function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
 
-    var originalNodeText = "text";
-
-    $(function() {$('#tree_content').jstree({
-        "core" : {
-            "check_callback" : true
-        },
-        "plugins" : ["contextmenu", "wholerow", "unique", "dnd", "state", "types"],
-        contextmenu: {items: customMenu}
-        });
-    });
-
-    function customMenu($node) {
-        var tree = $("#tree_content").jstree(true);
-        return {
-            "Create": {
-                "separator_before": false,
-                "separator_after": false,
-                "label": "Create",
-                "action": function (obj) {
-                    $node = tree.create_node($node);
-                    tree.edit($node);
-                }
-            },
-            "Rename": {
-                "separator_before": false,
-                "separator_after": false,
-                "label": "Rename",
-                "action": function (obj) {
-                    console.log($node.data.text);
-                    tree.edit($node);
-                }
-            },
-            "Remove": {
-                "separator_before": false,
-                "separator_after": false,
-                "label": "Remove",
-                "action": function (obj) {
-                    tree.delete_node($node);
-                }
-            }
-        };
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
     }
 
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
 </script>

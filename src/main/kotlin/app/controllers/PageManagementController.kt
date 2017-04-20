@@ -34,8 +34,7 @@ import app.handlers.UserHandler
 import database.models.RouteEntity
 import database.models.RouteEntityNode
 import database.models.RouteEntityTree
-import j2html.TagCreator.li
-import j2html.TagCreator.ul
+import j2html.TagCreator.*
 import j2html.tags.ContainerTag
 import mu.KLogging
 import spark.ModelAndView
@@ -43,6 +42,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import utils.j2htmlPartials
 import utils.tree.Node
 import java.util.*
 
@@ -68,7 +68,7 @@ class PageManagementController : Controller {
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        model.put("page_menu", "/templates/page_menu.vtl")
+        model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
         model = Web.loadNavBar(request, model)
 
         val root = RouteEntityNode(RouteEntity(-1, -1, "Pages", RouteEntityHandler.ROUTE_ENTITY_TYPE.PATH, -1))
