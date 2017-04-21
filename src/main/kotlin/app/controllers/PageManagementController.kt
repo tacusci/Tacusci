@@ -29,10 +29,8 @@
 
 package app.controllers
 
-import app.handlers.RouteEntityHandler
 import app.handlers.UserHandler
 import database.models.RouteEntity
-import database.models.RouteEntityNode
 import database.models.RouteEntityTree
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -42,7 +40,6 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
-import utils.j2htmlPartials
 import utils.tree.Node
 import java.util.*
 
@@ -71,10 +68,7 @@ class PageManagementController : Controller {
         model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
         model = Web.loadNavBar(request, model)
 
-        val pageFooterCodeTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area")
-
-        model.put("page_footer_edit_box", pageFooterCodeTextArea.render())
-
+        model.put("default_footer", h2("Testing footer preview thing!"))
 
         return ModelAndView(model, layoutTemplate)
     }

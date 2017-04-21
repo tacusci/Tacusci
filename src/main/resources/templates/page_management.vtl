@@ -1,20 +1,28 @@
+
+<style>
+    #PageFooterPreview { width:100%; height:100%; }
+</style>
+
 <div class="pure-g">
 
     <div id="layout" class="pure-u-24-24">
         <div class="tab">
-          <button class="tablinks" onclick="openTab(event, 'Page Footer')">Page Footer</button>
+          <button class="tablinks" onclick="openTab(event, 'Page Footer Edit')">Page Footer</button>
         </div>
 
-        <div id="Page Footer" class="tabcontent">
-            $!page_footer_edit_box
-            $!page_footer_preview
+        <div id="Page Footer Edit" class="tabcontent">
+            <textarea id="PageFooterEditBox" class="boxsizingBorder log-view-pane styled-text-area">$!default_footer</textarea>
+            <button class="pure-button" onclick="updateFooterPreview()">Preview</button>
+            <div class="pure-u-24-24">
+                <iframe id="PageFooterPreview"></iframe>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
 
-function openTab(evt, cityName) {
+function openTab(evt, elementName) {
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -31,7 +39,14 @@ function openTab(evt, cityName) {
     }
 
     // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
+    document.getElementById(elementName).style.display = "block";
     evt.currentTarget.className += " active";
+}
+
+function updateFooterPreview() {
+    var pageFooterPreview = document.getElementById("PageFooterPreview"),
+        pageFooterPreviewDoc = pageFooterPreview.contentDocument || pageFooterPreview.contentWindow.document;
+
+    pageFooterPreviewDoc.body.innerHTML = document.getElementById("PageFooterEditBox").value;
 }
 </script>
