@@ -1,5 +1,6 @@
 
 <style>
+    #PageFooterEditBox { height:50%; }
     #PageFooterPreview { width:100%; height:100%; }
 </style>
 
@@ -11,8 +12,7 @@
         </div>
 
         <div id="Page Footer Edit" class="tabcontent">
-            <textarea id="PageFooterEditBox" class="boxsizingBorder log-view-pane styled-text-area">$!default_footer</textarea>
-            <button class="pure-button" onclick="updateFooterPreview()">Preview</button>
+            <textarea id="PageFooterEditBox" name="PageFooterEditBox" class="boxsizingBorder log-view-pane styled-text-area">$!default_footer</textarea>
             <div class="pure-u-24-24">
                 <iframe id="PageFooterPreview"></iframe>
             </div>
@@ -20,7 +20,9 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
+
+window.onload = function() { initFooterPreview(); }
 
 function openTab(evt, elementName) {
     // Declare all variables
@@ -43,10 +45,17 @@ function openTab(evt, elementName) {
     evt.currentTarget.className += " active";
 }
 
+function initFooterPreview() {
+    console.log("Initialising preview update loop");
+    window.setInterval(updateFooterPreview, 150);
+}
+
 function updateFooterPreview() {
+    console.log("Updating preview");
     var pageFooterPreview = document.getElementById("PageFooterPreview"),
         pageFooterPreviewDoc = pageFooterPreview.contentDocument || pageFooterPreview.contentWindow.document;
 
     pageFooterPreviewDoc.body.innerHTML = document.getElementById("PageFooterEditBox").value;
 }
+
 </script>
