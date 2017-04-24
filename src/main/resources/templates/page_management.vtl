@@ -1,20 +1,20 @@
-
 <style>
-    #PageLayoutGrid { height:100% }
-    #PageFooterEditBox { height:50%; }
-    #PageFooterPreview { width:100%; height:100%; }
+    html, body { height:100% }
 </style>
 
 <div id="PageLayoutGrid" class="pure-g">
 
     <div id="layout" class="pure-u-24-24">
         <div class="tab">
-          <button class="tablinks" onclick="openTab(event, 'PageFooterEditTab')">Page Footer</button>
+            <button class="tablinks" onclick="openTab(event, 'PageFooterEditTab')">Page Footer</button>
         </div>
-       <
-        <div id="PageFooterEditTab" class="tabcontent">
-            <textarea id="PageFooterEditBox" name="PageFooterEditBox" class="boxsizingBorder styled-text-area">$!default_footer</textarea>
-            <iframe id="PageFooterPreview"></iframe>
+        <div id="PageFooterEditTab" class="pure-u-24-24 tabcontent">
+            <div class="topdiv">
+                <textarea id="PageFooterEditBox" name="PageFooterEditBox" class="boxsizingBorder styled-text-area">$!default_footer</textarea>
+            </div>
+            <div class="bottomdiv">
+                <iframe id="PageFooterPreview"></iframe>
+            </div>
         </div>
     </div>
 </div>
@@ -56,5 +56,6 @@ function updateFooterPreview() {
 
     pageFooterPreviewDoc.body.innerHTML = document.getElementById("PageFooterEditBox").value;
 }
+
 
 </script>

@@ -107,6 +107,8 @@ object  UserHandler : KLogging() {
     }
 
     fun loggedInUsername(request: Request): String {
+        //TODO: WARNING!! For debug purposes only,
+        if (request.ip() == "localhost" || request.ip() == "0:0:0:0:0:0:0:1") { return getRootAdmin().username }
         val session = request.session()
         if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {
@@ -225,8 +227,8 @@ object  UserHandler : KLogging() {
     }
 
     fun getSessionIdentifier(request: Request): String {
-        var clientIP = "${request.forwardedIP()} [${request.userAgent()}]"
-        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = "${request.ip()} [${request.userAgent()}]" }
-        return if (UserHandler.isLoggedIn(request)) "$clientIP | ${UserHandler.loggedInUsername(request)}" else clientIP
+        var clientIP = request.forwardedIP()
+        if (clientIP.isEmpty() || clientIP.isBlank()) { clientIP = request.ip() }
+        return if (UserHandler.isLoggedIn(request)) "$clientIP [${request.userAgent()}] | ${UserHandler.loggedInUsername(request)}" else "$clientIP [${request.userAgent()}]"
     }
 }
