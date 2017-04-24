@@ -58,6 +58,13 @@ submit-link:focus {
     margin-top: 0;
 }
 
+.button-green {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
 .log-view-pane { resize:vertical; max-height:800px; min-height:600px; }
 log-view-pane.horiz { resize:horizontal; min-width:300px; }
 

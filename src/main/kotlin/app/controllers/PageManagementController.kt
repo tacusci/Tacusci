@@ -68,7 +68,7 @@ class PageManagementController : Controller {
         model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
         model = Web.loadNavBar(request, model)
 
-        model.put("default_footer", h2("Testing footer preview thing!"))
+        model.put("footer_content", "")
 
         return ModelAndView(model, layoutTemplate)
     }
