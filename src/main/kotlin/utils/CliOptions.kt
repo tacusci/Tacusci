@@ -36,13 +36,11 @@ import mu.KLogging
  */
 
 data class CliOption(val title: String, val cliText: String, val argumentExpected: Boolean, var flagged: Boolean, var value: String)
-class MissingArgumentException: Exception()
 
 object CliOptions : KLogging() {
 
     val cliOptions = mutableListOf<CliOption>()
     var usageString = ""
-    var throwMissingArgException = false
 
     fun parseArgs(args: Array<String>) {
         args.forEachIndexed { index, arg ->
