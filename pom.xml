@@ -5,6 +5,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <packaging>jar</packaging>
+
     <groupId>co.uk.taurasystems</groupId>
     <artifactId>Tacusci</artifactId>
     <version>1.0</version>
@@ -13,6 +15,7 @@
         <kotlin.version>1.1.1</kotlin.version>
         <main.class>kotlin.app.ApplicationKt</main.class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <finalName>${project.artifactId}-${project.version}</finalName>
     </properties>
 
     <dependencies>
@@ -99,6 +102,7 @@
 
     <build>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+        <finalName>${finalName}</finalName>
         <plugins>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
