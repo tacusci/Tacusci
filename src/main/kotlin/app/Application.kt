@@ -43,6 +43,8 @@ import extensions.managedRedirect
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
+import utils.CliOption
+import utils.CliOptions
 import utils.Config
 import java.util.*
 import kotlin.concurrent.thread
@@ -148,14 +150,17 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    if (args.isEmpty() || args.size < 2) {
-        println("No username/password args"); System.exit(1)
-    }
+
     Config.load()
+    CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true, false, ""), CliOption("Password", "password", true, false, ""),
+                                    CliOption("Debug Mode", "debug", false, false, "")))
+    CliOptions.usageString = "-username <username> -password <password>"
+    CliOptions.parseArgs(args)
+
     val application = Application()
 
-    application.dbProperties.setProperty("user", args[0])
-    application.dbProperties.setProperty("password", args[1])
+    application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
+    application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))
     application.dbProperties.setProperty("useSSL", "false")
     application.dbProperties.setProperty("autoReconnect", "false")
     application.init()
