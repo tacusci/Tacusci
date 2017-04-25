@@ -57,7 +57,7 @@ class Application {
 
     companion object : KLogging()
 
-    fun connectToDB() {
+    fun setupDatabase() {
         val dbURL = Config.getProperty("db_url")
         //connect to root SQL server instance
         DAOManager.init(dbURL, dbProperties)
@@ -138,7 +138,7 @@ class Application {
     }
 
     fun init() {
-        connectToDB()
+        setupDatabase()
         setupDefaultGroups()
         setupSpark()
         setupSparkRoutes()
