@@ -38,6 +38,7 @@ import database.models.User
 import extensions.forwardedIP
 import mu.KLogging
 import spark.Request
+import utils.CliOptions
 import utils.Config
 import utils.PasswordStorage
 import utils.Utils
@@ -108,7 +109,8 @@ object  UserHandler : KLogging() {
 
     fun loggedInUsername(request: Request): String {
         //TODO: WARNING!! For debug purposes only,
-        if (request.ip() == "localhost" || request.ip() == "0:0:0:0:0:0:0:1") { return getRootAdmin().username }
+        if (CliOptions.getFlag("debug"))
+            if (request.ip() == "localhost" || request.ip() == "0:0:0:0:0:0:0:1") { return getRootAdmin().username }
         val session = request.session()
         if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {
