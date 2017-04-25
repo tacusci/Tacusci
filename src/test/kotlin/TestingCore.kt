@@ -27,11 +27,11 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
+import app.handlers.GroupHandler
+import app.handlers.UserHandler
 import com.nhaarman.mockito_kotlin.whenever
 import database.daos.DAOManager
 import database.models.Group
-import app.handlers.GroupHandler
-import app.handlers.UserHandler
 import org.mockito.Mockito
 import spark.Request
 import spark.Session
@@ -46,12 +46,12 @@ import java.util.*
 object TestingCore {
 
     fun setupConfig() {
-        Config.setProperty("default_admin_user", "tvf_admin")
+        Config.setProperty("default_admin_user", "tacusci_admin")
         Config.setProperty("default_admin_password", "Password1234!")
         Config.setProperty("server_address", "localhost")
-        Config.setProperty("schema_name", "tvf_testing")
+        Config.setProperty("schema_name", "tacusci_testing")
         Config.setProperty("port", "80")
-        Config.setProperty("log_file", "tvf.log")
+        Config.setProperty("log_file", "tacusci.log")
         Config.setProperty("default_admin_email", "admin_tvf@tvf.net")
         Config.setProperty("properties_file", "tvf_testing.properties")
         Config.setProperty("db_url", "jdbc:mysql://localhost")
