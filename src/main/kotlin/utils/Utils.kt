@@ -29,6 +29,9 @@
 
 package utils
 
+import mu.KLogging
+import org.apache.log4j.PropertyConfigurator
+import java.io.IOException
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,7 +42,7 @@ import java.util.*
 
 class Utils {
 
-    companion object {
+    companion object : KLogging() {
 
         val secureRandom = SecureRandom()
         val charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -81,6 +84,17 @@ class Utils {
             val simpleDateFormat = SimpleDateFormat(dateStringFormat)
             val date = simpleDateFormat.parse(dateToConvert)
             return date.time
+        }
+
+        fun updateLog4jFileLocation(logFilePath: String) {
+            val properties = Properties()
+            try {
+                val configStream = Utils::class.java.getResourceAsStream("/log4j.properties")
+                properties.load(configStream)
+                configStream.close()
+            } catch (e: IOException) { logger.error("Cannot load log4j configuration file") }
+            properties.setProperty("log4j.appender.FILE.file", logFilePath)
+            PropertyConfigurator.configure(properties)
         }
     }
 }
