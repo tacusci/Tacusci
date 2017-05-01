@@ -156,6 +156,7 @@ fun main(args: Array<String>) {
     //TODO: basically setup the console appender this way too, and deprecate the log4j properties file
     Utils.updateLogFilePath(Config.getProperty("log_file"))
 
+    //TODO: need to tidy this up (make it neater)
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true, false, ""), CliOption("Password", "password", true, false, ""),
                                     CliOption("Debug Mode", "debug", false, false, "")))
     CliOptions.usageString = "-username <username> -password <password>"
