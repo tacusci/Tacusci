@@ -30,8 +30,10 @@
 package utils
 
 import mu.KLogging
-import org.apache.log4j.PropertyConfigurator
-import java.io.IOException
+import org.apache.log4j.FileAppender
+import org.apache.log4j.Level
+import org.apache.log4j.Logger
+import org.apache.log4j.PatternLayout
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,7 +88,29 @@ class Utils {
             return date.time
         }
 
-        fun updateLog4jFileLocation(logFilePath: String) {
+        fun updateLogFilePath(logFilePath: String) {
+
+            val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+
+            /*
+            val consoleAppender = ConsoleAppender()
+            consoleAppender.threshold = Level.INFO
+            consoleAppender.activateOptions()
+
+            Logger.getRootLogger().addAppender(consoleAppender)
+            */
+
+            val fileAppender = FileAppender()
+            fileAppender.name = "RollingFileAppender"
+            fileAppender.file = logFilePath
+            fileAppender.layout = PatternLayout(pattern)
+            fileAppender.threshold = Level.INFO
+            fileAppender.append = true
+            fileAppender.activateOptions()
+
+            Logger.getRootLogger().addAppender(fileAppender)
+
+            /*
             val properties = Properties()
             try {
                 val configStream = Utils::class.java.getResourceAsStream("/log4j.properties")
@@ -95,6 +119,7 @@ class Utils {
             } catch (e: IOException) { logger.error("Cannot load log4j configuration file") }
             properties.setProperty("log4j.appender.FILE.file", logFilePath)
             PropertyConfigurator.configure(properties)
+            */
         }
     }
 }
