@@ -33,6 +33,7 @@
 
 import app.Application
 import extensions.doesNotExist
+import org.apache.log4j.*
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -55,7 +56,7 @@ open class Config {
                     Pair("schema_name", "tacusci"),
                     Pair("default_admin_user", "tacusci_admin"),
                     Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", "admin_tacusci@tacusci.net"),
+                    Pair("default_admin_email", ""),
                     Pair("log_file", "tacusci.log"),
                     Pair("using_ssl_on_proxy", "false"),
                     Pair("robots_file", ""),
@@ -94,6 +95,7 @@ open class Config {
                 }
             }
             propertiesFile.inputStream().close()
+            updateLoggerProperties(Config.getProperty("log_file"))
         }
 
         override fun getProperty(key: String): String {
@@ -159,6 +161,28 @@ open class Config {
                 this.load(File(this.getProperty("properties_file")).inputStream())
                 application.restartServer()
             }
+        }
+
+        fun updateLoggerProperties(logFilePath: String) {
+
+            val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+
+            val consoleAppender = ConsoleAppender()
+            consoleAppender.name = "ConsoleAppender"
+            consoleAppender.target = "System.err"
+            consoleAppender.layout = PatternLayout(pattern)
+            consoleAppender.threshold = Level.INFO
+            consoleAppender.activateOptions()
+            Logger.getRootLogger().addAppender(consoleAppender)
+
+            val fileAppender = FileAppender()
+            fileAppender.name = "RollingFileAppender"
+            fileAppender.file = logFilePath
+            fileAppender.layout = PatternLayout(pattern)
+            fileAppender.threshold = Level.INFO
+            fileAppender.append = true
+            fileAppender.activateOptions()
+            Logger.getRootLogger().addAppender(fileAppender)
         }
     }
 }

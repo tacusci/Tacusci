@@ -87,28 +87,5 @@ class Utils {
             val date = simpleDateFormat.parse(dateToConvert)
             return date.time
         }
-
-        fun updateLogFilePath(logFilePath: String) {
-
-            val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
-
-            /*
-            val consoleAppender = ConsoleAppender()
-            consoleAppender.threshold = Level.INFO
-            consoleAppender.activateOptions()
-
-            Logger.getRootLogger().addAppender(consoleAppender)
-            */
-
-            val fileAppender = FileAppender()
-            fileAppender.name = "RollingFileAppender"
-            fileAppender.file = logFilePath
-            fileAppender.layout = PatternLayout(pattern)
-            fileAppender.threshold = Level.INFO
-            fileAppender.append = true
-            fileAppender.activateOptions()
-
-            Logger.getRootLogger().addAppender(fileAppender)
-        }
     }
 }

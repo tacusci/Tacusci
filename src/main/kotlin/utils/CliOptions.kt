@@ -35,7 +35,7 @@ import mu.KLogging
  * Created by alewis on 25/04/2017.
  */
 
-data class CliOption(val title: String, val cliText: String, val argumentExpected: Boolean, var flagged: Boolean, var value: String)
+data class CliOption(val title: String, val cliText: String, val argumentExpected: Boolean = false, var isFlag: Boolean = false, var value: String = "")
 
 object CliOptions : KLogging() {
 
@@ -52,7 +52,7 @@ object CliOptions : KLogging() {
                                 cliOption.value = args[index + 1]
                             }
                         } else {
-                            cliOption.flagged = true
+                            cliOption.isFlag = true
                         }
                     }
                 }
@@ -64,7 +64,7 @@ object CliOptions : KLogging() {
                 outputUsageAndClose()
             }
             if (cliOption.argumentExpected) Config.setProperty(cliOption.cliText, cliOption.value)
-            if (!cliOption.argumentExpected) Config.setProperty(cliOption.cliText, cliOption.flagged.toString())
+            if (!cliOption.argumentExpected) Config.setProperty(cliOption.cliText, cliOption.isFlag.toString())
         }
     }
 
@@ -74,7 +74,7 @@ object CliOptions : KLogging() {
     }
 
     fun getFlag(cliText: String): Boolean {
-        cliOptions.forEach { if (it.cliText == cliText) return it.flagged }
+        cliOptions.forEach { if (it.cliText == cliText) return it.isFlag }
         return false
     }
 
