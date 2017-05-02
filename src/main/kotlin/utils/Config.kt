@@ -95,7 +95,7 @@ open class Config {
                 }
             }
             propertiesFile.inputStream().close()
-            updateLoggerProperties(Config.getProperty("log_file"))
+            setupLoggers(Config.getProperty("log_file"))
         }
 
         override fun getProperty(key: String): String {
@@ -163,15 +163,16 @@ open class Config {
             }
         }
 
-        fun updateLoggerProperties(logFilePath: String) {
+        fun setupLoggers(logFilePath: String) {
 
             val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+            val threshold = if (CliOptions.getFlag("debug")) Level.DEBUG else Level.INFO
 
             val consoleAppender = ConsoleAppender()
             consoleAppender.name = "ConsoleAppender"
             consoleAppender.target = "System.err"
             consoleAppender.layout = PatternLayout(pattern)
-            consoleAppender.threshold = Level.INFO
+            consoleAppender.threshold = threshold
             consoleAppender.activateOptions()
             Logger.getRootLogger().addAppender(consoleAppender)
 
@@ -179,7 +180,7 @@ open class Config {
             fileAppender.name = "RollingFileAppender"
             fileAppender.file = logFilePath
             fileAppender.layout = PatternLayout(pattern)
-            fileAppender.threshold = Level.INFO
+            fileAppender.threshold = threshold
             fileAppender.append = true
             fileAppender.activateOptions()
             Logger.getRootLogger().addAppender(fileAppender)

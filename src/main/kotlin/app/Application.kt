@@ -151,17 +151,20 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-
-    Config.load()
-
-
     //TODO: need to tidy this up (make it neater)
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true), CliOption("Password", "password", true),
                                     CliOption("Debug Mode", "debug", false)))
     CliOptions.usageString = "-username <username> -password <password>"
     CliOptions.parseArgs(args)
 
+    Config.load()
+
     val application = Application()
+
+    Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
+        application.infoLog("Force shut down detected, stopping everything cleanly...")
+        stop()
+    })
 
     application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
     application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))
@@ -169,8 +172,4 @@ fun main(args: Array<String>) {
     application.dbProperties.setProperty("autoReconnect", "false")
     application.init()
     //Config.monitorPropertiesFile(application)
-    Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
-        application.infoLog("Force shut down detected, stopping everything cleanly...")
-        stop()
-    })
 }
