@@ -109,17 +109,6 @@ class Utils {
             fileAppender.activateOptions()
 
             Logger.getRootLogger().addAppender(fileAppender)
-
-            /*
-            val properties = Properties()
-            try {
-                val configStream = Utils::class.java.getResourceAsStream("/log4j.properties")
-                properties.load(configStream)
-                configStream.close()
-            } catch (e: IOException) { logger.error("Cannot load log4j configuration file") }
-            properties.setProperty("log4j.appender.FILE.file", logFilePath)
-            PropertyConfigurator.configure(properties)
-            */
         }
     }
 }
