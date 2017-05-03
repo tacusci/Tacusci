@@ -81,7 +81,7 @@ object CliOptions : KLogging() {
     }
 
     fun outputUsageAndClose() {
-        var usageString = "Usage: Tacusci.jar"
+        var usageString = "Usage: tacusci"
         cliOptions.forEach {
             if (it.argumentExpected) {
                 usageString += " ${it.usageString}"
