@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`routeentities` (
 CREATE TABLE IF NOT EXISTS `$schema_name`.`reset_password` (
   `id_reset_passwords` INT NOT NULL AUTO_INCREMENT,
   `created_date_time` LONG NOT NULL,
-  `last_updated_datetime` LONG NOT NULL,
+  `last_updated_date_time` LONG NOT NULL,
   `banned_date_time` LONG,
   `id_users` INT NOT NULL,
   `auth_hash` VARCHAR(100) NOT NULL,
