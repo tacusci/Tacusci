@@ -110,7 +110,8 @@ object  UserHandler : KLogging() {
     fun loggedInUsername(request: Request): String {
         //TODO: WARNING!! For debug purposes only,
         if (CliOptions.getFlag("debug"))
-            if (request.ip() == "localhost" || request.ip() == "0:0:0:0:0:0:0:1") { return getRootAdmin().username }
+            //used to be 0:0:0:0:0:0:0:1
+            if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0")) { return getRootAdmin().username }
         val session = request.session()
         if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {

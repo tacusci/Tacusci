@@ -43,7 +43,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
      fun insertAuthHash(userId: Int, authHash: String) {
         connect()
         try {
-            val insertAuthHashStatement = "INSERT INTO $tableName (CREATEDDATETIME, LASTUPDATEDDATETIME, IDUSERS, AUTHHASH, EXPIRED) VALUES (?,?,?,?,?)"
+            val insertAuthHashStatement = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ID_USERS, AUTH_HASH, EXPIRED) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(insertAuthHashStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -60,7 +60,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
      fun updateAuthHash(userId: Int, authHash: String, expired: Int) {
         connect()
         try {
-            val updateAuthHashStatement = "UPDATE $tableName SET LASTUPDATEDDATETIME=?, AUTHHASH=?, EXPIRED=? WHERE IDUSERS=?"
+            val updateAuthHashStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, AUTH_HASH=?, EXPIRED=? WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(updateAuthHashStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, authHash)
@@ -77,7 +77,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         connect()
         var count = 0
         try {
-            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=?"
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, userId)
             val resultSet = preparedStatement?.executeQuery()
@@ -94,7 +94,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         var expired = 0
         connect()
         try {
-            val selectStatement = "SELECT EXPIRED FROM $tableName WHERE AUTHHASH=?"
+            val selectStatement = "SELECT EXPIRED FROM $tableName WHERE AUTH_HASH=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, authHash)
             val resultSet = preparedStatement?.executeQuery()
@@ -109,12 +109,12 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         connect()
         var authHash = ""
         try {
-            val selectStatement = "SELECT AUTHHASH FROM $tableName WHERE IDUSERS=?"
+            val selectStatement = "SELECT AUTH_HASH FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, userId)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                authHash = resultSet.getString("AUTHHASH")
+                authHash = resultSet.getString("AUTH_HASH")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
@@ -125,12 +125,12 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String)
         connect()
         var lastUpdatedDateTime = -1L
         try {
-            val selectStatement = "SELECT LASTUPDATEDDATETIME FROM $tableName WHERE AUTHHASH=?"
+            val selectStatement = "SELECT LAST_UPDATED_DATE_TIME FROM $tableName WHERE AUTH_HASH=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, authHash)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                lastUpdatedDateTime = resultSet.getLong("LASTUPDATEDDATETIME")
+                lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }

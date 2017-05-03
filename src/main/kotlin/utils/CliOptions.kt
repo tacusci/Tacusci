@@ -35,12 +35,14 @@ import mu.KLogging
  * Created by alewis on 25/04/2017.
  */
 
-data class CliOption(val title: String, val cliText: String, val argumentExpected: Boolean = false, var isFlag: Boolean = false, var value: String = "")
+data class CliOption(val title: String, val cliText: String,
+                     val argumentExpected: Boolean = false, var isFlag: Boolean = false,
+                     var usageString: String = "$title: -$cliText ${ if (argumentExpected) "<argument>" else "" }",
+                     var value: String = "")
 
 object CliOptions : KLogging() {
 
     val cliOptions = mutableListOf<CliOption>()
-    var usageString = ""
 
     fun parseArgs(args: Array<String>) {
         args.forEachIndexed { index, arg ->
@@ -79,6 +81,7 @@ object CliOptions : KLogging() {
     }
 
     fun outputUsageAndClose() {
+        val usageString = cliOptions.forEach {  }
         System.err.println("Missing required CLI arguments -> $usageString")
         System.exit(1)
     }

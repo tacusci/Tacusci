@@ -47,7 +47,7 @@ class RouteEntityDAO(url: String, dbProperties: Properties, tableName: String) :
     fun insertRouteEntity(routeEntity: RouteEntity): Boolean {
         connect()
         try {
-            val createRouteEntityStatement = "INSERT INTO $tableName (parentid, name)"
+            val createRouteEntityStatement = "INSERT INTO $tableName (parent_id, name)"
             return true
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }

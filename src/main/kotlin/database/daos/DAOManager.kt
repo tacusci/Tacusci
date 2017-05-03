@@ -137,8 +137,8 @@ object DAOManager : KLogging() {
     fun getDAO(table: TABLE): DAO {
         when (table) {
             TABLE.USERS -> return UserDAO(url, dbProperties, "users")
-            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
+            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.ROUTE_ENTITIES -> return RouteEntityDAO(url, dbProperties, "routeentities")
             TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "resetpassword")
             else -> {

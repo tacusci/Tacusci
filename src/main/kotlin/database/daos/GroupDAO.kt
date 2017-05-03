@@ -47,7 +47,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         connect()
         var groupID = -1
         try {
-            val selectStatement = "SELECT IDGROUPS FROM $tableName WHERE GROUPNAME=?"
+            val selectStatement = "SELECT ID_GROUPS FROM $tableName WHERE GROUP_NAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, groupName)
             val resultSet = preparedStatement?.executeQuery()
@@ -63,7 +63,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
-            val createGroupStatementString = "INSERT INTO $tableName (CREATEDDATETIME, LASTUPDATEDDATETIME, GROUPNAME) VALUES (?, ?, ?)"
+            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME) VALUES (?, ?, ?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -80,7 +80,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         connect()
         var count = 0
         try {
-            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE GROUPNAME=?"
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE GROUP_NAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, groupName)
             val resultSet = preparedStatement?.executeQuery()

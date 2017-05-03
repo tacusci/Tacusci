@@ -45,7 +45,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         if (!areUserAndGroupMapped(userID, groupID)) {
             connect()
             try {
-                val insertUserIntoGroupStatement = "INSERT INTO $tableName (IDUSERS, LASTUPDATEDDATETIME, IDGROUPS) VALUES (?,?,?)"
+                val insertUserIntoGroupStatement = "INSERT INTO $tableName (ID_USERS, LAST_UPDATED_DATE_TIME, ID_GROUPS) VALUES (?,?,?)"
                 val preparedStatement = connection?.prepareStatement(insertUserIntoGroupStatement)
                 preparedStatement?.setInt(1, userID)
                 preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -65,7 +65,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         connect()
         var count = 0
         try {
-            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE ID_USERS=? AND ID_GROUPS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, userID)
             preparedStatement?.setInt(2, groupID)
@@ -83,7 +83,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         if (areUserAndGroupMapped(userID, groupID)) {
             connect()
             try {
-                val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE IDUSERS=? AND IDGROUPS=?"
+                val removeUserFromGroupStatement = "DELETE FROM $tableName WHERE ID_USERS=? AND ID_GROUPS=?"
                 val preparedStatement = connection?.prepareStatement(removeUserFromGroupStatement)
                 preparedStatement?.setInt(1, userID)
                 preparedStatement?.setInt(2, groupID)

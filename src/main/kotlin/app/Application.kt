@@ -46,7 +46,6 @@ import spark.template.velocity.VelocityTemplateEngine
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
-import utils.Utils
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -151,10 +150,8 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    //TODO: need to tidy this up (make it neater)
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true), CliOption("Password", "password", true),
                                     CliOption("Debug Mode", "debug", false)))
-    CliOptions.usageString = "-username <username> -password <password>"
     CliOptions.parseArgs(args)
 
     Config.load()
