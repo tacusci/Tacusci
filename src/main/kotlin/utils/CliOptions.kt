@@ -37,7 +37,7 @@ import mu.KLogging
 
 data class CliOption(val title: String, val cliText: String,
                      val argumentExpected: Boolean = false, var isFlag: Boolean = false,
-                     var usageString: String = "$title: -$cliText ${ if (argumentExpected) "<argument>" else "" }",
+                     var usageString: String = "-$cliText ${ if (argumentExpected) "<argument>" else "" }",
                      var value: String = "")
 
 object CliOptions : KLogging() {
@@ -81,8 +81,13 @@ object CliOptions : KLogging() {
     }
 
     fun outputUsageAndClose() {
-        val usageString = cliOptions.forEach {  }
-        System.err.println("Missing required CLI arguments -> $usageString")
+        var usageString = "Usage: Tacusci.jar"
+        cliOptions.forEach {
+            if (it.argumentExpected) {
+                usageString += " ${it.usageString}"
+            }
+        }
+        println(usageString)
         System.exit(1)
     }
 }

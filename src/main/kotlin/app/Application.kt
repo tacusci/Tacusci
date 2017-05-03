@@ -150,8 +150,9 @@ class Application {
 }
 
 fun main(args: Array<String>) {
-    CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true), CliOption("Password", "password", true),
-                                    CliOption("Debug Mode", "debug", false)))
+    CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true),
+                                        CliOption("Password", "password", true),
+                                        CliOption("Debug Mode", "debug", false)))
     CliOptions.parseArgs(args)
 
     Config.load()
