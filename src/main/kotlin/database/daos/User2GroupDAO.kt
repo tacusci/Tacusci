@@ -73,7 +73,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
             if (resultSet!!.next()) {
                 count = resultSet.getInt(1)
             }
-            preparedStatement?.close()
+            preparedStatement.close()
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
         return count > 0
