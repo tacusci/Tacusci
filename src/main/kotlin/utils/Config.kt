@@ -166,7 +166,7 @@ open class Config {
         fun setupLoggers(logFilePath: String) {
 
             val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
-            val threshold = if (CliOptions.getFlag("debug")) Level.DEBUG else Level.INFO
+            val threshold = if (CliOptions.getFlag("debug") && !CliOptions.getFlag("disable_debug_output")) Level.DEBUG else Level.INFO
 
             val consoleAppender = ConsoleAppender()
             consoleAppender.name = "ConsoleAppender"
