@@ -30,17 +30,13 @@
 package app.controllers
 
 import app.handlers.UserHandler
-import database.models.RouteEntity
-import database.models.RouteEntityTree
-import j2html.TagCreator.*
-import j2html.tags.ContainerTag
+import j2html.TagCreator.link
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
-import utils.tree.Node
 import java.util.*
 
 
@@ -56,7 +52,7 @@ class PageManagementController : Controller {
     override val templatePath: String = "/templates/page_management.vtl"
     override val pageTitleSubstring: String = "Page Management"
     override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {}
 
@@ -66,6 +62,7 @@ class PageManagementController : Controller {
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
+        model.put("uri", rootUri)
         model = Web.loadNavBar(request, model)
 
         model.put("footer_content", "")
@@ -74,9 +71,11 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        println(request.queryParams("page_footer_content"))
+        return response
     }
-
+    //TODO: Remove these when decided to not use route tree for page struct
+    /*
     private fun createRouteTree(routeEntityTree: RouteEntityTree): ContainerTag {
         val rootTag = ul()
         val innerTag = li(routeEntityTree.rootElement.data.name)
@@ -97,4 +96,5 @@ class PageManagementController : Controller {
         }
         return rootTagz
     }
+    */
 }
