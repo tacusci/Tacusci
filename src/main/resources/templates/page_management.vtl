@@ -16,7 +16,7 @@
             <textarea id="PageFooterEditBox" name="PageFooterEditBox" class="boxsizingBorder edit-box styled-text-area">$!footer_content</textarea>
             <iframe id="PageFooterPreview" class="preview-box"></iframe>
             <div class="action-buttons">
-                <button class="pure-button button-success">Save</button>
+                <button class="pure-button button-success" onclick="submitFooter()">Save</button>
             </div>
         </div>
     </div>
@@ -60,5 +60,23 @@ function updateFooterPreview() {
     pageFooterPreviewDoc.body.innerHTML = document.getElementById("PageFooterEditBox").value;
 }
 
+function submitFooter() {
+    var pageFooterForm = document.createElement("form");
+	var pageFooterContentInput = document.createElement("input");
 
+	var pageFooterPreview = document.getElementById("PageFooterPreview"),
+        pageFooterPreviewDoc = pageFooterPreview.contentDocument || pageFooterPreview.contentWindow.document;
+
+	pageFooterForm.method = "POST";
+	pageFooterForm.action = "$!uri"
+
+	pageFooterContentInput.value = pageFooterPreviewDoc.body.innerHTML
+	pageFooterContentInput.name = "page_footer_content"
+
+	pageFooterForm.appendChild(pageFooterContentInput)
+
+	document.body.appendChild(pageFooterForm)
+
+	pageFooterForm.submit();
+}
 </script>
