@@ -97,12 +97,6 @@ class Application {
 
         ControllerManager.initBaseControllers()
 
-        /*
-        ControllerManager.routesAndControllers.forEach {
-            get(it.key, { request, response -> it.value.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-            post(it.key, { request, response -> it.value.post(request, response) })
-        }
-        */
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
         //MAP BEFORES
@@ -152,7 +146,8 @@ class Application {
 fun main(args: Array<String>) {
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true),
                                         CliOption("Password", "password", true),
-                                        CliOption("Debug Mode", "debug", false)))
+                                        CliOption("Debug Mode", "debug", false),
+                                        CliOption("Disable vibose output in debug mode", "disable_debug_output", false)))
     CliOptions.parseArgs(args)
 
     Config.load()
