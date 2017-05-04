@@ -36,6 +36,7 @@ import java.util.*
 /**
  * Created by alewis on 04/05/2017.
  */
+
 class PagesDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
 
     companion object : KLogging()
