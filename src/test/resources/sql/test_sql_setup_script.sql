@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`routeentities` (
 CREATE TABLE IF NOT EXISTS `$schema_name`.`reset_password` (
   `id_reset_passwords` INT NOT NULL AUTO_INCREMENT,
   `created_date_time` LONG NOT NULL,
-  `last_updated_datetime` LONG NOT NULL,
+  `last_updated_date_time` LONG NOT NULL,
   `banned_date_time` LONG,
   `id_users` INT NOT NULL,
   `auth_hash` VARCHAR(100) NOT NULL,
@@ -55,13 +55,14 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`reset_password` (
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   `id_page` INT NOT NULL AUTO_INCREMENT,
+  `created_date_time` LONG NOT NULL,
   `last_updated_date_time` LONG NOT NULL,
   `page_title` VARCHAR(100) NOT NULL,
   `page_route` VARCHAR(200) NOT NULL,
   `maintance_mode` BIT(1) NOT NULL,
   `public_and_live` BIT(1) NOT NULL,
-  `author_username` VARCHAR(45),
+  `author_user` INT NOT NULL,
   PRIMARY KEY (`id_page`),
   UNIQUE INDEX `id_page_UNIQUE` (`id_page` ASC),
   UNIQUE INDEX `page_route` (`page_route` ASC),
-  UNIQUE INDEX `author_username` (`author_username` ASC));
+  UNIQUE INDEX `author_user` (`author_user` ASC));
