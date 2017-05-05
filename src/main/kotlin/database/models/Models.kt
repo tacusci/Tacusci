@@ -102,5 +102,9 @@ class RouteEntityNode() : Node<RouteEntity>() {
 
 }
 
-data class RouteEntity(var id: Long, var parentId: Long, var name: String, var routeEntityType: RouteEntityHandler.ROUTE_ENTITY_TYPE, var pageId: Long)
-data class Page(var id: Long, var title: String, var content: String)
+data class RouteEntity(var id: Long, var parentId: Long, var name: String,
+                       var routeEntityType: RouteEntityHandler.ROUTE_ENTITY_TYPE,
+                       var pageId: Long)
+data class Page(var id: Long, var createdDateTime: Long, var lastUpdatedDateTime: Long,
+                var pageTitle: String, var pageRoute: String, var maintanceMode: Boolean,
+                var publicAndLive: Boolean, var authorUserId: Int)
