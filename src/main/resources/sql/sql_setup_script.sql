@@ -65,4 +65,4 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   PRIMARY KEY (`id_page`),
   UNIQUE INDEX `id_page_UNIQUE` (`id_page` ASC),
   UNIQUE INDEX `page_route` (`page_route` ASC),
-  UNIQUE INDEX `author_username` (`author_username` ASC));
+  UNIQUE INDEX `author_user` (`author_user` ASC));
