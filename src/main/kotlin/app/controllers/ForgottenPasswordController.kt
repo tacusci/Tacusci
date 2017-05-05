@@ -58,7 +58,6 @@ class ForgottenPasswordController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-
     override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
