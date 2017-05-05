@@ -29,6 +29,7 @@
 
 package app.handlers
 
+import database.models.User
 import mu.KLogging
 
 /**
@@ -37,4 +38,8 @@ import mu.KLogging
 class PageHandler {
 
     companion object : KLogging()
+
+    fun updatePageFooter(pageFooterData: String, authorUser: User) {
+
+    }
 }
