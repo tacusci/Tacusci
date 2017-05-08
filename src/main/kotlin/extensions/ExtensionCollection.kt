@@ -88,3 +88,9 @@ fun Response.httpsRedirect(request: Request, urlSuffix: String) {
 fun String.leftPad(padding: String): String {
     return padding+this
 }
+
+fun String.toIntSafe(): Int {
+    try {
+        return this.toInt()
+    } catch (e: NumberFormatException) { return -1 }
+}
