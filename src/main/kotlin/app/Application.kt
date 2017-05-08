@@ -40,6 +40,7 @@ import app.handlers.UserHandler
 import database.daos.DAOManager
 import database.models.Group
 import extensions.managedRedirect
+import extensions.toIntSafe
 import mu.KLogging
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
@@ -82,19 +83,24 @@ class Application {
     fun setupSpark() {
         var portNum = -1
         try {
-            portNum = Config.getProperty("port").toInt()
+            portNum = Config.getProperty("port").toIntSafe()
             logger.info("Setting port to $portNum")
         } catch (e: NumberFormatException) {
             logger.error("Port is not a valid number. Terminating...")
             System.exit(1)
         }
         port(portNum)
+
+        threadPool(Config.getProperty("max_threads").toIntSafe(), Config.getProperty("min_threads").toIntSafe(), Config.getProperty("thread_idle_timeout").toIntSafe())
+
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
+        setupSparkRoutes()
     }
 
     fun setupSparkRoutes() {
 
+        ControllerManager.mapAccessToStaticLocalFolder()
         ControllerManager.initBaseControllers()
 
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
@@ -124,6 +130,10 @@ class Application {
                 halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
             }
         })
+
+        //MAP CUSTOM RESPONSE PAGES
+
+        get("*", { request, response -> Web.get404Page(request, response)})
     }
 
     fun restartServer() {
@@ -135,7 +145,6 @@ class Application {
         setupDatabase()
         setupDefaultGroups()
         setupSpark()
-        setupSparkRoutes()
     }
 
     fun infoLog(message: String) {
@@ -145,9 +154,9 @@ class Application {
 
 fun main(args: Array<String>) {
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true),
-                                        CliOption("Password", "password", true),
-                                        CliOption("Debug Mode", "debug", false),
-                                        CliOption("Disable vibose output in debug mode", "disable_debug_output", false)))
+            CliOption("Password", "password", true),
+            CliOption("Debug Mode", "debug", false),
+            CliOption("Disable vibose output in debug mode", "disable_debug_output", false)))
     CliOptions.parseArgs(args)
 
     Config.load()
