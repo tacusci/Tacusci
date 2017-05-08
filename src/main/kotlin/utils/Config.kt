@@ -70,7 +70,12 @@ open class Config {
                     Pair("reset_password_email_subject", ""),
                     Pair("page_title", "Tacusci Website"),
                     Pair("page_title_divider", "|"),
-                    Pair("reset_password_email_content_file", ""))
+                    Pair("reset_password_email_content_file", ""),
+                    Pair("static_asset_folder", ""),
+                    Pair("max_threads", "8"),
+                    Pair("min_threads", "2"),
+                    Pair("thread_idle_timeout", "30000"),
+                    Pair("response_pages_folder", ""))
         }
 
         fun load() {
@@ -185,5 +190,21 @@ open class Config {
             fileAppender.activateOptions()
             Logger.getRootLogger().addAppender(fileAppender)
         }
+
+        //NOTE: this is technically deprecated, but should keep this as it works well to pass lists from config
+        // in a list format, eg. ["some_folder", "somewhere_over_the_rainbow", "/full random path with spaces/hi there"]
+        /*
+        fun getStaticAssetFoldersList(): MutableList<String> {
+            var configString = getProperty("static_asset_folders")
+            val staticAssetFoldersList = mutableListOf<String>()
+            if (configString.startsWith("[") && configString.endsWith("]")) {
+                configString = configString.removePrefix("[").removeSuffix("]")
+                configString.split(",").forEach {
+                    staticAssetFoldersList.add(it.replaceFirst(" ", "").removeSuffix(" "))
+                }
+            }
+            return staticAssetFoldersList
+        }
+        */
     }
 }
