@@ -101,6 +101,22 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    fun get404Page(request: Request, response: Response): String {
+        var responseContent = "404 not found!"
+        val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
+        val fourOhFourFile = File(responsePagesFolder.absolutePath+"/404.html")
+        if (fourOhFourFile.exists()) responseContent = fourOhFourFile.readText()
+        return responseContent
+    }
+
+    fun get500Page(request: Request, response: Response): String {
+        var responseContent = "404 not found!"
+        val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
+        val fourOhFourFile = File(responsePagesFolder.absolutePath+"/500.html")
+        if (fourOhFourFile.exists()) responseContent = fourOhFourFile.readText()
+        return responseContent
+    }
+
     fun mapFormToHash(session: Session, formTitle: String): String {
         val hash = Utils.randomHash(80)
         session.attribute(formTitle, hash)
