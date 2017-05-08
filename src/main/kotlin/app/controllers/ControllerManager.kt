@@ -33,6 +33,7 @@ import mu.KLogging
 import spark.Session
 import spark.Spark
 import spark.template.velocity.VelocityTemplateEngine
+import utils.Config
 
 /**
  * Created by alewis on 21/02/2017.
@@ -57,5 +58,8 @@ object ControllerManager : KLogging() {
                 if (it.handlesPosts) Spark.post(it.rootUri+childUri, { request, response -> it.post(request, response) })
             }
         }
+    }
+    fun mapAccessToStaticLocalFolder() {
+        Spark.externalStaticFileLocation(Config.getProperty("static_asset_folder"))
     }
 }
