@@ -91,7 +91,13 @@ class Application {
         }
         port(portNum)
 
-        threadPool(Config.getProperty("max_threads").toIntSafe(), Config.getProperty("min_threads").toIntSafe(), Config.getProperty("thread_idle_timeout").toIntSafe())
+        //these config values will basically be -1 if they're not set
+        val maxThreads = Config.getProperty("max_threads").toIntSafe()
+        val minThreads = Config.getProperty("min_threads").toIntSafe()
+        val threadIdleTimeout = Config.getProperty("thread_idle_timeout").toIntSafe()
+
+        if (maxThreads > 0) threadPool(maxThreads)
+        if (maxThreads > 0 && minThreads > 0 && threadIdleTimeout > 0) threadPool(maxThreads, minThreads, threadIdleTimeout)
 
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
