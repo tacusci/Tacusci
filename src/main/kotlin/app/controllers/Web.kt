@@ -33,6 +33,7 @@
 
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
+import j2html.TagCreator.h2
 import j2html.TagCreator.pre
 import mu.KLogging
 import spark.ModelAndView
@@ -102,19 +103,24 @@ object Web : KLogging() {
     }
 
     fun get404Page(request: Request, response: Response): String {
-        var responseContent = "404 not found!"
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
-        val fourOhFourFile = File(responsePagesFolder.absolutePath+"/404.html")
-        if (fourOhFourFile.exists()) responseContent = fourOhFourFile.readText()
-        return responseContent
+        var fourOhFourFile = File("")
+        listOf("404.html", "404.md", "404.vtl").forEach {
+            val currentFile = File(responsePagesFolder.absolutePath+"/$it")
+            if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
+        }
+        //need to make the backup response return page content from a template or something
+        if (fourOhFourFile.exists()) return fourOhFourFile.readText() else return h2("404").render()
     }
 
     fun get500Page(request: Request, response: Response): String {
-        var responseContent = "404 not found!"
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
-        val fourOhFourFile = File(responsePagesFolder.absolutePath+"/500.html")
-        if (fourOhFourFile.exists()) responseContent = fourOhFourFile.readText()
-        return responseContent
+        var fiveHundredOhFiveFile = File("")
+        listOf("500.html", "500.md", "500.vtl").forEach {
+            val currentFile = File(responsePagesFolder.absolutePath+"/$it")
+            if (currentFile.exists()) fiveHundredOhFiveFile = currentFile; return@forEach
+        }
+        if (fiveHundredOhFiveFile.exists()) return fiveHundredOhFiveFile.readText() else return h2("500").render()
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {
