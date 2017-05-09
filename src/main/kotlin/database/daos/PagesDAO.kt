@@ -29,6 +29,7 @@
 
 package database.daos
 
+import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
@@ -56,4 +57,6 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return pageId
     }
+
+    fun getPage(pageId: Int): Page { return Page(-1, -1, -1, "", "", true, false, -1) }
 }
