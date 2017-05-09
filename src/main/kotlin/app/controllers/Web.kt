@@ -87,14 +87,14 @@ object Web : KLogging() {
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
-        model.put("title", "Thames Valley Furs - Profile (User not found)")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
         model.put("template", "/templates/user_not_found.vtl")
         return ModelAndView(model, layoutTemplate)
     }
 
     fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
-        model.put("title", "Thames Valley Furs - Access Denied")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
         model = loadNavBar(request, model)
         model.put("access_denied_message", j2htmlPartials.centeredMessage("Access is denied", j2htmlPartials.HeaderType.h1).render())
