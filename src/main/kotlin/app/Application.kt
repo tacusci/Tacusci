@@ -113,7 +113,7 @@ class Application {
 
         //MAP BEFORES
 
-        before { request, response ->
+        before( "*", { request, response ->
             if (request.uri() != "/" && request.uri().endsWith("/")) {
                 response.managedRedirect(request, request.uri().removeSuffix("/"))
             }
@@ -121,7 +121,7 @@ class Application {
             val session = request.session()
             ControllerManager.initSessionAttributes(session)
             session.maxInactiveInterval(20 * 60)
-        }
+        })
 
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
