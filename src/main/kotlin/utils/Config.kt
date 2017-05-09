@@ -72,9 +72,9 @@ open class Config {
                     Pair("page_title_divider", "|"),
                     Pair("reset_password_email_content_file", ""),
                     Pair("static_asset_folder", ""),
-                    Pair("max_threads", "8"),
-                    Pair("min_threads", "2"),
-                    Pair("thread_idle_timeout", "30000"),
+                    Pair("max_threads", ""),
+                    Pair("min_threads", ""),
+                    Pair("thread_idle_timeout", ""),
                     Pair("response_pages_folder", ""))
         }
 
