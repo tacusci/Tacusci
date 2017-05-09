@@ -108,7 +108,7 @@ object  UserHandler : KLogging() {
     }
 
     fun loggedInUsername(request: Request): String {
-        //TODO: WARNING!! For debug purposes only,
+        //TODO: WARNING!! For debug purposes only
         if (CliOptions.getFlag("debug"))
             //used to be 0:0:0:0:0:0:0:1
             if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0")) { return getRootAdmin().username }
