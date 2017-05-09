@@ -1,9 +1,9 @@
 /*
  * # DON'T BE A DICK PUBLIC LICENSE
  *
- * > Version 1.1, December 2016
+ * > Version 1.1, December 2016-2017
  *
- * > Copyright (C) 2016 Adam Prakash Lewis
+ * > Copyright (C) 2016-2017 Adam Prakash Lewis
  *
  *  Everyone is permitted to copy and distribute verbatim or modified
  *  copies of this license document.
@@ -89,7 +89,7 @@ object Web : KLogging() {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
-        model.put("template", "/templates/user_not_found.vtl")
+        model.put("template", "/templates/404_not_found.vtl")
         return ModelAndView(model, layoutTemplate)
     }
 

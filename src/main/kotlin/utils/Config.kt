@@ -1,9 +1,9 @@
 /*
  * # DON'T BE A DICK PUBLIC LICENSE
  *
- * > Version 1.1, December 2016
+ * > Version 1.1, December 2016-2017
  *
- * > Copyright (C) 2016 Adam Prakash Lewis
+ * > Copyright (C) 2016-2017 Adam Prakash Lewis
  *
  *  Everyone is permitted to copy and distribute verbatim or modified
  *  copies of this license document.

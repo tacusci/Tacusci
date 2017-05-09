@@ -1,8 +1,8 @@
 <component name="CopyrightManager">
-  <settings default="DBAD">
+  <settings>
     <module2copyright>
       <element module="Kotlin" copyright="DBAD" />
-      <element module="Velocity" copyright="Apache V 2.0 License" />
+      <element module="Velocity" copyright="DBAD" />
     </module2copyright>
   </settings>
 </component>

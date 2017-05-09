@@ -1,9 +1,9 @@
 /*
  * # DON'T BE A DICK PUBLIC LICENSE
  *
- * > Version 1.1, December 2016
+ * > Version 1.1, December 2016-2017
  *
- * > Copyright (C) 2016 Adam Prakash Lewis
+ * > Copyright (C) 2016-2017 Adam Prakash Lewis
  *
  *  Everyone is permitted to copy and distribute verbatim or modified
  *  copies of this license document.
@@ -99,6 +99,8 @@ class RegisterController : Controller {
             if (!passwordInputIsValid) request.session().attribute("password_field_error", true) else request.session().attribute("password_field_error", false)
             if (!repeatedPasswordIsValid) request.session().attribute("repeated_password_field_error", true) else request.session().attribute("repeated_password_field_error", false)
             if (!emailIsValid) request.session().attribute("email_field_error", true) else request.session().attribute("email_field_error", false)
+
+            //TODO: MUST ADD CHECK FOR PREEXISTING EMAIL
 
             if (usernameInputIsValid) {
                 if (UserHandler.userExists(username)) {
