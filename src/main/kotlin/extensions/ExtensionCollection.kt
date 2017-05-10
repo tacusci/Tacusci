@@ -31,6 +31,7 @@
  
  package extensions
 
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import spark.Request
 import spark.Response
 import utils.Config
@@ -93,4 +94,24 @@ fun String.toIntSafe(): Int {
     try {
         return this.toInt()
     } catch (e: NumberFormatException) { return -1 }
+}
+
+fun String.fuzzySearchSimpleRatio(stringToCompare: String): Int {
+    return FuzzySearch.ratio(this, stringToCompare)
+}
+
+fun String.fuzzySearchPartialRatio(stringToCompare: String): Int {
+    return FuzzySearch.partialRatio(this, stringToCompare)
+}
+
+fun String.fuzzySearchTokenSortPartialRatio(stringToCompare: String): Int {
+    return FuzzySearch.tokenSortPartialRatio(this, stringToCompare)
+}
+
+fun String.fuzzySearchTokenSortRatio(stringToCompare: String): Int {
+    return FuzzySearch.tokenSortRatio(this, stringToCompare)
+}
+
+fun String.fuzzySearchWeightedRatio(stringToCompare: String): Int {
+    return FuzzySearch.weightedRatio(this, stringToCompare)
 }
