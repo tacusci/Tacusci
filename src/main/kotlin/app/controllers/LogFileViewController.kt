@@ -90,10 +90,13 @@ class LogFileViewController : Controller {
         val logLines = tailFile(logFile.toPath(), getLinesToShowLong(session))
         try {
             val textToShow: String = session.attribute("text_to_show")
+            //if the user has not specified what content to find in the logs
             if (textToShow.isBlank() || textToShow.isEmpty()) {
+                //just show it all
                 return logLines.asString_nLines()
             } else {
-                return logLines.contents().filter { it.contains(textToShow) }.joinToString("\n")
+                //find all the lines which contain the search text, and just return this stuff
+                return logLines.contents().filter { it.toLowerCase().contains(textToShow.toLowerCase()) }.joinToString("\n")
             }
         } catch (e: Exception) { if (logLines == null) return "Index is out of bounds, try something less than 2,147,483,647..." else return logLines.asString_nLines() }
     }
@@ -143,7 +146,6 @@ class LogFileViewController : Controller {
             if (textToShow != null) {
                 request.session().attribute("text_to_show", textToShow)
             }
-
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid refresh form...")
         }
