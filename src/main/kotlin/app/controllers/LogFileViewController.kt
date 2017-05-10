@@ -30,6 +30,7 @@
 package app.controllers
 
 import app.handlers.UserHandler
+import extensions.fuzzySearchTokenSortPartialRatio
 import extensions.managedRedirect
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -95,8 +96,9 @@ class LogFileViewController : Controller {
                 //just show it all
                 return logLines.asString_nLines()
             } else {
-                //find all the lines which contain the search text, and just return this stuff
-                return logLines.contents().filter { it.toLowerCase().contains(textToShow.toLowerCase()) }.joinToString("\n")
+                //TODO: Need to test this properly with a lot of sample data, but good enough for now DEAL WITH IT
+                //if the line score is high enough, it should contain a pretty close match to the search, so return this
+                return logLines.contents().filter { it.fuzzySearchTokenSortPartialRatio(textToShow) > 80 }.joinToString("\n")
             }
         } catch (e: Exception) { if (logLines == null) return "Index is out of bounds, try something less than 2,147,483,647..." else return logLines.asString_nLines() }
     }
