@@ -98,7 +98,7 @@ class LogFileViewController : Controller {
             } else {
                 //TODO: Need to test this properly with a lot of sample data, but good enough for now DEAL WITH IT
                 //if the line score is high enough, it should contain a pretty close match to the search, so return this
-                return logLines.contents().filter { it.fuzzySearchTokenSortPartialRatio(textToShow) > 80 }.joinToString("\n")
+                return logLines.contents().filter { it.fuzzySearchTokenSortPartialRatio(textToShow.replace(" ", "")) > 80 }.joinToString("\n")
             }
         } catch (e: Exception) { if (logLines == null) return "Index is out of bounds, try something less than 2,147,483,647..." else return logLines.asString_nLines() }
     }
