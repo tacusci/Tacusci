@@ -35,6 +35,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import spark.Request
 import spark.Response
 import utils.Config
+import utils.Utils
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -42,7 +43,6 @@ import java.nio.charset.Charset
 /**
  * Created by alewis on 15/11/2016.
  */
-
 
 fun StringBuilder.delete(string: String) {
     val i = this.indexOf(string)
@@ -78,7 +78,13 @@ fun Response.managedRedirect(request: Request, urlSuffix: String) {
     if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
         httpsRedirect(request, urlSuffix)
     } else {
-        redirect(urlSuffix)
+        try {
+            redirect(urlSuffix)
+        } catch (e: IllegalStateException) {
+            if (e.message!!.contains("Committed")) {
+                System.err.println("${Utils.getDateTimeNow()} ERROR (FROM THE EXTENSION COLLECTION CLASS) The double response conflict 'commited' error has occured...")
+            }
+        }
     }
 }
 
