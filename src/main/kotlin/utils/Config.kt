@@ -47,7 +47,7 @@ open class Config {
     companion object props : LinkedProperties() {
 
         var fileWatcher = FileWatcher(File(""))
-        var propertiesFile = File("")
+        var propertiesFile = File("tacusci.properties")
 
         private fun getDefaultPropertiesList(): List<Pair<String, String>> {
             return listOf(Pair("server_address", "localhost"),
@@ -81,8 +81,6 @@ open class Config {
         fun load() {
             val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
             //TODO: this could probably be cleaned up more
-            this.setProperty("properties_file", "tacusci.properties")
-            propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
                 defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
                 storeAll()
