@@ -52,30 +52,30 @@ open class Config {
         private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
             return hashMapOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
-                    Pair("db_url", "jdbc:mysql://localhost"),
+                    Pair("using_ssl_on_proxy", "false"),
                     Pair("schema_name", "tacusci"),
+                    Pair("db_url", "jdbc:mysql://localhost"),
                     Pair("default_admin_user", "tacusci_admin"),
                     Pair("default_admin_password", "Password1234!"),
                     Pair("default_admin_email", ""),
+                    Pair("max_threads", ""),
+                    Pair("min_threads", ""),
+                    Pair("thread_idle_timeout", ""),
                     Pair("log_file", "tacusci.log"),
-                    Pair("using_ssl_on_proxy", "false"),
-                    Pair("robots_file", ""),
-                    Pair("reset_password_authhash_timeout_seconds", ""),
                     Pair("smtp_server_host", ""),
                     Pair("smtp_server_port", ""),
                     Pair("smtp_account_username", ""),
                     Pair("smtp_account_password", ""),
                     Pair("smtp_use_ttls", "false"),
+                    Pair("page_title", "Tacusci Website"),
+                    Pair("static_asset_folder", ""),
+                    Pair("response_pages_folder", ""),
+                    Pair("page_title_divider", "|"),
+                    Pair("robots_file", ""),
+                    Pair("reset_password_authhash_timeout_seconds", ""),
                     Pair("reset_password_from_address", ""),
                     Pair("reset_password_email_subject", ""),
-                    Pair("page_title", "Tacusci Website"),
-                    Pair("page_title_divider", "|"),
-                    Pair("reset_password_email_content_file", ""),
-                    Pair("static_asset_folder", ""),
-                    Pair("max_threads", ""),
-                    Pair("min_threads", ""),
-                    Pair("thread_idle_timeout", ""),
-                    Pair("response_pages_folder", ""))
+                    Pair("reset_password_email_content_file", ""))
         }
 
         fun load() {
@@ -112,6 +112,7 @@ open class Config {
             return super.getProperty(key, defaultValue)
         }
 
+        //Note: can apparently wrap this with a more detailed FileOutputStream
         fun storeAll() { store(propertiesFile.outputStream(), "") }
 
         fun getDefaultProperty(key: String): String {
@@ -171,6 +172,7 @@ open class Config {
         fun setupLoggers(logFilePath: String) {
 
             val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+            //get explicitly set debug log level
             val threshold = if (CliOptions.getFlag("debug") && !CliOptions.getFlag("disable_debug_output")) Level.DEBUG else Level.INFO
 
             val consoleAppender = ConsoleAppender()
