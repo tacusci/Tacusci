@@ -33,10 +33,15 @@
 
 import app.Application
 import extensions.doesNotExist
+import org.apache.commons.configuration2.FileBasedConfiguration
+import org.apache.commons.configuration2.PropertiesConfiguration
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder
+import org.apache.commons.configuration2.builder.fluent.Parameters
 import org.apache.log4j.*
 import java.io.File
 import java.io.IOException
 import java.util.*
+import javax.naming.ConfigurationException
 
 /**
  * Created by alewis on 29/11/2016.
@@ -44,13 +49,16 @@ import java.util.*
 
 open class Config {
 
-    companion object props : Properties() {
+    companion object props {
 
         var fileWatcher = FileWatcher(File(""))
         var propertiesFile = File("")
+        val params = Parameters()
+        val builder: FileBasedConfigurationBuilder<FileBasedConfiguration> = FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration::class.java)
+                .configure(params.properties().setFileName("tacusci.properties"))
 
-        private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
-            return hashMapOf(Pair("server_address", "localhost"),
+        private fun getDefaultPropertiesList(): List<Pair<String, String>> {
+            return listOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
                     Pair("using_ssl_on_proxy", "false"),
                     Pair("schema_name", "tacusci"),
@@ -79,6 +87,23 @@ open class Config {
         }
 
         fun load() {
+
+            try {
+                val defaultProperties = getDefaultPropertiesList()
+                builder.configuration.setProperty("properties_file", "tacusci.properties")
+                if (File(builder.configuration.getString("properties_file")).doesNotExist()) {
+                    defaultProperties.forEach { pair ->
+                        builder.configuration.setProperty(pair.first, pair.second)
+                    }
+                    builder.save()
+                } else {
+                    defaultProperties.forEach { pair ->
+                        if (builder.configuration.getString())
+                    }
+                }
+            } catch (e: ConfigurationException) { System.err.println("Error loading config...") }
+
+            /*
             val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tacusci.properties")
@@ -101,6 +126,7 @@ open class Config {
             }
             propertiesFile.inputStream().close()
             setupLoggers(Config.getProperty("log_file"))
+            */
         }
 
         override fun getProperty(key: String): String {
@@ -125,24 +151,26 @@ open class Config {
 
         private fun getDefaultProperties(): Properties {
             val defaultProperties = Properties()
-            val defaultPropertyKeysAndValues = getDefaultPropertiesHashMap()
-            defaultPropertyKeysAndValues.forEach { property, value -> defaultProperties.setProperty(property, value) }
+            val defaultPropertyKeysAndValues = getDefaultPropertiesList()
+            defaultPropertyKeysAndValues.forEach { pair ->
+                defaultProperties.setProperty(pair.first, pair.second)
+            }
             return defaultProperties
         }
 
         fun loadFromPropertiesFile(propertiesFile: File) {
-            val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
+            val defaults = getDefaultPropertiesList()
             File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
-                defaults.forEach { property, value -> this.setProperty(property, value) }
+                defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
                     //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
-                    defaults.forEach { property, value ->
-                        if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
-                            this.setProperty(property, value)
+                    defaults.forEach { pair ->
+                        if (getProperty(pair.first).isEmpty() || getProperty(pair.first).isBlank()) {
+                            this.setProperty(pair.first, pair.second)
                         }
                     }
                     this.store(propertiesFile.outputStream(), "")
