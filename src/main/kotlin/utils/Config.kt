@@ -44,13 +44,13 @@ import java.util.*
 
 open class Config {
 
-    companion object props : Properties() {
+    companion object props : LinkedProperties() {
 
         var fileWatcher = FileWatcher(File(""))
         var propertiesFile = File("")
 
-        private fun getDefaultPropertiesHashMap(): HashMap<String, String> {
-            return hashMapOf(Pair("server_address", "localhost"),
+        private fun getDefaultPropertiesList(): List<Pair<String, String>> {
+            return listOf(Pair("server_address", "localhost"),
                     Pair("port", "1025"),
                     Pair("using_ssl_on_proxy", "false"),
                     Pair("schema_name", "tacusci"),
@@ -79,19 +79,19 @@ open class Config {
         }
 
         fun load() {
-            val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
+            val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
             //TODO: this could probably be cleaned up more
             this.setProperty("properties_file", "tacusci.properties")
             propertiesFile = File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
-                defaults.forEach { property, value -> this.setProperty(property, value) }
+                defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
                 storeAll()
             } else {
                 try {
                     this.load(propertiesFile.inputStream())
-                    defaults.forEach { property, value ->
-                        if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
-                            this.setProperty(property, value)
+                    defaults.forEach { pair ->
+                        if (getProperty(pair.first).isEmpty() || getProperty(pair.first).isBlank()) {
+                            this.setProperty(pair.first, pair.second)
                         }
                     }
                     this.store(propertiesFile.outputStream(), "")
@@ -125,24 +125,24 @@ open class Config {
 
         private fun getDefaultProperties(): Properties {
             val defaultProperties = Properties()
-            val defaultPropertyKeysAndValues = getDefaultPropertiesHashMap()
-            defaultPropertyKeysAndValues.forEach { property, value -> defaultProperties.setProperty(property, value) }
+            val defaultPropertyKeysAndValues = getDefaultPropertiesList()
+            defaultPropertyKeysAndValues.forEach { pair -> defaultProperties.setProperty(pair.first, pair.second) }
             return defaultProperties
         }
 
         fun loadFromPropertiesFile(propertiesFile: File) {
-            val defaults: HashMap<String, String> = getDefaultPropertiesHashMap()
+            val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
             File(this.getProperty("properties_file"))
             if (propertiesFile.doesNotExist()) {
-                defaults.forEach { property, value -> this.setProperty(property, value) }
+                defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
                     //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
-                    defaults.forEach { property, value ->
-                        if (getProperty(property).isEmpty() || getProperty(property).isBlank()) {
-                            this.setProperty(property, value)
+                    defaults.forEach { pair ->
+                        if (getProperty(pair.first).isEmpty() || getProperty(pair.first).isBlank()) {
+                            this.setProperty(pair.first, pair.second)
                         }
                     }
                     this.store(propertiesFile.outputStream(), "")
