@@ -65,8 +65,6 @@ object CliOptions : KLogging() {
             if (cliOption.argumentExpected && (cliOption.value.isEmpty() || cliOption.value.isBlank())) {
                 outputUsageAndClose()
             }
-            if (cliOption.argumentExpected) Config.setProperty(cliOption.cliText, cliOption.value)
-            if (!cliOption.argumentExpected) Config.setProperty(cliOption.cliText, cliOption.isFlag.toString())
         }
     }
 
