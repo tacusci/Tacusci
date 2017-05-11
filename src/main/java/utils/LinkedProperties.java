@@ -87,7 +87,7 @@ public class LinkedProperties extends Properties {
     }
 
     @Override
-    public String getProperty(String key) { return linkMap.get(key).toString(); }
+    public String getProperty(String key) { try { return linkMap.get(key).toString(); } catch (NullPointerException e) { return ""; } }
 
     public synchronized void store(OutputStream out, String comments)
             throws IOException {
@@ -96,9 +96,7 @@ public class LinkedProperties extends Properties {
         if (comments != null)
             writeln(awriter, "#" + comments);
         writeln(awriter, "#" + new Date().toString());
-        for (Iterator<java.util.Map.Entry<Object, Object>> e = linkMap.entrySet().iterator(); e.hasNext();) {
-            java.util.Map.Entry<Object, Object> entry = (java.util.Map.Entry<Object, Object>) e.next();
-
+        for (Map.Entry<Object, Object> entry : linkMap.entrySet()) {
             String key = (String) entry.getKey();
             String val = (String) entry.getValue();
             key = saveConvert(key, true);
