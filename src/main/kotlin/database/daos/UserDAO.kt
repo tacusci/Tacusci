@@ -253,7 +253,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun ban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNEDDATETIME=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 1)
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -269,7 +269,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun unban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNEDDATETIME=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 0)
             preparedStatement?.setLong(2, System.currentTimeMillis())

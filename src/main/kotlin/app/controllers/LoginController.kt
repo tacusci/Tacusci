@@ -87,11 +87,12 @@ class LoginController : Controller {
 
         if (request.session().attribute("is_banned")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User ${request.session().attribute<String>("banned_username")} is banned")
-            model.put("userIsBanned", "true")
             model.put("login_form", "")
             model.put("signup_link", "")
             request.session().attribute("is_banned", false)
             request.session().attribute("banned_username", "")
+        } else {
+            model.put("userIsNotBanned", "true")
         }
         return ModelAndView(model, layoutTemplate)
     }
