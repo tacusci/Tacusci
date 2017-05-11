@@ -33,7 +33,8 @@ package app.controllers
 
 import app.handlers.UserHandler
 import extensions.managedRedirect
-import j2html.TagCreator.*
+import j2html.TagCreator.h1
+import j2html.TagCreator.p
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -86,7 +87,7 @@ class LoginController : Controller {
 
         if (request.session().attribute("is_banned")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User ${request.session().attribute<String>("banned_username")} is banned")
-            model.put("banned_message", img().withSrc("/images/you_have_been_banned.jpg"))
+            model.put("userIsBanned", "true")
             model.put("login_form", "")
             model.put("signup_link", "")
             request.session().attribute("is_banned", false)

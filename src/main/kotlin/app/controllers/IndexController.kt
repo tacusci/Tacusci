@@ -59,10 +59,10 @@ class IndexController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
-        model.put("template", templatePath)
+        //model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model = Web.loadNavBar(request, model)
-        return ModelAndView(model, layoutTemplate)
+        return ModelAndView(model, templatePath)
     }
 
     override fun post(request: Request, response: Response): Response { throw UnsupportedOperationException("not implemented") }
