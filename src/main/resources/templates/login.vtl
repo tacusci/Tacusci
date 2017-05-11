@@ -27,13 +27,25 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
+<style>
+    .comic-sans-large {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        font-size: 800%;
+    }
+
+    h1 {
+        margin:0em 0;
+    }
+</style>
+
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         #if ($userIsNotBanned)
             $!login_form
             $!username_or_password_incorrect
         #{else}
-            <img src="/images/banned.png">
+            <h1 class="comic-sans-large">Banned</h1>
+            <h2>You have been banned from logging in.</h2>
         #end
     </div>
 </div>
