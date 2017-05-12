@@ -38,10 +38,7 @@ import database.models.User
 import extensions.forwardedIP
 import mu.KLogging
 import spark.Request
-import utils.CliOptions
-import utils.Config
-import utils.PasswordStorage
-import utils.Utils
+import utils.*
 
 /**
  * Created by tauraamui on 24/10/2016.
@@ -111,6 +108,7 @@ object  UserHandler : KLogging() {
         //TODO: WARNING!! For debug purposes only
         if (CliOptions.getFlag("debug"))
             //used to be 0:0:0:0:0:0:0:1
+            //TODO: give local access full access, since they're local and testing... right?
             if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0")) { return getRootAdmin().username }
         val session = request.session()
         if (isLoggedIn(request)) {
@@ -144,6 +142,12 @@ object  UserHandler : KLogging() {
                 logger.error("New root admin username is already in use, setting back to default...")
                 Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
                 Config.storeAll()
+            } else {
+                if (!Validation.matchUsernamePattern(newRootAdminUsername)) {
+                    logger.error("New root admin username does not meet validation standards, setting back to default...")
+                    Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                    Config.storeAll()
+                }
             }
         }
 
