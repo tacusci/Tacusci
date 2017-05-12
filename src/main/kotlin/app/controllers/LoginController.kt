@@ -119,14 +119,12 @@ class LoginController : Controller {
             if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
                 /*TODO: Need to improve email validation (2017-05-12 09:48 update this isn't possible due to form validation)
                   TODO: I need to decide whether I want to allow login via just username or email...*/
-                if (Validation.matchEmailPattern(username)) {
+                if (Validation.matchEmailPattern(username))
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
                     email = username
                     username = UserHandler.userDAO.getUsernameFromEmail(email)
-                }
-                if (!UserHandler.login(request, username, password)) {
+                if (!UserHandler.login(request, username, password))
                     response.managedRedirect(request, rootUri)
-                }
             } else {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
