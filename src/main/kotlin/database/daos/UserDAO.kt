@@ -149,8 +149,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         try {
             val selectStatement = "SELECT USERNAME FROM $tableName WHERE EMAIL=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setString(1, username)
-            preparedStatement?.setString(2, email)
+            preparedStatement?.setString(1, email)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
                 username = resultSet.getString("USERNAME")

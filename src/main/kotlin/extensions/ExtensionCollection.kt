@@ -102,6 +102,10 @@ fun String.toIntSafe(): Int {
     } catch (e: NumberFormatException) { return -1 }
 }
 
+fun String.isBlankOrEmpty(): Boolean { return this.isBlank() || this.isEmpty() }
+
+fun String.isNullOrBlankOrEmpty(): Boolean { return this.isNullOrBlank() || this.isNullOrEmpty() }
+
 fun String.fuzzySearchSimpleRatio(stringToCompare: String): Int {
     return FuzzySearch.ratio(this, stringToCompare)
 }

@@ -32,6 +32,7 @@
 package app.controllers
 
 import app.handlers.UserHandler
+import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import j2html.TagCreator.h1
 import j2html.TagCreator.p
@@ -116,18 +117,22 @@ class LoginController : Controller {
             var email = ""
             val password = request.queryParams("password")
 
-            if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
-                /*TODO: Need to improve email validation (2017-05-12 09:48 update this isn't possible due to form validation)
-                  TODO: I need to decide whether I want to allow login via just username or email...*/
-                if (Validation.matchEmailPattern(username))
-                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
-                    email = username
-                    username = UserHandler.userDAO.getUsernameFromEmail(email)
-                if (!UserHandler.login(request, username, password))
-                    response.managedRedirect(request, rootUri)
-            } else {
+            if (username.isNullOrBlankOrEmpty() || password.isNullOrBlankOrEmpty()) {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
+                response.managedRedirect(request, rootUri)
+                return response
+            } else {
+                //if the format for username is incorrect
+                if (!Validation.matchUsernamePattern(username)) {
+                    //check to see if it's an email address
+                    if (Validation.matchEmailPattern(username)) {
+                        //get username that corresponds to email
+                        email = username
+                        username = UserHandler.userDAO.getUsernameFromEmail(email)
+                    }
+                }
+                UserHandler.login(request, username, password)
             }
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid login form...")
