@@ -41,6 +41,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import utils.Validation
 import utils.j2htmlPartials
 
 /**
@@ -60,7 +61,7 @@ class LoginController : Controller {
 
     override fun initSessionBoolAttributes(session: Session) {
         hashMapOf(Pair("login_incorrect_creds", false), Pair("is_banned", false), Pair("username", ""), Pair("password", ""),
-                    Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
+                Pair("banned_username", ""), Pair("login_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
@@ -83,7 +84,7 @@ class LoginController : Controller {
             model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
         }
 
-        model.put("login_form", h1("Login").render()+loginForm.render())
+        model.put("login_form", h1("Login").render() + loginForm.render())
 
         if (request.session().attribute("is_banned")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User ${request.session().attribute<String>("banned_username")} is banned")
@@ -116,13 +117,16 @@ class LoginController : Controller {
             val password = request.queryParams("password")
 
             if (!(username.isNullOrBlank() || username.isNullOrEmpty() || password.isNullOrBlank() || password.isNullOrEmpty())) {
-                //TODO: Need to improve email validation
-                if (username.contains("@")) {
+                /*TODO: Need to improve email validation (2017-05-12 09:48 update this isn't possible due to form validation)
+                  TODO: I need to decide whether I want to allow login via just username or email...*/
+                if (Validation.matchEmailPattern(username)) {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Email instead of username detected, fetching associated username")
                     email = username
                     username = UserHandler.userDAO.getUsernameFromEmail(email)
                 }
-                if (!UserHandler.login(request, username, password)) { response.managedRedirect(request, rootUri) }
+                if (!UserHandler.login(request, username, password)) {
+                    response.managedRedirect(request, rootUri)
+                }
             } else {
                 request.session().attribute("login_error", true)
                 logger.info("Unrecognised username/password provided in form")
