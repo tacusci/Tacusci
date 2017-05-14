@@ -62,7 +62,7 @@ object DAOManager : KLogging() {
         PAGES
     }
 
-    public var connection: Connection? = null
+    var connection: Connection? = null
 
     fun init(url: String, dbProperties: Properties) {
         this.url = url
