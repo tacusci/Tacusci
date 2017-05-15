@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.controllers
+package app.pages.controllers
 
 import app.pages.PageFooter
 import j2html.TagCreator.p

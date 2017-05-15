@@ -29,6 +29,7 @@
 
 package app.controllers
 
+import app.pages.controllers.PageController
 import mu.KLogging
 import spark.Session
 import spark.Spark
