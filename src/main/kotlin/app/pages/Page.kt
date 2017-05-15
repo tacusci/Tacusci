@@ -29,6 +29,8 @@
 
 package app.pages
 
+import j2html.TagCreator.*
+import j2html.tags.Tag
 import spark.Request
 import spark.Response
 
@@ -37,16 +39,18 @@ import spark.Response
  */
 interface Page {
 
-    enum class PageType {
-        FOOTER,
-        USER_CREATED
-    }
+    enum class PageType {}
 
     var id: Int
-    val title: String
-    val rootUri: String
+    var title: String
+    var head: MutableList<Tag>
+    var body: MutableList<Tag>
+    var rootUri: String
     val type: Enum<PageType>
-    val body: String
 
-    fun getHandler(request: Request, response: Response): String
+    fun get(request: Request, response: Response): String
+    fun generateHtml(): String { return html().with(
+                                            head().with(head)
+                                        ).with(
+                                            body().with(body)).render() }
 }

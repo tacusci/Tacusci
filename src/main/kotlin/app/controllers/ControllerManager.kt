@@ -47,6 +47,9 @@ object ControllerManager : KLogging() {
 
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
     fun initBaseControllers() {
+
+        PageController.test()
+
         baseControllers.forEach {
             logger.debug("Mapping route: ${it.rootUri}")
             if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())

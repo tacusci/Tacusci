@@ -33,22 +33,17 @@ package app.pages
  * Created by tauraamui on 14/05/2017.
  */
 
-import app.pages.Page.PageType
+import app.pages.PartialPage.PageType
+import j2html.tags.Tag
 import spark.Request
 import spark.Response
 
-class PageFooter : Page {
+class PageFooter : PartialPage {
+
     override var id: Int = -1
-    override val title: String = ""
-    override val rootUri: String = ""
-    override val type: Enum<Page.PageType> = PageType.FOOTER
-    override val body: String = ""
+    override var title: String = ""
+    override var content = mutableListOf<Tag>()
+    override val type = PageType.FOOTER
 
-    override fun getHandler(request: Request, response: Response): String {
-        return generateHtml()
-    }
-
-    fun generateHtml(): String {
-        return "<html><title>$title</title><body>$body</body></html>"
-    }
+    override fun get(request: Request, response: Response): String { return generateHtml() }
 }
