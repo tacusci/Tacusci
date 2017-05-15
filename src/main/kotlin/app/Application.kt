@@ -33,8 +33,8 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
-import app.controllers.ControllerManager
-import app.controllers.Web
+import app.routecontrollers.ControllerManager
+import app.routecontrollers.Web
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import database.daos.DAOManager

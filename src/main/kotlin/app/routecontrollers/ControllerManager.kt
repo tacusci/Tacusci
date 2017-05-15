@@ -27,9 +27,9 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.controllers
+package app.routecontrollers
 
-import app.pages.controllers.PageController
+import app.pages.pagecontrollers.PageController
 import mu.KLogging
 import spark.Session
 import spark.Spark

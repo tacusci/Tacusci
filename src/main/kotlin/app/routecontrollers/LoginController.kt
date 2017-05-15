@@ -29,7 +29,7 @@
 
 
 
-package app.controllers
+package app.routecontrollers
 
 import app.handlers.UserHandler
 import extensions.isNullOrBlankOrEmpty

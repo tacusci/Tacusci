@@ -29,7 +29,7 @@
 
 package utils
 
-import app.controllers.Web
+import app.routecontrollers.Web
 import database.models.RouteEntityNode
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag

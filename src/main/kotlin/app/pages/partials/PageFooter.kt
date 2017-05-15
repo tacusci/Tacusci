@@ -43,7 +43,7 @@ class PageFooter : PartialPage {
     override var id: Int = -1
     override var title: String = ""
     override var content = mutableListOf<Tag>()
-    override val type = PageType.FOOTER
+    override val type = PartialPage.PageType.FOOTER
 
     override fun get(request: Request, response: Response): String { return generateHtml() }
 }

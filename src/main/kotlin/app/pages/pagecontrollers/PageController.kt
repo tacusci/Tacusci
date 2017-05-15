@@ -27,8 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.pages.controllers
+package app.pages.pagecontrollers
 
+import app.pages.Page
+import app.pages.RawPage
 import app.pages.partials.PageFooter
 import j2html.TagCreator.p
 import j2html.TagCreator.title
@@ -41,7 +43,7 @@ object PageController {
     val pages = listOf(PageFooter())
 
     fun test() {
-        val page = PageFooter()
+        val page = RawPage()
         page.id = 0
         page.title = "This is a test"
         page.head = mutableListOf(title(page.title))

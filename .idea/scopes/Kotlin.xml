@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Kotlin" pattern="src:app.*||src:app.controllers.*||src:app.handlers.*||src:database.*||src:extensions.*||src:database.models.*||src:database.daos.*||src:utils.*||src:templates.*||src:utils.tree.*||src:app..*||src:app.controllers..*||src:app.handlers..*||src:database..*||src:extensions..*||src:database.models..*||src:database.daos..*||src:utils..*||src:templates..*||src:utils.tree..*" />
+  <scope name="Kotlin" pattern="src:app.*||src:app.routecontrollers.*||src:app.handlers.*||src:database.*||src:extensions.*||src:database.models.*||src:database.daos.*||src:utils.*||src:templates.*||src:utils.tree.*||src:app..*||src:app.routecontrollers..*||src:app.handlers..*||src:database..*||src:extensions..*||src:database.models..*||src:database.daos..*||src:utils..*||src:templates..*||src:utils.tree..*" />
 </component>

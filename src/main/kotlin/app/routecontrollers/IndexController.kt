@@ -29,7 +29,7 @@
  
  
  
- package app.controllers
+ package app.routecontrollers
 
 import app.handlers.UserHandler
 import mu.KLogging
@@ -41,34 +41,29 @@ import utils.Config
 import java.util.*
 
 /**
- * Created by tauraamui on 27/10/2016.
+ * Created by tauraamui on 15/12/2016.
  */
-
-class DashboardController : Controller {
+class IndexController : Controller {
 
     companion object : KLogging()
 
-    override var rootUri: String = "/dashboard"
+    override var rootUri: String = "/"
     override val childUris: MutableList<String> = mutableListOf()
-    override val templatePath: String = "/templates/dashboard.vtl"
-    override val pageTitleSubstring: String = "Dashboard"
+    override val pageTitleSubstring: String = "Homepage"
+    override val templatePath: String = "/templates/index.vtl"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
-        model.put("template", templatePath)
+        //model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, model)
-        return ModelAndView(model, layoutTemplate)
+        return ModelAndView(model, templatePath)
     }
 
-    override fun post(request: Request, response: Response): Response {
-        //TODO: IMPLEMENT THIS
-        return response
-    }
+    override fun post(request: Request, response: Response): Response { throw UnsupportedOperationException("not implemented") }
 }
