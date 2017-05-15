@@ -27,28 +27,23 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.pages
+package app.pages.partials
 
-import j2html.TagCreator.body
-import j2html.TagCreator.html
+/**
+ * Created by tauraamui on 14/05/2017.
+ */
+
+import app.pages.partials.PartialPage.PageType
 import j2html.tags.Tag
 import spark.Request
 import spark.Response
 
-/**
- * Created by alewis on 15/05/2017.
- */
-interface PartialPage {
+class PageFooter : PartialPage {
 
-    enum class PageType {
-        FOOTER
-    }
+    override var id: Int = -1
+    override var title: String = ""
+    override var content = mutableListOf<Tag>()
+    override val type = PageType.FOOTER
 
-    var id: Int
-    var title: String
-    var content: MutableList<Tag>
-    val type: Enum<PageType>
-
-    fun get(request: Request, response: Response): String
-    fun generateHtml(): String { return html().with(body().with(content)).render() }
+    override fun get(request: Request, response: Response): String { return generateHtml() }
 }

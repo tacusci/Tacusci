@@ -29,7 +29,7 @@
 
 package app.pages.controllers
 
-import app.pages.PageFooter
+import app.pages.partials.PageFooter
 import j2html.TagCreator.p
 import j2html.TagCreator.title
 
