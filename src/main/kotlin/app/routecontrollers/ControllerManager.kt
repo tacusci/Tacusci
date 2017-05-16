@@ -51,6 +51,8 @@ object ControllerManager : KLogging() {
 
         PageController.test()
 
+        Spark.get("/test_page", { request, response -> "This is a test page" })
+
         baseControllers.forEach {
             logger.debug("Mapping route: ${it.rootUri}")
             if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())

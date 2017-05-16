@@ -41,7 +41,7 @@ interface Page {
 
     enum class PageType {
         RAW,
-        BASE_PAGE
+        CORE_PAGE
     }
 
     var id: Int
