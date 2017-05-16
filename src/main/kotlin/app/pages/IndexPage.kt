@@ -29,31 +29,20 @@
 
 package app.pages
 
-import j2html.TagCreator.*
 import j2html.tags.Tag
 import spark.Request
 import spark.Response
 
 /**
- * Created by tauraamui on 14/05/2017.
+ * Created by alewis on 16/05/2017.
  */
-interface Page {
+class IndexPage : Page {
+    override var id: Int = -1
+    override var title: String = ""
+    override var head: MutableList<Tag> = mutableListOf()
+    override var body: MutableList<Tag> = mutableListOf()
+    override var rootUri: String = ""
+    override val type = Page.PageType.BASE_PAGE
 
-    enum class PageType {
-        RAW,
-        BASE_PAGE
-    }
-
-    var id: Int
-    var title: String
-    var head: MutableList<Tag>
-    var body: MutableList<Tag>
-    var rootUri: String
-    val type: Enum<PageType>
-
-    fun get(request: Request, response: Response): String
-    fun generateHtml(): String { return html().with(
-                                            head().with(head)
-                                        ).with(
-                                            body().with(body)).render() }
+    override fun get(request: Request, response: Response): String { return "" }
 }

@@ -42,7 +42,7 @@ class RawPage : Page {
     override var head: MutableList<Tag> = mutableListOf()
     override var body: MutableList<Tag> = mutableListOf()
     override var rootUri: String = ""
-    override val type: Enum<Page.PageType> = Page.PageType.RAW
+    override val type = Page.PageType.RAW
 
     override fun get(request: Request, response: Response): String {
         return generateHtml()
