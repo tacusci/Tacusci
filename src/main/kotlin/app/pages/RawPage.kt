@@ -29,7 +29,7 @@
 
 package app.pages
 
-import j2html.tags.Tag
+import app.pages.structured.StructuredPage
 import spark.Request
 import spark.Response
 

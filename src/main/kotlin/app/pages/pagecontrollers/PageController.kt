@@ -32,8 +32,6 @@ package app.pages.pagecontrollers
 import app.handlers.UserHandler
 import app.pages.RawPage
 import app.pages.partials.PageFooter
-import j2html.TagCreator.p
-import j2html.TagCreator.title
 import spark.Spark
 import spark.template.velocity.VelocityIMTemplateEngine
 
@@ -44,23 +42,92 @@ object PageController {
 
     val pages = listOf(PageFooter())
 
-    fun test(): String {
-        val page = RawPage()
-        page.id = 0
-        page.title = "This is a test"
-        page.head = mutableListOf(title(page.title))
-        page.body = mutableListOf(p("This is some test text"), p("Hello there \$someone!"))
-        return page.generateHtml()
-    }
-
     fun mapPagesToRoutes() {
         Spark.get("/test_virtual_template", { request, response -> testVelocityGen() })
     }
 
     fun testVelocityGen(): String {
         val velocityTempEngine = VelocityIMTemplateEngine()
-        velocityTempEngine.insertTemplateAsString("test_virtual_template", test())
+        velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestRawPage())
         velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
         return velocityTempEngine.mergedIMTemplate
+    }
+
+    private fun getTestRawPage(): String {
+        val page = RawPage()
+        page.id = 0
+        page.title = "Virtual Template Test"
+        page.content = """<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Virtual Template Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+        * {
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        html {
+            color: #888;
+            display: table;
+            font-family: sans-serif;
+            height: 100%;
+            text-align: center;
+            width: 100%;
+        }
+
+        body {
+            display: table-cell;
+            vertical-align: middle;
+            margin: 2em auto;
+        }
+
+        h1 {
+            color: #555;
+            font-size: 2em;
+            font-weight: 400;
+        }
+
+        p {
+            margin: 0 auto;
+            width: 280px;
+        }
+
+        @media only screen and (max-width: 280px) {
+
+            body, p {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 0 0 0.3em;
+            }
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+      window.onload = function(e) { displayImage(); }
+      var images = ["/images/andy.gif", "/images/baskball.gif", "/images/pika.jpg", "/images/pony.jpg"];
+      function displayImage() {
+        var randNum = Math.floor(Math.random() * images.length);
+        document.derp_image.src = images[randNum];
+      }
+    </script>
+
+</head>
+<body>
+    <img src="/images/blank.jpg" name="derp_image" width="900" height="720">
+    <h1>Virtual Template Test!</h1>
+    <p>This was a successful load of the in memory template!</p>
+</body>
+</html>
+<!-- IE needs 512+ bytes: https://blogs.msdn.microsoft.com/ieinternals/2010/08/18/friendly-http-error-pages/ -->"""
+        return page.content
     }
 }

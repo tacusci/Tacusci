@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.pages
+package app.pages.structured
 
 import j2html.TagCreator.*
 import j2html.tags.Tag
