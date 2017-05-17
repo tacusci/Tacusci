@@ -30,20 +30,10 @@
 package app.pages
 
 import app.pages.structured.StructuredPage
-import spark.Request
-import spark.Response
 
 /**
  * Created by tauraamui on 15/05/2017.
  */
-class RawPage {
-    var id: Int = -1
-    var title = ""
-    var content = ""
-    var rootUri = ""
-    val type = StructuredPage.PageType.RAW
 
-    fun get(request: Request, response: Response): String {
-        return content
-    }
-}
+//TODO change the enum source for this page to make more sense
+data class RawPage(var id: Int = -1, var title: String = "", var content: String = "", var rootUri: String = "", val type: StructuredPage.PageType = StructuredPage.PageType.RAW)
