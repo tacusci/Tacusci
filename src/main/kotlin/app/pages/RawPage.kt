@@ -36,15 +36,14 @@ import spark.Response
 /**
  * Created by tauraamui on 15/05/2017.
  */
-class RawPage : Page {
-    override var id: Int = -1
-    override var title: String = ""
-    override var head: MutableList<Tag> = mutableListOf()
-    override var body: MutableList<Tag> = mutableListOf()
-    override var rootUri: String = ""
-    override val type = Page.PageType.RAW
+class RawPage {
+    var id: Int = -1
+    var title = ""
+    var content = ""
+    var rootUri = ""
+    val type = StructuredPage.PageType.RAW
 
-    override fun get(request: Request, response: Response): String {
-        return generateHtml()
+    fun get(request: Request, response: Response): String {
+        return content
     }
 }

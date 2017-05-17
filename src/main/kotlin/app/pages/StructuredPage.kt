@@ -37,7 +37,7 @@ import spark.Response
 /**
  * Created by tauraamui on 14/05/2017.
  */
-interface Page {
+interface StructuredPage {
 
     enum class PageType {
         RAW,

@@ -50,7 +50,7 @@ class PageManagementController : Controller {
     override var rootUri: String = "/dashboard/page_management"
     override val childUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/page_management.vtl"
-    override val pageTitleSubstring: String = "Page Management"
+    override val pageTitleSubstring: String = "StructuredPage Management"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 

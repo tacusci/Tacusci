@@ -47,11 +47,10 @@ object ControllerManager : KLogging() {
     val layoutTemplate = "/templates/layout.vtl"
 
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
+
     fun initBaseControllers() {
 
-        PageController.test()
-
-        Spark.get("/test_page", { request, response -> "This is a test page" })
+        PageController.mapPagesToRoutes()
 
         baseControllers.forEach {
             logger.debug("Mapping route: ${it.rootUri}")

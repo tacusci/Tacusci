@@ -36,14 +36,14 @@ import spark.Response
 /**
  * Created by alewis on 16/05/2017.
  */
-class IndexPage : Page {
+class IndexPage : StructuredPage {
 
     override var id: Int = -1
     override var title: String = ""
     override var head: MutableList<Tag> = mutableListOf()
     override var body: MutableList<Tag> = mutableListOf()
     override var rootUri: String = ""
-    override val type = Page.PageType.CORE_PAGE
+    override val type = StructuredPage.PageType.CORE_PAGE
 
     override fun get(request: Request, response: Response): String { return "" }
 }

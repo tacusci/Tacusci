@@ -29,11 +29,13 @@
 
 package app.pages.pagecontrollers
 
-import app.pages.Page
+import app.handlers.UserHandler
 import app.pages.RawPage
 import app.pages.partials.PageFooter
 import j2html.TagCreator.p
 import j2html.TagCreator.title
+import spark.Spark
+import spark.template.velocity.VelocityIMTemplateEngine
 
 /**
  * Created by tauraamui on 14/05/2017.
@@ -42,12 +44,23 @@ object PageController {
 
     val pages = listOf(PageFooter())
 
-    fun test() {
+    fun test(): String {
         val page = RawPage()
         page.id = 0
         page.title = "This is a test"
         page.head = mutableListOf(title(page.title))
-        page.body = mutableListOf(p("This is some test text"), p("Hello there"))
-        println(page.generateHtml())
+        page.body = mutableListOf(p("This is some test text"), p("Hello there \$someone!"))
+        return page.generateHtml()
+    }
+
+    fun mapPagesToRoutes() {
+        Spark.get("/test_virtual_template", { request, response -> testVelocityGen() })
+    }
+
+    fun testVelocityGen(): String {
+        val velocityTempEngine = VelocityIMTemplateEngine()
+        velocityTempEngine.insertTemplateAsString("test_virtual_template", test())
+        velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
+        return velocityTempEngine.mergedIMTemplate
     }
 }
