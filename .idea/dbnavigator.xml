@@ -16,7 +16,7 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
-      <charset value="windows-1252" />
+      <charset value="UTF-8" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -53,8 +53,8 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" current-schema="" />
     <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" current-schema="" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />

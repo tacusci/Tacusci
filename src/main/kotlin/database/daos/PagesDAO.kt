@@ -58,5 +58,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return pageId
     }
 
-    fun getPage(pageId: Int): Page { return Page(-1, -1, -1, "", "", true, false, -1) }
+    fun getPage(pageId: Int): Page {
+        return Page(-1, -1, -1, "", "", true, false, -1)
+    }
 }

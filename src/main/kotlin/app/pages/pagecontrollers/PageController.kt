@@ -30,8 +30,8 @@
 package app.pages.pagecontrollers
 
 import app.handlers.UserHandler
-import app.pages.RawPage
 import app.pages.partials.PageFooter
+import database.models.RawPage
 import spark.Spark
 import spark.template.velocity.VelocityIMTemplateEngine
 

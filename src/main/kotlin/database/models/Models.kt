@@ -32,6 +32,7 @@
  package database.models
 
 import app.handlers.RouteEntityHandler
+import app.pages.structured.StructuredPage
 import utils.Validation
 import utils.tree.Node
 import utils.tree.Tree
@@ -108,3 +109,7 @@ data class RouteEntity(var id: Long, var parentId: Long, var name: String,
 data class Page(var id: Long, var createdDateTime: Long, var lastUpdatedDateTime: Long,
                 var pageTitle: String, var pageRoute: String, var maintanceMode: Boolean,
                 var publicAndLive: Boolean, var authorUserId: Int)
+
+//TODO change the enum source for this page to make more sense
+data class RawPage(var id: Int = -1, var title: String = "", var content: String = "",
+                   var rootUri: String = "", val type: StructuredPage.PageType = StructuredPage.PageType.RAW)
