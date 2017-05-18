@@ -106,10 +106,8 @@ class RouteEntityNode() : Node<RouteEntity>() {
 data class RouteEntity(var id: Long, var parentId: Long, var name: String,
                        var routeEntityType: RouteEntityHandler.ROUTE_ENTITY_TYPE,
                        var pageId: Long)
-data class Page(var id: Long, var createdDateTime: Long, var lastUpdatedDateTime: Long,
-                var pageTitle: String, var pageRoute: String, var maintanceMode: Boolean,
-                var publicAndLive: Boolean, var authorUserId: Int)
 
-//TODO change the enum source for this page to make more sense
-data class RawPage(var id: Int = -1, var title: String = "", var content: String = "",
-                   var rootUri: String = "", val type: StructuredPage.PageType = StructuredPage.PageType.RAW)
+data class Page(var id: Long, var createdDateTime: Long, var lastUpdatedDateTime: Long,
+                var pageTitle: String, var pageRoute: String, var maintenanceMode: Int,
+                var content: String, var authorUserId: Int,
+                val type: StructuredPage.PageType = StructuredPage.PageType.RAW)

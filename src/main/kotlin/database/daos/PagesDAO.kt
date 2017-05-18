@@ -29,6 +29,7 @@
 
 package database.daos
 
+import app.pages.structured.StructuredPage
 import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
@@ -42,7 +43,27 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
 
     companion object : KLogging()
 
-    fun getPageID(pageTitle: String): Int {
+    fun insertPage(page: Page): Boolean {
+        connect()
+        try {
+            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) (?,?,?,?,?,?,?,?)"
+            val preparedStatement = connection?.prepareStatement(createPageStatementString)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setString(3, page.pageTitle)
+            preparedStatement?.setString(4, page.pageRoute)
+            preparedStatement?.setString(5, page.content)
+            preparedStatement?.setInt(6, page.maintenanceMode)
+            preparedStatement?.setInt(7, page.type.ordinal)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: Exception) { e.printStackTrace(); disconnect(); return false }
+    }
+
+    fun getPageIDByTitle(pageTitle: String): Int {
         connect()
         var pageId = -1
         try {
@@ -59,6 +80,10 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     }
 
     fun getPage(pageId: Int): Page {
-        return Page(-1, -1, -1, "", "", true, false, -1)
+        connect()
+        try {
+
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return Page(-1, -1, -1, "", "", 0, "", -1)
     }
 }
