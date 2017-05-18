@@ -9,4 +9,6 @@
 - [ ] Insert helpful data sets into Velocity template contexts for all pages, depending on type of page
     - For example, if the page is of type forum, then provide a list of all currently logged in user names
 
-- [ ] Create the main page management dashboard page which lists all existing pages and summerised details and about them
+- [ ] Create the main page management dashboard page which lists all existing pages and summerised details
+    - Details include (author, last edited date/time, created date time, etc.,)
+    - The same divs which are presented in a list representing each page should also be a link to edit said page
