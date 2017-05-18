@@ -53,19 +53,19 @@ public class VelocityIMTemplateEngine {
         templatesAndContexts.put(templateTitle, new VelocityContext());
     }
 
-    public void insertContexts(String templateTitle, HashMap<String, Object> keyAndValues) {
+    public void insertIntoContext(String templateTitle, HashMap<String, Object> keyAndValues) {
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         for (Map.Entry<String, Object> entry : keyAndValues.entrySet()) {
             velocityContext.put(entry.getKey(), entry.getValue());
         }
     }
 
-    public void insertContexts(String templateTitle, List<Pair<String, Object>> keyAndValues) {
+    public void insertIntoContext(String templateTitle, List<Pair<String, Object>> keyAndValues) {
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         keyAndValues.forEach(pair -> velocityContext.put(pair.getFirst(), pair.getSecond()));
     }
 
-    public void insertContext(String templateTitle, Pair<String, Object> keyAndValue) {
+    public void insertIntoContext(String templateTitle, Pair<String, Object> keyAndValue) {
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         velocityContext.put(keyAndValue.getFirst(), keyAndValue.getSecond());
     }

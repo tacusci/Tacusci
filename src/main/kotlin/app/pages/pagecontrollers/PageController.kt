@@ -51,7 +51,7 @@ object PageController {
         val velocityTempEngine = VelocityIMTemplateEngine()
         velocityTempEngine.flush("test_virtual_template")
         velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestAboutUsPage())
-        velocityTempEngine.insertContexts("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        velocityTempEngine.insertIntoContext("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
         val mergedTemplate = velocityTempEngine.merge("test_virtual_template")
         velocityTempEngine.flush("test_virtual_template")
         return mergedTemplate
