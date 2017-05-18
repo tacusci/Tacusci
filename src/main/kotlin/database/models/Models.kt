@@ -107,7 +107,7 @@ data class RouteEntity(var id: Long, var parentId: Long, var name: String,
                        var routeEntityType: RouteEntityHandler.ROUTE_ENTITY_TYPE,
                        var pageId: Long)
 
-data class Page(var id: Long, var createdDateTime: Long, var lastUpdatedDateTime: Long,
-                var pageTitle: String, var pageRoute: String, var maintenanceMode: Int,
+data class Page(var id: Int, var createdDateTime: Long, var lastUpdatedDateTime: Long,
+                var title: String, var pageRoute: String, var maintenanceMode: Int,
                 var content: String, var authorUserId: Int,
-                val type: StructuredPage.PageType = StructuredPage.PageType.RAW)
+                var type: StructuredPage.PageType = StructuredPage.PageType.RAW)

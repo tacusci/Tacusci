@@ -33,6 +33,7 @@ import j2html.TagCreator.*
 import j2html.tags.Tag
 import spark.Request
 import spark.Response
+import sun.jvm.hotspot.debugger.Page
 
 /**
  * Created by tauraamui on 14/05/2017.
@@ -41,7 +42,12 @@ interface StructuredPage {
 
     enum class PageType {
         RAW,
-        CORE_PAGE
+        CORE_PAGE;
+
+        companion object {
+            private val map = PageType.values().associateBy(PageType::ordinal)
+            fun fromInt(type: Int) = map[type]
+        }
     }
 
     var id: Int

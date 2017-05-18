@@ -31,7 +31,9 @@ package app.pages.pagecontrollers
 
 import app.handlers.UserHandler
 import app.pages.partials.PageFooter
-import database.models.RawPage
+import app.routecontrollers.Web
+import database.models.Page
+import spark.Request
 import spark.Spark
 import spark.template.velocity.VelocityIMTemplateEngine
 
@@ -43,18 +45,20 @@ object PageController {
     val pages = listOf(PageFooter())
 
     fun mapPagesToRoutes() {
-        Spark.get("/test_virtual_template", { request, response -> testVelocityGen() })
+        Spark.get("/test_virtual_template", { request, response -> testVelocityGen(request) })
     }
 
-    fun testVelocityGen(): String {
+    fun testVelocityGen(request: Request): String {
         val velocityTempEngine = VelocityIMTemplateEngine()
         velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestRawPage())
-        velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
+        velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        //velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
+        //velocityTempEngine.insertContextToIMTemplate("test_virtual_template", Pair("username", UserHandler.loggedInUsername(request)))
         return velocityTempEngine.mergedIMTemplate
     }
 
     private fun getTestRawPage(): String {
-        val page = RawPage()
+        val page = Page(-1, -1, -1, "", "", -1, "", -1)
         page.id = 0
         page.title = "Virtual Template Test"
         page.content = """<!doctype html>
@@ -122,6 +126,10 @@ object PageController {
 
 </head>
 <body>
+    $!home_link
+    $!login_or_profile_link
+    $!sign_out_form
+    <h1>Hello $!username</h1>
     <img src="/images/blank.jpg" name="derp_image" width="900" height="720">
     <h1>Virtual Template Test!</h1>
     <p>This was a successful load of the in memory template!</p>

@@ -29,6 +29,7 @@
 
 package utils
 
+import app.pages.structured.StructuredPage
 import mu.KLogging
 import org.apache.log4j.FileAppender
 import org.apache.log4j.Level
@@ -48,7 +49,6 @@ class Utils {
 
         val secureRandom = SecureRandom()
         val charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
 
         fun randomHash(length: Int): String {
             val stringBuilder = StringBuilder(length)

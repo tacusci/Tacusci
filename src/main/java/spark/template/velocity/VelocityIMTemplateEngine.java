@@ -10,7 +10,9 @@ import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -51,7 +53,23 @@ public class VelocityIMTemplateEngine {
         stringResourceRepository.putStringResource(templateTitle, templateContent);
     }
 
-    public void insertContextsToIMTemplate(String templateTitle, List<Pair<String, String>> keyAndValues) {
+    public void insertContextsToIMTemplate(String templateTitle, HashMap<String, Object> keyAndValues) {
+        VelocityContext velocityContext = new VelocityContext();
+        for (Map.Entry<String, Object> entry : keyAndValues.entrySet()) {
+            velocityContext.put(entry.getKey(), entry.getValue());
+        }
+        Template template = velocityEngine.getTemplate(templateTitle);
+        template.merge(velocityContext, writer);
+    }
+
+    public void insertContextToIMTemplate(String templateTitle, Pair<String, Object> keyAndValue) {
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put(keyAndValue.getFirst(), keyAndValue.getSecond());
+        Template template = velocityEngine.getTemplate(templateTitle);
+        template.merge(velocityContext, writer);
+    }
+
+    public void insertContextsToIMTemplate(String templateTitle, List<Pair<String, Object>> keyAndValues) {
         VelocityContext velocityContext = new VelocityContext();
         keyAndValues.forEach(pair -> velocityContext.put(pair.getFirst(), pair.getSecond()));
         Template template = velocityEngine.getTemplate(templateTitle);

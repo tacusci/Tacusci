@@ -47,11 +47,11 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getUser(userID: Int): User {
         connect()
-        var user = User(-1, -1, -1, "", "", "", "", 0, 0)
+        val user = User(-1, -1, -1, "", "", "", "", 0, 0)
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setString(1, userID.toString())
+            preparedStatement?.setInt(1, userID)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
                 user.id = resultSet.getInt("ID_USERS")
