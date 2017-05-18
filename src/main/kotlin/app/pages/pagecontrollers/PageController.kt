@@ -50,11 +50,12 @@ object PageController {
 
     fun testVelocityGen(request: Request): String {
         val velocityTempEngine = VelocityIMTemplateEngine()
+        velocityTempEngine.flush("test_virtual_template")
         velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestRawPage())
-        velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
-        //velocityTempEngine.insertContextsToIMTemplate("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
-        //velocityTempEngine.insertContextToIMTemplate("test_virtual_template", Pair("username", UserHandler.loggedInUsername(request)))
-        return velocityTempEngine.mergedIMTemplate
+        velocityTempEngine.insertContexts("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        velocityTempEngine.insertContexts("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
+        velocityTempEngine.insertContext("test_virtual_template", Pair("username", UserHandler.loggedInUsername(request)))
+        return velocityTempEngine.merge("test_virtual_template")
     }
 
     private fun getTestRawPage(): String {

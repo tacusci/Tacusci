@@ -10,17 +10,15 @@ import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by alewis on 17/05/2017.
  */
 public class VelocityIMTemplateEngine {
+
     private final VelocityEngine velocityEngine;
-    private StringWriter writer = new StringWriter();
+    private HashMap<String, VelocityContext> templatesAndContexts = new HashMap<>();
 
     /**
      * Constructor
@@ -51,34 +49,40 @@ public class VelocityIMTemplateEngine {
         velocityEngine.init();
         StringResourceRepository stringResourceRepository = StringResourceLoader.getRepository();
         stringResourceRepository.putStringResource(templateTitle, templateContent);
+        templatesAndContexts.put(templateTitle, new VelocityContext());
     }
 
-    public void insertContextsToIMTemplate(String templateTitle, HashMap<String, Object> keyAndValues) {
-        VelocityContext velocityContext = new VelocityContext();
+    public void insertContexts(String templateTitle, HashMap<String, Object> keyAndValues) {
+        VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         for (Map.Entry<String, Object> entry : keyAndValues.entrySet()) {
             velocityContext.put(entry.getKey(), entry.getValue());
         }
-        Template template = velocityEngine.getTemplate(templateTitle);
-        template.merge(velocityContext, writer);
     }
 
-    public void insertContextToIMTemplate(String templateTitle, Pair<String, Object> keyAndValue) {
-        VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put(keyAndValue.getFirst(), keyAndValue.getSecond());
-        Template template = velocityEngine.getTemplate(templateTitle);
-        template.merge(velocityContext, writer);
-    }
-
-    public void insertContextsToIMTemplate(String templateTitle, List<Pair<String, Object>> keyAndValues) {
-        VelocityContext velocityContext = new VelocityContext();
+    public void insertContexts(String templateTitle, List<Pair<String, Object>> keyAndValues) {
+        VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         keyAndValues.forEach(pair -> velocityContext.put(pair.getFirst(), pair.getSecond()));
-        Template template = velocityEngine.getTemplate(templateTitle);
-        template.merge(velocityContext, writer);
     }
 
-    public void clearIMTemplate() { writer.flush(); }
-    public String getMergedIMTemplate() {
+    public void insertContext(String templateTitle, Pair<String, Object> keyAndValue) {
+        VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
+        velocityContext.put(keyAndValue.getFirst(), keyAndValue.getSecond());
+    }
+
+    public String merge(String templateTitle) {
+        StringWriter writer = new StringWriter();
+        Template template = velocityEngine.getTemplate(templateTitle);
+        VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
+        template.merge(velocityContext, writer);
         Compressor htmlCompressor = new HtmlCompressor();
         return htmlCompressor.compress(writer.toString());
+    }
+
+    public void flush(String templateTitle) {
+        templatesAndContexts.remove(templateTitle);
+        StringResourceRepository stringResourceRepository = StringResourceLoader.getRepository();
+        if (velocityEngine.resourceExists(templateTitle)) {
+            stringResourceRepository.removeStringResource(templateTitle);
+        }
     }
 }
