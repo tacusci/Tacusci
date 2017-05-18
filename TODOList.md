@@ -11,4 +11,9 @@
 
 - [ ] Create the main page management dashboard page which lists all existing pages and summerised details
     - Details include (author, last edited date/time, created date time, etc.,)
-    - The same divs which are presented in a list representing each page should also be a link to edit said page
+    - The same divs which are presented in a list representing each page should also be a link to edit said
+      page
+
+- [ ] Implement more user management features
+	- Included in this should be adding more user role types (writer/blogger, designer (access to HTML and
+	  template creation), etc.,)
