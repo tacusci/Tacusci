@@ -51,5 +51,14 @@ class PageHandler {
     fun updatePage(page: Page): Boolean {
         return pageDAO.updatePage(page)
     }
+
+    fun getPageById(id: Int): Page {
+        return pageDAO.getPage(id)
+    }
+
+    fun getPageByTitle(title: String): Page {
+        return pageDAO.getPage(pageDAO.getPageIDByTitle(title))
+    }
+
     fun updatePageFooter(pageFooterData: String, authorUser: User) {}
 }
