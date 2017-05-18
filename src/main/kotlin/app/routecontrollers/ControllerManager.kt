@@ -29,7 +29,6 @@
 
 package app.routecontrollers
 
-import app.pages.pagecontrollers.PageController
 import mu.KLogging
 import spark.Session
 import spark.Spark
@@ -49,8 +48,6 @@ object ControllerManager : KLogging() {
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
 
     fun initBaseControllers() {
-
-        PageController.mapPagesToRoutes()
 
         baseControllers.forEach {
             logger.debug("Mapping route: ${it.rootUri}")

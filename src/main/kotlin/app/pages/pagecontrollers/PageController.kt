@@ -29,7 +29,6 @@
 
 package app.pages.pagecontrollers
 
-import app.handlers.UserHandler
 import app.pages.partials.PageFooter
 import app.routecontrollers.Web
 import database.models.Page
@@ -45,17 +44,104 @@ object PageController {
     val pages = listOf(PageFooter())
 
     fun mapPagesToRoutes() {
-        Spark.get("/test_virtual_template", { request, response -> testVelocityGen(request) })
+        Spark.get("/about_us", { request, response -> testVelocityGen(request) })
     }
 
     fun testVelocityGen(request: Request): String {
         val velocityTempEngine = VelocityIMTemplateEngine()
         velocityTempEngine.flush("test_virtual_template")
-        velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestRawPage())
+        velocityTempEngine.insertTemplateAsString("test_virtual_template", getTestAboutUsPage())
         velocityTempEngine.insertContexts("test_virtual_template", Web.loadNavBar(request, hashMapOf<String, Any>()))
-        velocityTempEngine.insertContexts("test_virtual_template", listOf(Pair("someone", UserHandler.getRootAdmin().username)))
-        velocityTempEngine.insertContext("test_virtual_template", Pair("username", UserHandler.loggedInUsername(request)))
-        return velocityTempEngine.merge("test_virtual_template")
+        val mergedTemplate = velocityTempEngine.merge("test_virtual_template")
+        velocityTempEngine.flush("test_virtual_template")
+        return mergedTemplate
+    }
+
+    private fun getTestAboutUsPage(): String {
+        val page = Page(-1, -1, -1, "", "", -1, "", -1)
+        page.title = "About Us"
+        page.content = """
+  <html>
+
+    <head>
+        <link rel="stylesheet" href="/styles/about-us.css">
+        <link rel="stylesheet" href="/styles/framework.css">
+    </head>
+
+  <body>
+    <div class="wrapper row2">
+  <div id="container" class="clear">
+    <div id="about-us" class="clear">
+      <section id="about-intro" class="clear">
+        <div class="three_fifth first"><img class="imgholder" src="images/demo/548x430.gif" alt=""></div>
+        <div class="two_fifth">
+          <h2>Vivamuslibero Auguer</h2>
+          <p>Lorem ipsum dolor sit amet, consectetaur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+          <p>Laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <h2>Vivamuslibero Auguer</h2>
+          <ul>
+            <li>Aliquam venenatis leo et orci.</li>
+            <li>Pellentesque eleifend vulputate massa.</li>
+            <li>Vivamus eleifend sollicitudin eros.</li>
+            <li>Maecenas vitae nunc.</li>
+            <li>Ut pretium odio eu nisi.</li>
+            <li>Nam condimentum mi id magna.</li>
+            <li>Pellentesque consectetuer, felis vel rhoncus.</li>
+          </ul>
+        </div>
+      </section>
+      <section id="client_logos">
+        <ul class="clear">
+          <li class="one_fifth first"><img src="images/demo/logo.gif" alt=""></li>
+          <li class="one_fifth"><img src="images/demo/logo.gif" alt=""></li>
+          <li class="one_fifth"><img src="images/demo/logo.gif" alt=""></li>
+          <li class="one_fifth"><img src="images/demo/logo.gif" alt=""></li>
+          <li class="one_fifth"><img src="images/demo/logo.gif" alt=""></li>
+        </ul>
+      </section>
+      <section id="team">
+        <h2>Vivamuslibero Auguer</h2>
+        <ul class="clear">
+          <li class="one_quarter first">
+            <figure><img src="images/demo/team-member.gif" alt="">
+              <figcaption>
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="one_quarter">
+            <figure><img src="images/demo/team-member.gif" alt="">
+              <figcaption>
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="one_quarter">
+            <figure><img src="images/demo/team-member.gif" alt="">
+              <figcaption>
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+              </figcaption>
+            </figure>
+          </li>
+          <li class="one_quarter">
+            <figure><img src="images/demo/team-member.gif" alt="">
+              <figcaption>
+                <p class="team_name">Name Goes Here</p>
+                <p class="team_title">Job Title Here</p>
+              </figcaption>
+            </figure>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>
+  </body>
+</html>"""
+        return page.content
     }
 
     private fun getTestRawPage(): String {

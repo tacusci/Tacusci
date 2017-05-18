@@ -29,6 +29,9 @@
 
 package app.handlers
 
+import database.daos.DAOManager
+import database.daos.PagesDAO
+import database.models.Page
 import database.models.User
 import mu.KLogging
 
@@ -39,7 +42,14 @@ class PageHandler {
 
     companion object : KLogging()
 
-    fun updatePageFooter(pageFooterData: String, authorUser: User) {
+    val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PagesDAO
 
+    fun createPage(page: Page): Boolean {
+        return pageDAO.insertPage(page)
     }
+
+    fun updatePage(page: Page): Boolean {
+        return pageDAO.updatePage(page)
+    }
+    fun updatePageFooter(pageFooterData: String, authorUser: User) {}
 }

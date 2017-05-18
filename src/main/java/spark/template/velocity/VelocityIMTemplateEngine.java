@@ -31,6 +31,7 @@ public class VelocityIMTemplateEngine {
                 "class.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
         velocityEngine = new org.apache.velocity.app.VelocityEngine(properties);
+        velocityEngine.init();
     }
 
     /**
@@ -43,10 +44,10 @@ public class VelocityIMTemplateEngine {
             throw new IllegalArgumentException("velocityEngine must not be null");
         }
         this.velocityEngine = velocityEngine;
+        this.velocityEngine.init();
     }
 
     public void insertTemplateAsString(String templateTitle, String templateContent) {
-        velocityEngine.init();
         StringResourceRepository stringResourceRepository = StringResourceLoader.getRepository();
         stringResourceRepository.putStringResource(templateTitle, templateContent);
         templatesAndContexts.put(templateTitle, new VelocityContext());
