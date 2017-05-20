@@ -40,6 +40,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
@@ -109,8 +110,12 @@ object Web : KLogging() {
             val currentFile = File(responsePagesFolder.absolutePath+"/$it")
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
-        //need to make the backup response return page content from a template or something
-        if (fourOhFourFile.exists()) return fourOhFourFile.readText() else return h2("404").render()
+        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
+        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        val result = velocityIMTemplateEngine.merge("fourOhFourTemplate")
+        velocityIMTemplateEngine.flush("fourOfFourTemplate")
+        return result
     }
 
     fun get500Page(request: Request, response: Response): String {
@@ -120,7 +125,12 @@ object Web : KLogging() {
             val currentFile = File(responsePagesFolder.absolutePath+"/$it")
             if (currentFile.exists()) fiveHundredOhFiveFile = currentFile; return@forEach
         }
-        if (fiveHundredOhFiveFile.exists()) return fiveHundredOhFiveFile.readText() else return h2("500").render()
+        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
+        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        val result = velocityIMTemplateEngine.merge("fiveHundredOhFive")
+        velocityIMTemplateEngine.flush("fiveHundredOhFive")
+        return result
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {
