@@ -30,7 +30,7 @@
 package app.pages.pagecontrollers
 
 import app.pages.partials.PageFooter
-import app.routecontrollers.Web
+import app.basecontrollers.Web
 import database.models.Page
 import spark.Request
 import spark.Spark

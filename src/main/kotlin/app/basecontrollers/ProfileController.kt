@@ -29,7 +29,7 @@
 
 
 
-package app.routecontrollers
+package app.basecontrollers
 
 import app.handlers.UserHandler
 import extensions.managedRedirect

@@ -29,7 +29,7 @@
  
  
  
- package app.routecontrollers
+ package app.basecontrollers
 
 import app.handlers.UserHandler
 import mu.KLogging
@@ -41,29 +41,34 @@ import utils.Config
 import java.util.*
 
 /**
- * Created by tauraamui on 15/12/2016.
+ * Created by tauraamui on 27/10/2016.
  */
-class IndexController : Controller {
+
+class DashboardController : Controller {
 
     companion object : KLogging()
 
-    override var rootUri: String = "/"
+    override var rootUri: String = "/dashboard"
     override val childUris: MutableList<String> = mutableListOf()
-    override val pageTitleSubstring: String = "Homepage"
-    override val templatePath: String = "/templates/index.vtl"
+    override val templatePath: String = "/templates/dashboard.vtl"
+    override val pageTitleSubstring: String = "Dashboard"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
-        //model.put("template", templatePath)
+        model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        model.put("username", UserHandler.loggedInUsername(request))
         model = Web.loadNavBar(request, model)
-        return ModelAndView(model, templatePath)
+        return ModelAndView(model, layoutTemplate)
     }
 
-    override fun post(request: Request, response: Response): Response { throw UnsupportedOperationException("not implemented") }
+    override fun post(request: Request, response: Response): Response {
+        //TODO: IMPLEMENT THIS
+        return response
+    }
 }

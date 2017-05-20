@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.routecontrollers
+package app.basecontrollers
 
 import app.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
