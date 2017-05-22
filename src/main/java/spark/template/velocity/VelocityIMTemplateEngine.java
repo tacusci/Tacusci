@@ -70,7 +70,7 @@ public class VelocityIMTemplateEngine {
         velocityContext.put(keyAndValue.getFirst(), keyAndValue.getSecond());
     }
 
-    public String merge(String templateTitle) {
+    public String render(String templateTitle) {
         StringWriter writer = new StringWriter();
         Template template = velocityEngine.getTemplate(templateTitle);
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);

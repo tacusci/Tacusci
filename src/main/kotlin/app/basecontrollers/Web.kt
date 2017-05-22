@@ -116,7 +116,7 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         VAPI.injectAPIInstances(request, "fourOhFourTemplate", velocityIMTemplateEngine)
-        val result = velocityIMTemplateEngine.merge("fourOhFourTemplate")
+        val result = velocityIMTemplateEngine.render("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOhFourTemplate")
         return result
     }
@@ -131,7 +131,7 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
         VAPI.injectAPIInstances(request, "fiveHundredOhFive", velocityIMTemplateEngine)
-        val result = velocityIMTemplateEngine.merge("fiveHundredOhFive")
+        val result = velocityIMTemplateEngine.render("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")
         return result
     }
