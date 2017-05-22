@@ -87,7 +87,7 @@ object Web : KLogging() {
         }
     }
 
-    fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun get_userNotFound(request: Request, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
@@ -96,7 +96,7 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    fun gen_accessDeniedPage(request: Request, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
@@ -104,7 +104,7 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun get404Page(request: Request, response: Response): String {
+    fun get404Page(request: Request): String {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fourOhFourFile = File("")
         listOf("404.html", "404.md", "404.vtl").forEach {
@@ -119,7 +119,7 @@ object Web : KLogging() {
         return result
     }
 
-    fun get500Page(request: Request, response: Response): String {
+    fun get500Page(request: Request): String {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fiveHundredOhFiveFile = File("")
         listOf("500.html", "500.md", "500.vtl").forEach {
