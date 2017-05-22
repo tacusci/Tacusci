@@ -46,7 +46,7 @@ import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -76,7 +76,7 @@ class UserManagementController : Controller {
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

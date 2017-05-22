@@ -1,4 +1,4 @@
-package vapi.users;
+package api.users;
 
 import app.handlers.UserHandler;
 import database.models.User;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by alewis on 22/05/2017.
  */
-public class VUserAPI {
+public class TUserAPI {
 
     public String getRootAdminUsername() { return UserHandler.INSTANCE.getRootAdmin().getUsername(); }
 

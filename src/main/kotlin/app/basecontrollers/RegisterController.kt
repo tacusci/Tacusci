@@ -40,7 +40,7 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -69,7 +69,7 @@ class RegisterController : Controller {
 
         val model = HashMap<String, Any>()
 
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
 
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")

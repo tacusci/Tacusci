@@ -41,7 +41,7 @@ import spark.Response
 import spark.Session
 import utils.Config
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -66,7 +66,7 @@ class ProfileController : Controller {
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         val model = HashMap<String, Any>()
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("username_header", h1(username))
@@ -77,7 +77,7 @@ class ProfileController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
         //the username who's profile is requested is from the end of the URL: /profile/IamAUser
         val userNameOfProfileToView = request.params(":username")
         if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {

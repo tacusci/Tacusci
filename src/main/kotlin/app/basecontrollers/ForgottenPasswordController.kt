@@ -41,7 +41,7 @@ import spark.Session
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -65,7 +65,7 @@ class ForgottenPasswordController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
         val model = hashMapOf<String, Any>()
 
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             response.managedRedirect(request, "/reset_password")

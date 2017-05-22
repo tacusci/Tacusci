@@ -44,7 +44,7 @@ import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 import java.io.File
 import java.util.*
 
@@ -92,7 +92,7 @@ object Web : KLogging() {
         model = loadNavBar(request, model)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
         model.put("template", "/templates/404_not_found.vtl")
-        model = VAPI.injectAPIInstances(request, model)
+        model = TacusciAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -100,7 +100,7 @@ object Web : KLogging() {
         var model = HashMap<String, Any>()
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
-        model = VAPI.injectAPIInstances(request, model)
+        model = TacusciAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -113,7 +113,7 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
-        VAPI.injectAPIInstances(request, "fourOhFourTemplate", velocityIMTemplateEngine)
+        TacusciAPI.injectAPIInstances(request, "fourOhFourTemplate", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.render("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOhFourTemplate")
         return result
@@ -128,7 +128,7 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
-        VAPI.injectAPIInstances(request, "fiveHundredOhFive", velocityIMTemplateEngine)
+        TacusciAPI.injectAPIInstances(request, "fiveHundredOhFive", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.render("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")
         return result

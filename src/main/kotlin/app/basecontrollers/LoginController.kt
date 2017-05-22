@@ -44,7 +44,7 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
-import vapi.users.VAPI
+import api.users.TacusciAPI
 
 /**
  * Created by alewis on 27/10/2016.
@@ -70,7 +70,7 @@ class LoginController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         val model = hashMapOf<String, Any>()
 
-        VAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
