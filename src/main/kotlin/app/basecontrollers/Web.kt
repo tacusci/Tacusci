@@ -44,7 +44,7 @@ import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
-import vapi.users.VUserAPI
+import vapi.users.VAPI
 import java.io.File
 import java.util.*
 
@@ -115,10 +115,9 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
-        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf<String, Any>()))
-        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", listOf(Pair("VUserAPI", VUserAPI())))
+        VAPI.injectAPIInstances(request, "fourOhFourTemplate", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.merge("fourOhFourTemplate")
-        velocityIMTemplateEngine.flush("fourOfFourTemplate")
+        velocityIMTemplateEngine.flush("fourOhFourTemplate")
         return result
     }
 
@@ -131,7 +130,7 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
-        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        VAPI.injectAPIInstances(request, "fiveHundredOhFive", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.merge("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")
         return result
