@@ -51,12 +51,6 @@ import java.util.*
  * Created by alewis on 25/10/2016.
  */
 
-class Test {
-
-    fun getSomeNames(): List<String> { return listOf("jewifjwefwe", "fjeijie") }
-    fun outputSomething() = println("ejfergregjerig")
-}
-
 //TODO need to rename this class
 object Web : KLogging() {
 
@@ -119,7 +113,6 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf<String, Any>()))
-        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", hashMapOf<String, Any>(Pair("Test", Test())))
         val result = velocityIMTemplateEngine.merge("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOfFourTemplate")
         return result

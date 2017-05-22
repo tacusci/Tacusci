@@ -33,11 +33,11 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
+import app.basecontrollers.ControllerManager
+import app.basecontrollers.Web
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import app.pages.pagecontrollers.PageController
-import app.basecontrollers.ControllerManager
-import app.basecontrollers.Web
 import database.daos.DAOManager
 import database.models.Group
 import extensions.managedRedirect
