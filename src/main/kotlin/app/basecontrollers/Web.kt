@@ -103,7 +103,6 @@ object Web : KLogging() {
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
         model = VAPI.injectAPIInstances(request, model)
-        model.put("access_denied_message", j2htmlPartials.centeredMessage("Access is denied", j2htmlPartials.HeaderType.h1).render())
         return ModelAndView(model, layoutTemplate)
     }
 
