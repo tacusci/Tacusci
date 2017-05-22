@@ -87,7 +87,6 @@ object Web : KLogging() {
         }
     }
 
-    //TODO: Need to make sure these get passed through Velocity
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
@@ -97,7 +96,6 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
-    //TODO: Need to make sure these get passed through Velocity
     fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
