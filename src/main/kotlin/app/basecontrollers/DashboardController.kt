@@ -38,6 +38,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import vapi.users.VAPI
 import java.util.*
 
 /**
@@ -63,7 +64,7 @@ class DashboardController : Controller {
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("username", UserHandler.loggedInUsername(request))
-        model = Web.loadNavBar(request, model)
+        model = VAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

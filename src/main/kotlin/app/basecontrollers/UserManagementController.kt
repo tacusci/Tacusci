@@ -46,6 +46,7 @@ import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
+import vapi.users.VAPI
 import java.util.*
 
 /**
@@ -75,7 +76,7 @@ class UserManagementController : Controller {
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
-        model = Web.loadNavBar(request, model)
+        VAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

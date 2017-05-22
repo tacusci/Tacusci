@@ -40,6 +40,7 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
+import vapi.users.VAPI
 import java.util.*
 
 /**
@@ -66,8 +67,9 @@ class RegisterController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
 
-        var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, model)
+        val model = HashMap<String, Any>()
+
+        VAPI.injectAPIInstances(request, model)
 
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")

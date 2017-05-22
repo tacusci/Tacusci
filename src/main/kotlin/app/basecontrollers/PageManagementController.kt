@@ -37,6 +37,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
+import vapi.users.VAPI
 import java.util.*
 
 
@@ -58,12 +59,12 @@ class PageManagementController : Controller {
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         DashboardController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PAGE_MANAGEMENT page")
-        var model = HashMap<String, Any>()
+        val model = HashMap<String, Any>()
+        VAPI.injectAPIInstances(request, model)
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
         model.put("uri", rootUri)
-        model = Web.loadNavBar(request, model)
 
         model.put("footer_content", "")
 

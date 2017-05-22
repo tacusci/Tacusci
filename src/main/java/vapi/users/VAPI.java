@@ -22,4 +22,15 @@ public class VAPI {
         velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavBar(request, new HashMap<>()));
         velocityIMTemplateEngine.insertIntoContext(templateTitle, apiObjInstances);
     }
+
+    public static HashMap<String, Object> injectAPIInstances(Request request, HashMap<String, Object> model) {
+        List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
+        apiObjInstances.add(new Pair<>("VUserAPI", new VUserAPI()));
+        for (Pair<String, Object> apiInstance : apiObjInstances) {
+            model.put(apiInstance.getFirst(), apiInstance.getSecond());
+        }
+
+        model = Web.INSTANCE.loadNavBar(request, model);
+        return model;
+    }
 }

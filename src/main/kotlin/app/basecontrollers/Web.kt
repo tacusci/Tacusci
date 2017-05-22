@@ -93,6 +93,7 @@ object Web : KLogging() {
         model = loadNavBar(request, model)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
         model.put("template", "/templates/404_not_found.vtl")
+        model = VAPI.injectAPIInstances(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -101,7 +102,7 @@ object Web : KLogging() {
         var model = HashMap<String, Any>()
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
-        model = loadNavBar(request, model)
+        model = VAPI.injectAPIInstances(request, model)
         model.put("access_denied_message", j2htmlPartials.centeredMessage("Access is denied", j2htmlPartials.HeaderType.h1).render())
         return ModelAndView(model, layoutTemplate)
     }

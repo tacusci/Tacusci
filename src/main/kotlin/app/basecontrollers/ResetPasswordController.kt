@@ -44,6 +44,7 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
+import vapi.users.VAPI
 import java.util.*
 
 /**
@@ -115,7 +116,7 @@ class ResetPasswordController : Controller {
     }
 
     fun genResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
-        Web.loadNavBar(request, model)
+        VAPI.injectAPIInstances(request, model)
         val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "$rootUri/$username/$authHash", "post")
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO

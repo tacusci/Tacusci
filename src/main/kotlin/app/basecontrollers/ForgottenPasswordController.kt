@@ -41,6 +41,7 @@ import spark.Session
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
+import vapi.users.VAPI
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -63,7 +64,8 @@ class ForgottenPasswordController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
         val model = hashMapOf<String, Any>()
-        Web.loadNavBar(request, model)
+
+        VAPI.injectAPIInstances(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             response.managedRedirect(request, "/reset_password")

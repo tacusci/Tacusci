@@ -42,6 +42,7 @@ import spark.Session
 import utils.Config
 import utils.Tail.tailFile
 import utils.j2htmlPartials
+import vapi.users.VAPI
 import java.io.File
 import java.util.*
 
@@ -68,7 +69,7 @@ class LogFileViewController : Controller {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
         var model = HashMap<String, Any>()
-        model = Web.loadNavBar(request, model)
+        VAPI.injectAPIInstances(request, model)
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 
