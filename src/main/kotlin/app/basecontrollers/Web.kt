@@ -44,6 +44,7 @@ import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
+import vapi.users.VUserAPI
 import java.io.File
 import java.util.*
 
@@ -115,6 +116,7 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf<String, Any>()))
+        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", listOf(Pair("VUserAPI", VUserAPI())))
         val result = velocityIMTemplateEngine.merge("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOfFourTemplate")
         return result
