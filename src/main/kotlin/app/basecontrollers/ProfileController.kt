@@ -31,6 +31,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import extensions.managedRedirect
 import j2html.TagCreator.h1
@@ -41,7 +42,6 @@ import spark.Response
 import spark.Session
 import utils.Config
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -84,14 +84,14 @@ class ProfileController : Controller {
             if (UserHandler.userDAO.userExists(userNameOfProfileToView)) {
                 model = genUserProfilePage(request, response, userNameOfProfileToView)
             } else {
-                return Web.get_userNotFound(request, response, layoutTemplate)
+                return Web.get_userNotFound(request, layoutTemplate)
             }
         } else {
             //if they've just requested: /profile then we give them /profile->the username of the person browsing
             if (userNameOfProfileToView == null || userNameOfProfileToView.isEmpty() || userNameOfProfileToView.isBlank()) {
                 if (UserHandler.isLoggedIn(request)) response.managedRedirect(request, "/profile/${UserHandler.loggedInUsername(request)}") else response.managedRedirect(request, "/")
             } else {
-                return Web.get_userNotFound(request, response, layoutTemplate)
+                return Web.get_userNotFound(request, layoutTemplate)
             }
         }
         return ModelAndView(model, layoutTemplate)

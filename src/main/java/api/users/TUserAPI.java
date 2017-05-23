@@ -16,6 +16,8 @@ public class TUserAPI {
 
     public TUserAPI(Request request) { this.request = request; }
 
+    public String getLoggedInUsername() { return UserHandler.INSTANCE.loggedInUsername(request); }
+
     public ArrayList<String> getAllAdminUserUsernames() {
         ArrayList<String> adminUsernames = new ArrayList<>();
         for (User user : UserHandler.INSTANCE.getAdmins()) { adminUsernames.add(user.getUsername()); }
