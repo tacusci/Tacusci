@@ -34,16 +34,16 @@
             $!dashboard_link
             $!login_or_profile_link
             $!sign_up_menu_link
-            $!sign_out_form
+            $TFormAPI.getSignOutForm()
         </ul>
     </div>
 </div>
 
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
-        <h1>Welcome $TUserAPI.getLoggedInUsername()</h1>
+        <h1>Welcome $TUserAPI.getLoggedInUser().getUsername()</h1>
         <h2>Dashboard</h2>
-            <a href="/profile/$username" class="pure-button">Go to profile</a>
+            <a href="/profile/$TUserAPI.getLoggedInUser().getUsername()" class="pure-button">Go to profile</a>
             <a href="/dashboard/user_management" class="pure-button">User Administration</a>
             <a href="/dashboard/page_management" class="pure-button">Page Management</a>
             <a href="/dashboard/log_file" class="pure-button">Log File</a>

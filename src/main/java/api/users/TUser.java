@@ -9,12 +9,14 @@ import java.util.ArrayList;
 /**
  * Created by alewis on 22/05/2017.
  */
-public class TUserAPI {
+public class TUser {
 
     public String getRootAdminUsername() { return UserHandler.INSTANCE.getRootAdmin().getUsername(); }
     private Request request = null;
 
-    public TUserAPI(Request request) { this.request = request; }
+    public TUser(Request request) { this.request = request; }
+
+    public User getLoggedInUser() { return UserHandler.INSTANCE.getUserDAO().getUser(UserHandler.INSTANCE.loggedInUsername(request)); }
 
     public String getLoggedInUsername() { return UserHandler.INSTANCE.loggedInUsername(request); }
 
