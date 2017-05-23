@@ -14,18 +14,21 @@ import java.util.List;
  */
 public class TacusciAPI {
 
+    private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
+
+    private static void init(Request request) {
+        apiObjInstances.add(new Pair<>("TUserAPI", new TUserAPI(request)));
+        apiObjInstances.add(new Pair<>("TFormAPI", new TFormAPI(request)));
+    }
+
     public static void injectAPIInstances(Request request, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
-        List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
-
-        apiObjInstances.add(new Pair<>("TUserAPI", new TUserAPI()));
-
+        init(request);
         velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavBar(request, new HashMap<>()));
         velocityIMTemplateEngine.insertIntoContext(templateTitle, apiObjInstances);
     }
 
     public static HashMap<String, Object> injectAPIInstances(Request request, HashMap<String, Object> model) {
-        List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
-        apiObjInstances.add(new Pair<>("TUserAPI", new TUserAPI()));
+        init(request);
         for (Pair<String, Object> apiInstance : apiObjInstances) {
             model.put(apiInstance.getFirst(), apiInstance.getSecond());
         }

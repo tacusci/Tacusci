@@ -2,6 +2,7 @@ package api.users;
 
 import app.handlers.UserHandler;
 import database.models.User;
+import spark.Request;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 public class TUserAPI {
 
     public String getRootAdminUsername() { return UserHandler.INSTANCE.getRootAdmin().getUsername(); }
+    private Request request = null;
+
+    public TUserAPI(Request request) { this.request = request; }
 
     public ArrayList<String> getAllAdminUserUsernames() {
         ArrayList<String> adminUsernames = new ArrayList<>();
