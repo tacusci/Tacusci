@@ -18,6 +18,8 @@ public class TUser {
 
     public TUser(Request request, Response response) { this.request = request; this.response = response; }
 
+    public boolean isLoggedIn() { return UserHandler.INSTANCE.isLoggedIn(request); }
+
     public User getLoggedInUser() { return UserHandler.INSTANCE.getUserDAO().getUser(UserHandler.INSTANCE.loggedInUsername(request)); }
 
     public String getLoggedInUsername() { return UserHandler.INSTANCE.loggedInUsername(request); }

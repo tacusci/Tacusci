@@ -34,7 +34,6 @@ package app.basecontrollers
 import api.users.TacusciAPI
 import app.handlers.UserHandler
 import extensions.managedRedirect
-import j2html.TagCreator.h1
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -69,7 +68,8 @@ class ProfileController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        model.put("username_header", h1(username))
+        val user = UserHandler.userDAO.getUser(username)
+        model.put("User", user)
         if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)
         return model
     }
