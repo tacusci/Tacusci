@@ -29,6 +29,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
 import extensions.managedRedirect
@@ -42,7 +43,6 @@ import spark.Session
 import utils.Config
 import utils.Tail.tailFile
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.io.File
 import java.util.*
 
@@ -69,7 +69,7 @@ class LogFileViewController : Controller {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
         var model = HashMap<String, Any>()
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
 

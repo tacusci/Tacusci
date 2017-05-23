@@ -129,21 +129,21 @@ class Application {
         before("/dashboard", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
-                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, layoutTemplate)))
+                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
             }
         })
 
         before("/dashboard/*", { request, response ->
             if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins") && !GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
-                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, layoutTemplate)))
+                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
             }
         })
 
         //MAP CUSTOM RESPONSE PAGES
 
-        notFound({ request, response -> Web.get404Page(request) })
-        internalServerError({ request, response -> Web.get500Page(request) })
+        notFound({ request, response -> Web.get404Page(request, response) })
+        internalServerError({ request, response -> Web.get500Page(request, response) })
     }
 
     fun restartServer() {

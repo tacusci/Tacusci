@@ -31,6 +31,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
@@ -44,7 +45,6 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 
 /**
  * Created by alewis on 27/10/2016.
@@ -70,7 +70,7 @@ class LoginController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOGIN page")
         val model = hashMapOf<String, Any>()
 
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")

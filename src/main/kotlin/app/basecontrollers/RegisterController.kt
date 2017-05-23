@@ -29,6 +29,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
@@ -40,7 +41,6 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -69,7 +69,7 @@ class RegisterController : Controller {
 
         val model = HashMap<String, Any>()
 
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
 
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")

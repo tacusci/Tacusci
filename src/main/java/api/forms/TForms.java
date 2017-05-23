@@ -2,6 +2,7 @@ package api.forms;
 
 import app.basecontrollers.Web;
 import spark.Request;
+import spark.Response;
 import utils.j2htmlPartials;
 
 /**
@@ -10,8 +11,9 @@ import utils.j2htmlPartials;
 public class TForms {
 
     private Request request = null;
+    private Response response = null;
 
-    public TForms(Request request) { this.request = request; }
+    public TForms(Request request, Response response) { this.request = request; this.response = response; }
 
     public String getLoginForm() {
         return j2htmlPartials.INSTANCE.pureFormAligned_Login(request.session(), "login_form","/login", "post").render();

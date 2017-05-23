@@ -31,6 +31,7 @@
  
  package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import j2html.TagCreator.h2
@@ -44,7 +45,6 @@ import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.io.File
 import java.util.*
 
@@ -87,24 +87,24 @@ object Web : KLogging() {
         }
     }
 
-    fun get_userNotFound(request: Request, layoutTemplate: String): ModelAndView {
+    fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
         model.put("template", "/templates/404_not_found.vtl")
-        model = TacusciAPI.injectAPIInstances(request, model)
+        model = TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun gen_accessDeniedPage(request: Request, layoutTemplate: String): ModelAndView {
+    fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
-        model = TacusciAPI.injectAPIInstances(request, model)
+        model = TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun get404Page(request: Request): String {
+    fun get404Page(request: Request, response: Response): String {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fourOhFourFile = File("")
         listOf("404.html", "404.md", "404.vtl").forEach {
@@ -113,13 +113,13 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
-        TacusciAPI.injectAPIInstances(request, "fourOhFourTemplate", velocityIMTemplateEngine)
+        TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.render("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOhFourTemplate")
         return result
     }
 
-    fun get500Page(request: Request): String {
+    fun get500Page(request: Request, response: Response): String {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fiveHundredOhFiveFile = File("")
         listOf("500.html", "500.md", "500.vtl").forEach {
@@ -128,7 +128,7 @@ object Web : KLogging() {
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
-        TacusciAPI.injectAPIInstances(request, "fiveHundredOhFive", velocityIMTemplateEngine)
+        TacusciAPI.injectAPIInstances(request, response, "fiveHundredOhFive", velocityIMTemplateEngine)
         val result = velocityIMTemplateEngine.render("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")
         return result

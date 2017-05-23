@@ -31,6 +31,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import extensions.managedRedirect
@@ -46,7 +47,6 @@ import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -76,7 +76,7 @@ class UserManagementController : Controller {
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 

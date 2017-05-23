@@ -29,6 +29,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
@@ -41,7 +42,6 @@ import spark.Session
 import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.io.File
 import kotlin.concurrent.thread
 
@@ -65,7 +65,7 @@ class ForgottenPasswordController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
         val model = hashMapOf<String, Any>()
 
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
 
         if (UserHandler.isLoggedIn(request)) {
             response.managedRedirect(request, "/reset_password")

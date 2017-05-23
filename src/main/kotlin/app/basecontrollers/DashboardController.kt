@@ -63,7 +63,7 @@ class DashboardController : Controller {
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        model = TacusciAPI.injectAPIInstances(request, model)
+        model = TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 

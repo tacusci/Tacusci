@@ -31,6 +31,7 @@
  
  package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
@@ -38,7 +39,6 @@ import spark.Request
 import spark.Response
 import spark.Session
 import utils.Config
-import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -62,7 +62,7 @@ class IndexController : Controller {
         var model = HashMap<String, Any>()
         //model.put("template", templatePath)
         model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        TacusciAPI.injectAPIInstances(request, model)
+        TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, templatePath)
     }
 

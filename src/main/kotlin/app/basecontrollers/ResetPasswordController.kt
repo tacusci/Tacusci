@@ -29,6 +29,7 @@
 
 package app.basecontrollers
 
+import api.users.TacusciAPI
 import app.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.ResetPasswordDAO
@@ -44,7 +45,6 @@ import spark.Session
 import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
-import api.users.TacusciAPI
 import java.util.*
 
 /**
@@ -100,7 +100,7 @@ class ResetPasswordController : Controller {
 
                         //check if the authhash is marked as expired
                         if (!resetPasswordDAO.authHashExpired(authHash)) {
-                            genResetPasswordPageContent(request, username, model, authHash)
+                            genResetPasswordPageContent(request, response, username, model, authHash)
                         } else {
                             genAccessExpiredContent(request, model)
                         }
@@ -115,8 +115,8 @@ class ResetPasswordController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun genResetPasswordPageContent(request: Request, username: String, model: HashMap<String, Any>, authHash: String) {
-        TacusciAPI.injectAPIInstances(request, model)
+    fun genResetPasswordPageContent(request: Request, response: Response, username: String, model: HashMap<String, Any>, authHash: String) {
+        TacusciAPI.injectAPIInstances(request, response, model)
         val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "$rootUri/$username/$authHash", "post")
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
