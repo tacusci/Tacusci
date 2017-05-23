@@ -6,11 +6,11 @@ import utils.j2htmlPartials;
 /**
  * Created by alewis on 23/05/2017.
  */
-public class TForm {
+public class TForms {
 
     private Request request = null;
 
-    public TForm(Request request) { this.request = request; }
+    public TForms(Request request) { this.request = request; }
 
     public String getLoginForm() {
         return j2htmlPartials.INSTANCE.pureFormAligned_Login(request.session(), "login_form","/login", "post").render();

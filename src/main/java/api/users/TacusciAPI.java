@@ -1,6 +1,6 @@
 package api.users;
 
-import api.forms.TForm;
+import api.forms.TForms;
 import app.basecontrollers.Web;
 import kotlin.Pair;
 import spark.Request;
@@ -19,7 +19,7 @@ public class TacusciAPI {
 
     private static void init(Request request) {
         apiObjInstances.add(new Pair<>("TUser", new TUser(request)));
-        apiObjInstances.add(new Pair<>("TForm", new TForm(request)));
+        apiObjInstances.add(new Pair<>("TForms", new TForms(request)));
     }
 
     public static void injectAPIInstances(Request request, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
