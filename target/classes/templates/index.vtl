@@ -32,7 +32,9 @@
         $!dashboard_link
         $!login_or_profile_link
         $!sign_up_menu_link
-        $TForms.getSignOutForm()
+        #if ($TUser.isLoggedIn())
+            $TForms.getSignOutForm()
+        #end
         <h2>Tacusci Website</h2>
     </body>
 </html>
