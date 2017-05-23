@@ -1,5 +1,6 @@
 package api.forms;
 
+import app.basecontrollers.Web;
 import spark.Request;
 import utils.j2htmlPartials;
 
@@ -18,5 +19,9 @@ public class TForms {
 
     public String getSignOutForm() {
         return j2htmlPartials.INSTANCE.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render();
+    }
+
+    public String getFormHash(String formName) {
+        return Web.INSTANCE.getFormHash(request.session(), formName);
     }
 }
