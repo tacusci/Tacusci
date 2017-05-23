@@ -13,6 +13,5 @@ public class TResponse {
 
     public TResponse(Request request, Response response) { this.request = request; this.response = response; }
 
-    public void redirect(String location) {
-        System.out.println(location);response.redirect(location); }
+    public void redirect(String location) { response.redirect(location); }
 }
