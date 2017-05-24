@@ -1,5 +1,6 @@
 package api.users;
 
+import extensions.ExtensionCollectionKt;
 import spark.Request;
 import spark.Response;
 
@@ -13,5 +14,5 @@ public class TResponse {
 
     public TResponse(Request request, Response response) { this.request = request; this.response = response; }
 
-    public void redirect(String location) { response.redirect(location); }
+    public void redirect(String location) { ExtensionCollectionKt.managedRedirect(response, request, location); }
 }
