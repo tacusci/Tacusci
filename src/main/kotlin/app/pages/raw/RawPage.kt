@@ -27,38 +27,20 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.pages.structured
+package app.pages.raw
 
-import j2html.TagCreator.*
-import j2html.tags.Tag
 import spark.Request
 import spark.Response
 
 /**
- * Created by tauraamui on 14/05/2017.
+ * Created by alewis on 24/05/2017.
  */
-interface StructuredPage {
+class RawPage {
 
-    enum class PageType {
-        RAW,
-        CORE_PAGE;
+    var id: Int = -1
+    var title = ""
+    var content: String = ""
+    var rootUri: String = ""
 
-        companion object {
-            private val map = PageType.values().associateBy(PageType::ordinal)
-            fun fromInt(type: Int) = map[type]
-        }
-    }
-
-    var id: Int
-    var title: String
-    var head: MutableList<Tag>
-    var body: MutableList<Tag>
-    var rootUri: String
-    val type: Enum<PageType>
-
-    fun get(request: Request, response: Response): String = generateHtml()
-    fun generateHtml(): String { return html().with(
-                                            head().with(head)
-                                        ).with(
-                                            body().with(body)).render() }
+    fun get(request: Request, response: Response): String = content
 }

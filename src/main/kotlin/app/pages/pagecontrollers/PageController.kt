@@ -29,15 +29,51 @@
 
 package app.pages.pagecontrollers
 
-import app.pages.partials.PageFooter
+import api.core.TacusciAPI
+import app.corecontrollers.Web
+import app.handlers.PageHandler
+import app.handlers.UserHandler
+import app.pages.raw.RawPage
+import app.pages.structured.StructuredPage
+import database.models.Page
+import spark.Request
+import spark.Response
+import spark.Spark
+import spark.template.velocity.VelocityIMTemplateEngine
 
 /**
  * Created by tauraamui on 14/05/2017.
  */
 object PageController {
 
-    val pages = listOf(PageFooter())
+    val pages = mutableListOf<RawPage>()
+
+    fun initTest() {
+        val testCustomPage = RawPage()
+        testCustomPage.id = 0
+        testCustomPage.title = "Test Page"
+        testCustomPage.rootUri = "/test_page"
+        testCustomPage.content = "<html><title>\$title</title><body><h2>#foreach (\$username in \$TUser.getAllRegUserUsernames()) <p>\$username</p>#end<h2></body></html>"
+
+        PageHandler.createPage(Page(-1, -1, -1, testCustomPage.title, testCustomPage.rootUri, -1, testCustomPage.content, UserHandler.getRootAdmin().id, StructuredPage.PageType.RAW))
+    }
 
     //TODO: Need to implement loading pages from the DB to be mapped here.
-    fun mapPagesToRoutes() {}
+    fun mapPagesToRoutes() {
+        initTest()
+        pages.forEach { page ->
+            Spark.get(page.rootUri, { request: Request, response: Response -> renderPage(page, request, response) })
+        }
+    }
+
+    private fun renderPage(page: RawPage, request: Request, response: Response): String {
+        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        velocityIMTemplateEngine.insertTemplateAsString(page.rootUri, page.content)
+        velocityIMTemplateEngine.insertIntoContext(page.rootUri, Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext(page.rootUri, Web.insertPageTitle(request, hashMapOf(), page.title))
+        TacusciAPI.injectAPIInstances(request, response, page.rootUri, velocityIMTemplateEngine)
+        val result = velocityIMTemplateEngine.render(page.rootUri)
+        velocityIMTemplateEngine.flush(page.rootUri)
+        return result
+    }
 }

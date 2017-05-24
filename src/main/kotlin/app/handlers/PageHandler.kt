@@ -38,9 +38,7 @@ import mu.KLogging
 /**
  * Created by alewis on 04/05/2017.
  */
-class PageHandler {
-
-    companion object : KLogging()
+object PageHandler : KLogging() {
 
     val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PagesDAO
 

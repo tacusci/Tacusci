@@ -123,4 +123,18 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return page
     }
+
+    fun getPages() {
+        val pages = mutableListOf<Page>()
+        connect()
+        try {
+            val selectStatement = "SELECT * FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val page = Page(-1, -1, -1, "", "", 0, "", -1)
+                //TODO: Finish implementing
+            }
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+    }
 }
