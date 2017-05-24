@@ -39,7 +39,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Config
 import utils.j2htmlPartials
 import java.util.*
 
@@ -67,7 +66,8 @@ class ProfileController : Controller {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
         val user = UserHandler.userDAO.getUser(username)
         model.put("User", user)
         if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)
@@ -77,7 +77,6 @@ class ProfileController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PROFILE/${request.params(":username")} page")
         var model = HashMap<String, Any>()
-        TacusciAPI.injectAPIInstances(request, response, model)
         //the username who's profile is requested is from the end of the URL: /profile/IamAUser
         val userNameOfProfileToView = request.params(":username")
         if (userNameOfProfileToView != null && userNameOfProfileToView.isNotBlank() && userNameOfProfileToView.isNotEmpty()) {

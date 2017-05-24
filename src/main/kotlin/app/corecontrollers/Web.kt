@@ -46,7 +46,6 @@ import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
-import java.util.*
 
 /**
  * Created by alewis on 25/10/2016.
@@ -54,6 +53,11 @@ import java.util.*
 
 //TODO need to rename this class
 object Web : KLogging() {
+
+    fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        return model
+    }
 
     fun loadNavBar(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
         model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
@@ -90,17 +94,19 @@ object Web : KLogging() {
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
         model = loadNavBar(request, model)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Profile (User not found)")
         model.put("template", "/templates/404_not_found.vtl")
         model = TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavBar(request, model)
+        Web.insertPageTitle(request, model, "Profile (User not found)")
         return ModelAndView(model, layoutTemplate)
     }
 
     fun gen_accessDeniedPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} Access Denied")
         model.put("template", "/templates/access_denied.vtl")
         model = TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavBar(request, model)
+        Web.insertPageTitle(request, model, "Access Denied")
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -114,6 +120,8 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
+        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.insertPageTitle(request, hashMapOf(), ""))
         val result = velocityIMTemplateEngine.render("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOhFourTemplate")
         return result
@@ -129,6 +137,8 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
         TacusciAPI.injectAPIInstances(request, response, "fiveHundredOhFive", velocityIMTemplateEngine)
+        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.insertPageTitle(request, hashMapOf(), ""))
         val result = velocityIMTemplateEngine.render("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")
         return result

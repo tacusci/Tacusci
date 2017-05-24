@@ -43,7 +43,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Config
 import utils.HTMLTable
 import utils.Utils
 import utils.j2htmlPartials
@@ -72,11 +71,13 @@ class UserManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())
-        TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
 

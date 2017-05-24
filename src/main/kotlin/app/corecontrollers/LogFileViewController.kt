@@ -71,7 +71,9 @@ class LogFileViewController : Controller {
         var model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
 
         val logFile = File(Config.getProperty("log_file"))
 

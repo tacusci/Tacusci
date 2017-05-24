@@ -38,7 +38,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Config
 import java.util.*
 
 /**
@@ -60,9 +59,9 @@ class IndexController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
         var model = HashMap<String, Any>()
-        //model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
         TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
         return ModelAndView(model, templatePath)
     }
 

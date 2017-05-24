@@ -72,7 +72,8 @@ class ResetPasswordController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
 
         var username = request.params(":username")

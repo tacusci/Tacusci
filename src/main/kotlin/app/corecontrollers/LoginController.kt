@@ -42,7 +42,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 
@@ -72,13 +71,16 @@ class LoginController : Controller {
 
         TacusciAPI.injectAPIInstances(request, response, model)
 
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
+
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
             response.managedRedirect(request, "/")
         }
 
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+
 
         val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", rootUri, "post")
 

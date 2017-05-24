@@ -33,11 +33,10 @@ public class TacusciAPI {
 
     public static HashMap<String, Object> injectAPIInstances(Request request, Response response, HashMap<String, Object> model) {
         init(request, response);
+        //model = Web.INSTANCE.loadNavBar(request, model);
         for (Pair<String, Object> apiInstance : apiObjInstances) {
             model.put(apiInstance.getFirst(), apiInstance.getSecond());
         }
-
-        model = Web.INSTANCE.loadNavBar(request, model);
         return model;
     }
 }

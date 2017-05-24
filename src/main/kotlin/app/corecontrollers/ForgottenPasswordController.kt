@@ -67,12 +67,15 @@ class ForgottenPasswordController : Controller {
 
         TacusciAPI.injectAPIInstances(request, response, model)
 
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavBar(request, model)
+
         if (UserHandler.isLoggedIn(request)) {
             response.managedRedirect(request, "/reset_password")
         }
 
         model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+
 
         val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 
