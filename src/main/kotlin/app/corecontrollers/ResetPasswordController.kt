@@ -29,7 +29,7 @@
 
 package app.corecontrollers
 
-import api.users.TacusciAPI
+import api.core.TacusciAPI
 import app.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.ResetPasswordDAO

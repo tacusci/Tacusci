@@ -1,4 +1,4 @@
-package api.users;
+package api.core;
 
 import extensions.ExtensionCollectionKt;
 import spark.Request;

@@ -31,7 +31,7 @@
 
 package app.corecontrollers
 
-import api.users.TacusciAPI
+import api.core.TacusciAPI
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import extensions.managedRedirect
