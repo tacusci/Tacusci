@@ -26,45 +26,27 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package app.basecontrollers
 
-import api.users.TacusciAPI
-import app.handlers.UserHandler
-import mu.KLogging
+package app.corecontrollers
+
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.Config
-import java.util.*
 
 /**
- * Created by tauraamui on 15/12/2016.
+ * Created by alewis on 06/02/2017.
  */
-class IndexController : Controller {
+interface Controller {
 
-    companion object : KLogging()
+    var rootUri: String
+    val childUris: MutableList<String>
+    val templatePath: String
+    val pageTitleSubstring: String
+    val handlesGets: Boolean
+    val handlesPosts: Boolean
 
-    override var rootUri: String = "/"
-    override val childUris: MutableList<String> = mutableListOf()
-    override val pageTitleSubstring: String = "Homepage"
-    override val templatePath: String = "/templates/index.vtl"
-    override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
-
-    override fun initSessionBoolAttributes(session: Session) {}
-
-    override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INDEX page")
-        var model = HashMap<String, Any>()
-        //model.put("template", templatePath)
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
-        TacusciAPI.injectAPIInstances(request, response, model)
-        return ModelAndView(model, templatePath)
-    }
-
-    override fun post(request: Request, response: Response): Response { throw UnsupportedOperationException("not implemented") }
+    fun initSessionBoolAttributes(session: Session)
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView
+    fun post(request: Request, response: Response): Response
 }

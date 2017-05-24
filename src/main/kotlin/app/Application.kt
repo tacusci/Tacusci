@@ -33,8 +33,8 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
-import app.basecontrollers.ControllerManager
-import app.basecontrollers.Web
+import app.corecontrollers.ControllerManager
+import app.corecontrollers.Web
 import app.handlers.GroupHandler
 import app.handlers.UserHandler
 import app.pages.pagecontrollers.PageController

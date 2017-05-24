@@ -29,7 +29,7 @@
  
  
  
- package app.basecontrollers
+ package app.corecontrollers
 
 import api.users.TacusciAPI
 import app.handlers.GroupHandler

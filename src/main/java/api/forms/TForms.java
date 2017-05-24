@@ -1,6 +1,6 @@
 package api.forms;
 
-import app.basecontrollers.Web;
+import app.corecontrollers.Web;
 import spark.Request;
 import spark.Response;
 import utils.j2htmlPartials;

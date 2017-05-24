@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.basecontrollers
+package app.corecontrollers
 
 import api.users.TacusciAPI
 import app.handlers.UserHandler
