@@ -133,7 +133,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
                 val page = Page(-1, -1, -1, "", "", 0, "", -1)
-                //TODO: Finish implementing
+                page.id = resultSet.getInt(1, )
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
     }
