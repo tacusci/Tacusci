@@ -176,11 +176,12 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun getUsers(): MutableCollection<User> {
         connect()
         val userList = mutableListOf<User>()
-        val selectStatement = "SELECT CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED FROM $tableName"
+        val selectStatement = "SELECT USER_ID, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED FROM $tableName"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
             val user = User(-1, -1, -1, "", "", "", "", 0, 0)
+            user.id = resultSet.getInt("ID_USERS")
             user.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
             user.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
             user.rootAdmin = resultSet.getInt("ROOT_ADMIN")
@@ -203,6 +204,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         preparedStatement?.setInt(1, user.rootAdmin)
         val resultSet = preparedStatement?.executeQuery()
         if (resultSet!!.next()) {
+            user.id = resultSet.getInt("ID_USERS")
             user.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
             user.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
             user.rootAdmin = resultSet.getInt("ROOT_ADMIN")
