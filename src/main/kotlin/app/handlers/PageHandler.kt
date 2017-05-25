@@ -46,16 +46,28 @@ object PageHandler : KLogging() {
         return pageDAO.insertPage(page)
     }
 
+    fun getAllPageRoutes(): MutableList<String> {
+        return pageDAO.getAllPageRoutes()
+    }
+
+    fun getAllPages(): MutableList<Page> {
+        return pageDAO.getAllPages()
+    }
+
     fun updatePage(page: Page): Boolean {
         return pageDAO.updatePage(page)
     }
 
     fun getPageById(id: Int): Page {
-        return pageDAO.getPage(id)
+        return pageDAO.getPageById(id)
     }
 
     fun getPageByTitle(title: String): Page {
-        return pageDAO.getPage(pageDAO.getPageIDByTitle(title))
+        return pageDAO.getPageById(pageDAO.getPageIdByTitle(title))
+    }
+
+    fun getPageByRoute(route: String): Page {
+        return pageDAO.getPageById(pageDAO.getPageIdByRoute(route))
     }
 
     fun updatePageFooter(pageFooterData: String, authorUser: User) {}

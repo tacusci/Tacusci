@@ -34,7 +34,6 @@ import app.corecontrollers.Web
 import app.handlers.PageHandler
 import app.handlers.UserHandler
 import app.pages.raw.RawPage
-import app.pages.structured.StructuredPage
 import database.models.Page
 import spark.Request
 import spark.Response
@@ -55,25 +54,30 @@ object PageController {
         testCustomPage.rootUri = "/test_page"
         testCustomPage.content = "<html><title>\$title</title><body><h2>#foreach (\$username in \$TUser.getAllRegUserUsernames()) <p>\$username</p>#end<h2></body></html>"
 
-        PageHandler.createPage(Page(-1, -1, -1, testCustomPage.title, testCustomPage.rootUri, -1, testCustomPage.content, UserHandler.getRootAdmin().id, StructuredPage.PageType.RAW))
+        Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)
+        PageHandler.createPage(Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id))
     }
 
     //TODO: Need to implement loading pages from the DB to be mapped here.
     fun mapPagesToRoutes() {
         initTest()
-        pages.forEach { page ->
-            Spark.get(page.rootUri, { request: Request, response: Response -> renderPage(page, request, response) })
+        PageHandler.getAllPageRoutes().forEach { pageRoute ->
+            Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
         }
     }
 
-    private fun renderPage(page: RawPage, request: Request, response: Response): String {
+    private fun getPageByRoute(pageRoute: String): Page {
+        return PageHandler.getPageByRoute(pageRoute)
+    }
+
+    private fun renderPage(page: Page, request: Request, response: Response): String {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
-        velocityIMTemplateEngine.insertTemplateAsString(page.rootUri, page.content)
-        velocityIMTemplateEngine.insertIntoContext(page.rootUri, Web.loadNavBar(request, hashMapOf()))
-        velocityIMTemplateEngine.insertIntoContext(page.rootUri, Web.insertPageTitle(request, hashMapOf(), page.title))
-        TacusciAPI.injectAPIInstances(request, response, page.rootUri, velocityIMTemplateEngine)
-        val result = velocityIMTemplateEngine.render(page.rootUri)
-        velocityIMTemplateEngine.flush(page.rootUri)
+        velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
+        velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.insertPageTitle(request, hashMapOf(), page.title))
+        TacusciAPI.injectAPIInstances(request, response, page.pageRoute, velocityIMTemplateEngine)
+        val result = velocityIMTemplateEngine.render(page.pageRoute)
+        velocityIMTemplateEngine.flush(page.pageRoute)
         return result
     }
 }

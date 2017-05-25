@@ -46,7 +46,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun insertPage(page: Page): Boolean {
         connect()
         try {
-            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) (?,?,?,?,?,?,?,?)"
+            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createPageStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -54,13 +54,14 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             preparedStatement?.setString(4, page.pageRoute)
             preparedStatement?.setString(5, page.content)
             preparedStatement?.setInt(6, page.maintenanceMode)
-            preparedStatement?.setInt(7, page.type.ordinal)
+            preparedStatement?.setInt(7, page.authorUserId)
+            preparedStatement?.setInt(8, page.type.ordinal)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
             disconnect()
             return true
-        } catch (e: Exception) { e.printStackTrace(); disconnect(); return false }
+        } catch (e: Exception) { e.message; disconnect(); return false }
     }
 
     fun updatePage(page: Page): Boolean {
@@ -84,11 +85,11 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
-    fun getPageIDByTitle(pageTitle: String): Int {
+    fun getPageIdByTitle(pageTitle: String): Int {
         connect()
         var pageId = -1
         try {
-            val selectStatement = "SELECT PAGE_ID FROM $tableName WHERE PAGE_TITLE=?"
+            val selectStatement = "SELECT ID_PAGE FROM $tableName WHERE PAGE_TITLE=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, pageTitle)
             val resultSet = preparedStatement?.executeQuery()
@@ -100,7 +101,23 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return pageId
     }
 
-    fun getPage(pageId: Int): Page {
+    fun getPageIdByRoute(pageRoute: String): Int {
+        connect()
+        var pageId = -1
+        try {
+            val selectStatement = "SELECT ID_PAGE FROM $tableName WHERE PAGE_ROUTE=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, pageRoute)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                pageId = resultSet.getInt(1)
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return pageId
+    }
+
+    fun getPageById(pageId: Int): Page {
         val page = Page(-1, -1, -1, "", "", 0, "", -1)
         connect()
         try {
@@ -124,17 +141,38 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return page
     }
 
-    fun getPages() {
+    fun getAllPages(): MutableList<Page> {
         val pages = mutableListOf<Page>()
         connect()
         try {
-            val selectStatement = "SELECT * FROM $tableName"
+            val selectStatement = "SELECT ID_PAGE FROM $tableName"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
-                val page = Page(-1, -1, -1, "", "", 0, "", -1)
-                //TODO: Finish implementing
+                /*
+                    This currently throws: 2017-05-25 12:04:02 ERROR PagesDAO:139 - Operation not allowed after ResultSet closed
+                    but currently no visible negative side effects
+                */
+                val pageId = resultSet.getInt("ID_PAGE")
+                pages.add(getPageById(pageId))
             }
+            disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return pages
+    }
+
+    fun  getAllPageRoutes(): MutableList<String> {
+        val pageRoutes = mutableListOf<String>()
+        connect()
+        try {
+            val selectStatement = "SELECT PAGE_ROUTE FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                pageRoutes.add(resultSet.getString("PAGE_ROUTE"))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return pageRoutes
     }
 }
