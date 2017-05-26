@@ -27,14 +27,6 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
-<style>
-    html, body { height:91%; }
-    #PageLayoutGrid { height:100%; }
-    #PageFooterEditTab { height:100%; }
-    .edit-box { resize:vertical; height:50%; }
-    .preview-box { resize:vertical; height:50%; width:100% }
-</style>
-
 <div id="nav_menu">
     <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
         <ul class="pure-menu-list">
@@ -49,77 +41,13 @@
     </div>
 </div>
 
-<div id="PageLayoutGrid" class="pure-g">
+#set ($divId = $page.getId())
 
-    <div id="layout" class="pure-u-24-24">
-        <div class="tab">
-            <button class="tablinks" onclick="openTab(event, 'PageFooterEditTab')">Page Footer</button>
+<div id=$divId class="pure-g">
+    #foreach ($page in $TPages.getAllPages())
+        <div id="layout" class="pure-u-24-24">
+            <h4>$page.getId()</h4>
+            <h4>$page.getPageRoute()</h4>
         </div>
-        <div id="PageFooterEditTab" class="tabcontent">
-            <textarea id="PageFooterEditBox" name="PageFooterEditBox" class="boxsizingBorder edit-box styled-text-area">$!footer_content</textarea>
-            <iframe id="PageFooterPreview" class="preview-box"></iframe>
-            <div class="action-buttons">
-                <button class="pure-button button-success" onclick="submitFooter()">Save</button>
-            </div>
-        </div>
-    </div>
+    #end
 </div>
-
-<script>
-
-window.onload = function() { initFooterPreview(); }
-
-function openTab(evt, elementName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(elementName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-function initFooterPreview() {
-    console.log("Initialising preview update loop");
-    window.setInterval(updateFooterPreview, 150);
-}
-
-function updateFooterPreview() {
-    console.log("Updating preview");
-    var pageFooterPreview = document.getElementById("PageFooterPreview"),
-        pageFooterPreviewDoc = pageFooterPreview.contentDocument || pageFooterPreview.contentWindow.document;
-
-    pageFooterPreviewDoc.body.innerHTML = document.getElementById("PageFooterEditBox").value;
-}
-
-function submitFooter() {
-    var pageFooterForm = document.createElement("form");
-	var pageFooterContentInput = document.createElement("input");
-
-	var pageFooterPreview = document.getElementById("PageFooterPreview"),
-        pageFooterPreviewDoc = pageFooterPreview.contentDocument || pageFooterPreview.contentWindow.document;
-
-	pageFooterForm.method = "POST";
-	pageFooterForm.action = "$!uri"
-
-	pageFooterContentInput.value = pageFooterPreviewDoc.body.innerHTML
-	pageFooterContentInput.name = "page_footer_content"
-
-	pageFooterForm.appendChild(pageFooterContentInput)
-
-	document.body.appendChild(pageFooterForm)
-
-	pageFooterForm.submit();
-}
-</script>

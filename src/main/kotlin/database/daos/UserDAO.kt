@@ -176,7 +176,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun getUsers(): MutableCollection<User> {
         connect()
         val userList = mutableListOf<User>()
-        val selectStatement = "SELECT USER_ID, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED FROM $tableName"
+        val selectStatement = "SELECT ID_USERS, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED FROM $tableName"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
@@ -199,7 +199,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun getRootAdmin(): User {
         connect()
         val user = User(-1, -1, -1, "", "", "", "", 0, 1)
-        val selectStatement = "SELECT CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, EMAIL, FULL_NAME, BANNED FROM $tableName WHERE ROOT_ADMIN=?"
+        val selectStatement = "SELECT ID_USERS, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, EMAIL, FULL_NAME, BANNED FROM $tableName WHERE ROOT_ADMIN=?"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         preparedStatement?.setInt(1, user.rootAdmin)
         val resultSet = preparedStatement?.executeQuery()
