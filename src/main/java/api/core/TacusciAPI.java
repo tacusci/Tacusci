@@ -4,6 +4,7 @@ import api.forms.TForms;
 import api.pages.TPages;
 import api.users.TUser;
 import app.corecontrollers.Web;
+import database.models.Page;
 import kotlin.Pair;
 import spark.Request;
 import spark.Response;
@@ -25,10 +26,12 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("TForms", new TForms(request, response)));
         apiObjInstances.add(new Pair<>("TResponse", new TResponse(request, response)));
         apiObjInstances.add(new Pair<>("TPages", new TPages(request, response)));
+        apiObjInstances.add(new Pair<>("TDateTime", new TDateTime(request, response)));
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
         init(request, response);
+        Page page = new Page();
         velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavBar(request, new HashMap<>()));
         velocityIMTemplateEngine.insertIntoContext(templateTitle, apiObjInstances);
     }
