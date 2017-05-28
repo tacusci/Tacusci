@@ -37,16 +37,18 @@ div.create-page {
   margin-left: 1em;
   margin-right: 1em;
   margin-bottom: 0.5em;
-  border: 2px solid;
-  border-radius: 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  display:inline;
 }
 
 div.page-info {
   margin-left: 1em;
   margin-right: 1em;
   margin-bottom: 0.5em;
-  border: 2px solid;
-  border-radius: 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  display:inline;
 }
 
 submit-link:focus {
