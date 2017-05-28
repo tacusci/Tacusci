@@ -51,8 +51,9 @@
     #foreach ($page in $TPages.getAllPages())
         #set ($divId = $page.getId())
         <div id=$divId class="pure-u-24-24 page-info">
-            <h4>$page.getId()</h4>
-            <h4>$page.getPageRoute()</h4>
+            <h4>Title: $page.getTitle()</h4>
+            <h4>Created: $TDateTime.convertMillisToDate($page.getCreatedDateTime())</h4>
+            <h4>Route: $page.getPageRoute()</h4>
         </div>
     #end
 </div>
