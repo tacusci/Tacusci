@@ -28,8 +28,23 @@ p.error-text {
   padding: .5em 1em;
 }
 
-.page-info-div {
-  background-color: red;
+#nav_menu {
+  margin-bottom: 0.1em;
+}
+
+div.create-page {
+  margin-top: 1em;
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-bottom: 2em;
+  outline: #00FF00 dotted thick;
+}
+
+div.page-info {
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-bottom: 1em;
+  outline: #00FF00 dotted thick;
 }
 
 submit-link:focus {

@@ -42,10 +42,15 @@
 </div>
 
 
-<div class="pure-g page-info-div">
+<div class="pure-g">
+    <div class="pure-u-24-24 create-page">
+        <h2>
+            CREATE PAGE
+        </h2>
+    </div>
     #foreach ($page in $TPages.getAllPages())
         #set ($divId = $page.getId())
-        <div id=$divId class="pure-u-16-24">
+        <div id=$divId class="pure-u-24-24 page-info">
             <h4>$page.getId()</h4>
             <h4>$page.getPageRoute()</h4>
         </div>
