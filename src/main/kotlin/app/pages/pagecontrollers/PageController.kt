@@ -54,8 +54,15 @@ object PageController {
         testCustomPage.rootUri = "/test_page"
         testCustomPage.content = "<html><title>\$title</title><body><h2>#foreach (\$username in \$TUser.getAllRegUserUsernames()) <p>\$username</p>#end<h2></body></html>"
 
+        val aboutUs = Page()
+        aboutUs.title = "About Us"
+        aboutUs.pageRoute = "/about_us"
+        aboutUs.content = "<html>title>\$title</title><body><h3>Seomthing</h3></body></html>"
+        aboutUs.authorUserId = UserHandler.getRootAdmin().id
+
         Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)
         PageHandler.createPage(Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id))
+        PageHandler.createPage(aboutUs)
     }
 
     //TODO: Need to implement loading pages from the DB to be mapped here.

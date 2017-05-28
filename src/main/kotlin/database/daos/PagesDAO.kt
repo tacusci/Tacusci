@@ -61,7 +61,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             preparedStatement?.close()
             disconnect()
             return true
-        } catch (e: Exception) { e.message; disconnect(); return false }
+        } catch (e: Exception) { logger.error(e.message); disconnect(); return false }
     }
 
     fun updatePage(page: Page): Boolean {
@@ -117,7 +117,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return pageId
     }
 
-    fun getPageById(pageId: Int): Page {
+    private fun getPageById(pageId: Int): Page {
         val page = Page(-1, -1, -1, "", "", 0, "", -1)
         connect()
         try {
@@ -136,9 +136,18 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 page.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
                 page.type = StructuredPage.PageType.fromInt(resultSet.getInt("PAGE_TYPE"))!!
             }
-            disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return page
+    }
+
+    fun getPageById(pageId: Int, closeConnection: Boolean): Page {
+        if (!closeConnection) {
+            return getPageById(pageId)
+        } else {
+            val page = getPageById(pageId)
+            disconnect()
+            return page
+        }
     }
 
     fun getAllPages(): MutableList<Page> {
@@ -154,7 +163,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                     but currently no visible negative side effects
                 */
                 val pageId = resultSet.getInt("ID_PAGE")
-                pages.add(getPageById(pageId))
+                pages.add(getPageById(pageId, false))
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }

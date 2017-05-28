@@ -59,15 +59,15 @@ object PageHandler : KLogging() {
     }
 
     fun getPageById(id: Int): Page {
-        return pageDAO.getPageById(id)
+        return pageDAO.getPageById(id, true)
     }
 
     fun getPageByTitle(title: String): Page {
-        return pageDAO.getPageById(pageDAO.getPageIdByTitle(title))
+        return pageDAO.getPageById(pageDAO.getPageIdByTitle(title), true)
     }
 
     fun getPageByRoute(route: String): Page {
-        return pageDAO.getPageById(pageDAO.getPageIdByRoute(route))
+        return pageDAO.getPageById(pageDAO.getPageIdByRoute(route), true)
     }
 
     fun updatePageFooter(pageFooterData: String, authorUser: User) {}

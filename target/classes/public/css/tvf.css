@@ -28,6 +28,10 @@ p.error-text {
   padding: .5em 1em;
 }
 
+.page-info-div {
+  background-color: red;
+}
+
 submit-link:focus {
   outline: none;
 }

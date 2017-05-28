@@ -65,8 +65,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   `page_type` INT NOT NULL,
   PRIMARY KEY (`id_page`),
   UNIQUE INDEX `id_page_UNIQUE` (`id_page` ASC),
-  UNIQUE INDEX `page_route` (`page_route` ASC),
-  UNIQUE INDEX `author_user` (`author_user_id` ASC));
+  UNIQUE INDEX `page_route` (`page_route` ASC));
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`page_footer` (
   `id_page_footer` INT NOT NULL AUTO_INCREMENT,

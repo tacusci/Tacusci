@@ -41,11 +41,11 @@
     </div>
 </div>
 
-#set ($divId = $page.getId())
 
-<div id=$divId class="pure-g">
+<div class="pure-g page-info-div">
     #foreach ($page in $TPages.getAllPages())
-        <div id="layout" class="pure-u-24-24">
+        #set ($divId = $page.getId())
+        <div id=$divId class="pure-u-16-24">
             <h4>$page.getId()</h4>
             <h4>$page.getPageRoute()</h4>
         </div>
