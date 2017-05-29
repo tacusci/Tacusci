@@ -7,12 +7,11 @@ import spark.Response;
 /**
  * Created by alewis on 23/05/2017.
  */
-public class TResponse {
+public class TResponse extends TAPIClass {
 
-    private Request request = null;
-    private Response response = null;
-
-    public TResponse(Request request, Response response) { this.request = request; this.response = response; }
+    public TResponse(Request request, Response response) {
+        super(request, response);
+    }
 
     public void redirect(String location) { ExtensionCollectionKt.managedRedirect(response, request, location); }
 }

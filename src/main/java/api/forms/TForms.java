@@ -1,5 +1,6 @@
 package api.forms;
 
+import api.core.TAPIClass;
 import app.corecontrollers.Web;
 import spark.Request;
 import spark.Response;
@@ -8,12 +9,11 @@ import utils.j2htmlPartials;
 /**
  * Created by alewis on 23/05/2017.
  */
-public class TForms {
+public class TForms extends TAPIClass {
 
-    private Request request = null;
-    private Response response = null;
-
-    public TForms(Request request, Response response) { this.request = request; this.response = response; }
+    public TForms(Request request, Response response) {
+        super(request, response);
+    }
 
     public String getLoginForm() {
         return j2htmlPartials.INSTANCE.pureFormAligned_Login(request.session(), "login_form","/login", "post").render();
