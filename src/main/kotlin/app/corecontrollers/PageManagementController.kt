@@ -31,6 +31,7 @@ package app.corecontrollers
 
 import api.core.TacusciAPI
 import app.handlers.UserHandler
+import j2html.TagCreator.h2
 import j2html.TagCreator.link
 import mu.KLogging
 import spark.ModelAndView
@@ -38,6 +39,7 @@ import spark.Request
 import spark.Response
 import spark.Session
 import java.util.*
+import kotlin.collections.HashMap
 
 
 /**
@@ -48,7 +50,7 @@ class PageManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/page_management"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:page_id")
     override val templatePath: String = "/templates/page_management.vtl"
     override val pageTitleSubstring: String = "Page Management"
     override val handlesGets: Boolean = true
@@ -62,12 +64,23 @@ class PageManagementController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavBar(request, model)
-        model.put("template", templatePath)
-        model.put("alt_css_link", link().attr("rel", "stylesheet").withHref("/css/tab_style.css"))
-        model.put("uri", rootUri)
 
-        model.put("footer_content", "")
+        if (request.params(":command") == null && request.params(":page_id") == null) {
+            model.put("template", templatePath)
+        } else {
+            return getCreatePage(request, response, layoutTemplate)
+        }
+        return ModelAndView(model, layoutTemplate)
+    }
 
+    private fun getCreatePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
+        Web.loadNavBar(request, model)
+        println(request.params(":command"))
+        println(request.params(":page_id"))
+        model.put("template", "/templates/create_page.vtl")
         return ModelAndView(model, layoutTemplate)
     }
 
