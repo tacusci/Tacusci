@@ -45,10 +45,7 @@
 <div class="pure-g">
     <a href="/dashboard/page_management/create_page">
         <div class="pure-u-24-24 create-page">
-            <h2>
-                $TForms
-                CREATE PAGE
-            </h2>
+            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/create", "CREATE PAGE")
         </div>
     </a>
     #foreach ($page in $TPages.getAllPages())
