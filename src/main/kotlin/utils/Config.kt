@@ -61,6 +61,7 @@ open class Config {
                     Pair("max_threads", ""),
                     Pair("min_threads", ""),
                     Pair("thread_idle_timeout", ""),
+                    Pair("session_idle_timeout", ""),
                     Pair("log_file", "tacusci.log"),
                     Pair("smtp_server_host", ""),
                     Pair("smtp_server_port", ""),
