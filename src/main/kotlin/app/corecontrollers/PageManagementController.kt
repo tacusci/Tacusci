@@ -30,7 +30,9 @@
 package app.corecontrollers
 
 import api.core.TacusciAPI
+import app.handlers.PageHandler
 import app.handlers.UserHandler
+import extensions.toIntSafe
 import j2html.TagCreator.h2
 import j2html.TagCreator.link
 import mu.KLogging
@@ -68,19 +70,30 @@ class PageManagementController : Controller {
         if (request.params(":command") == null && request.params(":page_id") == null) {
             model.put("template", templatePath)
         } else {
-            return getCreatePage(request, response, layoutTemplate)
+            return getCommandPage(request, response, layoutTemplate)
         }
         return ModelAndView(model, layoutTemplate)
     }
 
-    private fun getCreatePage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+    private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
         Web.loadNavBar(request, model)
         println(request.params(":command"))
         println(request.params(":page_id"))
-        model.put("template", "/templates/create_page.vtl")
+        when (request.params(":command")) {
+            "create" -> model.put("template", "/templates/create_page.vtl")
+            "edit" -> {
+                if (request.params("page_id") != null) {
+                    model.put("template", "/templates/edit_page.vtl")
+                    val page = PageHandler.getPageById(request.params("page_id").toIntSafe())
+                    model.put("page_to_edit", page)
+                } else {
+                    response.redirect("/dashboard/page_management")
+                }
+            }
+        }
         return ModelAndView(model, layoutTemplate)
     }
 

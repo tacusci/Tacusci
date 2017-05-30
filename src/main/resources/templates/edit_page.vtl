@@ -39,21 +39,7 @@
             #end
         </ul>
     </div>
-</div>
 
-
-<div class="pure-g">
-    <a href="/dashboard/page_management/create_page">
-        <div class="pure-u-24-24 create-page">
-            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/create", "CREATE PAGE")
-        </div>
-    </a>
-    #foreach ($page in $TPages.getAllPages())
-        #set ($divId = $page.getId())
-        <div id=$divId class="pure-u-24-24 page-info">
-            <h4>Title: $page.getTitle()</h4>
-            <h4>Route: $page.getPageRoute()</h4>
-            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT")
-        </div>
-    #end
+    <h2>Edit Page</h2>
+    <h3>$page_to_edit.getTitle()</h3>
 </div>
