@@ -101,27 +101,4 @@ class PageManagementController : Controller {
         println(request.queryParams("page_footer_content"))
         return response
     }
-    //TODO: Remove these when decided to not use route tree for page struct
-    /*
-    private fun createRouteTree(routeEntityTree: RouteEntityTree): ContainerTag {
-        val rootTag = ul()
-        val innerTag = li(routeEntityTree.rootElement.data.name)
-        if (routeEntityTree.rootElement.hasChildren()) {
-            addChild(innerTag, routeEntityTree.rootElement.children)
-        }
-        return rootTag.with(innerTag)
-    }
-
-    private fun addChild(rootTagz: ContainerTag, routeEntityNode: MutableList<Node<RouteEntity>>): ContainerTag {
-        routeEntityNode.forEach { node ->
-            val rootTag = ul()
-            val innerTag = li(node.data.name)
-            if (node.hasChildren()) {
-                addChild(innerTag, node.children)
-            }
-            rootTagz.with(rootTag.with(innerTag))
-        }
-        return rootTagz
-    }
-    */
 }
