@@ -41,7 +41,7 @@ import utils.Config
 
 object ControllerManager : KLogging() {
 
-    val baseControllers = listOf(IndexController(), DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
+    val baseControllers = listOf(DashboardController(), RegisterController(), UserManagementController(), LogFileViewController(),
                                     PageManagementController(), LoginController(), ProfileController(), ResetPasswordController(), ForgottenPasswordController())
     val layoutTemplate = "/templates/layout.vtl"
 

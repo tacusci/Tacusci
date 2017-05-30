@@ -2,7 +2,7 @@
 
 # Tacusci
 
-A custom CMS which also loads and host connections to the hosted website. No PHP or js, just Velocity Templates and a custom API set
+A custom CMS which also loads and host connections to the hosted website. No PHP or Javascript, just Velocity Templates and a custom API set
 
 ## Deployment
 
