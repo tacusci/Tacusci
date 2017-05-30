@@ -47,24 +47,6 @@ object PageController {
 
     val pages = mutableListOf<Page>()
 
-    fun initTest() {
-        val testCustomPage = Page()
-        testCustomPage.id = 0
-        testCustomPage.title = "Test Page"
-        testCustomPage.pageRoute = "/test_page"
-        testCustomPage.content = "<html><title>\$title</title><body><h2>#foreach (\$username in \$TUser.getAllRegUserUsernames()) <p>\$username</p>#end<h2></body></html>"
-
-        val aboutUs = Page()
-        aboutUs.title = "About Us"
-        aboutUs.pageRoute = "/about_us"
-        aboutUs.content = "<html><title>\$title</title><body><h3>Seomthing</h3></body></html>"
-        aboutUs.authorUserId = UserHandler.getRootAdmin().id
-
-        Page(title = testCustomPage.title, pageRoute = testCustomPage.pageRoute, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)
-        PageHandler.createPage(Page(title = testCustomPage.title, pageRoute = testCustomPage.pageRoute, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id))
-        PageHandler.createPage(aboutUs)
-    }
-
     fun initIndex() {
         val index = Page()
         index.title = "Index"
