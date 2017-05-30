@@ -33,25 +33,26 @@ import api.core.TacusciAPI
 import app.corecontrollers.Web
 import app.handlers.PageHandler
 import app.handlers.UserHandler
-import app.pages.raw.RawPage
 import database.models.Page
+import extensions.readTextAndClose
 import spark.Request
 import spark.Response
 import spark.Spark
 import spark.template.velocity.VelocityIMTemplateEngine
+import java.io.File
 
 /**
  * Created by tauraamui on 14/05/2017.
  */
 object PageController {
 
-    val pages = mutableListOf<RawPage>()
+    val pages = mutableListOf<Page>()
 
     fun initTest() {
-        val testCustomPage = RawPage()
+        val testCustomPage = Page()
         testCustomPage.id = 0
         testCustomPage.title = "Test Page"
-        testCustomPage.rootUri = "/test_page"
+        testCustomPage.pageRoute = "/test_page"
         testCustomPage.content = "<html><title>\$title</title><body><h2>#foreach (\$username in \$TUser.getAllRegUserUsernames()) <p>\$username</p>#end<h2></body></html>"
 
         val aboutUs = Page()
@@ -60,9 +61,18 @@ object PageController {
         aboutUs.content = "<html><title>\$title</title><body><h3>Seomthing</h3></body></html>"
         aboutUs.authorUserId = UserHandler.getRootAdmin().id
 
-        Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)
-        PageHandler.createPage(Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id))
+        Page(title = testCustomPage.title, pageRoute = testCustomPage.pageRoute, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)
+        PageHandler.createPage(Page(title = testCustomPage.title, pageRoute = testCustomPage.pageRoute, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id))
         PageHandler.createPage(aboutUs)
+    }
+
+    fun initIndex() {
+        val index = Page()
+        index.title = "Index"
+        index.pageRoute = "/"
+        index.content = this.javaClass.getResourceAsStream("/templates/index.vtl").readTextAndClose()
+        index.authorUserId = UserHandler.getRootAdmin().id
+        PageHandler.createPage(index)
     }
 
     //TODO: Need to implement loading pages from the DB to be mapped here.
