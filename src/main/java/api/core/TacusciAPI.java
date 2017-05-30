@@ -1,6 +1,7 @@
 package api.core;
 
 import api.forms.TForms;
+import api.forms.THTMLUtils;
 import api.pages.TPages;
 import api.users.TUser;
 import app.corecontrollers.Web;
@@ -9,6 +10,7 @@ import kotlin.Pair;
 import spark.Request;
 import spark.Response;
 import spark.template.velocity.VelocityIMTemplateEngine;
+import utils.j2htmlPartials;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("TResponse", new TResponse(request, response)));
         apiObjInstances.add(new Pair<>("TPages", new TPages(request, response)));
         apiObjInstances.add(new Pair<>("TDateTime", new TDateTime(request, response)));
+        apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {

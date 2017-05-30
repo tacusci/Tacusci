@@ -27,12 +27,18 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
-<div>
-    <form action="/generate_page_from_form">
-        Page title:<br>
-        <input id="page_title" name="page_title" type="text"><br>
-        Content:<br>
-        <textarea id="content"/></textarea>
-        <button class="pure-button" name="render" type="submit">Create</button>
-    </form>
+<div id="nav_menu">
+    <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <ul class="pure-menu-list">
+            $!home_link
+            $!dashboard_link
+            $!login_or_profile_link
+            $!sign_up_menu_link
+            #if ($TUser.isLoggedIn())
+                $TForms.getSignOutForm()
+            #end
+        </ul>
+    </div>
+
+    <h2>Create Page Page</h2>
 </div>

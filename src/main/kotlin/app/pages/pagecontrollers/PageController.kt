@@ -57,7 +57,7 @@ object PageController {
         val aboutUs = Page()
         aboutUs.title = "About Us"
         aboutUs.pageRoute = "/about_us"
-        aboutUs.content = "<html>title>\$title</title><body><h3>Seomthing</h3></body></html>"
+        aboutUs.content = "<html><title>\$title</title><body><h3>Seomthing</h3></body></html>"
         aboutUs.authorUserId = UserHandler.getRootAdmin().id
 
         Page(title = testCustomPage.title, pageRoute = testCustomPage.rootUri, content = testCustomPage.content, authorUserId = UserHandler.getRootAdmin().id)

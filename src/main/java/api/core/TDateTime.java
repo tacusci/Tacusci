@@ -7,12 +7,11 @@ import utils.Utils;
 /**
  * Created by alewis on 28/05/2017.
  */
-public class TDateTime {
+public class TDateTime extends TAPIClass {
 
-    private Request request = null;
-    private Response response = null;
-
-    public TDateTime(Request request, Response response) { this.request = request; this.response = response; }
+    public TDateTime(Request request, Response response) {
+        super(request, response);
+    }
 
     public String getDateNow() { return Utils.Companion.getDateNow(); }
     public String getDateNow(String format) { return Utils.Companion.getDateNow(format); }
