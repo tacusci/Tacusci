@@ -39,7 +39,6 @@ import spark.Request
 import spark.Response
 import spark.Spark
 import spark.template.velocity.VelocityIMTemplateEngine
-import java.io.File
 
 /**
  * Created by tauraamui on 14/05/2017.
@@ -75,9 +74,8 @@ object PageController {
         PageHandler.createPage(index)
     }
 
-    //TODO: Need to implement loading pages from the DB to be mapped here.
-    fun mapPagesToRoutes() {
-        initTest()
+    fun setupPages() {
+        initIndex()
         PageHandler.getAllPageRoutes().forEach { pageRoute ->
             Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
         }

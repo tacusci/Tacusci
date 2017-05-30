@@ -110,8 +110,7 @@ class Application {
         ControllerManager.mapAccessToStaticLocalFolder()
         ControllerManager.initBaseControllers()
 
-        PageController.initIndex()
-        PageController.mapPagesToRoutes()
+        PageController.setupPages()
 
         get("/robots.txt", { request, response -> Web.get_robotstxt(request) })
 
