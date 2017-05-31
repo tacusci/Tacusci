@@ -33,6 +33,19 @@
         height: 100%;
     }
 
+    .page-title-header {
+        padding-left: 20px;
+    }
+
+    .page-title-editbox {
+        margin-left: 20px;
+    }
+
+    .edit-button-bar {
+        margin-left: 20px;
+        width: auto;
+    }
+
     #editor {
         padding: 20px; margin: 20px;
         height: 70%;
@@ -54,12 +67,17 @@
     </div>
 </div>
 
-<h2>Edit - $pageToEdit.getTitle()</h2>
+<h2 class="page-title-header">Edit - $pageToEdit.getTitle()</h2>
 
-<input id="page_title" name="page_title" type="text" value="$pageToEdit.getTitle()">
+<input id="page_title" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
 <pre id="editor">
     $THTMLUtils.formatForEditing($pageToEdit.getContent())
 </pre>
+
+<div class="pure-u-24-24 edit-button-bar">
+    <input class="pure-button" type="button" value="Save">
+    <input class="pure-button" type="button" value="Clear">
+</div>
 
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
