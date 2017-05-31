@@ -166,7 +166,7 @@ fun main(args: Array<String>) {
     CliOptions.cliOptions.addAll(listOf(CliOption("Username", "username", true),
             CliOption("Password", "password", true),
             CliOption("Debug Mode", "debug", false),
-            CliOption("Disable vibose output in debug mode", "disable_debug_output", false)))
+            CliOption("Disable verbose output in debug mode", "disable_debug_output", false)))
     CliOptions.parseArgs(args)
 
     Config.load()
