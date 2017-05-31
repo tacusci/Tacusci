@@ -82,7 +82,7 @@ class PageManagementController : Controller {
                 if (request.params("page_id") != null) {
                     model.put("template", "/templates/edit_page.vtl")
                     val page = PageHandler.getPageById(request.params("page_id").toIntSafe())
-                    model.put("page_to_edit", page)
+                    model.put("pageToEdit", page)
                 } else {
                     response.redirect("/dashboard/page_management")
                 }
