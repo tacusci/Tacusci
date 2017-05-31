@@ -27,6 +27,7 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
+<!--
 <div id="nav_menu">
     <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
         <ul class="pure-menu-list">
@@ -39,7 +40,28 @@
             #end
         </ul>
     </div>
-
-    <h2>Edit Page</h2>
-    <h3>$page_to_edit.getTitle()</h3>
 </div>
+!-->
+
+<div id="nav_menu">
+    <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <ul class="pure-menu-list">
+            $!home_link
+            $!dashboard_link
+            $!login_or_profile_link
+            $!sign_up_menu_link
+            #if ($TUser.isLoggedIn())
+            $TForms.getSignOutForm()
+            #end
+        </ul>
+    </div>
+</div>
+
+<div id="editor" class="pure-u-24-24 centered"></div>
+
+<script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/velocity");
+</script>
