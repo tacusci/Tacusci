@@ -17,4 +17,12 @@ public class THTMLUtils extends TAPIClass {
     public String getButtonStyledLink(String href, String buttonText) {
         return j2htmlPartials.INSTANCE.link("pure-button", href, buttonText).render();
     }
+
+    public String formatForEditing(String content) {
+        return content.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
+    }
+
+    public String formatBackForSaving(String content) {
+        return content.replaceAll("&amp;", "&").replaceAll("<", "&lt;");
+    }
 }

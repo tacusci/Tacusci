@@ -54,12 +54,13 @@
 <h2>Edit - $pageToEdit.getTitle()</h2>
 
 <input id="page_title" name="page_title" type="text" value="$pageToEdit.getTitle()">
-<div id="editor"></div>
+<pre id="editor">
+    $THTMLUtils.formatForEditing($pageToEdit.getContent())
+</pre>
 
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.session.setMode("ace/mode/velocity");
-    editor.setValue($pageToEdit.getContent());
 </script>
