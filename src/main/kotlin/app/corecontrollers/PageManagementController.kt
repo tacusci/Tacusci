@@ -33,15 +33,11 @@ import api.core.TacusciAPI
 import app.handlers.PageHandler
 import app.handlers.UserHandler
 import extensions.toIntSafe
-import j2html.TagCreator.h2
-import j2html.TagCreator.link
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import java.util.*
-import kotlin.collections.HashMap
 
 
 /**
@@ -80,8 +76,6 @@ class PageManagementController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
         Web.loadNavBar(request, model)
-        println(request.params(":command"))
-        println(request.params(":page_id"))
         when (request.params(":command")) {
             "create" -> model.put("template", "/templates/create_page.vtl")
             "edit" -> {
