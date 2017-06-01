@@ -92,7 +92,7 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        println(request.queryParams("page_footer_content"))
+        println(request.queryParams("page_content"))
         return response
     }
 }

@@ -47,7 +47,9 @@
     }
 
     #editor {
-        padding: 20px; margin: 20px;
+        padding: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
         height: 70%;
         border: 1px solid lightgray;
     }
@@ -75,13 +77,39 @@
 </pre>
 
 <div class="pure-u-24-24 edit-button-bar">
-    <input class="pure-button" type="button" value="Save">
+    <input class="pure-button" type="button" value="Save" onclick="save()">
     <input class="pure-button" type="button" value="Clear">
 </div>
+
+<div id="save_page_div" hidden></div>
 
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.session.setMode("ace/mode/velocity");
+
+    function save() {
+        var savePageForm = document.createElement("form");
+        savePageForm.setAttribute('method', "post");
+        savePageForm.setAttribute('action', "/dashboard/page_management/edit/$pageToEdit.getId()");
+
+        var titleInput = document.createElement("input");
+        titleInput.type = "text";
+        titleInput.id = "page_title";
+        titleInput.name = "page_title";
+
+        var contentInput = document.createElement("input");
+        contentInput.type = "text";
+        contentInput.id = "page_content";
+        contentInput.name = "page_content";
+        contentInput.value = editor.getValue();
+
+        savePageForm.appendChild(titleInput);
+        savePageForm.appendChild(contentInput);
+
+        document.getElementById("save_page_div").appendChild(savePageForm);
+
+        savePageForm.submit();
+   }
 </script>
