@@ -119,8 +119,7 @@
         pageTitleInput.type = "text";
         pageTitleInput.value = "$pageToEdit.getTitle()";
 
-        var pageContentInput = document.createElement("input");
-        pageContentInput.type = "text";
+        var pageContentInput = document.createElement("textarea");
         pageContentInput.id = "page_content";
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
