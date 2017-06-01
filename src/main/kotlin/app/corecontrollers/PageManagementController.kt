@@ -92,7 +92,9 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        println(request.queryParams("page_content"))
+        if (Web.getFormHash(request.session(), "save_page_form") == request.queryParams("hashid")) {
+            response.redirect(request.uri())
+        }
         return response
     }
 }
