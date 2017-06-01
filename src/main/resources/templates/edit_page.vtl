@@ -82,7 +82,6 @@
 </div>
 
 <div id="save_page_div" hidden></div>
-
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
@@ -108,6 +107,12 @@
         pageIdInput.type = "text";
         pageIdInput.value = $pageToEdit.getId();
 
+        var pageRouteInput = document.createElement("input");
+        pageRouteInput.id = "page_route";
+        pageRouteInput.name = "page_route";
+        pageRouteInput.type = "text";
+        pageRouteInput.value = "$pageToEdit.getPageRoute()";
+
         var pageTitleInput = document.createElement("input");
         pageTitleInput.id = "page_title";
         pageTitleInput.name = "page_title";
@@ -120,8 +125,9 @@
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
 
-        savePageForm.appendChild(pageIdInput);
         savePageForm.appendChild(pageHashInput);
+        savePageForm.appendChild(pageIdInput);
+        savePageForm.appendChild(pageRouteInput);
         savePageForm.appendChild(pageTitleInput);
         savePageForm.appendChild(pageContentInput);
 

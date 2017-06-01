@@ -32,6 +32,7 @@ package app.corecontrollers
 import api.core.TacusciAPI
 import app.handlers.PageHandler
 import app.handlers.UserHandler
+import database.models.Page
 import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
@@ -93,6 +94,14 @@ class PageManagementController : Controller {
 
     override fun post(request: Request, response: Response): Response {
         if (Web.getFormHash(request.session(), "save_page_form") == request.queryParams("hashid")) {
+            val pageToSave = Page()
+            pageToSave.id = request.queryParams("page_id").toIntSafe()
+            pageToSave.pageRoute = request.queryParams("page_route")
+            pageToSave.title = request.queryParams("page_title")
+            pageToSave.content = request.queryParams("page_content")
+            pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
+            pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+            PageHandler.updatePage(pageToSave)
             response.redirect(request.uri())
         }
         return response

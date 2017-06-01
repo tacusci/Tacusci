@@ -67,7 +67,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun updatePage(page: Page): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=? PAGE_TITLE=? PAGE_ROUTE=? PAGE_CONTENT=? MAINTENANCE_MODE=? AUTHOR_USER_ID=? PAGE_TYPE=? WHERE ID_PAGE=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, PAGE_TITLE=?, PAGE_ROUTE=?, PAGE_CONTENT=?, MAINTENANCE_MODE=?, AUTHOR_USER_ID=?, PAGE_TYPE=? WHERE ID_PAGE=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, page.title)
