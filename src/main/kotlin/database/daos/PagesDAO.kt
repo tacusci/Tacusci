@@ -73,6 +73,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             preparedStatement?.setString(2, page.title)
             preparedStatement?.setString(3, page.pageRoute)
             preparedStatement?.setString(4, page.content)
+            println(preparedStatement)
             preparedStatement?.setInt(5, page.maintenanceMode)
             preparedStatement?.setInt(6, page.authorUserId)
             preparedStatement?.setInt(7, page.type.ordinal)
