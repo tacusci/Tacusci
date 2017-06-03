@@ -1,6 +1,5 @@
-package api.forms;
+package api.core;
 
-import api.core.TAPIClass;
 import spark.Request;
 import spark.Response;
 import utils.j2htmlPartials;
