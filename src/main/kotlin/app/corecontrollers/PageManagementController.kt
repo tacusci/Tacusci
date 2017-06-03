@@ -99,7 +99,6 @@ class PageManagementController : Controller {
             pageToSave.pageRoute = request.queryParams("page_route")
             pageToSave.title = request.queryParams("page_title")
             pageToSave.content = request.queryParams("page_content")
-            println(pageToSave.content.split("\n").count())
             pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
             pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
             PageHandler.updatePage(pageToSave)
