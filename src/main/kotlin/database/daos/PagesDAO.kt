@@ -158,10 +158,6 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             val preparedStatement = connection?.prepareStatement(selectStatement)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
-                /*
-                    This currently throws: 2017-05-25 12:04:02 ERROR PagesDAO:139 - Operation not allowed after ResultSet closed
-                    but currently no visible negative side effects
-                */
                 val pageId = resultSet.getInt("ID_PAGE")
                 pages.add(getPageById(pageId, false))
             }
