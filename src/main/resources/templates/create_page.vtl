@@ -39,6 +39,69 @@
             #end
         </ul>
     </div>
-
-    <h2>Create Page Page</h2>
 </div>
+
+<h2 class="page-title-header">Create - $pageToCreate.getTitle()</h2>
+
+<input id="page_title" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
+<pre id="editor"></pre>
+
+<div class="pure-u-24-24 edit-button-bar">
+    <input class="pure-button" type="button" value="Create" onclick="save()">
+    <input class="pure-button" type="button" value="Clear">
+</div>
+
+<div id="save_page_div" hidden></div>
+<script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/velocity");
+    
+    function save() {
+        var createPageForm = document.createElement("form");
+        createPageForm.id = "create_page_form";
+        createPageForm.name = "create_page_form";
+        createPageForm.setAttribute('method', "post");
+        createPageForm.setAttribute('action', "/dashboard/page_management/create");
+
+        var pageHashInput = document.createElement("input");
+        pageHashInput.id = "hashid";
+        pageHashInput.name = "hashid";
+        pageHashInput.type = "text";
+        pageHashInput.value = "$TForms.mapFormToHash("create_page_form")";
+
+        var pageIdInput = document.createElement("input");
+        pageIdInput.id = "page_id";
+        pageIdInput.name = "page_id";
+        pageIdInput.type = "text";
+        pageIdInput.value = $pageToCreate.getId();
+
+        var pageRouteInput = document.createElement("input");
+        pageRouteInput.id = "page_route";
+        pageRouteInput.name = "page_route";
+        pageRouteInput.type = "text";
+        pageRouteInput.value = "$pageToCreate.getPageRoute()";
+
+        var pageTitleInput = document.createElement("input");
+        pageTitleInput.id = "page_title";
+        pageTitleInput.name = "page_title";
+        pageTitleInput.type = "text";
+        pageTitleInput.value = "$pageToCreate.getTitle()";
+
+        var pageContentInput = document.createElement("textarea");
+        pageContentInput.id = "page_content";
+        pageContentInput.name = "page_content";
+        pageContentInput.value = editor.getValue();
+
+        createPageForm.appendChild(pageHashInput);
+        createPageForm.appendChild(pageIdInput);
+        createPageForm.appendChild(pageRouteInput);
+        createPageForm.appendChild(pageTitleInput);
+        createPageForm.appendChild(pageContentInput);
+
+        document.getElementById("save_page_div").appendChild(createPageForm);
+
+        createPageForm.submit();
+    }
+</script>

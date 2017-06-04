@@ -78,8 +78,11 @@ class PageManagementController : Controller {
         Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
         Web.loadNavBar(request, model)
         when (request.params(":command")) {
-            "create" -> model.put("template", "/templates/create_page.vtl")
-            "edit" -> {
+            "create" -> {
+                val page = Page()
+                model.put("template", "/templates/create_page.vtl")
+                model.put("pageToCreate", Page())
+            } "edit" -> {
                 if (request.params("page_id") != null) {
                     model.put("template", "/templates/edit_page.vtl")
                     val page = PageHandler.getPageById(request.params("page_id").toIntSafe())
@@ -93,17 +96,28 @@ class PageManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun post_SavePageForm(request: Request, response: Response): Response {
+        val pageToSave = Page()
+        pageToSave.id = request.queryParams("page_id").toIntSafe()
+        pageToSave.pageRoute = request.queryParams("page_route")
+        pageToSave.title = request.queryParams("page_title")
+        pageToSave.content = request.queryParams("page_content")
+        pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
+        pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        PageHandler.updatePage(pageToSave)
+        response.redirect(request.uri())
+        return response
+    }
+
+    private fun post_CreatePageForm(request: Request, response: Response): Response {
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (Web.getFormHash(request.session(), "save_page_form") == request.queryParams("hashid")) {
-            val pageToSave = Page()
-            pageToSave.id = request.queryParams("page_id").toIntSafe()
-            pageToSave.pageRoute = request.queryParams("page_route")
-            pageToSave.title = request.queryParams("page_title")
-            pageToSave.content = request.queryParams("page_content")
-            pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
-            pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
-            PageHandler.updatePage(pageToSave)
-            response.redirect(request.uri())
+            return post_SavePageForm(request, response)
+        } else if (Web.getFormHash(request.session(), "create_page_form") == request.queryParams("hashid")) {
+            return post_CreatePageForm(request, response)
         }
         return response
     }
