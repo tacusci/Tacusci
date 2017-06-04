@@ -16,6 +16,7 @@ To host this on a webserver JRE 8 or higher is required. To run as a service use
 * [Kotlin](https://kotlinlang.org/) - Alternative JVM language to Java
 * [j2html](http://j2html.com/) - Fast and fluent Java HTML5 builder
 * [Pure CSS](http://purecss.io/) - A set of small, responsive CSS modules that you can use in every web project.
+* [Ace Editor](https://github.com/ajaxorg/ace) - Online live raw HTML editing
 
 ## Authors
 
