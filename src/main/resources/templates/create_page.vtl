@@ -27,6 +27,34 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
+<style>
+
+    body, html {
+        height: 100%;
+    }
+
+    .page-title-header {
+        padding-left: 20px;
+    }
+
+    .page-title-editbox {
+        margin-left: 20px;
+    }
+
+    .edit-button-bar {
+        margin-left: 20px;
+        width: auto;
+    }
+
+    #editor {
+        padding: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        height: 70%;
+        border: 1px solid lightgray;
+    }
+</style>
+
 <div id="nav_menu">
     <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
         <ul class="pure-menu-list">
@@ -53,17 +81,14 @@
 
 <div id="save_page_div" hidden></div>
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.session.setMode("ace/mode/velocity");
-    
+<script type="text/javascript" charset="utf-8">
+    #include("/public/js/pageeditor.js")
     function save() {
         var createPageForm = document.createElement("form");
         createPageForm.id = "create_page_form";
         createPageForm.name = "create_page_form";
         createPageForm.setAttribute('method', "post");
-        createPageForm.setAttribute('action', "/dashboard/page_management/create");
+        createPageForm.setAttribute('action', "/dashboard/page_management/edit/$pageToCreate.getId()");
 
         var pageHashInput = document.createElement("input");
         pageHashInput.id = "hashid";
@@ -103,5 +128,5 @@
         document.getElementById("save_page_div").appendChild(createPageForm);
 
         createPageForm.submit();
-    }
+   }
 </script>

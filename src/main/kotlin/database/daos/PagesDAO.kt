@@ -72,7 +72,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, page.title)
             preparedStatement?.setString(3, page.pageRoute)
-            preparedStatement?.setString(4, page.content.removeSuffix("\r\n"))
+            preparedStatement?.setString(4, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setInt(5, page.maintenanceMode)
             preparedStatement?.setInt(6, page.authorUserId)
             preparedStatement?.setInt(7, page.type.ordinal)
