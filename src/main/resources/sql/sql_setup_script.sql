@@ -32,15 +32,6 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`user2group` (
   `last_updated_date_time` LONG NOT NULL,
   `id_groups` INT NOT NULL);
 
-CREATE TABLE IF NOT EXISTS `$schema_name`.`routeentities` (
-  `id_route_entities` INT NOT NULL,
-  `parent_id` INT,
-  `name` VARCHAR(45) NOT NULL,
-  `type` INT NOT NULL,
-  `id_page` INT,
-  PRIMARY KEY (`id_route_entities`),
-  UNIQUE INDEX `id_route_entities_UNIQUE` (`id_route_entities` ASC));
-
 CREATE TABLE IF NOT EXISTS `$schema_name`.`reset_password` (
   `id_reset_passwords` INT NOT NULL AUTO_INCREMENT,
   `created_date_time` LONG NOT NULL,
