@@ -68,7 +68,7 @@ class LogFileViewController : Controller {
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for LOG_FILE page")
 
-        var model = HashMap<String, Any>()
+        val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
 
@@ -78,7 +78,7 @@ class LogFileViewController : Controller {
         val logFile = File(Config.getProperty("log_file"))
 
         if (logFile.exists()) {
-            val logFileTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area").attr("readonly", "true")
+            val logFileTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area").attr("readonly", "true").attr("wrap", "hard")
             logFileTextArea.withText(getLogFileLines(request.session(), logFile))
             model.put("logFilePath", h2(logFile.absolutePath).withClass("centered"))
             model.put("refreshForm", genRefreshForm(request.session(), logFile))
