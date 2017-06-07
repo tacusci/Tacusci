@@ -32,6 +32,8 @@ package app.corecontrollers
 import api.core.TacusciAPI
 import app.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
+import extensions.isBlankOrEmpty
+import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag
@@ -142,7 +144,7 @@ class LogFileViewController : Controller {
             val linesToShow = request.queryParams("lines_to_show")
             val textToShow = request.queryParams("text_to_show")
 
-            if (!(linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty() || linesToShow.isNullOrBlank() || linesToShow.isNullOrEmpty())) {
+            if (!linesToShow.isNullOrBlankOrEmpty()) {
                 try {
                     request.session().attribute("lines_to_show", linesToShow)
                 } catch (e: Exception) { logger.error(e.message) }
