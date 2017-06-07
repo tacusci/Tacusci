@@ -115,8 +115,7 @@ class LoginController : Controller {
 
     private fun post_postLogin(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGIN page")
-
-        if (Web.getFormHash(request.session(), "login_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "login_form") == request.queryParams("hashid")) {
             var username = request.queryParams("username")
             var email = ""
             val password = request.queryParams("password")
@@ -149,7 +148,7 @@ class LoginController : Controller {
 
     private fun post_logout(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOGOUT form")
-        if (Web.getFormHash(request.session(), "sign_out_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "sign_out_form") == request.queryParams("hashid")) {
             if (UserHandler.isLoggedIn(request)) {
                 UserHandler.logout(request)
             }

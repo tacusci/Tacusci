@@ -82,7 +82,7 @@ class RegisterController : Controller {
     override fun post(request: Request, response: Response): Response {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
-        if (Web.getFormHash(request.session(), "register_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "register_form") == request.queryParams("hashid")) {
             val fullName = request.queryParams("full_name")
             val username = request.queryParams("username")
             val password = request.queryParams("password")

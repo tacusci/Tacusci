@@ -151,7 +151,7 @@ class ResetPasswordController : Controller {
     private fun post_resetPassword(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for reset password form")
 
-        if (Web.getFormHash(request.session(), "reset_password_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "reset_password_form") == request.queryParams("hashid")) {
             val username = request.params(":username")
             val authHash = request.params(":authhash")
 

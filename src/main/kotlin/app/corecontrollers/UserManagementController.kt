@@ -83,7 +83,7 @@ class UserManagementController : Controller {
 
     override fun post(request: Request, response: Response): Response {
 
-        if (Web.getFormHash(request.session(), "user_management_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "user_management_form") == request.queryParams("hashid")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
 
             val currentUserUsername = UserHandler.loggedInUsername(request)

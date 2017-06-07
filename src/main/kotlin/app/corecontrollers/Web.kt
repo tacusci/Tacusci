@@ -26,10 +26,10 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package app.corecontrollers
+
+
+
+package app.corecontrollers
 
 import api.core.TacusciAPI
 import app.handlers.GroupHandler
@@ -86,7 +86,7 @@ object Web : KLogging() {
         } else {
             return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
                     "User-agent: *\n"
-                            +"Disallow: /dashboard/*"
+                            + "Disallow: /dashboard/*"
             ).render()
         }
     }
@@ -114,7 +114,7 @@ object Web : KLogging() {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fourOhFourFile = File("")
         listOf("404.html", "404.md", "404.vtl").forEach {
-            val currentFile = File(responsePagesFolder.absolutePath+"/$it")
+            val currentFile = File(responsePagesFolder.absolutePath + "/$it")
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
@@ -131,7 +131,7 @@ object Web : KLogging() {
         val responsePagesFolder = File("${Config.getProperty("static_asset_folder")}/${Config.getProperty("response_pages_folder")}")
         var fiveHundredOhFiveFile = File("")
         listOf("500.html", "500.md", "500.vtl").forEach {
-            val currentFile = File(responsePagesFolder.absolutePath+"/$it")
+            val currentFile = File(responsePagesFolder.absolutePath + "/$it")
             if (currentFile.exists()) fiveHundredOhFiveFile = currentFile; return@forEach
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
@@ -150,5 +150,10 @@ object Web : KLogging() {
         return hash
     }
 
-    fun getFormHash(session: Session, formTitle: String): String = session.attribute(formTitle)
+    fun getFormHash(request: Request, formTitle: String): String {
+        if (request.raw().isRequestedSessionIdValid) {
+            return request.session().attribute(formTitle)
+        }
+        return "invalidhash"
+    }
 }

@@ -90,7 +90,7 @@ class ForgottenPasswordController : Controller {
 
     fun post_postForgottenPassword(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for forgotten password form")
-        if (Web.getFormHash(request.session(), "forgotten_password_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "forgotten_password_form") == request.queryParams("hashid")) {
             val username = request.queryParams("username")
             val email = request.queryParams("email")
 

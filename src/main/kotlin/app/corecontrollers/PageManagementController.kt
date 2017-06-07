@@ -114,9 +114,9 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        if (Web.getFormHash(request.session(), "save_page_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "save_page_form") == request.queryParams("hashid")) {
             return post_SavePageForm(request, response)
-        } else if (Web.getFormHash(request.session(), "create_page_form") == request.queryParams("hashid")) {
+        } else if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
             return post_CreatePageForm(request, response)
         }
         return response

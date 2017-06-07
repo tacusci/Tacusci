@@ -138,7 +138,7 @@ class LogFileViewController : Controller {
     override fun post(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for LOG_FILE page")
 
-        if (Web.getFormHash(request.session(), "refresh_form") == request.queryParams("hashid")) {
+        if (Web.getFormHash(request, "refresh_form") == request.queryParams("hashid")) {
             val linesToShow = request.queryParams("lines_to_show")
             val textToShow = request.queryParams("text_to_show")
 
