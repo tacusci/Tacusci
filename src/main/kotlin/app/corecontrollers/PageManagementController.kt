@@ -99,8 +99,8 @@ class PageManagementController : Controller {
     private fun post_SavePageForm(request: Request, response: Response): Response {
         val pageToSave = Page()
         pageToSave.id = request.queryParams("page_id").toIntSafe()
-        pageToSave.pageRoute = request.queryParams("page_route")
         pageToSave.title = request.queryParams("page_title")
+        pageToSave.pageRoute = request.queryParams("page_route")
         pageToSave.content = request.queryParams("page_content")
         pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
         pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
@@ -110,6 +110,14 @@ class PageManagementController : Controller {
     }
 
     private fun post_CreatePageForm(request: Request, response: Response): Response {
+        val pageToCreate = Page()
+        pageToCreate.title = request.queryParams("page_title")
+        pageToCreate.pageRoute = request.queryParams("page_route")
+        pageToCreate.content = request.queryParams("page_content")
+        pageToCreate.lastUpdatedDateTime = System.currentTimeMillis()
+        pageToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        PageHandler.createPage(pageToCreate)
+        response.redirect(rootUri)
         return response
     }
 

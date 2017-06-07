@@ -58,9 +58,16 @@ object PageController {
 
     fun setupPages() {
         initIndex()
-        PageHandler.getAllPageRoutes().forEach { pageRoute ->
-            Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
-        }
+        PageHandler.getAllPageRoutes().forEach { pageRoute -> mapPageRouteToDBPage(pageRoute) }
+    }
+
+    fun mapPageRouteToDBPage(pageRoute: String) {
+        Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
+    }
+
+    fun mapPageRouteTo404Page(pageRoute: String) {
+        //this is applying, but not actually working, BUG?
+        Spark.get(pageRoute, { request: Request, response: Response -> Web.get404Page(request, response) })
     }
 
     private fun getPageByRoute(pageRoute: String): Page {
@@ -68,13 +75,18 @@ object PageController {
     }
 
     private fun renderPage(page: Page, request: Request, response: Response): String {
-        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
-        velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
-        velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavBar(request, hashMapOf()))
-        velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.insertPageTitle(request, hashMapOf(), page.title))
-        TacusciAPI.injectAPIInstances(request, response, page.pageRoute, velocityIMTemplateEngine)
-        val result = velocityIMTemplateEngine.render(page.pageRoute)
-        velocityIMTemplateEngine.flush(page.pageRoute)
-        return result
+        //very hacky fix for routes that have been 'removed' :<
+        if (page.pageRoute.isNotEmpty()) {
+            val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+            velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
+            velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavBar(request, hashMapOf()))
+            velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.insertPageTitle(request, hashMapOf(), page.title))
+            TacusciAPI.injectAPIInstances(request, response, page.pageRoute, velocityIMTemplateEngine)
+            val result = velocityIMTemplateEngine.render(page.pageRoute)
+            velocityIMTemplateEngine.flush(page.pageRoute)
+            return result
+        } else {
+            return Web.get404Page(request, response)
+        }
     }
 }

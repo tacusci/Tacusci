@@ -29,6 +29,7 @@
 
 package app.handlers
 
+import app.pages.pagecontrollers.PageController
 import database.daos.DAOManager
 import database.daos.PagesDAO
 import database.models.Page
@@ -43,7 +44,10 @@ object PageHandler : KLogging() {
     val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PagesDAO
 
     fun createPage(page: Page): Boolean {
-        return pageDAO.insertPage(page)
+        val createdSuccessfully = pageDAO.insertPage(page)
+        if (createdSuccessfully)
+            PageController.mapPageRouteToDBPage(page.pageRoute)
+        return createdSuccessfully
     }
 
     fun getAllPageRoutes(): MutableList<String> {
@@ -55,7 +59,12 @@ object PageHandler : KLogging() {
     }
 
     fun updatePage(page: Page): Boolean {
-        return pageDAO.updatePage(page)
+        val existingRoute = pageDAO.getPageById(page.id).pageRoute
+        PageController.mapPageRouteTo404Page(existingRoute)
+        val updatedSuccessfully = pageDAO.updatePage(page)
+        if (updatedSuccessfully)
+            PageController.mapPageRouteToDBPage(page.pageRoute)
+        return updatedSuccessfully
     }
 
     fun getPageById(id: Int): Page {

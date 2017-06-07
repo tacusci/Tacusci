@@ -71,7 +71,9 @@
 
 <h2 class="page-title-header">Edit - $pageToEdit.getTitle()</h2>
 
-<input id="page_title" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
+<input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
+<input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getPageRoute()">
+
 <pre id="editor">
     $THTMLUtils.formatForEditing($pageToEdit.getContent())
 </pre>
@@ -80,7 +82,6 @@
     <input class="pure-button" type="button" value="Save" onclick="save()">
 </div>
 
-<div id="save_page_div" hidden></div>
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
     #include("/public/js/pageeditor.js")
@@ -103,17 +104,17 @@
         pageIdInput.type = "text";
         pageIdInput.value = $pageToEdit.getId();
 
-        var pageRouteInput = document.createElement("input");
-        pageRouteInput.id = "page_route";
-        pageRouteInput.name = "page_route";
-        pageRouteInput.type = "text";
-        pageRouteInput.value = "$pageToEdit.getPageRoute()";
-
         var pageTitleInput = document.createElement("input");
         pageTitleInput.id = "page_title";
         pageTitleInput.name = "page_title";
         pageTitleInput.type = "text";
-        pageTitleInput.value = "$pageToEdit.getTitle()";
+        pageTitleInput.value = document.getElementById("page_title_editable").value;
+
+        var pageRouteInput = document.createElement("input");
+        pageRouteInput.id = "page_route";
+        pageRouteInput.name = "page_route";
+        pageRouteInput.type = "text";
+        pageRouteInput.value = document.getElementById("page_route_editable").value;
 
         var pageContentInput = document.createElement("textarea");
         pageContentInput.id = "page_content";
@@ -131,3 +132,4 @@
         savePageForm.submit();
    }
 </script>
+<div id="save_page_div" hidden></div>

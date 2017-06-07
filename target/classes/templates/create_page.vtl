@@ -71,7 +71,8 @@
 
 <h2 class="page-title-header">Create page</h2>
 
-<input id="page_title" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
+<input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="">
+<input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="">
 <pre id="editor"></pre>
 
 <div class="pure-u-24-24 edit-button-bar">
@@ -87,7 +88,7 @@
         createPageForm.id = "create_page_form";
         createPageForm.name = "create_page_form";
         createPageForm.setAttribute('method', "post");
-        createPageForm.setAttribute('action', "/dashboard/page_management/edit/$pageToCreate.getId()");
+        createPageForm.setAttribute('action', "/dashboard/page_management/create");
 
         var pageHashInput = document.createElement("input");
         pageHashInput.id = "hashid";
@@ -101,17 +102,17 @@
         pageIdInput.type = "text";
         pageIdInput.value = $pageToCreate.getId();
 
-        var pageRouteInput = document.createElement("input");
-        pageRouteInput.id = "page_route";
-        pageRouteInput.name = "page_route";
-        pageRouteInput.type = "text";
-        pageRouteInput.value = "$pageToCreate.getPageRoute()";
-
         var pageTitleInput = document.createElement("input");
         pageTitleInput.id = "page_title";
         pageTitleInput.name = "page_title";
         pageTitleInput.type = "text";
-        pageTitleInput.value = "$pageToCreate.getTitle()";
+        pageTitleInput.value = document.getElementById("page_title_editable").value;
+
+        var pageRouteInput = document.createElement("input");
+        pageRouteInput.id = "page_route";
+        pageRouteInput.name = "page_route";
+        pageRouteInput.type = "text";
+        pageRouteInput.value = document.getElementById("page_route_editable").value;
 
         var pageContentInput = document.createElement("textarea");
         pageContentInput.id = "page_content";

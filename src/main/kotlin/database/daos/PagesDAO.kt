@@ -117,7 +117,7 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return pageId
     }
 
-    private fun getPageById(pageId: Int): Page {
+    public fun getPageById(pageId: Int): Page {
         val page = Page(-1, -1, -1, "", "", 0, "", -1)
         connect()
         try {
