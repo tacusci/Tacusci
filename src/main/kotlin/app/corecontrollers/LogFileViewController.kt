@@ -32,7 +32,6 @@ package app.corecontrollers
 import api.core.TacusciAPI
 import app.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
-import extensions.isBlankOrEmpty
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import j2html.TagCreator.*
