@@ -1,4 +1,4 @@
-CREATE schema IF NOT EXISTS $schema_name;
+CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`users` (
   `id_users` INT NOT NULL AUTO_INCREMENT,
@@ -32,15 +32,6 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`user2group` (
   `last_updated_date_time` LONG NOT NULL,
   `id_groups` INT NOT NULL);
 
-CREATE TABLE IF NOT EXISTS `$schema_name`.`routeentities` (
-  `id_route_entities` INT NOT NULL,
-  `parent_id` INT,
-  `name` VARCHAR(45) NOT NULL,
-  `type` INT NOT NULL,
-  `id_page` INT,
-  PRIMARY KEY (`id_route_entities`),
-  UNIQUE INDEX `id_route_entities_UNIQUE` (`id_route_entities` ASC));
-
 CREATE TABLE IF NOT EXISTS `$schema_name`.`reset_password` (
   `id_reset_passwords` INT NOT NULL AUTO_INCREMENT,
   `created_date_time` LONG NOT NULL,
@@ -59,13 +50,13 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   `last_updated_date_time` LONG NOT NULL,
   `page_title` VARCHAR(100) NOT NULL,
   `page_route` VARCHAR(200) NOT NULL,
-  `page_content` MEDIUMTEXT NOT NULL,
+  `page_content` LONGTEXT NOT NULL,
   `maintenance_mode` BIT(1) NOT NULL,
   `author_user_id` INT NOT NULL,
+  `page_type` INT NOT NULL,
   PRIMARY KEY (`id_page`),
   UNIQUE INDEX `id_page_UNIQUE` (`id_page` ASC),
-  UNIQUE INDEX `page_route` (`page_route` ASC),
-  UNIQUE INDEX `author_user` (`author_user_id` ASC));
+  UNIQUE INDEX `page_route` (`page_route` ASC));
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`page_footer` (
   `id_page_footer` INT NOT NULL AUTO_INCREMENT,
