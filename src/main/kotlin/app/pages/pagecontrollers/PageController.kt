@@ -35,6 +35,7 @@ import app.handlers.PageHandler
 import app.handlers.UserHandler
 import database.models.Page
 import extensions.readTextAndClose
+import mu.KLogging
 import spark.Request
 import spark.Response
 import spark.Spark
@@ -43,7 +44,7 @@ import spark.template.velocity.VelocityIMTemplateEngine
 /**
  * Created by tauraamui on 14/05/2017.
  */
-object PageController {
+object PageController : KLogging() {
 
     val pages = mutableListOf<Page>()
 
@@ -62,7 +63,10 @@ object PageController {
     }
 
     fun mapPageRouteToDBPage(pageRoute: String) {
-        Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
+        Spark.get(pageRoute, { request: Request, response: Response -> {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for $pageRoute")
+            renderPage(getPageByRoute(pageRoute), request, response)
+        } })
     }
 
     fun mapPageRouteTo404Page(pageRoute: String) {
