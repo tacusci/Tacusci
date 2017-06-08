@@ -58,7 +58,7 @@ class PageManagementController : Controller {
     override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        DashboardController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PAGE_MANAGEMENT page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for PAGE_MANAGEMENT page")
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
