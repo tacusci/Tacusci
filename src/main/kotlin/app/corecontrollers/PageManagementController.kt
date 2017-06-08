@@ -79,7 +79,6 @@ class PageManagementController : Controller {
         Web.loadNavBar(request, model)
         when (request.params(":command")) {
             "create" -> {
-                val page = Page()
                 model.put("template", "/templates/create_page.vtl")
                 model.put("pageToCreate", Page())
             } "edit" -> {
