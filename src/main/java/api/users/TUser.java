@@ -20,6 +20,8 @@ public class TUser {
 
     public boolean isLoggedIn() { return UserHandler.INSTANCE.isLoggedIn(request); }
 
+    public User getUserByName(String username) { return UserHandler.INSTANCE.getUserDAO().getUser(username); }
+
     public User getLoggedInUser() { return UserHandler.INSTANCE.getUserDAO().getUser(UserHandler.INSTANCE.loggedInUsername(request)); }
 
     public String getLoggedInUsername() { return UserHandler.INSTANCE.loggedInUsername(request); }
