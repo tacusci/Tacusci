@@ -63,27 +63,31 @@
             $!login_or_profile_link
             $!sign_up_menu_link
             #if ($TUser.isLoggedIn())
-                $TForms.getSignOutForm()
+            $TForms.getSignOutForm()
             #end
         </ul>
     </div>
 </div>
 
-<h2 class="page-title-header">Create page</h2>
+<h2 class="page-title-header">Edit - $pageToCreate.getTitle()</h2>
 
-<input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="">
-<input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="">
-<pre id="editor"></pre>
+<input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
+<input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getPageRoute()">
+
+<pre id="editor">
+    $THTMLUtils.formatForEditing($pageToCreate.getContent())
+</pre>
 
 <div class="pure-u-24-24 edit-button-bar">
-    <input class="pure-button" type="button" value="Create" onclick="save()">
+    <input class="pure-button" type="button" value="Create" onclick="create()">
 </div>
 
-<div id="save_page_div" hidden></div>
+<div id="create_page_div" hidden></div>
+
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
     #include("/public/js/pageeditor.js")
-    function save() {
+    function create() {
         var createPageForm = document.createElement("form");
         createPageForm.id = "create_page_form";
         createPageForm.name = "create_page_form";
@@ -125,7 +129,7 @@
         createPageForm.appendChild(pageTitleInput);
         createPageForm.appendChild(pageContentInput);
 
-        document.getElementById("save_page_div").appendChild(createPageForm);
+        document.getElementById("create_page_div").appendChild(createPageForm);
 
         createPageForm.submit();
    }

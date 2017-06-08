@@ -152,7 +152,7 @@ object Web : KLogging() {
 
     fun getFormHash(request: Request, formTitle: String): String {
         if (request.raw().isRequestedSessionIdValid) {
-            return request.session().attribute(formTitle)
+            return request.session().attribute<String>(formTitle)
         }
         return "invalidhash"
     }
