@@ -63,10 +63,7 @@ object PageController : KLogging() {
     }
 
     fun mapPageRouteToDBPage(pageRoute: String) {
-        Spark.get(pageRoute, { request: Request, response: Response -> {
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for $pageRoute")
-            renderPage(getPageByRoute(pageRoute), request, response)
-        } })
+        Spark.get(pageRoute, { request: Request, response: Response -> renderPage(getPageByRoute(pageRoute), request, response) })
     }
 
     fun mapPageRouteTo404Page(pageRoute: String) {
@@ -79,6 +76,9 @@ object PageController : KLogging() {
     }
 
     private fun renderPage(page: Page, request: Request, response: Response): String {
+
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ${page.pageRoute}")
+
         //very hacky fix for routes that have been 'removed' :<
         if (page.pageRoute.isNotEmpty()) {
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
