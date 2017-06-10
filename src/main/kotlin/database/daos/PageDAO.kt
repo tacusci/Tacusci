@@ -39,7 +39,7 @@ import java.util.*
  * Created by alewis on 04/05/2017.
  */
 
-class PagesDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class PageDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
 
     companion object : KLogging()
 
@@ -77,6 +77,20 @@ class PagesDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             preparedStatement?.setInt(6, page.authorUserId)
             preparedStatement?.setInt(7, page.type.ordinal)
             preparedStatement?.setInt(8, page.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
+    fun deletePage(page: Page): Boolean {
+        connect()
+        try {
+            val deleteStatement = "DELETE FROM $$tableName WHERE ID_PAGE=?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, page.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

@@ -31,7 +31,7 @@ package app.handlers
 
 import app.pages.pagecontrollers.PageController
 import database.daos.DAOManager
-import database.daos.PagesDAO
+import database.daos.PageDAO
 import database.models.Page
 import database.models.User
 import mu.KLogging
@@ -41,7 +41,7 @@ import mu.KLogging
  */
 object PageHandler : KLogging() {
 
-    val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PagesDAO
+    val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PageDAO
 
     fun createPage(page: Page): Boolean {
         val createdSuccessfully = pageDAO.insertPage(page)
@@ -50,21 +50,31 @@ object PageHandler : KLogging() {
         return createdSuccessfully
     }
 
+    fun updatePage(page: Page): Boolean {
+        val existingRoute = pageDAO.getPageById(page.id).pageRoute
+        val updatedSuccessfully = pageDAO.updatePage(page)
+        if (updatedSuccessfully) {
+            PageController.mapPageRouteTo404Page(existingRoute)
+            PageController.mapPageRouteToDBPage(page.pageRoute)
+        }
+        return updatedSuccessfully
+    }
+
+    fun deletePage(page: Page): Boolean {
+        val existingRoute = pageDAO.getPageById(page.id).pageRoute
+        val deletedSuccessfully = pageDAO.deletePage(page)
+        if (deletedSuccessfully) {
+            PageController.mapPageRouteTo404Page(existingRoute)
+        }
+        return deletedSuccessfully
+    }
+
     fun getAllPageRoutes(): MutableList<String> {
         return pageDAO.getAllPageRoutes()
     }
 
     fun getAllPages(): MutableList<Page> {
         return pageDAO.getAllPages()
-    }
-
-    fun updatePage(page: Page): Boolean {
-        val existingRoute = pageDAO.getPageById(page.id).pageRoute
-        PageController.mapPageRouteTo404Page(existingRoute)
-        val updatedSuccessfully = pageDAO.updatePage(page)
-        if (updatedSuccessfully)
-            PageController.mapPageRouteToDBPage(page.pageRoute)
-        return updatedSuccessfully
     }
 
     fun getPageById(id: Int): Page {

@@ -141,7 +141,7 @@ object DAOManager : KLogging() {
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
             TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "reset_password")
-            TABLE.PAGES -> return PagesDAO(url, dbProperties, "pages")
+            TABLE.PAGES -> return PageDAO(url, dbProperties, "pages")
             else -> {
                 return GenericDAO(url, dbProperties, "")
             }

@@ -120,11 +120,21 @@ class PageManagementController : Controller {
         return response
     }
 
+    private fun post_DeletePageForm(request: Request, response: Response): Response {
+        val pageToDelete = Page()
+        pageToDelete.id = request.queryParams("page_id").toIntSafe()
+        PageHandler.deletePage(pageToDelete)
+        response.redirect(rootUri)
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (Web.getFormHash(request, "save_page_form") == request.queryParams("hashid")) {
             return post_SavePageForm(request, response)
         } else if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
             return post_CreatePageForm(request, response)
+        } else if (Web.getFormHash(request, "delete_page_form") == request.queryParams("hashid")) {
+            return post_DeletePageForm(request, response)
         }
         return response
     }

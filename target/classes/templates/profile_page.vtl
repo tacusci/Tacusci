@@ -34,7 +34,9 @@
             $!dashboard_link
             $!login_or_profile_link
             $!sign_up_menu_link
-            $TForms.getSignOutForm()
+            #if ($TUser.isLoggedIn())
+                $TForms.getSignOutForm()
+            #end
         </ul>
     </div>
 </div>
@@ -42,6 +44,10 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         <h1>$User.getUsername()</h1>
-        $!reset_password_link
+        #if ($TUser.isLoggedIn())
+            #if ($TUser.getUsername() == $profile_page_user.getUsername())
+                $!reset_password_link
+            #end
+        #end
     </div>
 </div>
