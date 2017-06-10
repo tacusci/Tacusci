@@ -1,4 +1,9 @@
 
+html {
+    background-color: rgba(75, 77, 82, 1) !important;
+    color: rgba(235, 235, 235, 1) !important;
+}
+
 div.centered {
     margin-left: auto;
     margin-right: auto;
@@ -46,8 +51,10 @@ div.page-info {
   margin-left: 1em;
   margin-right: 1em;
   margin-bottom: 0.5em;
+  padding-left: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: #000000;
   border: 1px solid #ddd;
-  border-radius: 3px;
   display:inline;
 }
 
@@ -104,6 +111,11 @@ submit-link:focus {
 
         .button-secondary {
             background: rgb(66, 184, 221); /* this is a light blue */
+        }
+
+        .button-darker {
+            color: rgb(200, 200, 200);
+            background: rgb(95, 97, 102);
         }
 
 .log-view-pane { resize:vertical; max-height:800px; min-height:600px; }

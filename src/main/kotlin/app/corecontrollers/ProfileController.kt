@@ -59,13 +59,14 @@ class ProfileController : Controller {
     override fun initSessionBoolAttributes(session: Session) {}
 
     private fun setupAuthorisedElements(model: HashMap<String, Any>, username: String) {
-        model.put("reset_password_link", j2htmlPartials.link("pure-button", "/reset_password/$username", "Reset Password"))
+        model.put("reset_password_link", j2htmlPartials.link("pure-button button-darker", "/reset_password/$username", "Reset Password"))
     }
 
     private fun genUserProfilePage(request: Request, response: Response, username: String): HashMap<String, Any> {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
+        model.put("profile_page_user", UserHandler.userDAO.getUser(username))
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavBar(request, model)
         val user = UserHandler.userDAO.getUser(username)
