@@ -62,7 +62,7 @@ submit-link:focus {
   outline: none;
 }
 
-.boxsizingBorder {
+.boxsizingBorder {ª
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -118,7 +118,7 @@ submit-link:focus {
             background: rgb(95, 97, 102);
         }
 
-.log-view-pane { resize:vertical; max-height:800px; min-height:600px; }
+.log-view-pane { resize:vertical; max-height:800px; min-height:600px; width: 85%; }
 log-view-pane.horiz { resize:horizontal; min-width:300px; }
 
 textarea.styled-text-area {
