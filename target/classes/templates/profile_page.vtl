@@ -45,6 +45,7 @@
     <div class="pure-u-24-24 centered">
         <h1>$User.getUsername()</h1>
         #if ($TUser.isLoggedIn())
+            #throw error comparison is not working
             #if ($TUser.getUsername() == $profile_page_user.getUsername())
                 $!reset_password_link
             #end

@@ -96,6 +96,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_SavePageForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for SAVE_PAGE_FORM page")
         val pageToSave = Page()
         pageToSave.id = request.queryParams("page_id").toIntSafe()
         pageToSave.title = request.queryParams("page_title")
@@ -109,6 +110,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_CreatePageForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_PAGE_FORM page")
         val pageToCreate = Page()
         pageToCreate.title = request.queryParams("page_title")
         pageToCreate.pageRoute = request.queryParams("page_route")
@@ -121,6 +123,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_DeletePageForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_PAGE_FORM page")
         val pageToDelete = Page()
         pageToDelete.id = request.queryParams("page_id").toIntSafe()
         PageHandler.deletePage(pageToDelete)
