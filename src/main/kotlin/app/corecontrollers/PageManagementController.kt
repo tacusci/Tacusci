@@ -129,12 +129,13 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        if (Web.getFormHash(request, "save_page_form") == request.queryParams("hashid")) {
-            return post_SavePageForm(request, response)
-        } else if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
-            return post_CreatePageForm(request, response)
-        } else if (Web.getFormHash(request, "delete_page_form") == request.queryParams("hashid")) {
-            return post_DeletePageForm(request, response)
+        val formNames = listOf("save_page_form", "create_page_form", "delete_page_form")
+        formNames.forEach {
+            when (Web.getFormHash(request, it) == request.queryParams("hashid")) {
+                it == "save_page_form" -> return post_SavePageForm(request, response)
+                it == "create_page_form" -> return post_CreatePageForm(request, response)
+                it == "delete_page_form" -> return post_DeletePageForm(request, response)
+            }
         }
         return response
     }
