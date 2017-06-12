@@ -41,7 +41,7 @@ class UserHandlerTest {
     @Test
     fun login() {
         TestingCore.setupSetEnv()
-        val loginSuccessful = UserHandler.login(mockRequest(), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"))
+        val loginSuccessful = UserHandler.login(mockRequest(), Config.getProperty("root-username"), Config.getProperty("root-password"))
         assertTrue(loginSuccessful)
     }
 

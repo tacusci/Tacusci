@@ -46,23 +46,41 @@ import java.util.*
 object TestingCore {
 
     fun setupConfig() {
-        Config.setProperty("default_admin_user", "tacusci_admin")
-        Config.setProperty("default_admin_password", "Password1234!")
-        Config.setProperty("server_address", "localhost")
-        Config.setProperty("schema_name", "tacusci_testing")
-        Config.setProperty("port", "80")
-        Config.setProperty("log_file", "tacusci.log")
-        Config.setProperty("default_admin_email", "admin_tvf@tvf.net")
-        Config.setProperty("properties_file", "tvf_testing.properties")
-        Config.setProperty("db_url", "jdbc:mysql://localhost")
-
+        Config.setProperty("server-address", "localhost")
+        Config.setProperty("port", "1025")
+        Config.setProperty("using-ssl-on-proxy", "false")
+        Config.setProperty("schema-name", "tacusci")
+        Config.setProperty("db-url", "jdbc:mysql://localhost")
+        Config.setProperty("root-username", "admin_tacusci")
+        Config.setProperty("root-password", "Password1234!")
+        Config.setProperty("root-email", "")
+        Config.setProperty("color-theme", "dark")
+        Config.setProperty("max-threads", "")
+        Config.setProperty("min-threads", "")
+        Config.setProperty("thread-idle-timeout", "")
+        Config.setProperty("session-idle-timeout", "")
+        Config.setProperty("log-file", "tacusci.log")
+        Config.setProperty("smtp-server-host", "")
+        Config.setProperty("smtp-server-port", "")
+        Config.setProperty("smtp-account-username", "")
+        Config.setProperty("smtp-account-password", "")
+        Config.setProperty("smtp-use-ttls", "false")
+        Config.setProperty("page-title", "Tacusci Website")
+        Config.setProperty("static-asset-folder", "")
+        Config.setProperty("response-pages-folder", "")
+        Config.setProperty("page-title-divider", "|")
+        Config.setProperty("robots-file", "")
+        Config.setProperty("reset-password-authhash-timeout-seconds", "")
+        Config.setProperty("reset-password-from-address", "")
+        Config.setProperty("reset-password-email-subject", "")
+        Config.setProperty("reset-password-email-content-file", "")
     }
 
     fun setupSetEnv() {
 
         setupConfig()
         val dbProperties = Properties()
-        val dbURL = Config.getProperty("db_url")
+        val dbURL = Config.getProperty("db-url")
         dbProperties.setProperty("user", "root")
         dbProperties.setProperty("password", "")
         dbProperties.setProperty("useSSL", "false")
@@ -74,7 +92,7 @@ object TestingCore {
         DAOManager.disconnect()
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
-        DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbProperties)
+        DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
 
         GroupHandler.createGroup(Group("admins"))
         GroupHandler.createGroup(Group("members"))

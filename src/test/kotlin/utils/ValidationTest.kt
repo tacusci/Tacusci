@@ -40,7 +40,7 @@ import org.junit.Test
  */
 class ValidationTest {
 
-    val configRootAdmin = User(-1, -1, -1, "Root Admin", Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+    val configRootAdmin = User(-1, -1, -1, "Root Admin", Config.getProperty("root-user"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
 
     @Test
     fun matchPasswordPattern() {
