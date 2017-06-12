@@ -81,7 +81,6 @@ class LoginController : Controller {
 
         model.put("template", templatePath)
 
-
         val loginForm = j2htmlPartials.pureFormAligned_Login(request.session(), "login_form", rootUri, "post")
 
         if (request.session().attribute("login_incorrect_creds")) {
