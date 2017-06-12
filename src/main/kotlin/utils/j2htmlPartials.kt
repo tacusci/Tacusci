@@ -278,6 +278,10 @@ object j2htmlPartials {
         return a().withHref(href).withClass(lookAndFeelClass).withText(text)
     }
 
+    fun linkWithTarget(lookAndFeelClass: String, href: String, target: String, text: String): Tag {
+        return a().withHref(href).withTarget(target).withClass(lookAndFeelClass).withText(text)
+    }
+
     fun submitLink(text: String, classString: String): Tag {
         return input().withType("submit").withClass(classString).withValue(text)
     }

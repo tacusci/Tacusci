@@ -45,7 +45,7 @@
 <div class="pure-g">
     <a href="/dashboard/page_management/create_page">
         <div class="pure-u-24-24" style="margin-left: 1em; padding-bottom: 1em;">
-            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/create", "CREATE PAGE")
+            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/create", "CREATE PAGE", "button-darker")
         </div>
     </a>
     #foreach ($page in $TPages.getAllPages())
@@ -53,7 +53,10 @@
         <div id=$divId class="pure-u-24-24 page-info">
             <h4>Title: $page.getTitle()</h4>
             <h4>Route: $page.getPageRoute()</h4>
-            $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT")
+            <div class="display: inline-block">
+                $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT", "button-darker")
+                $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-darker")
+            </div>
         </div>
     #end
 </div>

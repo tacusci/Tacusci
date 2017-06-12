@@ -50,33 +50,34 @@ open class Config {
         var propertiesFile = File("tacusci.properties")
 
         private fun getDefaultPropertiesList(): List<Pair<String, String>> {
-            return listOf(Pair("server_address", "localhost"),
+            return listOf(Pair("server-address", "localhost"),
                     Pair("port", "1025"),
-                    Pair("using_ssl_on_proxy", "false"),
-                    Pair("schema_name", "tacusci"),
-                    Pair("db_url", "jdbc:mysql://localhost"),
-                    Pair("default_admin_user", "tacusci_admin"),
-                    Pair("default_admin_password", "Password1234!"),
-                    Pair("default_admin_email", ""),
-                    Pair("max_threads", ""),
-                    Pair("min_threads", ""),
-                    Pair("thread_idle_timeout", ""),
-                    Pair("session_idle_timeout", ""),
-                    Pair("log_file", "tacusci.log"),
-                    Pair("smtp_server_host", ""),
-                    Pair("smtp_server_port", ""),
-                    Pair("smtp_account_username", ""),
-                    Pair("smtp_account_password", ""),
-                    Pair("smtp_use_ttls", "false"),
-                    Pair("page_title", "Tacusci Website"),
-                    Pair("static_asset_folder", ""),
-                    Pair("response_pages_folder", ""),
-                    Pair("page_title_divider", "|"),
-                    Pair("robots_file", ""),
-                    Pair("reset_password_authhash_timeout_seconds", ""),
-                    Pair("reset_password_from_address", ""),
-                    Pair("reset_password_email_subject", ""),
-                    Pair("reset_password_email_content_file", ""))
+                    Pair("using-ssl-on-proxy", "false"),
+                    Pair("schema-name", "tacusci"),
+                    Pair("db-url", "jdbc:mysql://localhost"),
+                    Pair("default-admin-user", "tacusci-admin"),
+                    Pair("default-admin-password", "Password1234!"),
+                    Pair("default-admin-email", ""),
+                    Pair("color-theme", "dark"),
+                    Pair("max-threads", ""),
+                    Pair("min-threads", ""),
+                    Pair("thread-idle-timeout", ""),
+                    Pair("session-idle-timeout", ""),
+                    Pair("log-file", "tacusci.log"),
+                    Pair("smtp-server-host", ""),
+                    Pair("smtp-server-port", ""),
+                    Pair("smtp-account-username", ""),
+                    Pair("smtp-account-password", ""),
+                    Pair("smtp-use-ttls", "false"),
+                    Pair("page-title", "Tacusci Website"),
+                    Pair("static-asset-folder", ""),
+                    Pair("response-pages-folder", ""),
+                    Pair("page-title-divider", "|"),
+                    Pair("robots-file", ""),
+                    Pair("reset-password-authhash-timeout-seconds", ""),
+                    Pair("reset-password-from-address", ""),
+                    Pair("reset-password-email-subject", ""),
+                    Pair("reset-password-email-content-file", ""))
         }
 
         fun load() {
@@ -172,7 +173,7 @@ open class Config {
 
             val pattern = "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
             //get explicitly set debug log level
-            val threshold = if (CliOptions.getFlag("debug") && !CliOptions.getFlag("disable_debug_output")) Level.DEBUG else Level.INFO
+            val threshold = if (CliOptions.getFlag("debug") && !CliOptions.getFlag("disable-debug-output")) Level.DEBUG else Level.INFO
 
             val consoleAppender = ConsoleAppender()
             consoleAppender.name = "ConsoleAppender"

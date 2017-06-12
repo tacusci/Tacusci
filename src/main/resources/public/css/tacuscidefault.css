@@ -53,8 +53,9 @@ div.page-info {
   margin-bottom: 0.5em;
   padding-left: 0.5em;
   padding-bottom: 0.5em;
-  background-color: #000000;
-  border: 1px solid #ddd;
+  color: #cec8c8;
+  background-color: #282727;
+  border: 1px solid #302e2e;
   display:inline;
 }
 
