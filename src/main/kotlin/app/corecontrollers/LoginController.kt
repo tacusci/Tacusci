@@ -85,7 +85,8 @@ class LoginController : Controller {
 
         if (request.session().attribute("login_incorrect_creds")) {
             request.session().attribute("login_incorrect_creds", false)
-            model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
+            //model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
+            model.put("usernameOrPasswordIncorrect", true)
         }
 
         model.put("login_form", h1("Login").render() + loginForm.render())
