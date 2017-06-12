@@ -76,7 +76,7 @@ class LoginController : Controller {
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
-            response.managedRedirect(request, "/")
+            response.managedRedirect(request, "/dashboard")
         }
 
         model.put("template", templatePath)
