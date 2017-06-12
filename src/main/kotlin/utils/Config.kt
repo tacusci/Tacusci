@@ -55,9 +55,9 @@ open class Config {
                     Pair("using-ssl-on-proxy", "false"),
                     Pair("schema-name", "tacusci"),
                     Pair("db-url", "jdbc:mysql://localhost"),
-                    Pair("default-admin-user", "tacusci-admin"),
-                    Pair("default-admin-password", "Password1234!"),
-                    Pair("default-admin-email", ""),
+                    Pair("root-username", "admin_tacusci"),
+                    Pair("root-password", "Password1234!"),
+                    Pair("root-email", ""),
                     Pair("color-theme", "dark"),
                     Pair("max-threads", ""),
                     Pair("min-threads", ""),
@@ -100,7 +100,7 @@ open class Config {
                 }
             }
             propertiesFile.inputStream().close()
-            setupLoggers(Config.getProperty("log_file"))
+            setupLoggers(Config.getProperty("log-file"))
         }
 
         override fun getProperty(key: String): String {
@@ -132,7 +132,7 @@ open class Config {
 
         fun loadFromPropertiesFile(propertiesFile: File) {
             val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
-            File(this.getProperty("properties_file"))
+            File(this.getProperty("properties-file"))
             if (propertiesFile.doesNotExist()) {
                 defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
                 this.store(propertiesFile.outputStream(), "")
@@ -153,7 +153,7 @@ open class Config {
         }
 
         fun monitorPropertiesFile(application: Application) {
-            fileWatcher = FileWatcher(File(this.getProperty("properties_file")))
+            fileWatcher = FileWatcher(File(this.getProperty("properties-file")))
             fileWatcher.action = {propertiesFileUpdate(application)}
             fileWatcher.start()
         }
@@ -163,8 +163,8 @@ open class Config {
         }
 
         fun propertiesFileUpdate(application: Application) {
-            if (File(this.getProperty("properties_file")).exists()) {
-                this.load(File(this.getProperty("properties_file")).inputStream())
+            if (File(this.getProperty("properties-file")).exists()) {
+                this.load(File(this.getProperty("properties-file")).inputStream())
                 application.restartServer()
             }
         }

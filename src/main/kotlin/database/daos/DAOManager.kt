@@ -88,7 +88,7 @@ object DAOManager : KLogging() {
 
     fun setup(sqlScript: SQLScript) {
         sqlScript.parse()
-        sqlScript.replace("\$schema_name", Config.getProperty("schema_name"))
+        sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
         sqlScript.executeStatements(connection!!)
     }
 

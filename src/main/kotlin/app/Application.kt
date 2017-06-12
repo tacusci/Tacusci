@@ -60,7 +60,7 @@ class Application {
     companion object : KLogging()
 
     fun setupDatabase() {
-        val dbURL = Config.getProperty("db_url")
+        val dbURL = Config.getProperty("db-url")
         //connect to root SQL server instance
         DAOManager.init(dbURL, dbProperties)
         DAOManager.connect()
@@ -69,7 +69,8 @@ class Application {
         DAOManager.disconnect()
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
-        DAOManager.init(dbURL + "/${Config.getProperty("schema_name")}", dbProperties)
+        DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
+        DAOManager.connect()
     }
 
     fun setupDefaultGroups() {
@@ -93,9 +94,9 @@ class Application {
         port(portNum)
 
         //these config values will basically be -1 if they're not set
-        val maxThreads = Config.getProperty("max_threads").toIntSafe()
-        val minThreads = Config.getProperty("min_threads").toIntSafe()
-        val threadIdleTimeout = Config.getProperty("thread_idle_timeout").toIntSafe()
+        val maxThreads = Config.getProperty("max-threads").toIntSafe()
+        val minThreads = Config.getProperty("min-threads").toIntSafe()
+        val threadIdleTimeout = Config.getProperty("thread-idle-timeout").toIntSafe()
 
         if (maxThreads > 0) threadPool(maxThreads)
         if (maxThreads > 0 && minThreads > 0 && threadIdleTimeout > 0) threadPool(maxThreads, minThreads, threadIdleTimeout)

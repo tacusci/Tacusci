@@ -120,7 +120,7 @@ object  UserHandler : KLogging() {
     }
 
     fun createRootAdmin(): Boolean {
-        val configRootAdmin = User(-1, -1, -1, "Root admin", Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+        val configRootAdmin = User(-1, -1, -1, "Root admin", Config.getProperty("root-username"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
         if (!configRootAdmin.isValid()) return false
         //once inserted, this won't be auto updated...
         if (userDAO.insertUser(configRootAdmin)) logger.info("Created root admin successfully") else logger.info("Unable to create root admin account...")
@@ -131,7 +131,7 @@ object  UserHandler : KLogging() {
     }
 
     fun updateRootAdmin(): Boolean {
-        val newRootAdminUsername = Config.getProperty("default_admin_user")
+        val newRootAdminUsername = Config.getProperty("root-username")
 
         //if properties file values have changed for root admin
         if (userDAO.getRootAdmin().username != newRootAdminUsername) {
@@ -140,18 +140,18 @@ object  UserHandler : KLogging() {
             if (userDAO.getUsernames().contains(newRootAdminUsername)) {
                 //if username is already being used then change root admin username back to default
                 logger.error("New root admin username is already in use, setting back to default...")
-                Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                Config.setProperty("root-username", Config.getDefaultProperty("root-username"))
                 Config.storeAll()
             } else {
                 if (!Validation.matchUsernamePattern(newRootAdminUsername)) {
                     logger.error("New root admin username does not meet validation standards, setting back to default...")
-                    Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                    Config.setProperty("root-username", Config.getDefaultProperty("root-username"))
                     Config.storeAll()
                 }
             }
         }
 
-        val configRootAdmin = User(-1, -1, -1, Config.getProperty("default_admin_user"), Config.getProperty("default_admin_user"), Config.getProperty("default_admin_password"), Config.getProperty("default_admin_email"), 0, 1)
+        val configRootAdmin = User(-1, -1, -1, Config.getProperty("root-username"), Config.getProperty("root-username"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
         return userDAO.updateRootAdmin(configRootAdmin)
     }
 
@@ -164,7 +164,7 @@ object  UserHandler : KLogging() {
                     logger.info("Root admin has been changed in properties file but update has failed...")
                 }
             } else {
-                Config.setProperty("default_admin_user", Config.getDefaultProperty("default_admin_user"))
+                Config.setProperty("root-username", Config.getDefaultProperty("root-username"))
                 Config.storeAll()
             }
         }
