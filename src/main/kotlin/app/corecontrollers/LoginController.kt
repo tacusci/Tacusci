@@ -85,11 +85,11 @@ class LoginController : Controller {
 
         if (request.session().attribute("login_incorrect_creds")) {
             request.session().attribute("login_incorrect_creds", false)
-            //model.put("username_or_password_incorrect", p("Username or password is incorrect...").withClass("error-text"))
             model.put("usernameOrPasswordIncorrect", true)
         }
 
-        model.put("login_form", h1("Login").render() + loginForm.render())
+        model.put("login_form", loginForm.render())
+        //model.put("login_form", h1("Login").render() + loginForm.render())
 
         if (request.session().attribute("is_banned")) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User ${request.session().attribute<String>("banned_username")} is banned")
