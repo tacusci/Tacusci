@@ -55,7 +55,7 @@
             <h4>Route: $page.getPageRoute()</h4>
             <div class="display: inline-block">
                 $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT", "button-darker")
-                $THTMLUtils.getButtonStyledLink("$page.getPageRoute()", "VIEW", "button-darker")
+                <a class="pure-button button-darker" href="$page.getPageRoute()" target="_blank">VIEW</a>
             </div>
         </div>
     #end
