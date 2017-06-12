@@ -37,7 +37,7 @@ import mu.KLogging
 
 data class CliOption(val title: String, val cliText: String,
                      val argumentExpected: Boolean = false, var isFlag: Boolean = false,
-                     var usageString: String = "-$cliText ${ if (argumentExpected) "<argument>" else "" }",
+                     var usageString: String = "--$cliText ${ if (argumentExpected) "<argument>" else "" }",
                      var value: String = "")
 
 object CliOptions : KLogging() {
@@ -47,10 +47,10 @@ object CliOptions : KLogging() {
     fun parseArgs(args: Array<String>) {
         args.forEachIndexed { index, arg ->
             cliOptions.forEach { cliOption ->
-                if (arg.startsWith("-")) {
-                    if (arg.replace("-", "").toLowerCase() == cliOption.cliText.toLowerCase()) {
+                if (arg.startsWith("--")) {
+                    if (arg.replace("--", "").toLowerCase() == cliOption.cliText.toLowerCase()) {
                         if (cliOption.argumentExpected) {
-                            if (index + 1 < args.size && !args[index + 1].startsWith("-")) {
+                            if (index + 1 < args.size && !args[index + 1].startsWith("--")) {
                                 cliOption.value = args[index + 1]
                             }
                         } else {
