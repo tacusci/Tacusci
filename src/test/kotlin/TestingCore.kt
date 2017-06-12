@@ -53,7 +53,7 @@ object TestingCore {
         Config.setProperty("db-url", "jdbc:mysql://localhost")
         Config.setProperty("root-username", "admin_tacusci")
         Config.setProperty("root-password", "Password1234!")
-        Config.setProperty("root-email", "")
+        Config.setProperty("root-email", "admin@testing.com")
         Config.setProperty("color-theme", "dark")
         Config.setProperty("max-threads", "")
         Config.setProperty("min-threads", "")
