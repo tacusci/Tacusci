@@ -53,9 +53,15 @@
         <div id=$divId class="pure-u-24-24 page-info">
             <h4>Title: $page.getTitle()</h4>
             <h4>Route: $page.getPageRoute()</h4>
-            <div class="display: inline-block">
+            <div style="display: inline-block">
                 $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT", "button-darker")
                 $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-darker")
+                <form id="delete_page_form" style="display: inline-block" name="delete_page_form" method="post" action="/dashboard/page_management/delete/$page.getId()">
+                    <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_page_form") hidden>
+                    <input id="formName", name="formName" type="text" value="delete_page_form" hidden>
+                    <input id="page_id" name="page_id" type="text" value="$page.getId()" hidden>
+                    <input type="submit" class="pure-button button-darker" value="DELETE">
+                </form>
             </div>
         </div>
     #end

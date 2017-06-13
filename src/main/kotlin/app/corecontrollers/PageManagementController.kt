@@ -96,7 +96,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_EditPageForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM")
         val pageToEdit = Page()
         pageToEdit.id = request.queryParams("page_id").toIntSafe()
         pageToEdit.title = request.queryParams("page_title")
@@ -110,7 +110,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_CreatePageForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_PAGE_FORM page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_PAGE_FORM")
         val pageToCreate = Page()
         pageToCreate.title = request.queryParams("page_title")
         pageToCreate.pageRoute = request.queryParams("page_route")
@@ -123,7 +123,7 @@ class PageManagementController : Controller {
     }
 
     private fun post_DeletePageForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_PAGE_FORM page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_PAGE_FORM")
         val pageToDelete = Page()
         pageToDelete.id = request.queryParams("page_id").toIntSafe()
         PageHandler.deletePage(pageToDelete)
@@ -132,8 +132,6 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        val formNames = listOf("edit_page_form", "create_page_form", "delete_page_form")
-
         if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
             return post_CreatePageForm(request, response)
         } else if (Web.getFormHash(request, "edit_page_form") == request.queryParams("hashid")) {
