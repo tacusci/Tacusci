@@ -70,7 +70,6 @@ class Application {
         //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
         //reconnect at the requested specific schema
         DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
-        DAOManager.connect()
     }
 
     fun setupDefaultGroups() {
