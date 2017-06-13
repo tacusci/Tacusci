@@ -120,6 +120,7 @@ class RegisterController : Controller {
                 val user = User(-1, -1, -1, fullName, username, password, email, 0, 0)
                 request.session().attribute("user_created_successfully", true)
                 UserHandler.createUser(user)
+                sendConfirmationEmail(user)
             }
         } else {
             Web.logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
@@ -127,4 +128,7 @@ class RegisterController : Controller {
         response.managedRedirect(request, rootUri)
         return response
     }
+
+    //TODO: Implement this
+    private fun sendConfirmationEmail(user: User) {}
 }
