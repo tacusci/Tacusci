@@ -1,4 +1,4 @@
-CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`users` (
   `id_users` INT NOT NULL AUTO_INCREMENT,
