@@ -95,16 +95,16 @@ class PageManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
-    private fun post_SavePageForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for SAVE_PAGE_FORM page")
-        val pageToSave = Page()
-        pageToSave.id = request.queryParams("page_id").toIntSafe()
-        pageToSave.title = request.queryParams("page_title")
-        pageToSave.pageRoute = request.queryParams("page_route")
-        pageToSave.content = request.queryParams("page_content")
-        pageToSave.lastUpdatedDateTime = System.currentTimeMillis()
-        pageToSave.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
-        PageHandler.updatePage(pageToSave)
+    private fun post_EditPageForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM page")
+        val pageToEdit = Page()
+        pageToEdit.id = request.queryParams("page_id").toIntSafe()
+        pageToEdit.title = request.queryParams("page_title")
+        pageToEdit.pageRoute = request.queryParams("page_route")
+        pageToEdit.content = request.queryParams("page_content")
+        pageToEdit.lastUpdatedDateTime = System.currentTimeMillis()
+        pageToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        PageHandler.updatePage(pageToEdit)
         response.redirect(request.uri())
         return response
     }
@@ -132,13 +132,14 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        val formNames = listOf("save_page_form", "create_page_form", "delete_page_form")
-        formNames.forEach {
-            when (Web.getFormHash(request, it) == request.queryParams("hashid")) {
-                it == "save_page_form" -> return post_SavePageForm(request, response)
-                it == "create_page_form" -> return post_CreatePageForm(request, response)
-                it == "delete_page_form" -> return post_DeletePageForm(request, response)
-            }
+        val formNames = listOf("edit_page_form", "create_page_form", "delete_page_form")
+
+        if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
+            return post_CreatePageForm(request, response)
+        } else if (Web.getFormHash(request, "edit_page_form") == request.queryParams("hashid")) {
+            return post_EditPageForm(request, response)
+        } else if (Web.getFormHash(request, "delete_page_form") == request.queryParams("hashid")) {
+            return post_DeletePageForm(request, response)
         }
         return response
     }

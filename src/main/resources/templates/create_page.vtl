@@ -94,11 +94,17 @@
         createPageForm.setAttribute('method', "post");
         createPageForm.setAttribute('action', "/dashboard/page_management/create");
 
-        var pageHashInput = document.createElement("input");
-        pageHashInput.id = "hashid";
-        pageHashInput.name = "hashid";
-        pageHashInput.type = "text";
-        pageHashInput.value = "$TForms.mapFormToHash("create_page_form")";
+        var formHashInput = document.createElement("input");
+        formHashInput.id = "hashid";
+        formHashInput.name = "hashid";
+        formHashInput.type = "text";
+        formHashInput.value = "$TForms.mapFormToHash("create_page_form")";
+        
+        var formNameInput = document.createElement("input");
+        formNameInput.id = "formName";
+        formNameInput.name = "formName";
+        formNameInput.type = "text";
+        formNameInput.value = "create_page_form";
 
         var pageIdInput = document.createElement("input");
         pageIdInput.id = "page_id";
@@ -123,7 +129,8 @@
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
 
-        createPageForm.appendChild(pageHashInput);
+        createPageForm.appendChild(formHashInput);
+        createPageForm.appendChild(formNameInput);
         createPageForm.appendChild(pageIdInput);
         createPageForm.appendChild(pageRouteInput);
         createPageForm.appendChild(pageTitleInput);

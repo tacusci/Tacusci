@@ -87,16 +87,22 @@
     #include("/public/js/pageeditor.js")
     function save() {
         var savePageForm = document.createElement("form");
-        savePageForm.id = "save_page_form";
-        savePageForm.name = "save_page_form";
+        savePageForm.id = "edit_page_form";
+        savePageForm.name = "edit_page_form";
         savePageForm.setAttribute('method', "post");
         savePageForm.setAttribute('action', "/dashboard/page_management/edit/$pageToEdit.getId()");
 
-        var pageHashInput = document.createElement("input");
-        pageHashInput.id = "hashid";
-        pageHashInput.name = "hashid";
-        pageHashInput.type = "text";
-        pageHashInput.value = "$TForms.mapFormToHash("save_page_form")";
+        var formHashInput = document.createElement("input");
+        formHashInput.id = "hashid";
+        formHashInput.name = "hashid";
+        formHashInput.type = "text";
+        formHashInput.value = "$TForms.mapFormToHash("edit_page_form")";
+
+        var formNameInput = document.createElement("input");
+        formNameInput.id = "formName";
+        formNameInput.name = "formName";
+        formNameInput.type = "text";
+        formNameInput.value = "edit_page_form";
 
         var pageIdInput = document.createElement("input");
         pageIdInput.id = "page_id";
@@ -121,7 +127,8 @@
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
 
-        savePageForm.appendChild(pageHashInput);
+        savePageForm.appendChild(formHashInput);
+        savePageForm.appendChild(formNameInput);
         savePageForm.appendChild(pageIdInput);
         savePageForm.appendChild(pageRouteInput);
         savePageForm.appendChild(pageTitleInput);
