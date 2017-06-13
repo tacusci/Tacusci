@@ -132,12 +132,18 @@ class PageManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
-            return post_CreatePageForm(request, response)
-        } else if (Web.getFormHash(request, "edit_page_form") == request.queryParams("hashid")) {
-            return post_EditPageForm(request, response)
-        } else if (Web.getFormHash(request, "delete_page_form") == request.queryParams("hashid")) {
-            return post_DeletePageForm(request, response)
+        if (request.uri().contains("/dashboard/page_management/create")) {
+            if (Web.getFormHash(request, "create_page_form") == request.queryParams("hashid")) {
+                return post_CreatePageForm(request, response)
+            }
+        } else if (request.uri().contains("/dashboard/page_management/edit")) {
+            if (Web.getFormHash(request, "edit_page_form") == request.queryParams("hashid")) {
+                return post_EditPageForm(request, response)
+            }
+        } else if (request.uri().contains("/dashboard/page_management/delete")) {
+            if (Web.getFormHash(request, "delete_page_form") == request.queryParams("hashid")) {
+                return post_DeletePageForm(request, response)
+            }
         }
         return response
     }

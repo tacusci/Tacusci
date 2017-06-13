@@ -88,7 +88,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun deletePage(page: Page): Boolean {
         connect()
         try {
-            val deleteStatement = "DELETE FROM $$tableName WHERE ID_PAGE=?"
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_PAGE=?"
             val preparedStatement = connection?.prepareStatement(deleteStatement)
             preparedStatement?.setInt(1, page.id)
             preparedStatement?.execute()
