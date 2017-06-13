@@ -72,7 +72,7 @@ public class VelocityIMTemplateEngine {
 
     public String render(String templateTitle) {
         StringWriter writer = new StringWriter();
-        Template template = velocityEngine.getTemplate(templateTitle);
+        Template template = velocityEngine.getTemplate(templateTitle, "UTF-8");
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         template.merge(velocityContext, writer);
         Compressor htmlCompressor = new HtmlCompressor();

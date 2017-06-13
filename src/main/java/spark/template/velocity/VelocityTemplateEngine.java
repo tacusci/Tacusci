@@ -54,6 +54,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
     public VelocityTemplateEngine() {
         Properties properties = new Properties();
         properties.setProperty("resource.loader", "class");
+        properties.setProperty("description", "Velocity TemplateFileResource loader");
         properties.setProperty(
                 "class.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
@@ -77,7 +78,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
      */
     @Override
     public String render(ModelAndView modelAndView) {
-        Template template = velocityEngine.getTemplate(modelAndView.getViewName());
+        Template template = velocityEngine.getTemplate(modelAndView.getViewName(), "UTF-8");
         Object model = modelAndView.getModel();
         if (model instanceof Map) {
             Map<?, ?> modelMap = (Map<?, ?>) model;
