@@ -37,7 +37,12 @@
         padding-left: 20px;
     }
 
+
     .page-title-editbox {
+        margin-left: 20px;
+    }
+
+    .back-button {
         margin-left: 20px;
     }
 
@@ -63,7 +68,7 @@
             $!login_or_profile_link
             $!sign_up_menu_link
             #if ($TUser.isLoggedIn())
-            $TForms.getSignOutForm()
+                $TForms.getSignOutForm()
             #end
         </ul>
     </div>
@@ -71,6 +76,7 @@
 
 <h2 class="page-title-header">Edit - $pageToCreate.getTitle()</h2>
 
+<a href="/dashboard/page_management" class="pure-button button-darker back-button"><-</a>
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getPageRoute()">
 
