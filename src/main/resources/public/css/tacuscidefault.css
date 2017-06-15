@@ -66,6 +66,11 @@ h4.page-info {
     padding-right: 1em;
 }
 
+button.page-info {
+    margin-top: .3em;
+    float: right;
+}
+
 submit-link:focus {
   outline: none;
 }
