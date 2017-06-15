@@ -41,6 +41,7 @@ import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
 import database.models.Group
+import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
@@ -50,6 +51,7 @@ import spark.template.velocity.VelocityTemplateEngine
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
+import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -147,6 +149,32 @@ class Application {
         notFound({ request, response -> Web.get404Page(request, response) })
         internalServerError({ request, response -> Web.get500Page(request, response) })
     }
+
+    //An interesting feature, needs more work?
+    /*
+    fun restartTacusci() {
+        println("Restarting Tacusci")
+        val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
+        val currentJar = File(Application.javaClass.protectionDomain.codeSource.location.toURI())
+
+        if (!currentJar.name.endsWith(".jar"))
+            return
+
+        val command = mutableListOf<String>()
+        command.add(javaBin)
+        command.add("-jar")
+        command.add(currentJar.path)
+        CliOptions.cliOptions.forEach { cliOption ->
+            if (cliOption.value.isNullOrBlankOrEmpty()) {
+                command.add(cliOption.cliText)
+                command.add(cliOption.value)
+            }
+        }
+        val processBuilder = ProcessBuilder(command)
+        processBuilder.start()
+        System.exit(0)
+    }
+    */
 
     fun restartServer() {
         stop()
