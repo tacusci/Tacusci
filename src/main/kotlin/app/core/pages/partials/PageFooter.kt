@@ -33,7 +33,6 @@ package app.core.pages.partials
  * Created by tauraamui on 14/05/2017.
  */
 
-import app.pages.partials.PartialPage
 import j2html.tags.Tag
 import spark.Request
 import spark.Response

@@ -27,11 +27,13 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.controllers
+package app.core.core.controllers
 
 import api.core.TacusciAPI
-import app.handlers.PageHandler
-import app.handlers.UserHandler
+import app.core.controllers.Controller
+import app.core.controllers.Web
+import app.core.handlers.PageHandler
+import app.core.handlers.UserHandler
 import database.models.Page
 import extensions.toIntSafe
 import mu.KLogging

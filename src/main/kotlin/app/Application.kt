@@ -35,9 +35,9 @@ package app
 
 import app.core.controllers.ControllerManager
 import app.core.controllers.Web
-import app.handlers.GroupHandler
-import app.handlers.UserHandler
-import app.pages.pagecontrollers.PageController
+import app.core.handlers.GroupHandler
+import app.core.handlers.UserHandler
+import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
 import database.models.Group
 import extensions.managedRedirect

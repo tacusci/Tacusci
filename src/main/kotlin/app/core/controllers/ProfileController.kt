@@ -29,10 +29,12 @@
 
 
 
-package app.core.controllers
+package app.core.core.controllers
 
 import api.core.TacusciAPI
-import app.handlers.UserHandler
+import app.core.controllers.Controller
+import app.core.controllers.Web
+import app.core.handlers.UserHandler
 import extensions.managedRedirect
 import mu.KLogging
 import spark.ModelAndView

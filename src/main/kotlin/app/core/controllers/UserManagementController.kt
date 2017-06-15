@@ -29,11 +29,13 @@
 
 
 
-package app.core.controllers
+package app.core.core.controllers
 
 import api.core.TacusciAPI
-import app.handlers.GroupHandler
-import app.handlers.UserHandler
+import app.core.controllers.Controller
+import app.core.controllers.Web
+import app.core.handlers.GroupHandler
+import app.core.handlers.UserHandler
 import extensions.managedRedirect
 import j2html.TagCreator.*
 import j2html.tags.ContainerTag

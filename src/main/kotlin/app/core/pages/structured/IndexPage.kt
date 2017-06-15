@@ -27,9 +27,9 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.pages.structured
+package app.core.core.pages.structured
 
-import app.pages.structured.StructuredPage
+import app.core.pages.structured.StructuredPage
 import j2html.tags.Tag
 import spark.Request
 import spark.Response

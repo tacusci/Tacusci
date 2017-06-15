@@ -27,9 +27,9 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.handlers
+package app.core.core.handlers
 
-import app.pages.pagecontrollers.PageController
+import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
 import database.daos.PageDAO
 import database.models.Page

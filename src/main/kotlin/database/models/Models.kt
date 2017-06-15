@@ -31,8 +31,8 @@
  
  package database.models
 
-import app.handlers.RouteEntityHandler
-import app.pages.structured.StructuredPage
+import app.core.handlers.RouteEntityHandler
+import app.core.pages.structured.StructuredPage
 import utils.Validation
 import utils.tree.Node
 import utils.tree.Tree
