@@ -33,7 +33,6 @@
 
 import api.core.TacusciAPI
 import app.core.controllers.Controller
-import app.core.controllers.Web
 import app.core.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView

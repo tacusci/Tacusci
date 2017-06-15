@@ -30,8 +30,8 @@
 package app.core.pages.pagecontrollers
 
 import api.core.TacusciAPI
-import app.core.controllers.Web
-import app.core.handlers.PageHandler
+import app.core.core.controllers.Web
+import app.core.core.handlers.PageHandler
 import app.core.handlers.UserHandler
 import database.models.Page
 import extensions.readTextAndClose

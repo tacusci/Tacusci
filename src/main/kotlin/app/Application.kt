@@ -34,8 +34,8 @@ package app
  */
 
 import app.core.controllers.ControllerManager
-import app.core.controllers.Web
-import app.core.handlers.GroupHandler
+import app.core.core.controllers.Web
+import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager

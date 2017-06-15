@@ -33,7 +33,6 @@ package app.core.core.controllers
 
 import api.core.TacusciAPI
 import app.core.controllers.Controller
-import app.core.controllers.Web
 import app.core.handlers.UserHandler
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
