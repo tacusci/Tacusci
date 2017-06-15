@@ -50,10 +50,14 @@
     </a>
     #foreach ($page in $TPages.getAllPages())
         #set ($divId = $page.getId())
-        <div id=$divId class="pure-u-24-24 page-info">
-            <h4>Title: $page.getTitle()</h4>
-            <h4>Route: $page.getPageRoute()</h4>
-            <div style="display: inline-block">
+
+        <div id="$divId" class="pure-u-24-24 pure-g page-info">
+            <div class="pure-u-24-24" style="display: inline">
+                <h4 class="page-info">Title: $page.getTitle()</h4>
+                <h4 class="page-info">Route: $page.getPageRoute()</h4>
+            </div>
+
+            <div class="pure-u-24-24" style="display: inline-block">
                 $THTMLUtils.getButtonStyledLink("/dashboard/page_management/edit/$page.getId()", "EDIT", "button-darker")
                 $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-darker")
                 #if ($page.getPageRoute() != "/")

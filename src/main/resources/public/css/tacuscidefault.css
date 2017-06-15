@@ -51,11 +51,17 @@ div.page-info {
   margin-right: 1em;
   margin-bottom: 0.5em;
   padding-left: 0.5em;
+  padding-right: 0.5em;
   padding-bottom: 0.5em;
   color: #cec8c8;
   background-color: #282727;
   border: 1px solid #302e2e;
   display:inline;
+}
+
+h4.page-info {
+    margin-top: .5em;
+    margin-bottom: .5em;
 }
 
 submit-link:focus {
