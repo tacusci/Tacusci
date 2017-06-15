@@ -123,7 +123,7 @@ class Application {
 
             val session = request.session()
             ControllerManager.initSessionAttributes(session)
-            session.maxInactiveInterval(Config.getProperty("session_idle_timeout").toIntSafe())
+            session.maxInactiveInterval(Config.getProperty("session-idle-timeout").toIntSafe())
         })
 
         before("/dashboard", { request, response ->

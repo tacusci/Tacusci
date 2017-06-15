@@ -62,6 +62,6 @@ object ControllerManager : KLogging() {
         }
     }
     fun mapAccessToStaticLocalFolder() {
-        Spark.externalStaticFileLocation(Config.getProperty("static_asset_folder"))
+        Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
     }
 }
