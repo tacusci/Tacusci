@@ -3,6 +3,7 @@ package api.core;
 import api.forms.TForms;
 import api.pages.TPages;
 import api.users.TUser;
+import app.Application;
 import app.core.core.controllers.Web;
 import database.models.Page;
 import kotlin.Pair;
@@ -20,6 +21,11 @@ import java.util.List;
 public class TacusciAPI {
 
     private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
+    private static Application instance = null;
+
+    public static void setApplication(Application application) {
+        instance = application;
+    }
 
     private static void init(Request request, Response response) {
         apiObjInstances.add(new Pair<>("TUser", new TUser(request, response)));
@@ -28,6 +34,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("TPages", new TPages(request, response)));
         apiObjInstances.add(new Pair<>("TDateTime", new TDateTime(request, response)));
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
+        apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {

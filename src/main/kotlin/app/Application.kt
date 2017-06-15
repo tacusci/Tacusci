@@ -33,6 +33,7 @@ package app
  * Created by alewis on 24/10/2016.
  */
 
+import api.core.TacusciAPI
 import app.core.controllers.ControllerManager
 import app.core.core.controllers.Web
 import app.core.core.handlers.GroupHandler
@@ -43,6 +44,7 @@ import database.models.Group
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
+import spark.Spark
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.CliOption
@@ -148,7 +150,7 @@ class Application {
 
     fun restartServer() {
         stop()
-        init()
+        Spark.init()
     }
 
     fun init() {
@@ -182,6 +184,7 @@ fun main(args: Array<String>) {
     application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))
     application.dbProperties.setProperty("useSSL", "false")
     application.dbProperties.setProperty("autoReconnect", "false")
+    TacusciAPI.setApplication(application)
     application.init()
     //Config.monitorPropertiesFile(application)
 }
