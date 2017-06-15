@@ -76,7 +76,7 @@ class LogFileViewController : Controller {
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavBar(request, model)
 
-        val logFile = File(Config.getProperty("log_file"))
+        val logFile = File(Config.getProperty("log-file"))
 
         if (logFile.exists()) {
             val logFileTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area").attr("readonly", "true").attr("wrap", "hard")
