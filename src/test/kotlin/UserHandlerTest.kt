@@ -28,7 +28,7 @@
  */
 
 import TestingCore.mockRequest
-import app.handlers.UserHandler
+import app.core.handlers.UserHandler
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import utils.Config

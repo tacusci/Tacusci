@@ -1,6 +1,6 @@
 package api.users;
 
-import app.handlers.UserHandler;
+import app.core.handlers.UserHandler;
 import database.models.User;
 import spark.Request;
 import spark.Response;

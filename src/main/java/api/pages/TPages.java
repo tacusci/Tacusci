@@ -1,12 +1,11 @@
 package api.pages;
 
 import api.core.TAPIClass;
-import app.handlers.PageHandler;
+import app.core.core.handlers.PageHandler;
 import database.models.Page;
 import spark.Request;
 import spark.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
