@@ -29,14 +29,12 @@
 
 
 
-package app.corecontrollers
+package app.core.controllers
 
 import api.core.TacusciAPI
 import app.handlers.UserHandler
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
-import j2html.TagCreator.h1
-import j2html.TagCreator.p
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request

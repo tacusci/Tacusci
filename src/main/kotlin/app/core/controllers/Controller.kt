@@ -27,24 +27,26 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.pages.structured
+package app.core.controllers
 
-import app.pages.structured.StructuredPage
-import j2html.tags.Tag
+import spark.ModelAndView
 import spark.Request
 import spark.Response
+import spark.Session
 
 /**
- * Created by alewis on 16/05/2017.
+ * Created by alewis on 06/02/2017.
  */
-class IndexPage : StructuredPage {
+interface Controller {
 
-    override var id: Int = -1
-    override var title: String = ""
-    override var head: MutableList<Tag> = mutableListOf()
-    override var body: MutableList<Tag> = mutableListOf()
-    override var rootUri: String = ""
-    override val type = StructuredPage.PageType.CORE_PAGE
+    var rootUri: String
+    val childUris: MutableList<String>
+    val templatePath: String
+    val pageTitleSubstring: String
+    val handlesGets: Boolean
+    val handlesPosts: Boolean
 
-    override fun get(request: Request, response: Response): String { return "" }
+    fun initSessionBoolAttributes(session: Session)
+    fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView
+    fun post(request: Request, response: Response): Response
 }
