@@ -59,7 +59,7 @@
                 #if ($page.getPageRoute() != "/")
                     <form id="delete_page_form" style="display: inline-block" name="delete_page_form" method="post" action="/dashboard/page_management/delete/$page.getId()">
                         <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_page_form_$page.getId()") hidden>
-                        <input id="formName", name="formName" type="text" value="delete_page_form_$page.getId()" hidden>
+                        <input id="formName" name="formName" type="text" value="delete_page_form_$page.getId()" hidden>
                         <input id="page_id" name="page_id" type="text" value="$page.getId()" hidden>
                         <input type="submit" class="pure-button button-darker" value="DELETE">
                     </form>
