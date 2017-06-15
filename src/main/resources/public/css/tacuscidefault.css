@@ -67,8 +67,15 @@ h4.page-info {
 }
 
 button.page-info {
-    margin-top: .3em;
+    margin-top: .5em;
     float: right;
+}
+
+.back-button {
+    padding-top: 6.5px;
+    padding-left: 8px;
+    padding-bottom: 6.5px;
+    padding-right: 8px;
 }
 
 submit-link:focus {
