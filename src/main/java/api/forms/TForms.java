@@ -23,6 +23,14 @@ public class TForms extends TAPIClass {
         return j2htmlPartials.INSTANCE.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render();
     }
 
+    public String getUsernameInputField(String identifier, String placeholder) {
+        return j2htmlPartials.INSTANCE.usernameInput(identifier, placeholder).render();
+    }
+
+    public String getValidatedPasswordInputField(String identifier, String placeholder) {
+        return j2htmlPartials.INSTANCE.validatedPasswordInput(identifier, placeholder).render();
+    }
+
     public String mapFormToHash(String formName) {
         return Web.INSTANCE.mapFormToHash(request.session(), formName);
     }
