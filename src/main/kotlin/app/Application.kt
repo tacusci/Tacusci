@@ -151,7 +151,6 @@ class Application {
     }
 
     //An interesting feature, needs more work?
-    /*
     fun restartTacusci() {
         println("Restarting Tacusci")
         val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
@@ -165,16 +164,17 @@ class Application {
         command.add("-jar")
         command.add(currentJar.path)
         CliOptions.cliOptions.forEach { cliOption ->
-            if (cliOption.value.isNullOrBlankOrEmpty()) {
-                command.add(cliOption.cliText)
-                command.add(cliOption.value)
+            if (!cliOption.value.isNullOrBlankOrEmpty()) {
+                command.add("--{cliOption.cliText}")
+                if (cliOption.argumentExpected) {
+                    command.add(cliOption.value)
+                }
             }
         }
         val processBuilder = ProcessBuilder(command)
         processBuilder.start()
         System.exit(0)
     }
-    */
 
     fun restartServer() {
         stop()
