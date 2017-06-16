@@ -20,4 +20,8 @@ public class TServer extends TAPIClass {
     public void restart() {
         if (instance != null) { instance.restartServer(); }
     }
+
+    public String getRequestURI() {
+        return request.uri();
+    }
 }

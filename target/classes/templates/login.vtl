@@ -55,8 +55,30 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         #if ($userIsNotBanned)
-            <h1 class="header">Login</h1>
-            $!login_form
+            <h1 class="header">Login $TServer.getRequestURI()</h1>
+            <form id="login_form" name="login_form" class="pure-form pure-form-aligned" href="/login" method="post">
+                <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("login_form") hidden>
+                <input name="formName" value="login_form" hidden>
+                <fieldset>
+                    <div class="pure-control-group">
+                        <label class="light-shade" for="username">Username</label>
+                        $TForms.getUsernameInputField("username", "Username")
+                    </div>
+
+                    <div class="pure-control-group">
+                        <label class="light-shade" for="password">Password</label>
+                        $TForms.getValidatedPasswordInputField("password", "Password")
+                    </div>
+
+                    <div class="pure-controls" style="margin: 1.5em 0 0 auto;">
+                        <button method="submit" class="pure-button pure-button-primary">Login</button>
+                    </div>
+                </fieldset>
+                <div>
+                    <a href="/forgotten_password">Forgotten Password</a>
+                </div>
+            </form>
+
             #if ($usernameOrPasswordIncorrect)
                 <p class="error-text">Username or password is incorrect...</p>
             #end

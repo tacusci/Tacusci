@@ -4,6 +4,10 @@ html {
     font-size: 9.5pt;
 }
 
+.light-shade {
+    color: #cec8c8;
+}
+
 div.centered {
     margin-left: auto;
     margin-right: auto;

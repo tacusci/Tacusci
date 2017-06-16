@@ -62,6 +62,7 @@ class DashboardController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
         var model = HashMap<String, Any>()
         model.put("template", templatePath)
+        TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavBar(request, model)
         model = TacusciAPI.injectAPIInstances(request, response, model)
