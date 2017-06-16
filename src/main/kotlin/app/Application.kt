@@ -58,6 +58,7 @@ import kotlin.concurrent.thread
 
 class Application {
 
+    var restarting = false
     val dbProperties = Properties()
     val layoutTemplate = "/templates/layout.vtl"
 
@@ -150,7 +151,7 @@ class Application {
         internalServerError({ request, response -> Web.get500Page(request, response) })
     }
 
-    //An interesting feature, needs more work?
+    /*
     fun restartTacusci() {
         println("Restarting Tacusci")
         val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
@@ -175,10 +176,17 @@ class Application {
         processBuilder.start()
         System.exit(0)
     }
+    */
 
     fun restartServer() {
+        restarting = true
+        thread {
+            Thread.sleep(300)
+            init()
+        }
         stop()
-        Spark.init()
+        DAOManager.disconnect()
+        restarting = false
     }
 
     fun init() {
@@ -204,8 +212,10 @@ fun main(args: Array<String>) {
     val application = Application()
 
     Runtime.getRuntime().addShutdownHook(thread(name = "Shutdown thread", start = false) {
-        application.infoLog("Force shut down detected, stopping everything cleanly...")
-        stop()
+        if (!application.restarting) {
+            application.infoLog("Force shut down detected, stopping everything cleanly...")
+            stop()
+        }
     })
 
     application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
