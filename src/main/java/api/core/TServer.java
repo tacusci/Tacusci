@@ -16,12 +16,7 @@ public class TServer extends TAPIClass {
         this.instance = instance;
     }
 
-    //Um, doesn't work properly xD stops the server, doesn't start it
     public void restart() {
         if (instance != null) { instance.restartServer(); }
-    }
-
-    public String getRequestURI() {
-        return request.uri();
     }
 }

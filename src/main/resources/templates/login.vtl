@@ -56,7 +56,7 @@
     <div class="pure-u-24-24 centered">
         #if ($userIsNotBanned)
             <h1 class="header">Login</h1>
-            <form id="login_form" name="login_form" class="pure-form pure-form-aligned" href="/login" method="post">
+            <form id="login_form" name="login_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI() method="post">
                 <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("login_form") hidden>
                 <input name="formName" value="login_form" hidden>
                 <fieldset>
