@@ -52,9 +52,17 @@ object PageController : KLogging() {
         val index = Page()
         index.title = "Index"
         index.pageRoute = "/"
+        index.isDeleteable = false
         index.content = this.javaClass.getResourceAsStream("/templates/index.vtl").readTextAndClose()
         index.authorUserId = UserHandler.getRootAdmin().id
         PageHandler.createPage(index)
+
+        val undeletablePage = Page()
+        undeletablePage.title = "Undeletable"
+        undeletablePage.isDeleteable = false
+        undeletablePage.content = "<h1>Undeletable</h1>"
+        undeletablePage.authorUserId = UserHandler.getRootAdmin().id
+        PageHandler.createPage(undeletablePage)
 
         /*
         for (i in 1000..200000) {

@@ -26,10 +26,10 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package extensions
+
+
+
+package extensions
 
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import spark.Request
@@ -63,27 +63,31 @@ fun Request.forwardedIP(): String {
     var forwardedIP = ""
     try {
         forwardedIP = this.raw().getHeader("X-Forwarded-For")
-    } catch (e: Exception) { return forwardedIP }
+    } catch (e: Exception) {
+        return forwardedIP
+    }
     return forwardedIP
 }
 
 //this isn't low level enough to show up in IDE but hopefully will be good reminder
 @Deprecated("This function won't work for services with a proxy, use managed re-direct instead")
-fun Response.redirect(location: String) {}
+fun Response.redirect(location: String) {
+}
 
 @Deprecated("This function won't work for services with a proxy, use managed re-direct instead")
-fun Response.redirect(location: String, htmlStatus: Int) {}
+fun Response.redirect(location: String, htmlStatus: Int) {
+}
 
 fun Response.managedRedirect(request: Request, urlSuffix: String) {
-    if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
-        httpsRedirect(request, urlSuffix)
-    } else {
-        try {
+    try {
+        if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
+            httpsRedirect(request, urlSuffix)
+        } else {
             redirect(urlSuffix)
-        } catch (e: IllegalStateException) {
-            if (e.message!!.contains("Committed")) {
-                System.err.println("${Utils.getDateTimeNow()} ERROR (FROM THE EXTENSION COLLECTION CLASS) The double response conflict 'commited' error has occured...")
-            }
+        }
+    } catch (e: IllegalStateException) {
+        if (e.message!!.contains("Committed")) {
+            System.err.println("${Utils.getDateTimeNow()} ERROR (FROM THE EXTENSION COLLECTION CLASS) The double response conflict 'commited' error has occured...")
         }
     }
 }
@@ -93,18 +97,24 @@ fun Response.httpsRedirect(request: Request, urlSuffix: String) {
 }
 
 fun String.leftPad(padding: String): String {
-    return padding+this
+    return padding + this
 }
 
 fun String.toIntSafe(): Int {
     try {
         return this.toInt()
-    } catch (e: NumberFormatException) { return -1 }
+    } catch (e: NumberFormatException) {
+        return -1
+    }
 }
 
-fun String.isBlankOrEmpty(): Boolean { return this.isBlank() || this.isEmpty() }
+fun String.isBlankOrEmpty(): Boolean {
+    return this.isBlank() || this.isEmpty()
+}
 
-fun String.isNullOrBlankOrEmpty(): Boolean { return this.isNullOrBlank() || this.isNullOrEmpty() }
+fun String.isNullOrBlankOrEmpty(): Boolean {
+    return this.isNullOrBlank() || this.isNullOrEmpty()
+}
 
 fun String.fuzzySearchSimpleRatio(stringToCompare: String): Int {
     return FuzzySearch.ratio(this, stringToCompare)

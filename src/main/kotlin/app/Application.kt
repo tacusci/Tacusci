@@ -41,17 +41,14 @@ import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
 import database.models.Group
-import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
-import spark.Spark
 import spark.Spark.*
 import spark.template.velocity.VelocityTemplateEngine
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
-import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -125,7 +122,6 @@ class Application {
             if (request.uri() != "/" && request.uri().endsWith("/")) {
                 response.managedRedirect(request, request.uri().removeSuffix("/"))
             }
-
             val session = request.session()
             ControllerManager.initSessionAttributes(session)
             session.maxInactiveInterval(Config.getProperty("session-idle-timeout").toIntSafe())

@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   `page_title` VARCHAR(100) NOT NULL,
   `page_route` VARCHAR(200) NOT NULL,
   `page_content` LONGTEXT NOT NULL,
+  `deleteable` BIT(1) NOT NULL,
   `maintenance_mode` BIT(1) NOT NULL,
   `author_user_id` INT NOT NULL,
   `page_type` INT NOT NULL,

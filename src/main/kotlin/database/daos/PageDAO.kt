@@ -46,16 +46,17 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun insertPage(page: Page): Boolean {
         connect()
         try {
-            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?)"
+            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, DELETEABLE, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createPageStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, page.title)
             preparedStatement?.setString(4, page.pageRoute)
             preparedStatement?.setString(5, page.content.removeSuffix("\r\n"))
-            preparedStatement?.setInt(6, page.maintenanceMode)
-            preparedStatement?.setInt(7, page.authorUserId)
-            preparedStatement?.setInt(8, page.type.ordinal)
+            preparedStatement?.setBoolean(6, page.isDeleteable)
+            preparedStatement?.setInt(7, page.maintenanceMode)
+            preparedStatement?.setInt(8, page.authorUserId)
+            preparedStatement?.setInt(9, page.type.ordinal)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -67,16 +68,17 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     fun updatePage(page: Page): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, PAGE_TITLE=?, PAGE_ROUTE=?, PAGE_CONTENT=?, MAINTENANCE_MODE=?, AUTHOR_USER_ID=?, PAGE_TYPE=? WHERE ID_PAGE=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, PAGE_TITLE=?, PAGE_ROUTE=?, PAGE_CONTENT=?, DELETEABLE=?, MAINTENANCE_MODE=?, AUTHOR_USER_ID=?, PAGE_TYPE=? WHERE ID_PAGE=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, page.title)
             preparedStatement?.setString(3, page.pageRoute)
             preparedStatement?.setString(4, page.content.trim().removeSuffix("\r\n"))
-            preparedStatement?.setInt(5, page.maintenanceMode)
-            preparedStatement?.setInt(6, page.authorUserId)
-            preparedStatement?.setInt(7, page.type.ordinal)
-            preparedStatement?.setInt(8, page.id)
+            preparedStatement?.setBoolean(5, page.isDeleteable)
+            preparedStatement?.setInt(6, page.maintenanceMode)
+            preparedStatement?.setInt(7, page.authorUserId)
+            preparedStatement?.setInt(8, page.type.ordinal)
+            preparedStatement?.setInt(9, page.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -146,6 +148,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
                 page.title = resultSet.getString("PAGE_TITLE")
                 page.pageRoute = resultSet.getString("PAGE_ROUTE")
                 page.content = resultSet.getString("PAGE_CONTENT")
+                page.isDeleteable = resultSet.getBoolean("DELETEABLE")
                 page.maintenanceMode = resultSet.getInt("MAINTENANCE_MODE")
                 page.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
                 page.type = StructuredPage.PageType.fromInt(resultSet.getInt("PAGE_TYPE"))!!

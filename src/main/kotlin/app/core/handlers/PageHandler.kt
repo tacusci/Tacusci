@@ -61,10 +61,15 @@ object PageHandler : KLogging() {
     }
 
     fun deletePage(page: Page): Boolean {
-        val existingRoute = pageDAO.getPageById(page.id).pageRoute
-        val deletedSuccessfully = pageDAO.deletePage(page)
-        if (deletedSuccessfully) {
-            PageController.mapPageRouteTo404Page(existingRoute)
+        var deletedSuccessfully = false
+        if (page.isDeleteable) {
+            val existingRoute = pageDAO.getPageById(page.id).pageRoute
+            deletedSuccessfully = pageDAO.deletePage(page)
+            if (deletedSuccessfully) {
+                PageController.mapPageRouteTo404Page(existingRoute)
+            }
+        } else {
+            logger.error("Cannot delete page ${page.title}...")
         }
         return deletedSuccessfully
     }
