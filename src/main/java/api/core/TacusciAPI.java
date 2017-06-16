@@ -41,7 +41,7 @@ public class TacusciAPI {
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
         init(request, response);
         Page page = new Page();
-        velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavBar(request, new HashMap<>()));
+        velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavigationElements(request, new HashMap<>()));
         velocityIMTemplateEngine.insertIntoContext(templateTitle, apiObjInstances);
     }
 

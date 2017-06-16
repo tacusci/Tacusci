@@ -74,7 +74,7 @@ class ResetPasswordController : Controller {
         val model = HashMap<String, Any>()
         model.put("template", templatePath)
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for RESET_PASSWORD/${request.params(":username")} page")
 
         var username = request.params(":username")
@@ -138,13 +138,13 @@ class ResetPasswordController : Controller {
     }
 
     fun genAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Tried accessing someone's reset password form")
         model.put("unauthorised_reset_request_message", h1("Access Denied"))
     }
 
     fun genAccessExpiredContent(request: Request, model: HashMap<String, Any>) {
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Tried accessing an expired reset password form address")
         model.put("access_expired_message", h1("Access has expired"))
     }

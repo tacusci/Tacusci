@@ -71,7 +71,7 @@ class LoginController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
 
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")

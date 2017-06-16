@@ -59,7 +59,7 @@ object Web : KLogging() {
         return model
     }
 
-    fun loadNavBar(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
+    fun loadNavigationElements(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
         model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
         model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
         model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
@@ -93,10 +93,10 @@ object Web : KLogging() {
 
     fun get_userNotFound(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         var model = HashMap<String, Any>()
-        model = loadNavBar(request, model)
+        model = loadNavigationElements(request, model)
         model.put("template", "/templates/404_not_found.vtl")
         model = TacusciAPI.injectAPIInstances(request, response, model)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         Web.insertPageTitle(request, model, "Profile (User not found)")
         return ModelAndView(model, layoutTemplate)
     }
@@ -105,7 +105,7 @@ object Web : KLogging() {
         var model = HashMap<String, Any>()
         model.put("template", "/templates/access_denied.vtl")
         model = TacusciAPI.injectAPIInstances(request, response, model)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         Web.insertPageTitle(request, model, "Access Denied")
         return ModelAndView(model, layoutTemplate)
     }
@@ -120,7 +120,7 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
-        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavigationElements(request, hashMapOf()))
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.insertPageTitle(request, hashMapOf(), ""))
         val result = velocityIMTemplateEngine.render("fourOhFourTemplate")
         velocityIMTemplateEngine.flush("fourOhFourTemplate")
@@ -137,7 +137,7 @@ object Web : KLogging() {
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
         velocityIMTemplateEngine.insertTemplateAsString("fiveHundredOhFive", (if (fiveHundredOhFiveFile.exists()) fiveHundredOhFiveFile.readText() else h2("500").render()))
         TacusciAPI.injectAPIInstances(request, response, "fiveHundredOhFive", velocityIMTemplateEngine)
-        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.loadNavBar(request, hashMapOf()))
+        velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.loadNavigationElements(request, hashMapOf()))
         velocityIMTemplateEngine.insertIntoContext("fiveHundredOhFive", Web.insertPageTitle(request, hashMapOf(), ""))
         val result = velocityIMTemplateEngine.render("fiveHundredOhFive")
         velocityIMTemplateEngine.flush("fiveHundredOhFive")

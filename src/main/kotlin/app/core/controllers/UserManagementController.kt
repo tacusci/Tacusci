@@ -75,7 +75,7 @@ class UserManagementController : Controller {
 
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
 
         val userAdminForm = genUserForm(request)
         model.put("user_admin_form", userAdminForm.render())

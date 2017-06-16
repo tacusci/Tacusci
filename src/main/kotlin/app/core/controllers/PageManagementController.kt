@@ -63,7 +63,7 @@ class PageManagementController : Controller {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
 
         if (request.params(":command") == null && request.params(":page_id") == null) {
             model.put("template", templatePath)
@@ -77,7 +77,7 @@ class PageManagementController : Controller {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
             "create" -> {
                 model.put("template", "/templates/create_page.vtl")

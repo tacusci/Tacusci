@@ -94,7 +94,7 @@ object PageController : KLogging() {
         if (page.pageRoute.isNotEmpty()) {
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
-            velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavBar(request, hashMapOf()))
+            velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavigationElements(request, hashMapOf()))
             velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.insertPageTitle(request, hashMapOf(), page.title))
             TacusciAPI.injectAPIInstances(request, response, page.pageRoute, velocityIMTemplateEngine)
             val result = velocityIMTemplateEngine.render(page.pageRoute)

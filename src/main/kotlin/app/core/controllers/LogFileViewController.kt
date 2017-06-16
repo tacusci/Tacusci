@@ -76,7 +76,7 @@ class LogFileViewController : Controller {
         model.put("template", templatePath)
 
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
 
         val logFile = File(Config.getProperty("log-file"))
 

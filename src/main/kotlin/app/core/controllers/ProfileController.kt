@@ -69,7 +69,7 @@ class ProfileController : Controller {
         model.put("template", templatePath)
         model.put("profile_page_user", UserHandler.userDAO.getUser(username))
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         val user = UserHandler.userDAO.getUser(username)
         model.put("User", user)
         if (UserHandler.loggedInUsername(request) == username) setupAuthorisedElements(model, username)

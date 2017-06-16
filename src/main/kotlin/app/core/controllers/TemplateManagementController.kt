@@ -63,7 +63,7 @@ class TemplateManagementController : Controller {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         return ModelAndView(model, layoutTemplate)
     }
 

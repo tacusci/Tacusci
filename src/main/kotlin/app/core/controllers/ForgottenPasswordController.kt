@@ -69,7 +69,7 @@ class ForgottenPasswordController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
 
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
 
         if (UserHandler.isLoggedIn(request)) {
             response.managedRedirect(request, "/reset_password")

@@ -64,7 +64,7 @@ class DashboardController : Controller {
         model.put("template", templatePath)
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
-        Web.loadNavBar(request, model)
+        Web.loadNavigationElements(request, model)
         model = TacusciAPI.injectAPIInstances(request, response, model)
         return ModelAndView(model, layoutTemplate)
     }
