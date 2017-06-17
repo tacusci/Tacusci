@@ -78,15 +78,16 @@ class PageManagementController : Controller {
     private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
-        Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
         Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
             "create" -> {
                 model.put("template", "/templates/create_page.vtl")
+                Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Page")
                 model.put("pageToCreate", Page())
             } "edit" -> {
                 if (request.params("page_id") != null) {
                     model.put("template", "/templates/edit_page.vtl")
+                    Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
                     val page = PageHandler.getPageById(request.params("page_id").toIntSafe())
                     if (page.id == -1) response.redirect("/dashboard/page_management")
                     model.put("pageToEdit", page)

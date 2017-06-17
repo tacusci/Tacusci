@@ -53,7 +53,7 @@ class TemplateManagementController : Controller {
 
     override var rootUri: String = "/dashboard/template_management"
     override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:template_id")
-    override val templatePath: String = ""
+    override val templatePath: String = "/templates/template_management.vtl"
     override val pageTitleSubstring: String = "Templates"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
@@ -66,6 +66,12 @@ class TemplateManagementController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
+
+        if (request.params(":command") == null && request.params(":template_id") == null) {
+            model.put("template", templatePath)
+        } else {
+            return getCommandPage(request, response, layoutTemplate)
+        }
         return ModelAndView(model, layoutTemplate)
     }
 
