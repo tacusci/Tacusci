@@ -33,11 +33,11 @@
         height: 100%;
     }
 
-    .page-title-header {
+    .template-title-header {
         padding-left: 20px;
     }
 
-    .page-title-editbox {
+    .template-title-editbox {
         margin-left: 20px;
     }
 
@@ -73,16 +73,15 @@
     </div>
 </div>
 
-<h2 class="page-title-header">Edit - $pageToEdit.getTitle()</h2>
+<h2 class="template-title-header">Edit - $templateToEdit.getTitle()</h2>
 
 <a href="$TRequest.getRequestURI()" class="pure-button button-darker back-button">
     <img src="/images/back_arrow.png" style="width:23px;height:17px;">
 </a>
-<input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
-<input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getPageRoute()">
+<input id="template_title_editable" class="template-title-editbox" name="template_title" type="text" value="$templateToEdit.getTitle()">
 
 <pre id="editor">
-    $THTMLUtils.formatForEditing($pageToEdit.getContent())
+    $THTMLUtils.formatForEditing($templateToEdit.getContent())
 </pre>
 
 <div class="pure-u-24-24 edit-button-bar">
@@ -91,59 +90,59 @@
 
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-    #include("/public/js/pageeditor.js")
+    #include("/public/js/templateeditor.js")
     function save() {
-        var savePageForm = document.createElement("form");
-        savePageForm.id = "edit_page_form";
-        savePageForm.name = "edit_page_form";
-        savePageForm.setAttribute('method', "post");
-        savePageForm.setAttribute('action', "/dashboard/page_management/edit/$pageToEdit.getId()");
+        var saveTemplateForm = document.createElement("form");
+        saveTemplateForm.id = "edit_template_form";
+        saveTemplateForm.name = "edit_template_form";
+        saveTemplateForm.setAttribute('method', "post");
+        saveTemplateForm.setAttribute('action', "/dashboard/template_management/edit/$templateToEdit.getId()");
 
         var formHashInput = document.createElement("input");
         formHashInput.id = "hashid";
         formHashInput.name = "hashid";
         formHashInput.type = "text";
-        formHashInput.value = "$TForms.mapFormToHash("edit_page_form")";
+        formHashInput.value = "$TForms.mapFormToHash("edit_template_form")";
 
         var formNameInput = document.createElement("input");
         formNameInput.id = "formName";
         formNameInput.name = "formName";
         formNameInput.type = "text";
-        formNameInput.value = "edit_page_form";
+        formNameInput.value = "edit_template_form";
 
-        var pageIdInput = document.createElement("input");
-        pageIdInput.id = "page_id";
-        pageIdInput.name = "page_id";
-        pageIdInput.type = "text";
-        pageIdInput.value = $pageToEdit.getId();
+        var templateIdInput = document.createElement("input");
+        templateIdInput.id = "template_id";
+        templateIdInput.name = "template_id";
+        templateIdInput.type = "text";
+        templateIdInput.value = $templateToEdit.getId();
 
-        var pageTitleInput = document.createElement("input");
-        pageTitleInput.id = "page_title";
-        pageTitleInput.name = "page_title";
-        pageTitleInput.type = "text";
-        pageTitleInput.value = document.getElementById("page_title_editable").value;
+        var templateTitleInput = document.createElement("input");
+        templateTitleInput.id = "template_title";
+        templateTitleInput.name = "template_title";
+        templateTitleInput.type = "text";
+        templateTitleInput.value = document.getElementById("template_title_editable").value;
 
-        var pageRouteInput = document.createElement("input");
-        pageRouteInput.id = "page_route";
-        pageRouteInput.name = "page_route";
-        pageRouteInput.type = "text";
-        pageRouteInput.value = document.getElementById("page_route_editable").value;
+        var templateRouteInput = document.createElement("input");
+        templateRouteInput.id = "template_route";
+        templateRouteInput.name = "template_route";
+        templateRouteInput.type = "text";
+        templateRouteInput.value = document.getElementById("template_route_editable").value;
 
-        var pageContentInput = document.createElement("textarea");
-        pageContentInput.id = "page_content";
-        pageContentInput.name = "page_content";
-        pageContentInput.value = editor.getValue();
+        var templateContentInput = document.createElement("textarea");
+        templateContentInput.id = "template_content";
+        templateContentInput.name = "template_content";
+        templateContentInput.value = editor.getValue();
 
-        savePageForm.appendChild(formHashInput);
-        savePageForm.appendChild(formNameInput);
-        savePageForm.appendChild(pageIdInput);
-        savePageForm.appendChild(pageRouteInput);
-        savePageForm.appendChild(pageTitleInput);
-        savePageForm.appendChild(pageContentInput);
+        saveTemplateForm.appendChild(formHashInput);
+        saveTemplateForm.appendChild(formNameInput);
+        saveTemplateForm.appendChild(templateIdInput);
+        saveTemplateForm.appendChild(templateRouteInput);
+        saveTemplateForm.appendChild(templateTitleInput);
+        saveTemplateForm.appendChild(templateContentInput);
 
-        document.getElementById("save_page_div").appendChild(savePageForm);
+        document.getElementById("save_template_div").appendChild(saveTemplateForm);
 
-        savePageForm.submit();
+        saveTemplateForm.submit();
    }
 </script>
-<div id="save_page_div" hidden></div>
+<div id="save_template_div" hidden></div>

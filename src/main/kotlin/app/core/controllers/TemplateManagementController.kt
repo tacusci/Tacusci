@@ -33,7 +33,11 @@
 
 import api.core.TacusciAPI
 import app.core.controllers.Controller
+import app.core.core.handlers.TemplateHandler
 import app.core.handlers.UserHandler
+import database.models.Page
+import database.models.Template
+import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -81,8 +85,17 @@ class TemplateManagementController : Controller {
         Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Template")
         Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
-            "create" -> {}
-            "edit" -> {}
+            "create" -> {
+                model.put("template", "/templates/create_template.vtl")
+                Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Template")
+                model.put("templateToCreate", Template())
+            } "edit" -> {
+                if (request.params("template_id") != null) {
+                    model.put("template", "/templates/edit_template.vtl")
+                    Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit template")
+                    val template = TemplateHandler.getTemplateById(request.params("template_id").toIntSafe())
+                }
+            }
         }
         return ModelAndView(model, layoutTemplate)
     }
