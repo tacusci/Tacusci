@@ -52,7 +52,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, page.title)
             preparedStatement?.setString(4, page.pageRoute)
-            preparedStatement?.setString(5, page.content.removeSuffix("\r\n"))
+            preparedStatement?.setString(5, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setBoolean(6, page.isDeleteable)
             preparedStatement?.setInt(7, page.maintenanceMode)
             preparedStatement?.setInt(8, page.authorUserId)
