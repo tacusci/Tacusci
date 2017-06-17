@@ -149,7 +149,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
                 templates.add(getTemplateById(templateId, false))
             }
             disconnect()
-        } catch (e: SQLException) { logger.error(e.message; disconnect()) }
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return templates
     }
 }
