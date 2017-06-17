@@ -1,6 +1,7 @@
 package api.templates;
 
 import api.core.TAPIClass;
+import app.core.core.handlers.TemplateHandler;
 import database.models.Template;
 import spark.Request;
 import spark.Response;
@@ -16,5 +17,5 @@ public class TTemplates extends TAPIClass {
         super(request, response);
     }
 
-    public List<Template> getAllTemplates() { return  }
+    public List<Template> getAllTemplates() { return TemplateHandler.INSTANCE.getAllTemplates(); }
 }
