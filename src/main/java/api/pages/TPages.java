@@ -17,7 +17,5 @@ public class TPages extends TAPIClass {
         super(request, response);
     }
 
-    public List<Page> getAllPages() {
-        return PageHandler.INSTANCE.getAllPages();
-    }
+    public List<Page> getAllPages() { return PageHandler.INSTANCE.getAllPages(); }
 }

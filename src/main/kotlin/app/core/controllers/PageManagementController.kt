@@ -33,6 +33,8 @@ import api.core.TacusciAPI
 import app.core.controllers.Controller
 import app.core.core.handlers.PageHandler
 import app.core.handlers.UserHandler
+import database.daos.DAOManager
+import database.daos.PageDAO
 import database.models.Page
 import extensions.toIntSafe
 import mu.KLogging
@@ -125,9 +127,8 @@ class PageManagementController : Controller {
 
     private fun post_DeletePageForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_PAGE_FORM")
-        val pageToDelete = Page()
-        pageToDelete.id = request.queryParams("page_id").toIntSafe()
-        PageHandler.deletePage(pageToDelete)
+        val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PageDAO
+        PageHandler.deletePage(pageDAO.getPageById(request.queryParams("page_id").toIntSafe()))
         response.redirect(rootUri)
         return response
     }
