@@ -76,9 +76,34 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
             return true
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
-    /*
-    fun deleteTemplate(template: Template): Boolean {
 
+    fun deleteTemplate(template: Template): Boolean {
+        connect()
+        try {
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_TEMPLATE=?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, template.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
-    */
+
+    fun getTemplateIdByTitle(templateTitle: String): Int {
+        connect()
+        var templateId = -1
+        try {
+            val selectStatement = "SELECT ID_TEMPLATE FROM $tableName WHERE TEMPLATE_TITLE=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, templateTitle)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                templateId = resultSet.getInt(1)
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return templateId
+    }
 }
