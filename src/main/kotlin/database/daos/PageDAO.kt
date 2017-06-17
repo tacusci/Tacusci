@@ -134,7 +134,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
     }
 
     public fun getPageById(pageId: Int): Page {
-        val page = Page(-1, -1, -1, "", "", 0, "", -1)
+        val page = Page()
         connect()
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_PAGE=?"
