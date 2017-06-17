@@ -40,6 +40,8 @@ import spark.Request
 import spark.Response
 import spark.Session
 import java.util.*
+import javax.enterprise.inject.Model
+import kotlin.collections.HashMap
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -67,7 +69,36 @@ class TemplateManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Template")
+        Web.loadNavigationElements(request, model)
+        when (request.params(":command")) {
+            "create" -> {}
+            "edit" -> {}
+        }
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    private fun post_CreateTemplateForm(request: Request, response: Response): Response { return response }
+    private fun post_EditTemplateForm(request: Request, response: Response): Response { return response }
+    private fun post_DeleteTemplateForm(request: Request, response: Response): Response { return response }
+
     override fun post(request: Request, response: Response): Response {
+        if (request.uri().contains("template_management/create")) {
+            if (Web.getFormHash(request, "create_template_form") == request.queryParams("hashid")) {
+                return post_CreateTemplateForm(request, response)
+            }
+        } else if (request.uri().contains("template_management/edit")) {
+            if (Web.getFormHash(request, "edit_template_form") == request.queryParams("hashid")) {
+                return post_EditTemplateForm(request, response)
+            }
+        } else if (request.uri().contains("template_management/delete")) {
+            if (Web.getFormHash(request, "delete_template_form") == request.queryParams("hashid")) {
+                return post_DeleteTemplateForm(request, response)
+            }
+        }
         return response
     }
 }

@@ -1,0 +1,79 @@
+<!--
+  ~ # DON'T BE A DICK PUBLIC LICENSE
+  ~
+  ~ > Version 1.1, December 2016
+  ~
+  ~ > Copyright (C) 2016-2017 Adam Prakash Lewis
+  ~
+  ~  Everyone is permitted to copy and distribute verbatim or modified
+  ~  copies of this license document.
+  ~
+  ~ > DON'T BE A DICK PUBLIC LICENSE
+  ~ > TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+  ~
+  ~  1. Do whatever you like with the original work, just don't be a dick.
+  ~
+  ~      Being a dick includes - but is not limited to - the following instances:
+  ~
+  ~ 	 1a. Outright copyright infringement - Don't just copy this and change the name.
+  ~ 	 1b. Selling the unmodified original with no work done what-so-ever, that's REALLY being a dick.
+  ~ 	 1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.
+  ~
+  ~  2. If you become rich through modifications, related works/services, or supporting the original work,
+  ~  share the love. Only a dick would make loads off this work and not buy the original work's
+  ~  creator(s) a pint.
+  ~
+  ~  3. Code is provideadfd with no warranty. Using somebody else's code and bitching when it goes wrong makes
+  ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
+  -->
+
+<div id="nav_menu">
+    <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <ul class="pure-menu-list">
+            $!home_link
+            $!dashboard_link
+            $!login_or_profile_link
+            $!sign_up_menu_link
+            #if ($TUser.isLoggedIn())
+                $TForms.getSignOutForm()
+            #end
+        </ul>
+    </div>
+</div>
+
+<div class="pure-g">
+    <a href="$TRequest.getRequestURI()/create_template">
+        <div class="pure-u-24-24" style="margin-left: 1em; padding-bottom: 1em;">
+            <a href="/dashboard" class="pure-button button-darker back-button">
+                <img src="/images/back_arrow.png" style="width:23px;height:17px;">
+            </a>
+            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-darker")
+        </div>
+    </a>
+    #foreach ($page in $TPages.getAllPages())
+        #set ($divId = $page.getId())
+
+        <div id="$divId" class="pure-u-24-24 pure-g page-info">
+            <div class="pure-u">
+                <h4 class="page-info">Title: $page.getTitle()</h4>
+                <h4 class="page-info">Route: $page.getPageRoute()</h4>
+            </div>
+
+            #if ($page.isDeleteable())
+                <div class="pure-u" style="float: right;">
+                    <form id="delete_page_form" name="delete_page_form" method="post" action="$TRequest.getRequestURI()/delete/$page.getId()">
+                        <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_page_form_$page.getId()") hidden>
+                        <input id="formName" name="formName" type="text" value="delete_page_form_$page.getId()" hidden>
+                        <input id="page_id" name="page_id" type="text" value="$page.getId()" hidden>
+                        <button type="submit" class="pure-button button-darker page-info">X</button>
+                    </form>
+                </div>
+            #end
+
+            <div class="pure-u-24-24" style="display: inline-block">
+                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$page.getId()", "EDIT", "button-darker")
+                $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-darker")
+            </div>
+        </div>
+    #end
+</div>
