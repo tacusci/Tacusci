@@ -106,4 +106,50 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return templateId
     }
+
+    fun getTemplateById(templateId: Int): Template {
+        val template = Template()
+        connect()
+        try {
+            val selectStatement = "SELETE * FROM $tableName WHERE ID_TEMPLATE=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setInt(1, templateId)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                template.id = resultSet.getInt("ID_TEMPLATE")
+                template.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
+                template.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                template.title = resultSet.getString("TEMPLATE_TITLE")
+                template.content = resultSet.getString("TEMPLATE_CONTENT")
+                template.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
+            }
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return template
+    }
+
+    fun getTemplateById(templateId: Int, closeConnection: Boolean): Template {
+        if (!closeConnection) {
+            return getTemplateById(templateId)
+        } else {
+            val template = getTemplateById(templateId)
+            disconnect()
+            return template
+        }
+    }
+
+    fun getAlTemplates(): MutableList<Template> {
+        val templates = mutableListOf<Template>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_TEMPLATE FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val templateId = resultSet.getInt("ID_TEMPLATE")
+                templates.add(getTemplateById(templateId, false))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message; disconnect()) }
+        return templates
+    }
 }
