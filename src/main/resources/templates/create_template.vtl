@@ -37,6 +37,7 @@
         padding-left: 20px;
     }
 
+
     .template-title-editbox {
         margin-left: 20px;
     }
@@ -73,48 +74,50 @@
     </div>
 </div>
 
-<h2 class="template-title-header">Edit - $templateToEdit.getTitle()</h2>
+<h2 class="template-title-header">Edit - $templateToCreate.getTitle()</h2>
 
-<a href="$TRequest.getRequestURI()" class="pure-button button-darker back-button">
+<a href="/dashboard/template_management" class="pure-button button-darker back-button">
     <img src="/images/back_arrow.png" style="width:23px;height:17px;">
 </a>
-<input id="template_title_editable" class="template-title-editbox" name="template_title" type="text" value="$templateToEdit.getTitle()">
+<input id="template_title_editable" class="template-title-editbox" name="template_title" type="text" value="$templateToCreate.getTitle()">
 
 <pre id="editor">
-    $THTMLUtils.formatForEditing($templateToEdit.getContent())
+    $THTMLUtils.formatForEditing($templateToCreate.getContent())
 </pre>
 
 <div class="pure-u-24-24 edit-button-bar">
-    <input class="pure-button" type="button" value="Save" onclick="save()">
+    <input class="pure-button" type="button" value="Create" onclick="create()">
 </div>
+
+<div id="create_template_div" hidden></div>
 
 <script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-    #include("/public/js/pageeditor.js")
-    function save() {
-        var saveTemplateForm = document.createElement("form");
-        saveTemplateForm.id = "edit_template_form";
-        saveTemplateForm.name = "edit_template_form";
-        saveTemplateForm.setAttribute('method', "post");
-        saveTemplateForm.setAttribute('action', "/dashboard/template_management/edit/$templateToEdit.getId()");
+    #include("/public/js/templateeditor.js")
+    function create() {
+        var createTemplateForm = document.createElement("form");
+        createTemplateForm.id = "create_template_form";
+        createTemplateForm.name = "create_template_form";
+        createTemplateForm.setAttribute('method', "post");
+        createTemplateForm.setAttribute('action', "/dashboard/template_management/create");
 
         var formHashInput = document.createElement("input");
         formHashInput.id = "hashid";
         formHashInput.name = "hashid";
         formHashInput.type = "text";
-        formHashInput.value = "$TForms.mapFormToHash("edit_template_form")";
-
+        formHashInput.value = "$TForms.mapFormToHash("create_template_form")";
+        
         var formNameInput = document.createElement("input");
         formNameInput.id = "formName";
         formNameInput.name = "formName";
         formNameInput.type = "text";
-        formNameInput.value = "edit_template_form";
+        formNameInput.value = "create_template_form";
 
         var templateIdInput = document.createElement("input");
         templateIdInput.id = "template_id";
         templateIdInput.name = "template_id";
         templateIdInput.type = "text";
-        templateIdInput.value = $templateToEdit.getId();
+        templateIdInput.value = $templateToCreate.getId();
 
         var templateTitleInput = document.createElement("input");
         templateTitleInput.id = "template_title";
@@ -127,15 +130,14 @@
         templateContentInput.name = "template_content";
         templateContentInput.value = editor.getValue();
 
-        saveTemplateForm.appendChild(formHashInput);
-        saveTemplateForm.appendChild(formNameInput);
-        saveTemplateForm.appendChild(templateIdInput);
-        saveTemplateForm.appendChild(templateTitleInput);
-        saveTemplateForm.appendChild(templateContentInput);
+        createTemplateForm.appendChild(formHashInput);
+        createTemplateForm.appendChild(formNameInput);
+        createTemplateForm.appendChild(templateIdInput);
+        createTemplateForm.appendChild(templateTitleInput);
+        createTemplateForm.appendChild(templateContentInput);
 
-        document.getElementById("save_template_div").appendChild(saveTemplateForm);
+        document.getElementById("create_template_div").appendChild(createTemplateForm);
 
-        saveTemplateForm.submit();
+        createTemplateForm.submit();
    }
 </script>
-<div id="save_template_div" hidden></div>
