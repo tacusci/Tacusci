@@ -118,11 +118,12 @@ object PageController : KLogging() {
                 val templateDAO = DAOManager.getDAO(DAOManager.TABLE.TEMPLATES) as TemplateDAO
                 val templateToUse = templateDAO.getTemplateById(page.templateToUseId)
                 velocityIMTemplateEngine.insertTemplateAsString(templateToUse.title, templateToUse.content)
+                velocityIMTemplateEngine.insertIntoContext(templateToUse.title, Web.loadNavigationElements(request, hashMapOf()))
+                velocityIMTemplateEngine.insertIntoContext(templateToUse.title, Web.insertPageTitle(request, hashMapOf(), page.title))
                 velocityIMTemplateEngine.insertIntoContext(templateToUse.title, hashMapOf<String, Any>(Pair("pageContent", result)))
                 result = velocityIMTemplateEngine.render(templateToUse.title)
                 velocityIMTemplateEngine.flush(templateToUse.title)
             }
-
             return result
         } else {
             return Web.get404Page(request, response)
