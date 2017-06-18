@@ -41,6 +41,10 @@
         margin-left: 20px;
     }
 
+    .template-selectbox {
+        margin-left: 20px;
+    }
+
     .back-button {
         margin-left: 20px;
     }
@@ -75,11 +79,17 @@
 
 <h2 class="page-title-header">Edit - $pageToEdit.getTitle()</h2>
 
-<a href="$TRequest.getRequestURI()" class="pure-button button-darker back-button">
+<a href="/dashboard/page_management" class="pure-button button-darker back-button">
     <img src="/images/back_arrow.png" style="width:23px;height:17px;">
 </a>
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getPageRoute()">
+<select class="template-selectbox">
+    <option value=""></option>
+    #foreach ($template in $TTemplates.getAllTemplates())
+        <option value=$template.getTitle()>$template.getTitle()</option>
+    #end
+</select>
 
 <pre id="editor">
     $THTMLUtils.formatForEditing($pageToEdit.getContent())
