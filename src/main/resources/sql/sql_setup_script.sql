@@ -68,4 +68,5 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`templates` (
     `template_content` LONGTEXT NOT NULL,
     `author_user_id` INT NOT NULL,
     PRIMARY KEY (`id_template`),
-    UNIQUE INDEX `id_page_UNIQUE` (`id_template` ASC));
+    UNIQUE INDEX `id_page_UNIQUE` (`id_template` ASC),
+    UNIQUE VARCHAR `template_title` (`template_title` ASC));

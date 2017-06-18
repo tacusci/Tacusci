@@ -33,6 +33,8 @@ import api.core.TacusciAPI
 import app.core.core.controllers.Web
 import app.core.core.handlers.PageHandler
 import app.core.handlers.UserHandler
+import database.daos.DAOManager
+import database.daos.TemplateDAO
 import database.models.Page
 import extensions.readTextAndClose
 import mu.KLogging
@@ -103,13 +105,24 @@ object PageController : KLogging() {
 
         //very hacky fix for routes that have been 'removed' :<
         if (page.pageRoute.isNotEmpty()) {
+            var result = ""
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
             velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavigationElements(request, hashMapOf()))
             velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.insertPageTitle(request, hashMapOf(), page.title))
             TacusciAPI.injectAPIInstances(request, response, page.pageRoute, velocityIMTemplateEngine)
-            val result = velocityIMTemplateEngine.render(page.pageRoute)
+            result = velocityIMTemplateEngine.render(page.pageRoute)
             velocityIMTemplateEngine.flush(page.pageRoute)
+
+            if (page.templateToUseId >= 0) {
+                val templateDAO = DAOManager.getDAO(DAOManager.TABLE.TEMPLATES) as TemplateDAO
+                val templateToUse = templateDAO.getTemplateById(page.templateToUseId)
+                velocityIMTemplateEngine.insertTemplateAsString(templateToUse.title, templateToUse.content)
+                velocityIMTemplateEngine.insertIntoContext(templateToUse.title, hashMapOf<String, Any>(Pair("pageContent", result)))
+                result = velocityIMTemplateEngine.render(templateToUse.title)
+                velocityIMTemplateEngine.flush(templateToUse.title)
+            }
+
             return result
         } else {
             return Web.get404Page(request, response)
