@@ -85,7 +85,7 @@
 </a>
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getPageRoute()">
-<select class="template-selectbox">
+<select id="template_select" class="template-selectbox">
     <option value="-1"></option>
     #foreach ($template in $TTemplates.getAllTemplates())
         <option value=$template.getId()>$template.getTitle()</option>
@@ -147,12 +147,19 @@
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
 
+        var templateToUseInput = document.createElement("input");
+        templateToUseInput.id = "template_to_use";
+        templateToUseInput.name = "template_to_use";
+        var templateSelector = document.getElementById("template_select");
+        templateToUseInput.value = templateSelector.options[templateSelector.selectedIndex].value;
+
         createPageForm.appendChild(formHashInput);
         createPageForm.appendChild(formNameInput);
         createPageForm.appendChild(pageIdInput);
         createPageForm.appendChild(pageRouteInput);
         createPageForm.appendChild(pageTitleInput);
         createPageForm.appendChild(pageContentInput);
+        createPageForm.appendChild(templateToUseInput);
 
         document.getElementById("create_page_div").appendChild(createPageForm);
 

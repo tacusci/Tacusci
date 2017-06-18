@@ -84,10 +84,15 @@
 </a>
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getPageRoute()">
-<select class="template-selectbox">
+<select id="template_select" class="template-selectbox">
     <option value="-1"></option>
     #foreach ($template in $TTemplates.getAllTemplates())
-        <option value=$template.getId()>$template.getTitle()</option>
+        <option #if ($pageToEdit.getTemplateToUseId() >= 0)
+                    #if ($pageToEdit.getTemplateToUseId() == $template.getId())
+                        selected="selected"
+                    #end
+                #end
+                value=$template.getId()>$template.getTitle()</option>
     #end
 </select>
 
@@ -144,12 +149,19 @@
         pageContentInput.name = "page_content";
         pageContentInput.value = editor.getValue();
 
+        var templateToUseInput = document.createElement("input");
+        templateToUseInput.id = "template_to_use";
+        templateToUseInput.name = "template_to_use";
+        var templateSelector = document.getElementById("template_select");
+        templateToUseInput.value = templateSelector.options[templateSelector.selectedIndex].value;
+
         savePageForm.appendChild(formHashInput);
         savePageForm.appendChild(formNameInput);
         savePageForm.appendChild(pageIdInput);
         savePageForm.appendChild(pageRouteInput);
         savePageForm.appendChild(pageTitleInput);
         savePageForm.appendChild(pageContentInput);
+        savePageForm.appendChild(templateToUseInput);
 
         document.getElementById("save_page_div").appendChild(savePageForm);
 
