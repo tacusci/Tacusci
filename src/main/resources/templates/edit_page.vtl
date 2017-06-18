@@ -85,9 +85,9 @@
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToEdit.getPageRoute()">
 <select class="template-selectbox">
-    <option value=""></option>
+    <option value="-1"></option>
     #foreach ($template in $TTemplates.getAllTemplates())
-        <option value=$template.getTitle()>$template.getTitle()</option>
+        <option value=$template.getId()>$template.getTitle()</option>
     #end
 </select>
 

@@ -42,6 +42,10 @@
         margin-left: 20px;
     }
 
+    .template-selectbox {
+            margin-left: 20px;
+    }
+
     .back-button {
         margin-left: 20px;
     }
@@ -81,6 +85,12 @@
 </a>
 <input id="page_title_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getTitle()">
 <input id="page_route_editable" class="page-title-editbox" name="page_title" type="text" value="$pageToCreate.getPageRoute()">
+<select class="template-selectbox">
+    <option value="-1"></option>
+    #foreach ($template in $TTemplates.getAllTemplates())
+        <option value=$template.getId()>$template.getTitle()</option>
+    #end
+</select>
 
 <pre id="editor">
     $THTMLUtils.formatForEditing($pageToCreate.getContent())
