@@ -99,6 +99,19 @@ class PageManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun post_CreatePageForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_PAGE_FORM")
+        val pageToCreate = Page()
+        pageToCreate.title = request.queryParams("page_title")
+        pageToCreate.pageRoute = request.queryParams("page_route")
+        pageToCreate.content = request.queryParams("page_content")
+        pageToCreate.lastUpdatedDateTime = System.currentTimeMillis()
+        pageToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        PageHandler.createPage(pageToCreate)
+        response.redirect(rootUri)
+        return response
+    }
+
     private fun post_EditPageForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM")
         val pageToEdit = Page()
@@ -110,19 +123,6 @@ class PageManagementController : Controller {
         pageToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         PageHandler.updatePage(pageToEdit)
         response.redirect(request.uri())
-        return response
-    }
-
-    private fun post_CreatePageForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_PAGE_FORM")
-        val pageToCreate = Page()
-        pageToCreate.title = request.queryParams("page_title")
-        pageToCreate.pageRoute = request.queryParams("page_route")
-        pageToCreate.content = request.queryParams("page_content")
-        pageToCreate.lastUpdatedDateTime = System.currentTimeMillis()
-        pageToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
-        PageHandler.createPage(pageToCreate)
-        response.redirect(rootUri)
         return response
     }
 

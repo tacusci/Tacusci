@@ -35,6 +35,8 @@ import api.core.TacusciAPI
 import app.core.controllers.Controller
 import app.core.core.handlers.TemplateHandler
 import app.core.handlers.UserHandler
+import database.daos.DAOManager
+import database.daos.TemplateDAO
 import database.models.Page
 import database.models.Template
 import extensions.toIntSafe
@@ -86,23 +88,55 @@ class TemplateManagementController : Controller {
         Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
             "create" -> {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CREATE TEMPLATE page")
                 model.put("template", "/templates/create_template.vtl")
                 Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Template")
                 model.put("templateToCreate", Template())
             } "edit" -> {
                 if (request.params("template_id") != null) {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for EDIT TEMPLATE page")
                     model.put("template", "/templates/edit_template.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit template")
-                    val template = TemplateHandler.getTemplateById(request.params("template_id").toIntSafe())
+                    val templateToEdit = TemplateHandler.getTemplateById(request.params("template_id").toIntSafe())
+                    model.put("templateToEdit", templateToEdit)
                 }
             }
         }
         return ModelAndView(model, layoutTemplate)
     }
 
-    private fun post_CreateTemplateForm(request: Request, response: Response): Response { return response }
-    private fun post_EditTemplateForm(request: Request, response: Response): Response { return response }
-    private fun post_DeleteTemplateForm(request: Request, response: Response): Response { return response }
+    private fun post_CreateTemplateForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_TEMPLATE_FORM")
+        val templateToCreate = Template()
+        templateToCreate.title = request.queryParams("template_title")
+        templateToCreate.content = request.queryParams("template_content")
+        templateToCreate.lastUpdatedDateTime = System.currentTimeMillis()
+        templateToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        TemplateHandler.createTemplate(templateToCreate)
+        response.redirect(rootUri)
+        return response
+    }
+
+    private fun post_EditTemplateForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_TEMPLATE_FORM")
+        val templateToEdit = Template()
+        templateToEdit.id = request.queryParams("template_id").toIntSafe()
+        templateToEdit.title = request.queryParams("template_title")
+        templateToEdit.content = request.queryParams("template_content")
+        templateToEdit.lastUpdatedDateTime = System.currentTimeMillis()
+        templateToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
+        TemplateHandler.updateTemplate(templateToEdit)
+        response.redirect(request.uri())
+        return response
+    }
+
+    private fun post_DeleteTemplateForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_TEMPLATE_FORM")
+        val templateDAO = DAOManager.getDAO(DAOManager.TABLE.TEMPLATES) as TemplateDAO
+        TemplateHandler.deleteTemplate(templateDAO.getTemplateById(request.queryParams("template_id").toIntSafe()))
+        response.redirect(rootUri)
+        return response
+    }
 
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("template_management/create")) {
@@ -114,7 +148,7 @@ class TemplateManagementController : Controller {
                 return post_EditTemplateForm(request, response)
             }
         } else if (request.uri().contains("template_management/delete")) {
-            if (Web.getFormHash(request, "delete_template_form") == request.queryParams("hashid")) {
+            if (Web.getFormHash(request, "delete_template_form_${request.queryParams("template_id")}") == request.queryParams("hashid")) {
                 return post_DeleteTemplateForm(request, response)
             }
         }

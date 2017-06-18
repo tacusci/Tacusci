@@ -45,7 +45,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
     fun insertTemplate(template: Template): Boolean {
         connect()
         try {
-            val createTemplateStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, TEMPLATE_TITLE, TEMPLATE CONTENT, AUTHOR_USER_ID) VALUES (?,?,?,?,?)"
+            val createTemplateStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, TEMPLATE_TITLE, TEMPLATE_CONTENT, AUTHOR_USER_ID) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createTemplateStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -63,12 +63,13 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
     fun updateTemplate(template: Template): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_TIME=?, TEMPLATE_TITLE=?, TEMPLATE_CONTENT=?, AUTHOR_USER_ID=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, TEMPLATE_TITLE=?, TEMPLATE_CONTENT=?, AUTHOR_USER_ID=? WHERE ID_TEMPLATE=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, template.title)
             preparedStatement?.setString(3, template.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setInt(4, template.authorUserId)
+            preparedStatement?.setInt(5, template.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -111,7 +112,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
         val template = Template()
         connect()
         try {
-            val selectStatement = "SELETE * FROM $tableName WHERE ID_TEMPLATE=?"
+            val selectStatement = "SELECT * FROM $tableName WHERE ID_TEMPLATE=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, templateId)
             val resultSet = preparedStatement?.executeQuery()
@@ -137,7 +138,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String) : Ge
         }
     }
 
-    fun getAlTemplates(): MutableList<Template> {
+    fun getAllTemplates(): MutableList<Template> {
         val templates = mutableListOf<Template>()
         connect()
         try {

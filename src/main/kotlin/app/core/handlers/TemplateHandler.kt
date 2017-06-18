@@ -54,7 +54,7 @@ object TemplateHandler : KLogging() {
     }
 
     fun getAllTemplates(): MutableList<Template> {
-        return templateDAO.getAlTemplates()
+        return templateDAO.getAllTemplates()
     }
 
     fun getTemplateById(templateId: Int): Template {
