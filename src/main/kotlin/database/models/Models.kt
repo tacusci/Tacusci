@@ -109,8 +109,10 @@ data class RouteEntity(var id: Long, var parentId: Long, var name: String,
 
 data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
                 var title: String = "", var pageRoute: String = "", var maintenanceMode: Int = 0,
-                var content: String = "", var authorUserId: Int = -1,
+                var content: String = "",
                 var isDeleteable: Boolean = true,
+                var templateToUseId: Int = -1,
+                var authorUserId: Int = -1,
                 var type: StructuredPage.PageType = StructuredPage.PageType.RAW)
 
 data class Template(var id: Int = 1, var createdDateTime: Long = 1, var lastUpdatedDateTime: Long = -1,
