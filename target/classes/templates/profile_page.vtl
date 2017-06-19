@@ -34,7 +34,7 @@
             $!dashboard_link
             $!login_or_profile_link
             $!sign_up_menu_link
-            #if ($TUser.isLoggedIn())
+            #if ($TUsers.isLoggedIn())
                 $TForms.getSignOutForm()
             #end
         </ul>
@@ -44,9 +44,9 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         <h1>$User.getUsername()</h1>
-        #if ($TUser.isLoggedIn())
+        #if ($TUsers.isLoggedIn())
             #throw error comparison is not working
-            #if ($TUser.getUsername() == $profile_page_user.getUsername())
+            #if ($TUsers.getUsername() == $profile_page_user.getUsername())
                 $!reset_password_link
             #end
         #end
