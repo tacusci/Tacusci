@@ -1,5 +1,6 @@
 package api.users;
 
+import api.core.TAPIClass;
 import app.core.handlers.UserHandler;
 import database.models.User;
 import spark.Request;
@@ -10,13 +11,11 @@ import java.util.ArrayList;
 /**
  * Created by alewis on 22/05/2017.
  */
-public class TUser {
+public class TUsers extends TAPIClass {
+
+    public TUsers(Request request, Response response) { super(request, response); }
 
     public String getRootAdminUsername() { return UserHandler.INSTANCE.getRootAdmin().getUsername(); }
-    private Request request = null;
-    private Response response = null;
-
-    public TUser(Request request, Response response) { this.request = request; this.response = response; }
 
     public boolean isLoggedIn() { return UserHandler.INSTANCE.isLoggedIn(request); }
 

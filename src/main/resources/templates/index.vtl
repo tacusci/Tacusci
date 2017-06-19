@@ -31,18 +31,22 @@
         <link rel="icon" href=""/>
     </head>
     <body>
-        <a href=$home_link_address>Home</a>
-        <a href=$dashboard_link_address>Dashboard</a>
-        #if (!$TUser.isLoggedIn())
-            <a href=$login_link_address>Login</a>
-            <a href=$sign_up_link_address>Sign Up</a>
-        #else
-            <a href=$profile_link_address>$TUser.getLoggedInUsername()</a>
-        #end
+        <nav>
+            <a href=$home_link_address>Home</a>
+            #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "admins"))
+                <a href=$dashboard_link_address>Dashboard</a>
+            #end
+            #if (!$TUsers.isLoggedIn())
+                <a href=$login_link_address>Login</a>
+                <a href=$sign_up_link_address>Sign Up</a>
+            #else
+                <a href=$profile_link_address>$TUsers.getLoggedInUsername()</a>
+            #end
 
-        #if ($TUser.isLoggedIn())
-            $TForms.getSignOutForm()
-        #end
+            #if ($TUsers.isLoggedIn())
+                $TForms.getSignOutForm()
+            #end
+        </nav>
         <h2>Tacusci Website</h2>
     </body>
 </html>

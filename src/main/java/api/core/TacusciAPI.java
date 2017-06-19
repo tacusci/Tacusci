@@ -1,9 +1,10 @@
 package api.core;
 
 import api.forms.TForms;
+import api.groups.TGroups;
 import api.pages.TPages;
 import api.templates.TTemplates;
-import api.users.TUser;
+import api.users.TUsers;
 import app.Application;
 import app.core.core.controllers.Web;
 import database.models.Page;
@@ -29,9 +30,10 @@ public class TacusciAPI {
     }
 
     private static void init(Request request, Response response) {
-        apiObjInstances.add(new Pair<>("TUser", new TUser(request, response)));
+        apiObjInstances.add(new Pair<>("TUsers", new TUsers(request, response)));
         apiObjInstances.add(new Pair<>("TForms", new TForms(request, response)));
         apiObjInstances.add(new Pair<>("TPages", new TPages(request, response)));
+        apiObjInstances.add(new Pair<>("TGroups", new TGroups(request, response)));
         apiObjInstances.add(new Pair<>("TTemplates", new TTemplates(request, response)));
         apiObjInstances.add(new Pair<>("TResponse", new TResponse(request, response)));
         apiObjInstances.add(new Pair<>("TRequest", new TRequest(request, response)));

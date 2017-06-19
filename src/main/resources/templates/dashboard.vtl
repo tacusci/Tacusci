@@ -34,7 +34,7 @@
             $!dashboard_link
             $!login_or_profile_link
             $!sign_up_menu_link
-            #if ($TUser.isLoggedIn())
+            #if ($TUsers.isLoggedIn())
                 $TForms.getSignOutForm()
             #end
         </ul>
@@ -43,9 +43,9 @@
 
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
-        <h1 class="header">Welcome $TUser.getLoggedInUser().getUsername()</h1>
+        <h1 class="header">Welcome $TUsers.getLoggedInUser().getUsername()</h1>
         <h2 class="header">Dashboard</h2>
-            <a href="/profile/$TUser.getLoggedInUser().getUsername()" class="pure-button button-darker">Go to profile</a>
+            <a href="/profile/$TUsers.getLoggedInUser().getUsername()" class="pure-button button-darker">Go to profile</a>
             <a href="/dashboard/user_management" class="pure-button button-darker">User Administration</a>
             <a href="/dashboard/page_management" class="pure-button button-darker">Page Management</a>
             <a href="/dashboard/template_management" class="pure-button button-darker">Template Management</a>
