@@ -34,8 +34,7 @@ package app.core.core.controllers
 import api.core.TacusciAPI
 import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
-import j2html.TagCreator.h2
-import j2html.TagCreator.pre
+import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -60,17 +59,17 @@ object Web : KLogging() {
     }
 
     fun loadNavigationElements(request: Request, model: HashMap<String, Any>): HashMap<String, Any> {
-        model.put("home_link", j2htmlPartials.pureMenuItemLink("/", "Home").render())
-        model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/login", "Login").render())
-        model.put("sign_up_menu_link", j2htmlPartials.pureMenuItemLink("/register", "Sign Up").render())
+
+        model.put("home_link_address", "/")
+        model.put("login_link_address", "/login")
+        model.put("sign_up_link_address", "/register")
 
         if (UserHandler.isLoggedIn(request)) {
             val username = UserHandler.loggedInUsername(request)
             if (GroupHandler.userInGroup(username, "admins") || GroupHandler.userInGroup(username, "moderators")) {
-                model.put("dashboard_link", j2htmlPartials.pureMenuItemLink("/dashboard", "Dashboard").render())
+                model.put("dashboard_link_address", "/dashboard")
             }
-            model.put("login_or_profile_link", j2htmlPartials.pureMenuItemLink("/profile", UserHandler.loggedInUsername(request)).render())
-            model.put("sign_up_menu_link", "")
+            model.put("profile_link_address", "/profile/${UserHandler.loggedInUsername(request)}")
             model.put("sign_out_form", j2htmlPartials.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render())
         }
         return model

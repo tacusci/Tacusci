@@ -31,10 +31,15 @@
         <link rel="icon" href=""/>
     </head>
     <body>
-        $!home_link
-        $!dashboard_link
-        $!login_or_profile_link
-        $!sign_up_menu_link
+        <a href=$home_link_address>Home</a>
+        <a href=$dashboard_link_address>Dashboard</a>
+        #if (!$TUser.isLoggedIn())
+            <a href=$login_link_address>Login</a>
+            <a href=$sign_up_link_address>Sign Up</a>
+        #else
+            <a href=$profile_link_address>$TUser.getLoggedInUsername()</a>
+        #end
+
         #if ($TUser.isLoggedIn())
             $TForms.getSignOutForm()
         #end
