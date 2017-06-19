@@ -27,6 +27,28 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
+<nav>
+    <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a class="pure-menu-link" href=$home_link_address>Home</a></li>
+                #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "admins"))
+                    <li class="pure-menu-item"><a class="pure-menu-link" href=$dashboard_link_address>Dashboard</a></li>
+                #end
+
+                #if (!$TUsers.isLoggedIn())
+                    <li class="pure-menu-item"><a class="pure-menu-link" href=$login_link_address>Login</a></li>
+                    <li class="pure-menu-item"><a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a></li>
+                #else
+                    <li class="pure-menu-item"><a class="pure-menu-link" href=$profile_link_address>$TUsers.getLoggedInUsername()</a></li>
+                #end
+
+                #if ($TUsers.isLoggedIn())
+                    $TForms.getSignOutForm()
+                #end
+        </ul>
+    </div>
+</nav>
+
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
     <div id="header"><h1>Server Error</h1></div>
