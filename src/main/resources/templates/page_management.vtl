@@ -60,10 +60,10 @@
 <div class="pure-g">
     <a href="$TRequest.getRequestURI()/create_page">
         <div class="pure-u-24-24" style="margin-left: 1em; padding-bottom: 1em;">
-            <a href="/dashboard" class="pure-button button-darker back-button">
+            <a href="/dashboard" class="pure-button button-theme back-button">
                 <img src="/images/back_arrow.png" style="width:23px;height:17px;">
             </a>
-            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-darker")
+            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-theme")
         </div>
     </a>
     #foreach ($page in $TPages.getAllPages())
@@ -81,14 +81,14 @@
                         <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_page_form_$page.getId()") hidden>
                         <input id="formName" name="formName" type="text" value="delete_page_form_$page.getId()" hidden>
                         <input id="page_id" name="page_id" type="text" value="$page.getId()" hidden>
-                        <button type="submit" class="pure-button button-darker page-info">X</button>
+                        <button type="submit" class="pure-button button-theme page-info">X</button>
                     </form>
                 </div>
             #end
 
             <div class="pure-u-24-24" style="display: inline-block">
-                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$page.getId()", "EDIT", "button-darker")
-                $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-darker")
+                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$page.getId()", "EDIT", "button-theme")
+                $THTMLUtils.getButtonStyledLinkOpenNewTab($page.getPageRoute(), "VIEW", "button-theme")
             </div>
         </div>
     #end

@@ -60,10 +60,10 @@
 <div class="pure-g">
     <a href="$TRequest.getRequestURI()/create_template">
         <div class="pure-u-24-24" style="margin-left: 1em; padding-bottom: 1em;">
-            <a href="/dashboard" class="pure-button button-darker back-button">
+            <a href="/dashboard" class="pure-button button-theme back-button">
                 <img src="/images/back_arrow.png" style="width:23px;height:17px;">
             </a>
-            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE TEMPLATE", "button-darker")
+            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE TEMPLATE", "button-theme")
         </div>
     </a>
     #foreach ($template in $TTemplates.getAllTemplates())
@@ -79,12 +79,12 @@
                     <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_template_form_$template.getId()") hidden>
                     <input id="formName" name="formName" type="text" value="delete_template_form_$template.getId()" hidden>
                     <input id="template_id" name="template_id" type="text" value="$template.getId()" hidden>
-                    <button type="submit" class="pure-button button-darker page-info">X</button>
+                    <button type="submit" class="pure-button button-theme page-info">X</button>
                 </form>
             </div>
 
             <div class="pure-u-24-24" style="display: inline-block">
-                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$template.getId()", "EDIT", "button-darker")
+                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$template.getId()", "EDIT", "button-theme")
             </div>
         </div>
     #end
