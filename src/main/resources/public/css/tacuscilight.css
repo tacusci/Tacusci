@@ -4,8 +4,8 @@ html {
     font-size: 9.5pt;
 }
 
-.light-shade {
-    color: #cec8c8;
+.theme-shade {
+    rgb(95, 97, 102);
 }
 
 div.centered {
@@ -58,8 +58,8 @@ div.page-info {
   padding-left: 0.5em;
   padding-right: 0.5em;
   padding-bottom: 0.5em;
-  color: #cec8c8;
-  background-color: #282727;
+  color: rgb(95, 97, 102);
+  background-color: rgb(240, 240, 240);
   border: 1px solid #302e2e;
   display:inline;
 }
@@ -95,19 +95,19 @@ submit-link:focus {
 }
 
 .header {
-     color: #cec8c8;
+     color: rgb(95, 97, 102);
      text-align: center;
  }
 
  .header h1 {
-    color: #cec8c8;
+    color: rgb(95, 97, 102);
     margin: 0.2em 0;
     font-size: 3em;
     font-weight: 300;
 }
 
 .header h2 {
-    color: #cec8c8;
+    color: rgb(95, 97, 102);
     font-weight: 300;
     padding: 0;
     margin-top: 0;
@@ -139,8 +139,8 @@ submit-link:focus {
         }
 
         .button-theme {
-            color: rgb(200, 200, 200);
-            background: rgb(95, 97, 102);
+            color: rgb(95, 97, 102);
+            background: rgb(200, 200, 200);
         }
 
 .log-view-pane { resize:vertical; max-height:800px; min-height:600px; width: 85%; }
