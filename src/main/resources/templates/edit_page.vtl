@@ -67,6 +67,7 @@
     <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a class="pure-menu-link" href=$home_link_address>Home</a></li>
+
                 #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "admins"))
                     <li class="pure-menu-item"><a class="pure-menu-link" href=$dashboard_link_address>Dashboard</a></li>
                 #end
@@ -79,8 +80,15 @@
                 #end
 
                 #if ($TUsers.isLoggedIn())
-                    $TForms.getSignOutForm()
+                    <li class="pure-menu-item">
+                        <form id="sign_out_form" name="sign_out_form" method="post" action="/login">
+                            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("sign_out_form") hidden/>
+                            <input name="formName" value="sign_out_form" hidden/>
+                            <input type="submit" class="submit-link" value="Logout"/>
+                        </form>
+                    </li>
                 #end
+             </li>
         </ul>
     </div>
 </nav>
