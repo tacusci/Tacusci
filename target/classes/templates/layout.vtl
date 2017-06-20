@@ -43,7 +43,13 @@
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="/css/pure_css/grids-responsive-min.css">
     <!--<![endif]--></head>
-    <link rel="stylesheet" type="text/css" href="/css/tacuscidefault.css">
+
+    #set($cssFile="/css/tacuscidark.css")
+    #if ($TConfig.getProperty("color-theme") == "light")
+        #set($cssFile="/css/tacuscilight.css")
+    #end
+
+    <link rel="stylesheet" type="text/css" href=$cssFile>
 
 <link rel="icon" href=""/>
 <body>
