@@ -67,7 +67,7 @@ class ProfileController : Controller {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
         model.put("template", templatePath)
-        model.put("profile_page_user", UserHandler.userDAO.getUser(username))
+        model.put("profilePageUser", UserHandler.userDAO.getUser(username))
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
         val user = UserHandler.userDAO.getUser(username)

@@ -83,7 +83,8 @@ class LogFileViewController : Controller {
         if (logFile.exists()) {
             val logFileTextArea = textarea().withClass("boxsizingBorder log-view-pane styled-text-area").attr("readonly", "true").attr("wrap", "hard")
             logFileTextArea.withText(getLogFileLines(request.session(), logFile))
-            model.put("logFilePath", h2(logFile.absolutePath).withClass("centered"))
+            //h2(logFile.absolutePath).withClass("centered"))
+            model.put("logFilePath", logFile.absolutePath)
             model.put("refreshForm", genRefreshForm(request.session(), logFile))
             model.put("logFileLines", logFileTextArea.render())
         } else {
