@@ -55,6 +55,8 @@ import kotlin.concurrent.thread
 
 class Application {
 
+    private val VERSION = "v.1.0.0"
+
     var restarting = false
     val dbProperties = Properties()
     val layoutTemplate = "/templates/layout.vtl"
