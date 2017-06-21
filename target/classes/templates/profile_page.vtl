@@ -59,11 +59,11 @@
 
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
-        <h1>$User.getUsername()</h1>
+        <h1 class="header">$User.getUsername()</h1>
+
         #if ($TUsers.isLoggedIn())
-            #throw error comparison is not working
-            #if ($TUsers.getUsername() == $profile_page_user.getUsername())
-                $!reset_password_link
+            #if ($TUsers.getLoggedInUsername() == $profilePageUser.getUsername())
+                <a href="/reset_password/$TUsers.getLoggedInUsername()" class="pure-button button-theme">Reset Password</a>
             #end
         #end
     </div>

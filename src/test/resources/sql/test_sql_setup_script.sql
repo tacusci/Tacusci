@@ -1,4 +1,4 @@
-CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`users` (
   `id_users` INT NOT NULL AUTO_INCREMENT,
@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   `page_title` VARCHAR(100) NOT NULL,
   `page_route` VARCHAR(200) NOT NULL,
   `page_content` LONGTEXT NOT NULL,
+  `deleteable` BIT(1) NOT NULL,
+  `template_to_use_id` INT,
   `maintenance_mode` BIT(1) NOT NULL,
   `author_user_id` INT NOT NULL,
   `page_type` INT NOT NULL,
@@ -58,10 +60,12 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`pages` (
   UNIQUE INDEX `id_page_UNIQUE` (`id_page` ASC),
   UNIQUE INDEX `page_route` (`page_route` ASC));
 
-CREATE TABLE IF NOT EXISTS `$schema_name`.`page_footer` (
-  `id_page_footer` INT NOT NULL AUTO_INCREMENT,
-  `created_date_time` LONG NOT NULL,
-  `last_updated_date_time` LONG NOT NULL,
-  `author_user_id` INT NOT NULL,
-  PRIMARY KEY (`id_page_footer`),
-  UNIQUE INDEX `id_page_footer_UNIQUE` (`id_page_footer` ASC));
+CREATE TABLE IF NOT EXISTS `$schema_name`.`templates` (
+    `id_template` INT NOT NULL AUTO_INCREMENT,
+    `created_date_time` LONG NOT NULL,
+    `last_updated_date_time` LONG NOT NULL,
+    `template_title` VARCHAR(100) NOT NULL UNIQUE,
+    `template_content` LONGTEXT NOT NULL,
+    `author_user_id` INT NOT NULL,
+    PRIMARY KEY (`id_template`),
+    UNIQUE INDEX `id_page_UNIQUE` (`id_template` ASC));
