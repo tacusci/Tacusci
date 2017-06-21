@@ -146,7 +146,7 @@ class ResetPasswordController : Controller {
     fun genAccessExpiredContent(request: Request, model: HashMap<String, Any>) {
         Web.loadNavigationElements(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Tried accessing an expired reset password form address")
-        model.put("access_expired_message", h1("Access has expired"))
+        model.put("access_expired_message", h1("Access has expired").withClass("header"))
     }
 
     private fun post_resetPassword(request: Request, response: Response): Response {
