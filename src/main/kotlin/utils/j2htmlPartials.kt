@@ -197,14 +197,14 @@ object j2htmlPartials {
                 input().withName("formName").withValue(name).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
-                                label("Full Name").attr("for", "full_name"),
+                                label("Full Name").withClass("theme-shade").attr("for", "full_name"),
                                 fullNameInput("full_name", "Full Name")
                         ),
 
                         label("Full Name Invalid").withCondHidden(!session.attribute<Boolean>("full_name_field_error")),
 
                         div().withClass("pure-control-group").with(
-                                label("Username").attr("for", "username"),
+                                label("Username").withClass("theme-shade").attr("for", "username"),
                                 usernameInput("username", "Username")
                         ),
 
@@ -212,32 +212,32 @@ object j2htmlPartials {
                         label("Username is not available").withCondHidden(!session.attribute<Boolean>("username_not_available_error")),
 
                         div().withClass("pure-control-group").with(
-                                label("Password").attr("for", "password"),
+                                label("Password").withClass("theme-shade").attr("for", "password"),
                                 validatedPasswordInput("password", "Password")
                         ),
 
                         label("Password is invalid").withCondHidden(!session.attribute<Boolean>("password_field_error")),
 
                         div().withClass("pure-control-group").with(
-                                label("Repeat Password").attr("for", "repeat_password"),
+                                label("Repeat Password").withClass("theme-shade").attr("for", "repeat_password"),
                                 validatedPasswordInput("repeat_password", "Repeat Password")
                         ),
 
                         label("Repeated password is invalid").withCondHidden(!session.attribute<Boolean>("repeated_password_field_error")),
-                        label("Passwords do not match").withCondHidden(!session.attribute<Boolean>("passwords_mismatch_error")),
+                        label("Passwords do not match").withClass("theme-shade").withCondHidden(!session.attribute<Boolean>("passwords_mismatch_error")),
 
                         div().withClass("pure-control-group").with(
-                                label("Email").attr("for", "email"),
+                                label("Email").withClass("theme-shade").attr("for", "email"),
                                 emailInput("email", "Email")
                         ),
 
-                        label("Email is invalid").withCondHidden(!session.attribute<Boolean>("email_field_error")),
+                        label("Email is invalid").withClass("theme-shade").withCondHidden(!session.attribute<Boolean>("email_field_error")),
 
                         div().withClass("pure-controls").with(
-                                button("Register").withMethod("submit").withClass("pure-button pure-button-primary")
+                                button("Register").withClass("theme-shade").withMethod("submit").withClass("pure-button pure-button-primary")
                         ),
 
-                        label("User created successfully").withCondHidden(!session.attribute<Boolean>("user_created_successfully"))
+                        label("User created successfully").withClass("theme-shade").withCondHidden(!session.attribute<Boolean>("user_created_successfully"))
                 )
         )
     }
