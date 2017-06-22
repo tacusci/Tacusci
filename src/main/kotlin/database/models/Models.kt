@@ -70,7 +70,7 @@ data class User(var id: Int, var createdDateTime: Long, var lastUpdatedDateTime:
 }
 
 
-data class Group(val name: String) {
+data class Group(val name: String, var parentGroupId: Int) {
 
     fun isValid(): Boolean {
         if (!isNameValid()) { return false }

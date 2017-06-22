@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS  `$schema_name`.`groups` (
   `created_date_time` LONG NOT NULL,
   `last_updated_date_time` LONG NOT NULL,
   `group_name` VARCHAR(45) NOT NULL,
+  `id_parent_group` INT,
   PRIMARY KEY (`id_groups`),
   UNIQUE INDEX `id_groups_UNIQUE` (`id_groups` ASC),
   UNIQUE INDEX `group_name_UNIQUE` (`group_name` ASC));
