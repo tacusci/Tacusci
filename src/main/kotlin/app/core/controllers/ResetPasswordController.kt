@@ -178,7 +178,7 @@ class ResetPasswordController : Controller {
                 if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
                     if (newPassword == newPasswordRepeated) {
                         if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
-                            Config.props.setProperty("default-admin-password", newPassword)
+                            Config.props.setProperty("root-password", newPassword)
                             Config.storeAll()
                             if (UserHandler.updateRootAdmin()) {
                                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
