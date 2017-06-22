@@ -250,14 +250,14 @@ object j2htmlPartials {
                 input().withName("username").withValue(username).isHidden,
                 fieldset().with(
                         div().withClass("pure-control-group").with(
-                                label("Type new password").attr("for", "new_password"),
+                                label("Type new password").withClass("theme-shade").attr("for", "new_password"),
                                 validatedPasswordInput("new_password", "New password")
                         ),
 
-                        label("New password is invalid").withCondHidden(!session.attribute<Boolean>("new_password_field_error")),
+                        label("New password is invalid").withClass("theme-shade").withCondHidden(!session.attribute<Boolean>("new_password_field_error")),
 
                         div().withClass("pure-control-group").with(
-                                label("Retype new password").attr("for", "new_password_repeated"),
+                                label("Retype new password").withClass("theme-shade").attr("for", "new_password_repeated"),
                                 validatedPasswordInput("new_password_repeated", "Retype new password")
                         ),
 
