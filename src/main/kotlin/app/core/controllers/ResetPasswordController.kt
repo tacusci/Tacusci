@@ -47,6 +47,7 @@ import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
+import javax.xml.registry.infomodel.User
 
 /**
  * Created by alewis on 12/03/2017.
@@ -122,16 +123,16 @@ class ResetPasswordController : Controller {
         val resetPasswordForm = j2htmlPartials.pureFormAligned_ResetPassword(request.session(), "reset_password_form", username, "$rootUri/$username/$authHash", "post")
         val userDAO = DAOManager.getDAO(DAOManager.TABLE.USERS) as UserDAO
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
-        model.put("reset_password_form", h1("Reset Password").render() + resetPasswordForm.render())
+        model.put("reset_password_form", h1("Reset Password").withClass("header").render() + resetPasswordForm.render())
         if (request.session().attribute("reset_password_successfully")) {
-            model.put("password_reset_successful", h2("Password reset successfully"))
+            model.put("password_reset_successful", h2("Password reset successfully").withClass("header"))
             request.session().attribute("reset_password_successfully", false)
             val userId = userDAO.getUserID(username)
             //update hash to mark it as expired
             resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
         } else {
             if (request.session().attribute("passwords_dont_match")) {
-                model.put("passwords_dont_match", h2("Passwords don't match"))
+                model.put("passwords_dont_match", h2("Passwords don't match").withClass("header"))
                 request.session().attribute("passwords_dont_match", true)
             }
         }
@@ -140,7 +141,7 @@ class ResetPasswordController : Controller {
     fun genAccessDeniedContent(request: Request, model: HashMap<String, Any>) {
         Web.loadNavigationElements(request, model)
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Tried accessing someone's reset password form")
-        model.put("unauthorised_reset_request_message", h1("Access Denied"))
+        model.put("unauthorised_reset_request_message", h1("Access Denied").withClass("header"))
     }
 
     fun genAccessExpiredContent(request: Request, model: HashMap<String, Any>) {
@@ -177,7 +178,7 @@ class ResetPasswordController : Controller {
                 if (newPasswordInputIsValid && newRepeatedPasswordIsValid) {
                     if (newPassword == newPasswordRepeated) {
                         if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
-                            Config.props.setProperty("default_admin_password", newPassword)
+                            Config.props.setProperty("default-admin-password", newPassword)
                             Config.storeAll()
                             if (UserHandler.updateRootAdmin()) {
                                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
