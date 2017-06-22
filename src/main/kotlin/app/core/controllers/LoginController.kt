@@ -33,6 +33,7 @@ package app.core.core.controllers
 
 import api.core.TacusciAPI
 import app.core.controllers.Controller
+import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
@@ -75,7 +76,11 @@ class LoginController : Controller {
 
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
-            response.managedRedirect(request, "/dashboard")
+            val loggedInUsername = UserHandler.loggedInUsername(request)
+            if (GroupHandler.userInGroup(loggedInUsername, "admins") || GroupHandler.userInGroup(loggedInUsername, "moderators"))
+                response.managedRedirect(request, "/dashboard")
+            else
+                response.managedRedirect(request, "/")
         }
 
         model.put("template", templatePath)
