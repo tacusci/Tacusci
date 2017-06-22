@@ -77,6 +77,25 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
+    fun getGroups(): MutableList<Group> {
+        val groups = mutableListOf<Group>()
+        connect()
+        try {
+            val selectStatment = "SELECT * FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatment)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                val group = Group("")
+                group.name = resultSet.getString("GROUP_NAME")
+                group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                groups.add(group)
+            }
+            return groups
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
+    }
+
+    fun getParentGroup(group: Group): Group {}
+
     fun groupExists(groupName: String): Boolean {
         connect()
         var count = 0
