@@ -26,9 +26,9 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
+
+
+
 package app.core.core.handlers
 
 import app.core.handlers.UserHandler
@@ -91,12 +91,16 @@ object GroupHandler : KLogging() {
     }
 
     fun userInGroup(username: String, groupName: String): Boolean {
+        var userInGroup = false
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
                 val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                return user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                userInGroup = user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                if (!userInGroup) {
+                    groupDAO.getGroupChildren(groupName).forEach { userInGroup = userInGroup(username, it.name) }
+                }
             }
         }
-        return false
+        return userInGroup
     }
 }

@@ -43,23 +43,6 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
 
     companion object : KLogging()
 
-    fun getGroupID(groupName: String): Int {
-        connect()
-        var groupID = -1
-        try {
-            val selectStatement = "SELECT ID_GROUPS FROM $tableName WHERE GROUP_NAME=?"
-            val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setString(1, groupName)
-            val resultSet = preparedStatement?.executeQuery()
-            if (resultSet!!.next()) {
-                groupID = resultSet.getInt(1)
-            }
-            disconnect()
-        } catch (e: SQLException) { logger.error(e.message); disconnect() }
-        disconnect()
-        return groupID
-    }
-
     fun getGroup(groupId: Int): Group {
         connect()
         val group = Group()
@@ -80,6 +63,27 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return group
     }
 
+    fun getGroup(groupName: String): Group {
+        return getGroup(getGroupID(groupName))
+    }
+
+    fun getGroupID(groupName: String): Int {
+        connect()
+        var groupID = -1
+        try {
+            val selectStatement = "SELECT ID_GROUPS FROM $tableName WHERE GROUP_NAME=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, groupName)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                groupID = resultSet.getInt(1)
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        disconnect()
+        return groupID
+    }
+
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
@@ -97,23 +101,6 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
-    fun getGroups(): MutableList<Group> {
-        val groups = mutableListOf<Group>()
-        connect()
-        try {
-            val selectStatment = "SELECT * FROM $tableName"
-            val preparedStatement = connection?.prepareStatement(selectStatment)
-            val resultSet = preparedStatement?.executeQuery()
-            if (resultSet!!.next()) {
-                val group = Group()
-                group.name = resultSet.getString("GROUP_NAME")
-                group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
-                groups.add(group)
-            }
-            return groups
-        } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
-    }
-
     fun groupExists(groupName: String): Boolean {
         connect()
         var count = 0
@@ -129,6 +116,57 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { e.printStackTrace(); disconnect() }
         disconnect()
         return count > 0
+    }
+
+    fun getGroups(): MutableList<Group> {
+        val groups = mutableListOf<Group>()
+        connect()
+        try {
+            val selectStatment = "SELECT * FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatment)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val group = Group()
+                group.id = resultSet.getInt("ID_GROUPS")
+                group.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
+                group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                group.name = resultSet.getString("GROUP_NAME")
+                group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                groups.add(group)
+            }
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
+        disconnect()
+        return groups
+    }
+
+    fun getGroupChildren(group: Group): MutableList<Group> {
+        return getGroupChildren(group.id)
+    }
+
+    fun getGroupChildren(groupName: String): MutableList<Group> {
+        return getGroupChildren(getGroupID(groupName))
+    }
+
+    fun getGroupChildren(groupId: Int): MutableList<Group> {
+        val childGroups = mutableListOf<Group>()
+        connect()
+        try {
+            val selectStatment = "SELECT * FROM $tableName WHERE ID_PARENT_GROUP=?"
+            val preparedStatement = connection?.prepareStatement(selectStatment)
+            preparedStatement?.setInt(1, groupId)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val group = Group()
+                group.id = resultSet.getInt("ID_GROUPS")
+                group.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
+                group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                group.name = resultSet.getString("GROUP_NAME")
+                group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                childGroups.add(group)
+            }
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return childGroups }
+        disconnect()
+        return childGroups
     }
 
     fun addUserToGroup(username: String, groupName: String): Boolean {

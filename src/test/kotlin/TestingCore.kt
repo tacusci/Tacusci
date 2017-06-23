@@ -94,8 +94,8 @@ object TestingCore {
         //reconnect at the requested specific schema
         DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
 
-        GroupHandler.createGroup(Group("admins"))
-        GroupHandler.createGroup(Group("members"))
+        GroupHandler.createGroup(Group(name = "admins"))
+        GroupHandler.createGroup(Group(name = "members"))
         UserHandler.createRootAdmin()
     }
 

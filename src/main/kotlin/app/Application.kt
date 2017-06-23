@@ -77,11 +77,11 @@ class Application {
     }
 
     fun setupDefaultGroups() {
-        GroupHandler.createGroup(Group("dashboard_access"))
+        GroupHandler.createGroup(Group(name = "dashboard_access"))
         val dashboardGroupId = GroupHandler.groupDAO.getGroupID("dashboard_access")
-        GroupHandler.createGroup(Group("admins", dashboardGroupId))
-        GroupHandler.createGroup(Group("moderators", dashboardGroupId))
-        GroupHandler.createGroup(Group("members"))
+        GroupHandler.createGroup(Group(name = "admins", parentGroupId = dashboardGroupId))
+        GroupHandler.createGroup(Group(name = "moderators", parentGroupId = dashboardGroupId))
+        GroupHandler.createGroup(Group(name = "members"))
         UserHandler.createRootAdmin()
         //root admin might already exist but check for properties file changes
         UserHandler.updateRootAdmin()

@@ -74,12 +74,15 @@ data class Group(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdat
 
     fun isValid(): Boolean {
         if (!isNameValid()) { return false }
+        if (!isParentIdNotId()) { return false }
         return true
     }
 
     fun isNameValid(): Boolean {
         return !(name.isBlank() || name.isEmpty())
     }
+
+    fun isParentIdNotId(): Boolean = id != parentGroupId
 }
 
 class RouteEntityTree() : Tree<RouteEntity>() {
