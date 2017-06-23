@@ -60,6 +60,26 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return groupID
     }
 
+    fun getGroup(groupId: Int): Group {
+        connect()
+        val group = Group()
+        try {
+            val selectStatement = "SELECT * FROM $tableName WHERE ID_GROUPS=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setInt(1, groupId)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                group.id = resultSet.getInt("ID_GROUPS")
+                group.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
+                group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                group.name = resultSet.getString("GROUP_NAME")
+                group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return group }
+        return group
+    }
+
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
@@ -85,7 +105,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             val preparedStatement = connection?.prepareStatement(selectStatment)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                val group = Group("")
+                val group = Group()
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
                 groups.add(group)
@@ -93,8 +113,6 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             return groups
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
     }
-
-    fun getParentGroup(group: Group): Group {}
 
     fun groupExists(groupName: String): Boolean {
         connect()
