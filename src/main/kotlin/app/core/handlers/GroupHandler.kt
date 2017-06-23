@@ -97,10 +97,19 @@ object GroupHandler : KLogging() {
                 val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
                 userInGroup = user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
                 if (!userInGroup) {
-                    groupDAO.getGroupChildren(groupName).forEach { userInGroup = userInGroup(username, it.name) }
+                    return checkChildren(username, groupName)
                 }
             }
         }
         return userInGroup
+    }
+
+    private fun checkChildren(username: String, groupName: String): Boolean {
+        groupDAO.getGroupChildren(groupName).forEach { childGroup ->
+            if (this.userInGroup(username, childGroup.name)) {
+                return true
+            } else return checkChildren(username, childGroup.name)
+        }
+        return false
     }
 }
