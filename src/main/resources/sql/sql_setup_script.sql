@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`route_permissions` (
     `id_permission` INT NOT NULL AUTO_INCREMENT,
     `created_date_time` LONG NOT NULL,
     `last_updated_date_time` LONG NOT NULL,
-    `permission_title` VARCHAR(100) NOT NULL,
+    `permission_title` VARCHAR(100) NOT NULL UNIQUE,
     `route` VARCHAR(200) NOT NULL,
     `id_groups` INT NOT NULL,
     PRIMARY KEY (`id_permission`));
