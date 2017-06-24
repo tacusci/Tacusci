@@ -123,3 +123,6 @@ data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdate
 
 data class Template(var id: Int = 1, var createdDateTime: Long = 1, var lastUpdatedDateTime: Long = -1,
                     var title: String = "", var content: String = "", var authorUserId: Int = -1)
+
+data class RoutePermission(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
+                           var title: String = "", var route: String = "", var groupId: Int = -1)

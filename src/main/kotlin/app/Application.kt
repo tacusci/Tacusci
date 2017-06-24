@@ -114,6 +114,7 @@ class Application {
     fun setupSparkRoutes() {
 
         ControllerManager.mapAccessToStaticLocalFolder()
+        ControllerManager.initDefaultRoutePermissions()
         ControllerManager.initBaseControllers()
 
         PageController.setupPages()
@@ -131,22 +132,8 @@ class Application {
             session.maxInactiveInterval(Config.getProperty("session-idle-timeout").toIntSafe())
         })
 
-        before("/dashboard", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
-                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
-            }
-        })
-
-        before("/dashboard/*", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
-                halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
-            }
-        })
-
-        notFound({ request, response -> Web.get404Page(request, response) })
-        internalServerError({ request, response -> Web.get500Page(request, response) })
+        ControllerManager.applyGroupPermissionsToRoutes()
+        ControllerManager.initResponsePages()
     }
 
     /*

@@ -29,7 +29,14 @@
 
 package app.core.controllers
 
+import app.Application
 import app.core.core.controllers.*
+import app.core.core.handlers.GroupHandler
+import app.core.handlers.UserHandler
+import database.daos.DAOManager
+import database.daos.RoutePermissionDAO
+import database.models.RoutePermission
+import database.models.User
 import mu.KLogging
 import spark.Session
 import spark.Spark
@@ -63,7 +70,37 @@ object ControllerManager : KLogging() {
             }
         }
     }
+
+    fun initDefaultRoutePermissions() {
+        val routePermissionDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_PERMISSIONS) as RoutePermissionDAO
+        val dashboardAccessGroupId = GroupHandler.groupDAO.getGroupID("dashboard_access")
+        routePermissionDAO.insertRoutePermission(RoutePermission(title = "Dashboard Access", route = "/dashboard", groupId = dashboardAccessGroupId))
+        routePermissionDAO.insertRoutePermission(RoutePermission(title = "Dashboard Access Wildcard", route = "/dashboard/*", groupId = dashboardAccessGroupId))
+    }
+
     fun mapAccessToStaticLocalFolder() {
         Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
+    }
+
+    fun applyGroupPermissionsToRoutes() {
+
+        Spark.before("/dashboard", { request, response ->
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
+                Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
+            }
+        })
+
+        Spark.before("/dashboard/*", { request, response ->
+            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
+                Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
+            }
+        })
+    }
+
+    fun initResponsePages() {
+        Spark.notFound({ request, response -> Web.get404Page(request, response) })
+        Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
     }
 }
