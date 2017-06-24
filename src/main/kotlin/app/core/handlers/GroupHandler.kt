@@ -91,6 +91,23 @@ object GroupHandler : KLogging() {
     }
 
     fun userInGroup(username: String, groupName: String): Boolean {
+        val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+        if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))) {
+            return true
+        } else {
+            groupDAO.getGroupChildren(groupName).forEach { childGroup ->
+                if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(childGroup.name))) {
+                    return true
+                } else {
+                    return userInGroup(username, childGroup.name)
+                }
+            }
+        }
+        return false
+    }
+
+    /*
+    fun userInGroup(username: String, groupName: String): Boolean {
         var userInGroup = false
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
@@ -105,11 +122,14 @@ object GroupHandler : KLogging() {
     }
 
     private fun checkChildren(username: String, groupName: String): Boolean {
+        var found = false
         groupDAO.getGroupChildren(groupName).forEach { childGroup ->
             if (this.userInGroup(username, childGroup.name)) {
-                return true
+                found = true
+                return@forEach
             } else return checkChildren(username, childGroup.name)
         }
-        return false
+        return found
     }
+    */
 }

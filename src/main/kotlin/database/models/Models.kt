@@ -82,7 +82,10 @@ data class Group(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdat
         return !(name.isBlank() || name.isEmpty())
     }
 
-    fun isParentIdNotId(): Boolean = id != parentGroupId
+    fun isParentIdNotId(): Boolean {
+        if (id == -1 || parentGroupId == -1) return true
+        return id != parentGroupId
+    }
 }
 
 class RouteEntityTree() : Tree<RouteEntity>() {

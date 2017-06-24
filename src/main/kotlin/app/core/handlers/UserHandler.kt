@@ -126,8 +126,8 @@ object  UserHandler : KLogging() {
         //once inserted, this won't be auto updated...
         if (userDAO.insertUser(configRootAdmin)) logger.info("Created root admin successfully") else logger.info("Unable to create root admin account...")
 
-        GroupHandler.addUserToGroup(configRootAdmin, "members")
         GroupHandler.addUserToGroup(configRootAdmin, "admins")
+        GroupHandler.addUserToGroup(configRootAdmin, "members")
         return true
     }
 

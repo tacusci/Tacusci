@@ -77,7 +77,7 @@ class LoginController : Controller {
         if (UserHandler.isLoggedIn(request)) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> User already logged in, redirecting to landing page")
             val loggedInUsername = UserHandler.loggedInUsername(request)
-            if (GroupHandler.userInGroup(loggedInUsername, "admins") || GroupHandler.userInGroup(loggedInUsername, "moderators"))
+            if (GroupHandler.userInGroup(loggedInUsername, "dashboard_access"))
                 response.managedRedirect(request, "/dashboard")
             else
                 response.managedRedirect(request, "/")
