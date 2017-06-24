@@ -145,8 +145,6 @@ class Application {
             }
         })
 
-        //MAP CUSTOM RESPONSE PAGES
-
         notFound({ request, response -> Web.get404Page(request, response) })
         internalServerError({ request, response -> Web.get500Page(request, response) })
     }

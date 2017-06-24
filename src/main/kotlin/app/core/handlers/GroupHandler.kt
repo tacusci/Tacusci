@@ -32,6 +32,7 @@
 package app.core.core.handlers
 
 import app.core.handlers.UserHandler
+import com.sun.org.apache.xpath.internal.operations.Bool
 import database.daos.DAOManager
 import database.daos.GroupDAO
 import database.daos.User2GroupDAO
@@ -92,44 +93,35 @@ object GroupHandler : KLogging() {
 
     fun userInGroup(username: String, groupName: String): Boolean {
         val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-        if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))) {
-            return true
-        } else {
-            groupDAO.getGroupChildren(groupName).forEach { childGroup ->
-                if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(childGroup.name))) {
-                    return true
-                } else {
-                    return userInGroup(username, childGroup.name)
-                }
-            }
+        if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), GroupHandler.groupDAO.getGroupID(groupName))) return true
+        groupDAO.getGroupChildren(groupName).forEach { childGroup ->
+            if (userInGroup(username, childGroup.name))
+                return true
+            else
+                groupDAO.getGroupChildren(childGroup).forEach { userInGroup(username, it.name) }
         }
         return false
     }
 
     /*
-    fun userInGroup(username: String, groupName: String): Boolean {
-        var userInGroup = false
-        if (UserHandler.userExists(username)) {
-            if (groupExists(groupName)) {
-                val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                userInGroup = user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
-                if (!userInGroup) {
-                    return checkChildren(username, groupName)
-                }
-            }
-        }
-        return userInGroup
-    }
-
-    private fun checkChildren(username: String, groupName: String): Boolean {
-        var found = false
+    fun userInGroupRec(username: String, groupName: String): Boolean {
+        if (userInGroup(username, groupName)) return true
         groupDAO.getGroupChildren(groupName).forEach { childGroup ->
-            if (this.userInGroup(username, childGroup.name)) {
-                found = true
-                return@forEach
-            } else return checkChildren(username, childGroup.name)
+            if (userInGroup(username, childGroup.name))
+                return true
+            else
+                groupDAO.getGroupChildren(childGroup).forEach { userInGroupRec(username, it.name) }
         }
-        return found
+        return false
     }
     */
+
+    fun displayGroupsAndChildren(groupName: String) {
+        println("Group: "+groupName)
+        println("Parent: ${groupDAO.getGroup(groupDAO.getGroup(groupName).parentGroupId).name}")
+        groupDAO.getGroupChildren(groupName).forEach { childGroup ->
+            println("Child of $groupName: ${childGroup.name}")
+            groupDAO.getGroupChildren(childGroup).forEach { displayGroupsAndChildren(it.name) }
+        }
+    }
 }
