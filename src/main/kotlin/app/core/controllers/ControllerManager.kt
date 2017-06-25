@@ -84,19 +84,22 @@ object ControllerManager : KLogging() {
 
     fun applyGroupPermissionsToRoutes() {
 
-        Spark.before("/dashboard", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard without authentication.")
-                Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
-            }
-        })
+        val routePermissionDAO = DAOManager.getDAO(DAOManager.TABLE.ROUTE_PERMISSIONS) as RoutePermissionDAO
 
-        Spark.before("/dashboard/*", { request, response ->
-            if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "dashboard_access")) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Is trying to access dashboard sub page without authentication.")
-                Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
-            }
-        })
+        routePermissionDAO.getRoutePermissions().forEach { routePermission ->
+            Spark.before(routePermission.route, { request, response ->
+                if (UserHandler.isLoggedIn(request)) {
+                    val group = GroupHandler.groupDAO.getGroup(routePermission.groupId)
+                    if (!GroupHandler.userInGroup(UserHandler.loggedInUsername(request), group.name)) {
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> is trying to access ${routePermission.route} but isn't a member of group ${group.name}")
+                        Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
+                    }
+                } else {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> is trying to access ${routePermission.route} but is not logged in...")
+                    Spark.halt(401, VelocityTemplateEngine().render(Web.gen_accessDeniedPage(request, response, layoutTemplate)))
+                }
+            })
+        }
     }
 
     fun initResponsePages() {
