@@ -34,7 +34,7 @@
         <nav>
             <a class="pure-menu-link" href=$home_link_address>Home</a>
 
-            #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "admins"))
+            #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "dashboard_access"))
                 <a class="pure-menu-link" href=$dashboard_link_address>Dashboard</a>
             #end
 

@@ -29,14 +29,12 @@
 
 package app.core.controllers
 
-import app.Application
 import app.core.core.controllers.*
 import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.RoutePermissionDAO
 import database.models.RoutePermission
-import database.models.User
 import mu.KLogging
 import spark.Session
 import spark.Spark
