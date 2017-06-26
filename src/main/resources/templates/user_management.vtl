@@ -31,6 +31,21 @@
     <div class="pure-u-24-24 centered">
         #set($loggedInUser = $TUsers.getLoggedInUser())
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
+            <form id="user_management_form" name="user_management_form" class="pure-form" method="post" action=$TRequest.getRequestURI()>
+              <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
+              <input id="formName" name="formName" type="text" value="user_management_form" hidden>
+              <table class="pure-table">
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Banned</th>
+                  <th>Admin</th>
+                  <th>Moderator</th>
+                </tr>
+            </table>
+            </form>
             <h3 class="theme-shade">You are an admin</h3>
         #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
             <h3 class="theme-shade">You are a moderator</h3>
