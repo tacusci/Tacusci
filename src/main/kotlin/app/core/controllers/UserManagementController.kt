@@ -203,7 +203,7 @@ class UserManagementController : Controller {
     private fun genUserFormForAdmin(request: Request): ContainerTag {
         //match this form instance with a random ID in the server side session
         val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
+        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri)
         userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
         val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
         userListTable.className = "pure-table"

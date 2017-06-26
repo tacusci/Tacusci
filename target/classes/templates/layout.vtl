@@ -51,8 +51,40 @@
 
     <link rel="stylesheet" type="text/css" href=$cssFile>
 
-<link rel="icon" href=""/>
+    <link rel="icon" href=""/>
 <body>
+    <nav>
+        <div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a class="pure-menu-link" href=$home_link_address>Home</a></li>
+
+                #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "dashboard_access"))
+                <li class="pure-menu-item"><a class="pure-menu-link" href=$dashboard_link_address>Dashboard</a></li>
+                #end
+
+                #if (!$TUsers.isLoggedIn())
+                <li class="pure-menu-item"><a class="pure-menu-link" href=$login_link_address>Login</a></li>
+                <li class="pure-menu-item"><a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a></li>
+                #else
+                <li class="pure-menu-item"><a class="pure-menu-link" href=$profile_link_address>$TUsers.getLoggedInUsername()</a></li>
+                #end
+
+                #if ($TUsers.isLoggedIn())
+                <li class="pure-menu-item">
+                    <form id="sign_out_form" name="sign_out_form" method="post" action="/login">
+                        <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("sign_out_form") hidden/>
+                        <input name="formName" value="sign_out_form" hidden/>
+                        <input type="submit" class="submit-link" value="Logout"/>
+                    </form>
+                </li>
+                #end
+                </li>
+            </ul>
+        </div>
+    </nav>
+    #foreach ($user in $TUsers.getAllAdminUserUsernames())
+        <p>$user.getUsername()</p>
+    #end
     #parse($template)
 </body>
 </html>
