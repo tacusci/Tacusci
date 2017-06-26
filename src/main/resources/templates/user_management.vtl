@@ -44,11 +44,11 @@
                   <th>Admin</th>
                   <th>Moderator</th>
                 </tr>
-            </table>
+                  #foreach ($user in $TUsers.getAllAdminUserUsernames())
+                    <p>$user.getUsername()</p>
+                  #end
+                </table>
             </form>
-            <h3 class="theme-shade">You are an admin</h3>
-        #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
-            <h3 class="theme-shade">You are a moderator</h3>
         #end
         $!user_admin_form
     </div>
