@@ -78,7 +78,7 @@ class UserManagementController : Controller {
         Web.loadNavigationElements(request, model)
 
         val userAdminForm = genUserForm(request)
-        model.put("user_admin_form", userAdminForm.render())
+        //model.put("user_admin_form", userAdminForm.render())
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -242,6 +242,7 @@ class UserManagementController : Controller {
         }
 
         userManagementForm.with(userListTable.render())
+
         if (request.session().attribute("user_management_changes_made")) {
             userManagementForm.with(p("Changes applied..."))
             request.session().attribute("user_management_changes_made", false)

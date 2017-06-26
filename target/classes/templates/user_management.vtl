@@ -59,15 +59,15 @@
                         <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "moderators")) checked=""#end>
                         </td>
                       </tr>
-                      #if ($TRequest.getSession().attribute("user_management_changes_made"))
-                        <p>"Changes applied..."</p>
-                        $TRequest.getSession().attribute("user_management_changes_made", false)
-                      #else
-                        <br>
-                      #end
                     #end
                   #end
                 </table>
+                #if ($TRequest.getSession().attribute("user_management_changes_made"))
+                  <p>"Changes applied..."</p>
+                  $TRequest.getSession().attribute("user_management_changes_made", false)
+                #else
+                  <br>
+                #end
                 <input id="update_user_management" name="update_user_management" type="submit" class="pure-button pure-button-primary" value="Update">
             </form>
         #end
