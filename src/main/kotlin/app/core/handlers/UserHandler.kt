@@ -172,6 +172,10 @@ object  UserHandler : KLogging() {
         }
     }
 
+    fun getUsers(): List<User> {
+        return userDAO.getUsers().toList()
+    }
+
     fun getRegularUsers(): List<User> {
         return userDAO.getUsers().filter { user ->
             !GroupHandler.userInGroup(user, "moderators") && !GroupHandler.userInGroup(user, "admins") && user.username != getRootAdmin().username

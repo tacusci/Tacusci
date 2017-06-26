@@ -31,7 +31,7 @@
     <div class="pure-u-24-24 centered">
         #set($loggedInUser = $TUsers.getLoggedInUser())
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
-            <form id="user_management_form" name="user_management_form" class="pure-form" method="post" action=$TRequest.getRequestURI()>
+            <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
               <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
               <input id="formName" name="formName" type="text" value="user_management_form" hidden>
               <table class="pure-table">
@@ -44,12 +44,32 @@
                   <th>Admin</th>
                   <th>Moderator</th>
                 </tr>
-                  #foreach ($user in $TUsers.getAllAdminUserUsernames())
-                  <p>$user.getUsername()</p>
+                  #set($loggedInUser = $TUsers.getLoggedInUser())
+                  #foreach ($user in $TUsers.getUsers())
+                    #if ($loggedInUser.getId() != $user.getId())
+                      <tr>
+                        <td>$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
+                        <td>$user.getFullName()</td>
+                        <td>$user.getUsername()</td>
+                        <td>$user.getEmail()</td>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="banned_checkbox.hidden"><input id=$user.getUsername() name="banned_checkbox" value=$user.getUsername() type="checkbox" #if ($TUsers.isBanned($user)) checked=""#end>
+                        </td>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="admin_checkbox.hidden"><input id=$user.getUsername() name="admin_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "admins")) checked=""#end>
+                        </td>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "moderators")) checked=""#end>
+                        </td>
+                      </tr>
+                      #if ($TRequest.getSession().attribute("user_management_changes_made"))
+                        <p>"Changes applied..."</p>
+                        $TRequest.getSession().attribute("user_management_changes_made", false)
+                      #else
+                        <br>
+                      #end
+                    #end
                   #end
                 </table>
+                <input id="update_user_management" name="update_user_management" type="submit" class="pure-button pure-button-primary" value="Update">
             </form>
         #end
-        $!user_admin_form
     </div>
 </div>

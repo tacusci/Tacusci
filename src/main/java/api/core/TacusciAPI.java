@@ -40,6 +40,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("TRequest", new TRequest(request, response)));
         apiObjInstances.add(new Pair<>("TDateTime", new TDateTime(request, response)));
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
+        apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
     }
 

@@ -2,6 +2,7 @@ package api.core;
 
 import spark.Request;
 import spark.Response;
+import spark.Session;
 
 /**
  * Created by alewis on 23/05/2017.
@@ -15,4 +16,6 @@ public class TRequest extends TAPIClass {
     public String getRequestURI() {
         return request.uri();
     }
+
+    public Session getSession() { return request.session(); }
 }
