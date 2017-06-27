@@ -34,24 +34,27 @@
             <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
               <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
               <input id="formName" name="formName" type="text" value="user_management_form" hidden>
-              <table class="pure-table">
-                <tr>
-                  <th>Date/Time</th>
-                  <th>Full Name</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Banned</th>
-                  <th>Admin</th>
-                  <th>Moderator</th>
-                </tr>
-                  #set($loggedInUser = $TUsers.getLoggedInUser())
-                  #foreach ($user in $TUsers.getUsers())
-                    #if ($loggedInUser.getId() != $user.getId())
+              <table class="pure-table" align="center">
+                <thead>
+                  <tr>
+                    <th>Date/Time</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Banned</th>
+                    <th>Admin</th>
+                    <th>Moderator</th>
+                  </tr>
+                </thead>
+                  <tbody>
+                    #set($loggedInUser = $TUsers.getLoggedInUser())
+                    #foreach ($user in $TUsers.getUsers())
+                      #if ($loggedInUser.getId() != $user.getId())
                       <tr>
-                        <td>$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
-                        <td>$user.getFullName()</td>
-                        <td>$user.getUsername()</td>
-                        <td>$user.getEmail()</td>
+                        <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
+                        <td class="theme-shade">$user.getFullName()</td>
+                        <td class="theme-shade">$user.getUsername()</td>
+                        <td class="theme-shade">$user.getEmail()</td>
                         <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="banned_checkbox.hidden"><input id=$user.getUsername() name="banned_checkbox" value=$user.getUsername() type="checkbox" #if ($TUsers.isBanned($user)) checked=""#end>
                         </td>
                         <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="admin_checkbox.hidden"><input id=$user.getUsername() name="admin_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "admins")) checked=""#end>
@@ -59,10 +62,10 @@
                         <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "moderators")) checked=""#end>
                         </td>
                       </tr>
+                      #end
                     #end
-                  #end
+                  </tbody>
                 </table>
-                <p>$TRequest.getSession().attribute("user_management_changes_made")</p>
                 #if ($TRequest.getSession().attribute("user_management_changes_made"))
                   <p>"Changes applied..."</p>
                   $TRequest.getSession().attribute("user_management_changes_made", false)
