@@ -79,6 +79,7 @@ class UserManagementController : Controller {
 
         val userAdminForm = genUserForm(request)
         //model.put("user_admin_form", userAdminForm.render())
+        model.put("user_management_changes_made", true)
         return ModelAndView(model, layoutTemplate)
     }
 
