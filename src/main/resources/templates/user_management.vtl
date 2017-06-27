@@ -30,6 +30,30 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         #set($loggedInUser = $TUsers.getLoggedInUser())
+        #set($users = [])
+        #if ($TGroups.userInGroup($loggedInUser, "admins"))
+          #foreach ($adminUser in $TUsers.getAdminUsers())
+            $users.add($adminUser)
+          #end
+
+          #foreach ($moderatorUser in $TUsers.getModeratorUsers())
+            $users.add($moderatorUser)
+          #end
+
+          #foreach ($regularUser in $TUsers.getRegularUsers())
+            $users.add($regularUser)
+          #end
+      
+        #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
+          #foreach ($moderatorUser in $TUsers.getModeratorUsers())
+            $users.add($moderatorUser)
+          #end
+
+          #foreach ($regularUser in $TUsers.getRegularUsers())
+            $users.add($regularUser)
+          #end
+        #end
+
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
             <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
               <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
@@ -48,7 +72,7 @@
                 </thead>
                   <tbody>
                     #set($loggedInUser = $TUsers.getLoggedInUser())
-                    #foreach ($user in $TUsers.getUsers())
+                    #foreach ($user in $users)
                       #if ($loggedInUser.getId() != $user.getId())
                       <tr>
                         <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
