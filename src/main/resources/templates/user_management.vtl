@@ -43,7 +43,7 @@
           #foreach ($regularUser in $TUsers.getRegularUsers())
             $users.add($regularUser)
           #end
-      
+
         #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
           #foreach ($moderatorUser in $TUsers.getModeratorUsers())
             $users.add($moderatorUser)
@@ -71,7 +71,6 @@
                   </tr>
                 </thead>
                   <tbody>
-                    #set($loggedInUser = $TUsers.getLoggedInUser())
                     #foreach ($user in $users)
                       #if ($loggedInUser.getId() != $user.getId())
                       <tr>
