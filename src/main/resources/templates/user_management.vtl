@@ -66,9 +66,8 @@
                     #end
                   </tbody>
                 </table>
-                #if ($TRequest.getSession().attribute("user_management_changes_made"))
-                  <p>"Changes applied..."</p>
-                  $TRequest.getSession().attribute("user_management_changes_made", false)
+                #if ($user_management_changes_made)
+                  <p class="theme-shade">Changes applied...</p>
                 #else
                   <br>
                 #end
