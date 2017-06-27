@@ -62,6 +62,7 @@
                     #end
                   #end
                 </table>
+                <p>$TRequest.getSession().attribute("user_management_changes_made")</p>
                 #if ($TRequest.getSession().attribute("user_management_changes_made"))
                   <p>"Changes applied..."</p>
                   $TRequest.getSession().attribute("user_management_changes_made", false)
