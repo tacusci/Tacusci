@@ -44,6 +44,8 @@ public class TUsers extends TAPIClass {
 
     public List<User> getUsers() { return UserHandler.INSTANCE.getUsers(); }
 
+    public User getRootAdmin() { return UserHandler.INSTANCE.getRootAdmin(); }
+
     public List<User> getUsersInGroup(String groupName) {
         ArrayList<User> usersInGroup = new ArrayList<>();
         for (User user : UserHandler.INSTANCE.getUsers()) {

@@ -32,26 +32,12 @@
         #set($loggedInUser = $TUsers.getLoggedInUser())
         #set($users = [])
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
-          #foreach ($adminUser in $TUsers.getAdminUsers())
-            $users.add($adminUser)
-          #end
-
-          #foreach ($moderatorUser in $TUsers.getModeratorUsers())
-            $users.add($moderatorUser)
-          #end
-
-          #foreach ($regularUser in $TUsers.getRegularUsers())
-            $users.add($regularUser)
-          #end
-
+          $users.addAll($TUsers.getAdminUsers())
+          $users.addAll($TUsers.getModeratorUsers())
+          $users.addAll($TUsers.getRegularUsers())
         #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
-          #foreach ($moderatorUser in $TUsers.getModeratorUsers())
-            $users.add($moderatorUser)
-          #end
-
-          #foreach ($regularUser in $TUsers.getRegularUsers())
-            $users.add($regularUser)
-          #end
+          $users.addAll($TUsers.getModeratorUsers())
+          $users.addAll($TUsers.getRegularUser())
         #end
 
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
@@ -62,6 +48,7 @@
                 <thead>
                   <tr>
                     <th>Date/Time</th>
+                    <th>Updated Date/Time</th>
                     <th>Full Name</th>
                     <th>Username</th>
                     <th>Email</th>
@@ -72,9 +59,10 @@
                 </thead>
                   <tbody>
                     #foreach ($user in $users)
-                      #if ($loggedInUser.getId() != $user.getId())
+                      #if ($loggedInUser.getId() != $user.getId() && $loggedInUser.getRootAdmin <= 0)
                       <tr>
                         <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
+                        <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getLastUpdatedDateTime())</td>
                         <td class="theme-shade">$user.getFullName()</td>
                         <td class="theme-shade">$user.getUsername()</td>
                         <td class="theme-shade">$user.getEmail()</td>
