@@ -70,7 +70,7 @@ class UserManagementController : Controller {
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for USER_MANAGEMENT page")
-        var model = HashMap<String, Any>()
+        val model = HashMap<String, Any>()
         model.put("template", templatePath)
 
         TacusciAPI.injectAPIInstances(request, response, model)
@@ -196,109 +196,5 @@ class UserManagementController : Controller {
         }
         usersAndAdminState.add(userAndAdminState)
         return usersAndAdminState
-    }
-
-    private fun genUserFormForAdmin(request: Request): ContainerTag {
-        //match this form instance with a random ID in the server side session
-        val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri)
-        userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
-        val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Admin", "Moderator"))
-        userListTable.className = "pure-table"
-
-        val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
-        val currentUser = UserHandler.userDAO.getUser(currentUserId)
-
-        UserHandler.userDAO.getUsers().filter {
-            it.username != currentUser.username && it.rootAdmin <= 0
-        }.forEach { user ->
-            val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
-            val adminCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("admin_checkbox")
-            val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
-
-            if (UserHandler.isBanned(user.username)) {
-                bannedCheckbox.attr("checked", "")
-            }
-
-            if (GroupHandler.userInGroup(user, "admins")) {
-                adminCheckbox.attr("checked", "")
-            }
-
-            if (GroupHandler.userInGroup(user, "moderators")) {
-                moderatorCheckbox.attr("checked", "")
-            }
-
-            userListTable.addRow(listOf (
-                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
-                    listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
-                    listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
-                    listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("admin_checkbox.hidden"), adminCheckbox),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox))
-            )
-        }
-
-        userManagementForm.with(userListTable.render())
-
-        if (request.session().attribute("user_management_changes_made")) {
-            userManagementForm.with(p("Changes applied..."))
-            request.session().attribute("user_management_changes_made", false)
-        } else {
-            userManagementForm.with(br())
-        }
-        userManagementForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
-        return userManagementForm
-    }
-
-    private fun genUserFormForModerators(request: Request): ContainerTag {
-        val hash = Web.mapFormToHash(request.session(), "user_management_form")
-        val userManagementForm = form().withMethod("post").withClass("pure-form").withAction(rootUri).withMethod("post")
-        userManagementForm.with(input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden)
-        val userListTable = HTMLTable(listOf("Date/Time", "Full Name", "Username", "Email", "Banned", "Moderator"))
-        userListTable.className = "pure-table"
-
-        val currentUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
-        val currentUser = UserHandler.userDAO.getUser(currentUserId)
-
-        UserHandler.userDAO.getUsers().filter {
-            it.username != currentUser.username && it.rootAdmin <= 0 && !GroupHandler.userInGroup(it, "admins")
-        }.forEach { user ->
-            val bannedCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("banned_checkbox")
-            val moderatorCheckbox = input().withType("checkbox").withId(user.username).withValue(user.username).withName("moderator_checkbox")
-
-            if (UserHandler.isBanned(user.username)) {
-                bannedCheckbox.attr("checked", "")
-            }
-
-            if (GroupHandler.userInGroup(user, "moderators")) {
-                moderatorCheckbox.attr("checked", "")
-            }
-
-            userListTable.addRow(listOf(
-                    listOf<Tag>(label(Utils.convertMillisToDateTime(user.createdDateTime))),
-                    listOf<Tag>(label(user.fullName).withName(user.username).withId(user.username)),
-                    listOf(j2htmlPartials.link("", "/profile/${user.username}", user.username)),
-                    listOf(j2htmlPartials.link("", "mailto:${user.email}?Subject=''", user.email)),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("banned_checkbox.hidden"), bannedCheckbox),
-                    listOf<Tag>(input().withType("hidden").withId(user.username).withValue(user.username).withName("moderator_checkbox.hidden"), moderatorCheckbox))
-            )
-        }
-
-        userManagementForm.with(userListTable.render())
-        if (request.session().attribute("user_management_changes_made")) {
-            userManagementForm.with(p("Changes applied..."))
-            request.session().attribute("user_management_changes_made", false)
-        } else {
-            userManagementForm.with(br())
-        }
-        userManagementForm.with(input().withType("submit").withClass("pure-button pure-button-primary").withName("update_user_management").withId("update_user_management").withValue("Update"))
-        return userManagementForm
-    }
-
-    private fun genUserForm(request: Request): ContainerTag {
-        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "admins")) return genUserFormForAdmin(request)
-        if (GroupHandler.userInGroup(UserHandler.loggedInUsername(request), "moderators")) return genUserFormForModerators(request)
-        return h2("Access denied")
     }
 }
