@@ -36,17 +36,11 @@ import app.core.core.controllers.Web
 import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import extensions.managedRedirect
-import j2html.TagCreator.*
-import j2html.tags.ContainerTag
-import j2html.tags.Tag
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import utils.HTMLTable
-import utils.Utils
-import utils.j2htmlPartials
 import java.util.*
 
 /**
