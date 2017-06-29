@@ -29,11 +29,15 @@
 
 package app.core.controllers
 
+import api.core.TacusciAPI
+import app.core.core.controllers.Web
+import app.core.handlers.UserHandler
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import java.util.*
 
 /**
  * Created by alewis on 29/06/2017.
@@ -51,15 +55,19 @@ class GroupManagementController : Controller {
 
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for GROUP_MANAGEMENT page")
+        val model = HashMap<String, Any>()
+        model.put("template", templatePath)
+
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, pageTitleSubstring)
+        Web.loadNavigationElements(request, model)
+
+        return ModelAndView(model, layoutTemplate)
     }
 
-    override fun post(request: Request, response: Response): Response {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun post(request: Request, response: Response): Response { return response }
 }
