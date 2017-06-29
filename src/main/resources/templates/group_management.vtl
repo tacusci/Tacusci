@@ -30,5 +30,8 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
       <h1 class="theme-shade">Group Management</h1>
+        #foreach ($group in $TGroups.getGroups())
+            <div class="theme-shade">$group.getName()</div>
+        #end
     </div>
 </div>
