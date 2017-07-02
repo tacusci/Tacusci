@@ -96,6 +96,9 @@ object  UserHandler : KLogging() {
 
     fun isLoggedIn(request: Request): Boolean {
         val session = request.session() ?: return false
+        if (CliOptions.getFlag("debug"))
+            if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0"))
+                return true
         if (session.attributes().isNotEmpty()) {
             if (session.attributes().contains("logged_in")) {
                 val loggedIn: Boolean = session.attribute("logged_in")
@@ -110,7 +113,8 @@ object  UserHandler : KLogging() {
         if (CliOptions.getFlag("debug"))
             //used to be 0:0:0:0:0:0:0:1
             //TODO: give local access full access, since they're local and testing... right?
-            if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0")) { return getRootAdmin().username }
+            if (request.ip() == "localhost" || request.ip().contains("0:0:0:0:0:0:0"))
+                return getRootAdmin().username
         val session = request.session()
         if (isLoggedIn(request)) {
             if (session.attributes().contains("username")) {
