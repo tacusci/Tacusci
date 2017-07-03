@@ -52,7 +52,7 @@ class UserManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/user_management"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childUris: MutableList<String> = mutableListOf("/:command")
     override val templatePath: String = "/templates/user_management.vtl"
     override val pageTitleSubstring: String = "User Management"
     override val handlesGets: Boolean = true
@@ -71,6 +71,16 @@ class UserManagementController : Controller {
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
         model.put("user_management_changes_made", request.session().attribute("user_management_changes_made"))
+        return ModelAndView(model, layoutTemplate)
+    }
+
+    private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        val model = HashMap<String, Any>()
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavigationElements(request, model)
+        when (request.params(":command")) {
+            "create" -> {}
+        }
         return ModelAndView(model, layoutTemplate)
     }
 
