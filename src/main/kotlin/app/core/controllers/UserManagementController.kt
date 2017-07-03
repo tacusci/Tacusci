@@ -35,7 +35,9 @@ import api.core.TacusciAPI
 import app.core.core.controllers.Web
 import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import database.models.User
 import extensions.managedRedirect
+import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -71,6 +73,13 @@ class UserManagementController : Controller {
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
         model.put("user_management_changes_made", request.session().attribute("user_management_changes_made"))
+
+        if (request.params(":command") == null && request.params(":page_id") == null) {
+            model.put("template", templatePath)
+        } else {
+            return getCommandPage(request, response, layoutTemplate)
+        }
+
         return ModelAndView(model, layoutTemplate)
     }
 
@@ -79,7 +88,21 @@ class UserManagementController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
-            "create" -> {}
+            "create" -> {
+                model.put("template", "/templates/create_user.vtl")
+                Web.insertPageTitle(request, model, "$pageTitleSubstring - Create User")
+                model.put("userToCreate", User())
+            } "edit" -> {
+                if (request.params("user_id") != null) {
+                    model.put("template", "/templates/edit_user.vtl")
+                    Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit User")
+                    val user = UserHandler.getUserById(request.params("user_id").toIntSafe())
+                    if (user.id == -1) response.redirect("/dashboard/user_management")
+                    model.put("userToEdit", user)
+                } else {
+                    response.redirect("/dashboard/user_management")
+                }
+            }
         }
         return ModelAndView(model, layoutTemplate)
     }

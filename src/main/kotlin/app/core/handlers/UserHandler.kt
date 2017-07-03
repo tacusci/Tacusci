@@ -124,6 +124,10 @@ object  UserHandler : KLogging() {
         return ""
     }
 
+    fun getUserById(id: Int): User {
+        return userDAO.getUser(id)
+    }
+
     fun createRootAdmin(): Boolean {
         val configRootAdmin = User(-1, -1, -1, "Root admin", Config.getProperty("root-username"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
         if (!configRootAdmin.isValid()) return false

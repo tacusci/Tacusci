@@ -40,9 +40,9 @@ import utils.tree.Tree
 /**
  * Created by alewis on 20/12/2016.
  */
-data class User(var id: Int, var createdDateTime: Long, var lastUpdatedDateTime: Long,
-                var fullName: String, var username: String, var password: String, var email: String,
-                var banned: Int, var rootAdmin: Int) {
+data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
+                var fullName: String = "", var username: String = "", var password: String = "", var email: String = "",
+                var banned: Int = -1, var rootAdmin: Int = -1) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }

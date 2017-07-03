@@ -28,25 +28,33 @@
   -->
 
 <div class="pure-g">
+
+    <div class="pure-u-24-24">
+        <a href="/dashboard" class="pure-button button-theme back-button">
+            <img src="/images/back_arrow.png" style="width:23px;height:17px;">
+        </a>
+
+        $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE USER", "button-theme")
+    </div>
+
     <div class="pure-u-24-24 centered">
         #set($loggedInUser = $TUsers.getLoggedInUser())
         #set($users = [])
         #if ($TGroups.userInGroup($loggedInUser, "admins"))
-          $users.addAll($TUsers.getAdminUsers())
-          $users.addAll($TUsers.getModeratorUsers())
-          $users.addAll($TUsers.getRegularUsers())
+            $users.addAll($TUsers.getAdminUsers())
+            $users.addAll($TUsers.getModeratorUsers())
+            $users.addAll($TUsers.getRegularUsers())
         #elseif ($TGroups.userInGroup($loggedInUser, "moderators"))
-          $users.addAll($TUsers.getModeratorUsers())
-          $users.addAll($TUsers.getRegularUser())
+            $users.addAll($TUsers.getModeratorUsers())
+            $users.addAll($TUsers.getRegularUser())
         #end
 
-        #if ($TGroups.userInGroup($loggedInUser, "admins"))
-            <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
-              <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
-              <input id="formName" name="formName" type="text" value="user_management_form" hidden>
-              <table class="pure-table" align="center">
+        <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
+            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("user_management_form") hidden>
+            <input id="formName" name="formName" type="text" value="user_management_form" hidden>
+            <table class="pure-table" align="center">
                 <thead>
-                  <tr>
+                <tr>
                     <th>Date/Time</th>
                     <th>Updated Date/Time</th>
                     <th>Full Name</th>
@@ -55,35 +63,46 @@
                     <th>Banned</th>
                     <th>Admin</th>
                     <th>Moderator</th>
-                  </tr>
+                </tr>
                 </thead>
-                  <tbody>
-                    #foreach ($user in $users)
-                      #if ($loggedInUser.getId() != $user.getId() && $loggedInUser.getRootAdmin <= 0)
-                      <tr>
+                <tbody>
+                #foreach ($user in $users)
+                    #if ($loggedInUser.getId() != $user.getId() && $loggedInUser.getRootAdmin <= 0)
+                    <tr>
                         <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
                         <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getLastUpdatedDateTime())</td>
                         <td class="theme-shade">$user.getFullName()</td>
                         <td class="theme-shade">$user.getUsername()</td>
                         <td class="theme-shade">$user.getEmail()</td>
-                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="banned_checkbox.hidden"><input id=$user.getUsername() name="banned_checkbox" value=$user.getUsername() type="checkbox" #if ($TUsers.isBanned($user)) checked=""#end>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername()
+                                   name="banned_checkbox.hidden"><input id=$user.getUsername() name="banned_checkbox"
+                                                                        value=$user.getUsername() type="checkbox" #if
+                                                                        ($TUsers.isBanned($user)) checked="" #end>
                         </td>
-                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="admin_checkbox.hidden"><input id=$user.getUsername() name="admin_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "admins")) checked=""#end>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername()
+                                   name="admin_checkbox.hidden"><input id=$user.getUsername() name="admin_checkbox"
+                                                                       value=$user.getUsername() type="checkbox" #if
+                                                                       ($TGroups.userInGroup($user, "admins"))
+                            checked=""#end>
                         </td>
-                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername() name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox" value=$user.getUsername() type="checkbox" #if ($TGroups.userInGroup($user, "moderators")) checked=""#end>
+                        <td><input type="hidden" id=$user.getUsername() value=$user.getUsername()
+                                   name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox"
+                                                                           value=$user.getUsername() type="checkbox" #if
+                                                                           ($TGroups.userInGroup($user, "moderators"))
+                            checked=""#end>
                         </td>
-                      </tr>
-                      #end
+                    </tr>
                     #end
-                  </tbody>
-                </table>
-                #if ($user_management_changes_made)
-                  <p class="theme-shade">Changes applied...</p>
-                #else
-                  <br>
                 #end
-                <input id="update_user_management" name="update_user_management" type="submit" class="pure-button pure-button-primary" value="Update">
-            </form>
-        #end
+                </tbody>
+            </table>
+            #if ($user_management_changes_made)
+                <p class="theme-shade">Changes applied...</p>
+            #else
+                <br>
+            #end
+            <input id="update_user_management" name="update_user_management" type="submit"
+                   class="pure-button pure-button-primary" value="Update">
+        </form>
     </div>
 </div>
