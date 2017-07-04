@@ -47,6 +47,7 @@ public class TUsers extends TAPIClass {
             if (GroupHandler.INSTANCE.userInGroup(user, groupName))
                 usersInGroup.add(user);
         }
+        System.out.println(usersInGroup);
         return usersInGroup;
     }
 
