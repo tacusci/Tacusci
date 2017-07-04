@@ -31,4 +31,34 @@
     <div class="pure-u-24-24">
         <h1 class="page-title-header header">Create User</h1>
     </div>
+
+    <div class="pure-u-24-24 centered">
+        <form id="create_user_form" name="create_user_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI()/create method="post">
+            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("create_user_form") hidden>
+            <input id="formName" name="formName" type="text" value="create_user_form" hidden>
+            <input id="user_id" name="user_id" type="text" value=$userToCreate.getId() hidden>
+            <fieldset>
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="username">Username</label>
+                    $TForms.getUsernameInputField("username", "Username")
+                </div>
+
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="full_name">Full Name</label>
+                    $TForms.getFullNameInputField("full_name", "Full Name")
+                </div>
+
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="email">Email</label>
+                    $TForms.getEmailInputField("email", "Email")
+                </div>
+
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="password">Password</label>
+                    $TForms.getValidatedPasswordInputField("password", "Password")
+                </div>
+            </fieldset>
+            <button method="submit" class="pure-button pure-button-primary">Create</button>
+        </form>
+    </div>
 </div>
