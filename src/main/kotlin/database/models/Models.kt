@@ -42,7 +42,7 @@ import utils.tree.Tree
  */
 data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
                 var fullName: String = "", var username: String = "", var password: String = "", var email: String = "",
-                var banned: Int = -1, var rootAdmin: Int = -1) {
+                var banned: Int = 0, var rootAdmin: Int = 0) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }

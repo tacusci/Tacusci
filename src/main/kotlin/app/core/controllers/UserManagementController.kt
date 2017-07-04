@@ -107,10 +107,24 @@ class UserManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun post_CreateUserForm(request: Request, response: Response): Response {
+        val userToCreate = User()
+        userToCreate.username = request.queryParams("username")
+        userToCreate.fullName = request.queryParams("full_name")
+        userToCreate.email = request.queryParams("email")
+        userToCreate.password = request.queryParams("password")
+        UserHandler.createUser(userToCreate)
+        response.redirect(request.uri())
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
 
-        println(request.queryParams())
-        println(request.uri())
+        if (request.uri().contains("user_management/create")) {
+            if (Web.getFormHash(request, "create_user_form") == request.queryParams("hashid")) {
+                return post_CreateUserForm(request, response)
+            }
+        }
 
         if (request.uri() == rootUri) {
             if (Web.getFormHash(request, "user_management_form") == request.queryParams("hashid")) {
