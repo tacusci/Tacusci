@@ -97,10 +97,10 @@ class UserManagementController : Controller {
                     model.put("template", "/templates/edit_user.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit User")
                     val user = UserHandler.getUserById(request.params("user_id").toIntSafe())
-                    if (user.id == -1) response.redirect("/dashboard/user_management")
+                    if (user.id == -1) response.redirect(rootUri)
                     model.put("userToEdit", user)
                 } else {
-                    response.redirect("/dashboard/user_management")
+                    response.redirect(rootUri)
                 }
             }
         }
@@ -109,72 +109,78 @@ class UserManagementController : Controller {
 
     override fun post(request: Request, response: Response): Response {
 
-        if (Web.getFormHash(request, "user_management_form") == request.queryParams("hashid")) {
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
+        println(request.queryParams())
+        println(request.uri())
 
-            val currentUserUsername = UserHandler.loggedInUsername(request)
+        if (request.uri() == rootUri) {
+            if (Web.getFormHash(request, "user_management_form") == request.queryParams("hashid")) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for user management form")
 
-            if (GroupHandler.userInGroup(currentUserUsername, "admins") || GroupHandler.userInGroup(currentUserUsername, "moderators")) {
-                var statusChangedForAnyone = false
+                val currentUserUsername = UserHandler.loggedInUsername(request)
 
-                val usersAndBanned = getUserIsBanned(request)
-                val usersAndIsModeratorState = getUserIsModerator(request)
-                val usersAndIsAdminState = getUserIsAdminStateFromForm(request)
+                if (GroupHandler.userInGroup(currentUserUsername, "admins") || GroupHandler.userInGroup(currentUserUsername, "moderators")) {
+                    var statusChangedForAnyone = false
 
-                usersAndBanned.forEach {
-                    for ((username, banned) in it) {
-                        if (username == UserHandler.getRootAdmin().username) continue
-                        if (username == UserHandler.loggedInUsername(request)) continue
-                        if (banned && !UserHandler.isBanned(username)) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
-                            UserHandler.ban(username)
-                        } else if (!banned && UserHandler.isBanned(username)) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
-                            UserHandler.unban(username)
+                    val usersAndBanned = getUserIsBanned(request)
+                    val usersAndIsModeratorState = getUserIsModerator(request)
+                    val usersAndIsAdminState = getUserIsAdminStateFromForm(request)
+
+                    usersAndBanned.forEach {
+                        for ((username, banned) in it) {
+                            if (username == UserHandler.getRootAdmin().username) continue
+                            if (username == UserHandler.loggedInUsername(request)) continue
+                            if (banned && !UserHandler.isBanned(username)) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has banned user $username")
+                                UserHandler.ban(username)
+                            } else if (!banned && UserHandler.isBanned(username)) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
+                                UserHandler.unban(username)
+                            }
                         }
                     }
-                }
 
-                usersAndIsAdminState.forEach {
-                    for ((username, admin) in it) {
-                        if (username == UserHandler.getRootAdmin().username) continue
-                        if (username == UserHandler.loggedInUsername(request)) continue
-                        if (admin && !GroupHandler.userInGroup(username, "admins")) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
-                            GroupHandler.addUserToGroup(username, "admins")
-                        } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
-                            GroupHandler.removeUserFromGroup(username, "admins")
+                    usersAndIsAdminState.forEach {
+                        for ((username, admin) in it) {
+                            if (username == UserHandler.getRootAdmin().username) continue
+                            if (username == UserHandler.loggedInUsername(request)) continue
+                            if (admin && !GroupHandler.userInGroup(username, "admins")) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
+                                GroupHandler.addUserToGroup(username, "admins")
+                            } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
+                                GroupHandler.removeUserFromGroup(username, "admins")
+                            }
                         }
                     }
-                }
 
-                usersAndIsModeratorState.forEach {
-                    for ((username, moderator) in it) {
-                        if (username == UserHandler.getRootAdmin().username) continue
-                        if (username == UserHandler.loggedInUsername(request)) continue
-                        if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
-                            GroupHandler.addUserToGroup(username, "moderators")
-                        } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
-                            statusChangedForAnyone = true
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
-                            GroupHandler.removeUserFromGroup(username, "moderators")
+                    usersAndIsModeratorState.forEach {
+                        for ((username, moderator) in it) {
+                            if (username == UserHandler.getRootAdmin().username) continue
+                            if (username == UserHandler.loggedInUsername(request)) continue
+                            if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
+                                GroupHandler.addUserToGroup(username, "moderators")
+                            } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
+                                statusChangedForAnyone = true
+                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
+                                GroupHandler.removeUserFromGroup(username, "moderators")
+                            }
                         }
                     }
+                    if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
+                } else {
+                    logger.warn("${UserHandler.getSessionIdentifier(request)} -> has no right to submit user management form...")
                 }
-                if (statusChangedForAnyone) request.session().attribute("user_management_changes_made", true) else request.session().attribute("user_management_changes_made", false)
             } else {
-                logger.warn("${UserHandler.getSessionIdentifier(request)} -> has no right to submit user management form...")
+                logger.warn("${UserHandler.getSessionIdentifier(request)} -> Has submitted an invalid user management form...")
             }
-        } else {
-            logger.warn("${UserHandler.getSessionIdentifier(request)} -> Has submitted an invalid user management form...")
         }
+
         response.managedRedirect(request, rootUri)
         return response
     }
