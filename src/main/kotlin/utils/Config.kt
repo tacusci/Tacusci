@@ -36,6 +36,7 @@ import extensions.doesNotExist
 import org.apache.log4j.*
 import java.io.File
 import java.io.IOException
+import java.nio.charset.Charset
 import java.util.*
 
 /**
@@ -56,7 +57,7 @@ open class Config {
                     Pair("schema-name", "tacusci"),
                     Pair("db-url", "jdbc:mysql://localhost"),
                     Pair("root-username", "admin_tacusci"),
-                    Pair("root-password", "Password1234!"),
+                    Pair("root-password", encryptStoredPassword("Password1234!")),
                     Pair("root-email", ""),
                     Pair("color-theme", "dark"),
                     Pair("max-threads", ""),
@@ -110,6 +111,15 @@ open class Config {
 
         override fun getProperty(key: String, defaultValue: String): String {
             return super.getProperty(key, defaultValue)
+        }
+
+        fun encryptStoredPassword(password: String): String {
+            return "CRYPT(${Base64.getEncoder().encodeToString(PasswordStorage.createHash(password).toByteArray(Charset.forName("UTF-8")))})"
+        }
+
+        fun decryptStoredPassword(base64encryptedHash: String) {
+            //TODO: Implement using regex group selection using this regex: CRYPT\((\S*)\)
+            return
         }
 
         //Note: can apparently wrap this with a more detailed FileOutputStream
