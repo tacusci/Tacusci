@@ -38,6 +38,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Created by alewis on 29/11/2016.
@@ -119,6 +120,11 @@ open class Config {
 
         fun decryptStoredPassword(base64encryptedHash: String) {
             //TODO: Implement using regex group selection using this regex: CRYPT\((\S*)\)
+            val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
+            val matcher = pattern.matcher(base64encryptedHash)
+            if (matcher.find()) {
+                println(matcher.group(0))
+            }
             return
         }
 
