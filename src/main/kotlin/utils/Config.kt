@@ -38,6 +38,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Created by alewis on 29/11/2016.
@@ -57,7 +58,7 @@ open class Config {
                     Pair("schema-name", "tacusci"),
                     Pair("db-url", "jdbc:mysql://localhost"),
                     Pair("root-username", "admin_tacusci"),
-                    Pair("root-password", encryptStoredPassword("Password1234!")),
+                    Pair("root-password", "Password1234!"),
                     Pair("root-email", ""),
                     Pair("color-theme", "dark"),
                     Pair("max-threads", ""),
@@ -102,6 +103,9 @@ open class Config {
             }
             propertiesFile.inputStream().close()
             setupLoggers(Config.getProperty("log-file"))
+
+            encryptStoredPassword()
+            println(decryptStoredPassword())
         }
 
         override fun getProperty(key: String): String {
@@ -113,13 +117,24 @@ open class Config {
             return super.getProperty(key, defaultValue)
         }
 
-        fun encryptStoredPassword(password: String): String {
-            return "CRYPT(${Base64.getEncoder().encodeToString(PasswordStorage.createHash(password).toByteArray(Charset.forName("UTF-8")))})"
+        fun encryptStoredPassword() {
+            val password = getProperty("root-password")
+            val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
+            val matcher = pattern.matcher(password)
+            if (!matcher.find()) {
+                //if existing password in the config has not been encrypted, then do so
+                setProperty("root-password", "CRYPT(${Base64.getEncoder().encodeToString(PasswordStorage.createHash(password).toByteArray(Charset.forName("UTF-8")))})")
+                storeAll()
+            }
         }
 
-        fun decryptStoredPassword(base64encryptedHash: String) {
+        fun decryptStoredPassword(): String {
             //TODO: Implement using regex group selection using this regex: CRYPT\((\S*)\)
-            return
+            val password = getProperty("root-password")
+            val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
+            val matcher = pattern.matcher(password)
+            if (matcher.find()) return Base64.getDecoder().decode(matcher.group(1)).toString()
+            return ""
         }
 
         //Note: can apparently wrap this with a more detailed FileOutputStream
