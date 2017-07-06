@@ -105,7 +105,6 @@ open class Config {
             setupLoggers(Config.getProperty("log-file"))
 
             encryptStoredPassword()
-            println(decryptStoredPassword())
         }
 
         override fun getProperty(key: String): String {
@@ -133,7 +132,7 @@ open class Config {
             val password = getProperty("root-password")
             val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
             val matcher = pattern.matcher(password)
-            if (matcher.find()) return Base64.getDecoder().decode(matcher.group(1)).toString()
+            if (matcher.find()) return String(Base64.getDecoder().decode(matcher.group(1)), Charset.forName("UTF-8"))
             return ""
         }
 
