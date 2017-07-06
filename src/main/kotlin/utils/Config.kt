@@ -128,7 +128,6 @@ open class Config {
         }
 
         fun decryptStoredPassword(): String {
-            //TODO: Implement using regex group selection using this regex: CRYPT\((\S*)\)
             val password = getProperty("root-password")
             val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
             val matcher = pattern.matcher(password)
