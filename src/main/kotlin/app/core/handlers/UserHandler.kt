@@ -161,7 +161,7 @@ object  UserHandler : KLogging() {
             }
         }
 
-        val configRootAdmin = User(-1, -1, -1, Config.getProperty("root-username"), Config.getProperty("root-username"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
+        val configRootAdmin = User(-1, -1, -1, Config.getProperty("root-username"), Config.getProperty("root-username"), Config.decryptStoredPassword(), Config.getProperty("root-email"), 0, 1)
         return userDAO.updateRootAdmin(configRootAdmin)
     }
 
