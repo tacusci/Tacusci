@@ -102,12 +102,6 @@ open class Config {
                 }
             }
 
-            val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
-            val matcher = pattern.matcher(getProperty("root-password"))
-            if (!matcher.find()) {
-
-            }
-
             propertiesFile.inputStream().close()
             setupLoggers(Config.getProperty("log-file"))
 
