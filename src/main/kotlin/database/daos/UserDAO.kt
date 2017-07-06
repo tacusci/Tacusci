@@ -36,6 +36,7 @@ import mu.KLogging
 import utils.PasswordStorage
 import java.sql.SQLException
 import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -224,7 +225,12 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, user.username)
-            preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
+            val pattern = Pattern.compile("sha1\\:\\d*:\\d*:\\S*")
+            val matcher = pattern.matcher(user.password)
+            if (matcher.find())
+                preparedStatement?.setString(3, user.password)
+            else
+                preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
             preparedStatement?.setInt(4, user.rootAdmin)
             preparedStatement?.execute()
             connection?.commit()
