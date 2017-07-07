@@ -72,6 +72,7 @@ class UserManagementController : Controller {
         TacusciAPI.injectAPIInstances(request, response, model)
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
+
         model.put("user_management_changes_made", request.session().attribute("user_management_changes_made"))
 
         if (request.params(":command") == null && request.params(":page_id") == null) {
