@@ -162,7 +162,6 @@ open class Config {
                 this.store(propertiesFile.outputStream(), "")
             } else {
                 try {
-                    //logger.info("Loading properties from tvf.properties")
                     this.load(propertiesFile.inputStream())
                     defaults.forEach { pair ->
                         if (getProperty(pair.first).isEmpty() || getProperty(pair.first).isBlank()) {
