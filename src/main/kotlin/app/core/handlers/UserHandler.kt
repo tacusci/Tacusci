@@ -129,7 +129,8 @@ object  UserHandler : KLogging() {
     }
 
     fun createRootAdmin(): Boolean {
-        val configRootAdmin = User(-1, -1, -1, "Root admin", Config.getProperty("root-username"), Config.getProperty("root-password"), Config.getProperty("root-email"), 0, 1)
+        val configRootAdmin = User(fullName = "Root admin", username = Config.getProperty("root-username"), password = Config.getProperty("root-password"),
+                                    email = Config.getProperty("root-email"), banned = 0, rootAdmin = 1)
         if (!configRootAdmin.isValid()) return false
         //once inserted, this won't be auto updated...
         if (userDAO.insertUser(configRootAdmin)) logger.info("Created root admin successfully") else logger.info("Unable to create root admin account...")
@@ -161,7 +162,8 @@ object  UserHandler : KLogging() {
             }
         }
 
-        val configRootAdmin = User(-1, -1, -1, Config.getProperty("root-username"), Config.getProperty("root-username"), Config.decryptStoredPassword(), Config.getProperty("root-email"), 0, 1)
+        val configRootAdmin = User(fullName = "Root admin", username = Config.getProperty("root-username"), password = Config.decryptStoredPassword(),
+                                        email = Config.getProperty("root-email"), banned = 0, rootAdmin = 1)
         return userDAO.updateRootAdmin(configRootAdmin)
     }
 
