@@ -28,10 +28,51 @@
   -->
 
 <div class="pure-g">
+
+    <div class="pure-u-24-24">
+        $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE GROUP", "button-theme")
+    </div>
+
     <div class="pure-u-24-24 centered">
-      <h1 class="theme-shade">Group Management</h1>
-        #foreach ($group in $TGroups.getGroups())
-            <div class="theme-shade">$group.getName()</div>
-        #end
+        <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
+            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("group_management_form") hidden>
+            <input id="formName" name="formName" type="text" value="group_management_form" hidden>
+            <table class="pure-table" align="center">
+                <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Updated Date/Time</th>
+                    <th>Group Name</th>
+                    <th>Users In Group</th>
+                </tr>
+                </thead>
+                    <tbody>
+                    #foreach ($group in $TGroups.getGroups())
+                        #set($usersInGroupList = [])
+                        #set($usernameListString = "")
+
+                        #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
+                            #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
+                                $usersInGroupList.add($userInGroup.getUsername())
+                            #end
+                        #end
+
+                        #foreach ($username in $usersInGroupList)
+                            #if ($usersInGroupList.indexOf($username) == 0)
+                                #set($usernameListString = $username)
+                            #else
+                                #set($usernameListString = $usernameListString + ", " + $username)
+                            #end
+                        #end
+                            <tr>
+                                <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
+                                <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
+                                <td class="theme-shade">$group.getName()</td>
+                                <td class="theme-shade">$usernameListString</td>
+                            </tr>
+                    #end
+                    </tbody>
+            </table>
+        </form>
     </div>
 </div>

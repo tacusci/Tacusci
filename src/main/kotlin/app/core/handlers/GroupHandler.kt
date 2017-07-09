@@ -32,7 +32,6 @@
 package app.core.core.handlers
 
 import app.core.handlers.UserHandler
-import com.sun.org.apache.xpath.internal.operations.Bool
 import database.daos.DAOManager
 import database.daos.GroupDAO
 import database.daos.User2GroupDAO
@@ -86,6 +85,8 @@ object GroupHandler : KLogging() {
     fun groupExists(groupName: String): Boolean {
         return groupDAO.groupExists(groupName)
     }
+
+    fun getUsersInGroup(groupName: String): List<User> = UserHandler.getUsers().filter { user -> userInGroup(user, groupName) }
 
     fun userInGroup(user: User, groupName: String): Boolean {
         return userInGroup(user.username, groupName)

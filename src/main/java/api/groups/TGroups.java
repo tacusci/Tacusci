@@ -23,6 +23,6 @@ public class TGroups extends TAPIClass {
     public boolean groupExists(String groupName) { return GroupHandler.INSTANCE.groupExists(groupName); }
     public boolean userInGroup(User user, String groupName) { return GroupHandler.INSTANCE.userInGroup(user, groupName); }
     public boolean userInGroup(String username, String groupName) { return GroupHandler.INSTANCE.userInGroup(username, groupName); }
-
+    public List<User> getUsersInGroup(String groupName) { return GroupHandler.INSTANCE.getUsersInGroup(groupName); }
     public List<Group> getGroups() { return GroupHandler.INSTANCE.getGroupDAO().getGroups(); }
 }
