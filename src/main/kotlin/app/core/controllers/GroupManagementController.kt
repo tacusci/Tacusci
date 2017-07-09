@@ -48,11 +48,10 @@ class GroupManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/group_management"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:group_id")
     override val templatePath: String = "/templates/group_management.vtl"
-    override val pageTitleSubstring: String = "Group Manaegement"
+    override val pageTitleSubstring: String = "Group Management"
     override val handlesGets: Boolean = true
-
     override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {}
@@ -66,7 +65,16 @@ class GroupManagementController : Controller {
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
 
+        if (request.queryParams(":command") == null && request.queryParams(":group_id") == null) {
+            model.put("template", templatePath)
+        } else {
+            return getCommandPage(request, response, layoutTemplate)
+        }
         return ModelAndView(model, layoutTemplate)
+    }
+
+    private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+
     }
 
     override fun post(request: Request, response: Response): Response { return response }

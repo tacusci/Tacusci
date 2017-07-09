@@ -54,7 +54,7 @@ class UserManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/user_management"
-    override val childUris: MutableList<String> = mutableListOf("/:command")
+    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:user_id")
     override val templatePath: String = "/templates/user_management.vtl"
     override val pageTitleSubstring: String = "User Management"
     override val handlesGets: Boolean = true
@@ -80,7 +80,6 @@ class UserManagementController : Controller {
         } else {
             return getCommandPage(request, response, layoutTemplate)
         }
-
         return ModelAndView(model, layoutTemplate)
     }
 
