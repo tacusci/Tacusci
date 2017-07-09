@@ -47,30 +47,30 @@
                 </tr>
                 </thead>
                     <tbody>
-                    #foreach ($group in $TGroups.getGroups())
-                        #set($usersInGroupList = [])
-                        #set($usernameListString = "")
+                        #foreach ($group in $TGroups.getGroups())
+                            #set($usersInGroupList = [])
+                            #set($usernameListString = "")
 
-                        #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
-                            #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
-                                $usersInGroupList.add($userInGroup.getUsername())
+                            #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
+                                #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
+                                    $usersInGroupList.add($userInGroup.getUsername())
+                                #end
                             #end
-                        #end
 
-                        #foreach ($username in $usersInGroupList)
-                            #if ($usersInGroupList.indexOf($username) == 0)
-                                #set($usernameListString = $username)
-                            #else
-                                #set($usernameListString = $usernameListString + ", " + $username)
+                            #foreach ($username in $usersInGroupList)
+                                #if ($usersInGroupList.indexOf($username) == 0)
+                                    #set($usernameListString = $username)
+                                #else
+                                    #set($usernameListString = $usernameListString + ", " + $username)
+                                #end
                             #end
+                                <tr>
+                                    <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
+                                    <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
+                                    <td class="theme-shade">$group.getName()</td>
+                                    <td class="theme-shade">$usernameListString</td>
+                                </tr>
                         #end
-                            <tr>
-                                <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
-                                <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
-                                <td class="theme-shade">$group.getName()</td>
-                                <td class="theme-shade">$usernameListString</td>
-                            </tr>
-                    #end
                     </tbody>
             </table>
         </form>
