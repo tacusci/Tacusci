@@ -53,7 +53,7 @@
 
                             #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
                                 #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
-                                    $usersInGroupList.add($userInGroup.getUsername())
+                                    #set($swallow = $usersInGroupList.add($userInGroup.getUsername()))
                                 #end
                             #end
 
