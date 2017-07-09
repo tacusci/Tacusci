@@ -218,6 +218,10 @@ object  UserHandler : KLogging() {
 
     fun createUser(user: User): Boolean {
         if (!user.isValid()) return false
+        if (user.username == Config.getDefaultProperty("root-username")) {
+            logger.error("Cannot create user -> Username same as default root admin")
+            return false
+        }
         userDAO.insertUser(user)
         GroupHandler.addUserToGroup(user, "members")
         return true
