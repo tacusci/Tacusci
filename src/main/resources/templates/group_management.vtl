@@ -67,7 +67,7 @@
                                 <tr>
                                     <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
                                     <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
-                                    <td class="theme-shade">$group.getName()</td>
+                                    <td class="theme-shade"><a href="$TRequest.getRequestURI()/edit/$group.getId()">$group.getName()</a></td>
                                     <td class="theme-shade">$usernameListString</td>
                                 </tr>
                         #end
