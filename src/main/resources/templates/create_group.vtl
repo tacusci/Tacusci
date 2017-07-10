@@ -27,4 +27,61 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
-<h2 class="page-title-header header">Create new group</h2>
+<div class="pure-g">
+    <div class="pure-u-24-24">
+        <h1 class="page-title-header header">Create Group</h1>
+    </div>
+
+    <div class="pure-u-24-24 centered">
+        <form id="create_group_form" name="create_group_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI()/create method="post">
+            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("create_group_form") hidden>
+            <input id="formName" name="formName" type="text" value="create_group_form" hidden>
+            <input id="group_id" name="group_id" type="text" value=$groupToCreate.getId() hidden>
+            <fieldset>
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="group_name">Group Name</label>
+                    $TForms.getRequiredInputField("group_name", "Group Name")
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="pure-u-24-24 centered" style="display: inherit;">
+        <div class="pure-u-4-6">
+            <b>All Users</b>
+        </div>
+        <div class="pure-u-4-6">
+            <b></b>
+        </div>
+        <div class="pure-u-4-6">
+            <b>Users In Group</b>
+        </div>
+    </div>
+
+    <div class="pure-u-24-24 centered" style="display: inherit;">
+        <div class="pure-u-4-6">
+            <select size="10" multiple style="width:150">
+                #foreach ($user in $TUsers.getUsers())
+                <option value="$user.getUsername()">$user.getUsername()</option>
+                #end
+            </select>
+        </div>
+
+        <div class="pure-u-4-6">
+            <button type="button">
+                "->"
+            </button>
+            <button type="button">
+                "<-"
+            </button>
+        </div>
+
+        <div class="pure-u-4-6">
+            <select size="10" multiple style="width:150">
+                #foreach ($user in $TUsers.getUsers())
+                <option value="$user.getUsername()">$user.getUsername()</option>
+                #end
+            </select>
+        </div>
+    </div>
+</div>
