@@ -31,7 +31,10 @@ package app.core.controllers
 
 import api.core.TacusciAPI
 import app.core.core.controllers.Web
+import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import database.models.Group
+import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -65,7 +68,7 @@ class GroupManagementController : Controller {
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
 
-        if (request.queryParams(":command") == null && request.queryParams(":group_id") == null) {
+        if (request.params(":command") == null && request.params(":group_id") == null) {
             model.put("template", templatePath)
         } else {
             return getCommandPage(request, response, layoutTemplate)
@@ -74,7 +77,27 @@ class GroupManagementController : Controller {
     }
 
     private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-
+        val model = HashMap<String, Any>()
+        TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavigationElements(request, model)
+        when (request.params(":command")) {
+            "create" -> {
+                model.put("template", "/templates/create_group.vtl")
+                Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Group")
+                model.put("groupToCreate", Group())
+            } "edit" -> {
+            if (request.params("group_id") != null) {
+                model.put("template", "/templates/edit_group.vtl")
+                Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
+                val group = GroupHandler.groupDAO.getGroup(request.params("group_id").toIntSafe())
+                if (group.id == -1) response.redirect("/dashboard/group_management")
+                model.put("groupToEdit", group)
+            } else {
+                response.redirect("/dashboard/group_management")
+            }
+        }
+        }
+        return ModelAndView(model, layoutTemplate)
     }
 
     override fun post(request: Request, response: Response): Response { return response }
