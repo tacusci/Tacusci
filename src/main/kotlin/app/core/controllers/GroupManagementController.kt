@@ -85,20 +85,24 @@ class GroupManagementController : Controller {
                 model.put("template", "/templates/create_group.vtl")
                 Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Group")
                 model.put("groupToCreate", Group())
-            } "edit" -> {
-            if (request.params("group_id") != null) {
-                model.put("template", "/templates/edit_group.vtl")
-                Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
-                val group = GroupHandler.groupDAO.getGroup(request.params("group_id").toIntSafe())
-                if (group.id == -1) response.redirect("/dashboard/group_management")
-                model.put("groupToEdit", group)
-            } else {
-                response.redirect("/dashboard/group_management")
             }
-        }
+            
+            "edit" -> {
+                if (request.params("group_id") != null) {
+                    model.put("template", "/templates/edit_group.vtl")
+                    Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
+                    val group = GroupHandler.groupDAO.getGroup(request.params("group_id").toIntSafe())
+                    if (group.id == -1) response.redirect("/dashboard/group_management")
+                    model.put("groupToEdit", group)
+                } else {
+                    response.redirect("/dashboard/group_management")
+                }
+            }
         }
         return ModelAndView(model, layoutTemplate)
     }
 
-    override fun post(request: Request, response: Response): Response { return response }
+    override fun post(request: Request, response: Response): Response {
+        return response
+    }
 }
