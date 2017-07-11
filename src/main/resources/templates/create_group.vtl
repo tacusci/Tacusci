@@ -46,11 +46,11 @@
         </form>
     </div>
 
-    <div class="pure-u-24-24 centered" style="display: inherit;">
+    <div class="pure-u-24-24 centered">
         <div class="pure-u-1-3">
             <b>All Users</b>
         </div>
-        <div class="pure-u-1-3">
+        <div class="pure-u">
             <b></b>
         </div>
         <div class="pure-u-1-3">
@@ -58,26 +58,26 @@
         </div>
     </div>
 
-    <div class="pure-u-24-24 centered" style="display: inherit;">
+    <div class="pure-u-24-24 centered">
         <div class="pure-u-1-3">
-            <select size="10" multiple style="width:150">
+            <select size="10" multiple style="width:100%">
                 #foreach ($user in $TUsers.getUsers())
                 <option value="$user.getUsername()">$user.getUsername()</option>
                 #end
             </select>
         </div>
 
-        <div class="pure-u-1-3">
+        <div class="pure-u">
             <button type="button">
-                "->"
+                ->
             </button>
             <button type="button">
-                "<-"
+                <-
             </button>
         </div>
 
         <div class="pure-u-1-3">
-            <select size="10" multiple style="width:150">
+            <select size="10" multiple style="width:100%">
                 #foreach ($user in $TUsers.getUsers())
                 <option value="$user.getUsername()">$user.getUsername()</option>
                 #end
