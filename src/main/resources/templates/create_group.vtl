@@ -60,7 +60,7 @@
 
     <div class="pure-u-24-24 centered">
         <div class="pure-u-1-3">
-            <select size="10" multiple style="width:100%">
+            <select id="users-list" size="10" style="width:100%">
                 #foreach ($user in $TUsers.getUsers())
                 <option value="$user.getUsername()">$user.getUsername()</option>
                 #end
@@ -68,16 +68,57 @@
         </div>
 
         <div class="pure-u">
-            <button type="button">
+            <button type="button" onclick="addUsernameToGroup()">
                 ->
             </button>
-            <button type="button">
+            <button type="button" onclick="removeUsernameFromGroup()">
                 <-
             </button>
         </div>
 
         <div class="pure-u-1-3">
-            <select size="10" multiple style="width:100%"></select>
+            <select id="users-in-group-list" size="10" style="width:100%"></select>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+  var addUsernameToGroup = function() {
+    var usersListSelect = document.getElementById("users-list");
+
+    if (usersListSelect.selectedIndex > -1) {
+      var newUserOption = document.createElement("option");
+      newUserOption.value = usersListSelect.options[usersListSelect.selectedIndex].value;
+      newUserOption.innerHTML = newUserOption.value;
+      var usersInGroupListSelect = document.getElementById("users-in-group-list");
+      console.log(selectContainsOption(usersInGroupListSelect, newUserOption))
+      if (!selectContainsOption(usersInGroupListSelect, newUserOption.value)) {
+        usersInGroupListSelect.append(newUserOption);
+        usersListSelect.remove(usersListSelect.selectedIndex);
+      }
+    }
+  }
+
+  var removeUsernameFromGroup = function() {
+    var usersInGroupListSelect = document.getElementById("users-in-group-list");
+
+    if (usersInGroupListSelect.selectedIndex > -1) {
+      var newUserOption = document.createElement("option");
+      newUserOption.value = usersInGroupListSelect.options[usersInGroupListSelect.selectedIndex].value;
+      newUserOption.innerHTML = newUserOption.value;
+      var usersListSelect = document.getElementById("users-list");
+      if (!selectContainsOption(usersListSelect, newUserOption.value)) {
+        usersListSelect.append(newUserOption);
+        usersInGroupListSelect.remove(usersInGroupListSelect.selectedIndex);
+      }
+    }
+  }
+
+  var selectContainsOption = function(select, option) {
+    if (select !== null) {
+      return (select.innerHTML.indexOf('value="' + option + '"') > -1);
+    } else {
+      return false;
+    }
+  }
+</script>
