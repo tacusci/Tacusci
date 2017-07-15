@@ -34,8 +34,6 @@
 
     <div class="pure-u-24-24 centered">
         <form id="create_group_form" name="create_group_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI()/create method="post">
-            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("create_group_form") hidden>
-            <input id="formName" name="formName" type="text" value="create_group_form" hidden>
             <input id="group_id" name="group_id" type="text" value=$groupToCreate.getId() hidden>
             <fieldset>
                 <div class="pure-control-group">
@@ -83,15 +81,51 @@
 </div>
 
 <div class="pure-u-24-24 centered">
-    <button class="pure-button" onclick="submitCreateGroupForm()">Create</button>
+    <button class="pure-button" onclick="create()">Create</button>
 </div>
 
 <script type="text/javascript">
 
-  var submitCreateGroupForm = function() {
-    var usersInGroupListSelect = document.getElementById("users-in-group-list");
+  function create() {
+        var createPageForm = document.createElement("form");
+        createPageForm.id = "create_group_form";
+        createPageForm.name = "create_group_form";
+        createPageForm.setAttribute('method', "post");
+        createPageForm.setAttribute('action', "/dashboard/group_management/create");
 
-  }
+        var formHashInput = document.createElement("input");
+        formHashInput.id = "hashid";
+        formHashInput.name = "hashid";
+        formHashInput.type = "text";
+        formHashInput.value = "$TForms.mapFormToHash("create_group_form")";
+
+        var formNameInput = document.createElement("input");
+        formNameInput.id = "formName";
+        formNameInput.name = "formName";
+        formNameInput.type = "text";
+        formNameInput.value = "create_group_form";
+
+        var groupIdInput = document.createElement("group_id");
+        groupIdInput.id = "group_id";
+        groupIdInput.type = "text";
+        groupIdInput.value = $groupToCreate.getId();
+
+        var groupNameInput = document.createElement("input");
+        groupNameInput.id = "group_name";
+        groupNameInput.name = "group_name";
+        groupNameInput.value = document.getElementById("group_name").value;
+
+        var groupUserList = document.createElement("input");
+        groupUserList.id = "group_members_list";
+        groupUserList.name = "group_members_list";
+
+        var usersInGroupListSelect = document.getElementById("users-in-group-list");
+
+        for (var i = 0; i < usersInGroupListSelect.options.length; i++) {
+            console.log(usersInGroupListSelect.options[i].value);
+            groupUserList = groupUserList.value + "\n" + usersInGroupListSelect.options[i].value;
+        }
+ }
 
   var addUsernameToGroup = function() {
     var usersListSelect = document.getElementById("users-list");
