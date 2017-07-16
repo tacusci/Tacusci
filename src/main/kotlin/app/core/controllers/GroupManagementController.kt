@@ -34,6 +34,7 @@ import app.core.core.controllers.Web
 import app.core.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.models.Group
+import extensions.isNullOrBlankOrEmpty
 import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
@@ -102,9 +103,28 @@ class GroupManagementController : Controller {
         return ModelAndView(model, layoutTemplate)
     }
 
+    private fun post_CreateGroupForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for CREATE_GROUP_FORM")
+        val groupToCreate = Group()
+        groupToCreate.name = request.queryParams("group_name")
+        if (!groupToCreate.name.isNullOrBlankOrEmpty()) {
+            GroupHandler.createGroup(groupToCreate)
+            request.queryParams("group_members_list").split(",").forEach {
+                val userToAdd = UserHandler.userDAO.getUser(it)
+                if (userToAdd.id > -1) {
+                    GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
+                }
+            }
+        }
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
-        println(request.queryParams("group_name"))
-        println(request.queryParams("group_members_list"))
+        if (request.uri().contains("/group_management/create")) {
+            if (Web.getFormHash(request, "create_group_form") == request.queryParams("hashid")) {
+                return post_CreateGroupForm(request, response)
+            }
+        }
         return response
     }
 }
