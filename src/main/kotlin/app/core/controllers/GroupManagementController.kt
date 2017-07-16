@@ -103,6 +103,8 @@ class GroupManagementController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
+        println(request.queryParams("group_name"))
+        println(request.queryParams("group_members_list"))
         return response
     }
 }

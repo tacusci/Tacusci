@@ -84,14 +84,16 @@
     <button class="pure-button" onclick="create()">Create</button>
 </div>
 
+<div id="create_group_div" hidden></div>
+
 <script type="text/javascript">
 
   function create() {
-        var createPageForm = document.createElement("form");
-        createPageForm.id = "create_group_form";
-        createPageForm.name = "create_group_form";
-        createPageForm.setAttribute('method', "post");
-        createPageForm.setAttribute('action', "/dashboard/group_management/create");
+        var createGroupForm = document.createElement("form");
+        createGroupForm.id = "create_group_form";
+        createGroupForm.name = "create_group_form";
+        createGroupForm.setAttribute('method', "post");
+        createGroupForm.setAttribute('action', "/dashboard/group_management/create");
 
         var formHashInput = document.createElement("input");
         formHashInput.id = "hashid";
@@ -122,9 +124,22 @@
         var usersInGroupListSelect = document.getElementById("users-in-group-list");
 
         for (var i = 0; i < usersInGroupListSelect.options.length; i++) {
-            console.log(usersInGroupListSelect.options[i].value);
-            groupUserList = groupUserList.value + "\n" + usersInGroupListSelect.options[i].value;
+            if (i == 0) {
+                groupUserList.value = groupUserList.value + usersInGroupListSelect.options[i].value;
+            } else {
+                groupUserList.value = groupUserList.value + "," + usersInGroupListSelect.options[i].value;
+            }
         }
+        
+        createGroupForm.appendChild(formHashInput);
+        createGroupForm.appendChild(formNameInput);
+        createGroupForm.appendChild(groupIdInput);
+        createGroupForm.appendChild(groupNameInput);
+        createGroupForm.appendChild(groupUserList);
+
+        document.getElementById("create_group_div").appendChild(createGroupForm);
+
+        createGroupForm.submit();
  }
 
   var addUsernameToGroup = function() {
