@@ -112,7 +112,7 @@ class GroupManagementController : Controller {
             request.queryParams("group_members_list").split(",").forEach {
                 val userToAdd = UserHandler.userDAO.getUser(it)
                 if (userToAdd.id > -1) {
-                    GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
+                    if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
                 }
             }
         }
