@@ -119,6 +119,13 @@ class GroupManagementController : Controller {
         return response
     }
 
+    private fun post_EditGroupForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_GROUP_FORM")
+        val groupToEdit = Group()
+        groupToEdit.name = request.queryParams("group_name")
+        if (!groupToEdit.name.isNullOrBlankOrEmpty()) {}
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("/group_management/create")) {
             if (Web.getFormHash(request, "create_group_form") == request.queryParams("hashid")) {

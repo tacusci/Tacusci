@@ -101,6 +101,8 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
+    fun updateGroup(group: Group)
+
     fun groupExists(groupName: String): Boolean {
         connect()
         var count = 0
