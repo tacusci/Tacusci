@@ -63,6 +63,15 @@ object j2htmlPartials {
                 .withPlaceholder(placeholder)
     }
 
+    fun requiredInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+    }
+
     fun fullNameInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)

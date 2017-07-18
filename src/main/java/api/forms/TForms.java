@@ -31,6 +31,10 @@ public class TForms extends TAPIClass {
         return j2htmlPartials.INSTANCE.requiredInputField(identifier, placeholder).render();
     }
 
+    public String getRequiredInputField(String identifier, String placeholder, String defaultContent) {
+        return j2htmlPartials.INSTANCE.requiredInputField(identifier, placeholder, defaultContent).render();
+    }
+
     public String getUsernameInputField(String identifier, String placeholder) {
         return j2htmlPartials.INSTANCE.usernameInput(identifier, placeholder).render();
     }

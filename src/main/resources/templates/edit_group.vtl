@@ -27,4 +27,166 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
-<h2 class="page-title-header header">Edit group $groupToEdit.getName()</h2>
+<div class="pure-g">
+    <div class="pure-u-24-24">
+        <h1 class="page-title-header header">Edit Group</h1>
+    </div>
+
+    <div class="pure-u-24-24 centered">
+        <form id="create_group_form" name="create_group_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI()/edit method="post">
+            <input id="group_id" name="group_id" type="text" value=$groupToEdit.getId() hidden>
+            <fieldset>
+                <div class="pure-control-group">
+                    <label class="theme-shade" for="group_name" required>Group Name</label>
+                    $TForms.getRequiredInputField("group_name", "Group Name", $groupToEdit.getName())
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="pure-u-24-24 centered">
+        <div class="pure-u-1-3">
+            <b>All Users</b>
+        </div>
+        <div class="pure-u">
+            <b></b>
+        </div>
+        <div class="pure-u-1-3">
+            <b>Users In Group</b>
+        </div>
+    </div>
+
+    <div class="pure-u-24-24 centered">
+        <div class="pure-u-1-3">
+            <select id="users-list" size="10" style="width:100%" ondblclick="addUsernameToGroup()">
+                #foreach ($user in $TUsers.getUsers())
+                    #if (!$TGroups.userInGroup($user, $groupToEdit.getName()))
+                        <option value="$user.getUsername()">$user.getUsername()</option>
+                    #end
+                #end
+            </select>
+        </div>
+
+        <div class="pure-u">
+            <button type="button" onclick="addUsernameToGroup()">
+                ->
+            </button>
+            <button type="button" onclick="removeUsernameFromGroup()">
+                <-
+            </button>
+        </div>
+
+        <div class="pure-u-1-3">
+            <select id="users-in-group-list" size="10" style="width:100%" ondblclick="removeUsernameFromGroup()">
+                #foreach ($user in $TGroups.getUsersInGroup($groupToEdit.getName()))
+                    <option value="$user.getUsername()">$user.getUsername()</option>
+                #end
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="pure-u-24-24 centered">
+    <button class="pure-button" onclick="create()">Edit</button>
+</div>
+
+<div id="create_group_div" hidden></div>
+
+<script type="text/javascript">
+
+  function create() {
+        var createGroupForm = document.createElement("form");
+        createGroupForm.id = "create_group_form";
+        createGroupForm.name = "create_group_form";
+        createGroupForm.setAttribute('method', "post");
+        createGroupForm.setAttribute('action', "/dashboard/group_management/edit");
+
+        var formHashInput = document.createElement("input");
+        formHashInput.id = "hashid";
+        formHashInput.name = "hashid";
+        formHashInput.type = "text";
+        formHashInput.value = "$TForms.mapFormToHash("create_group_form")";
+
+        var formNameInput = document.createElement("input");
+        formNameInput.id = "formName";
+        formNameInput.name = "formName";
+        formNameInput.type = "text";
+        formNameInput.value = "create_group_form";
+
+        var groupIdInput = document.createElement("group_id");
+        groupIdInput.id = "group_id";
+        groupIdInput.type = "text";
+        groupIdInput.value = $groupToEdit.getId();
+
+        var groupNameInput = document.createElement("input");
+        groupNameInput.id = "group_name";
+        groupNameInput.name = "group_name";
+        groupNameInput.value = document.getElementById("group_name").value;
+
+        var groupUserList = document.createElement("input");
+        groupUserList.id = "group_members_list";
+        groupUserList.name = "group_members_list";
+
+        var usersInGroupListSelect = document.getElementById("users-in-group-list");
+
+        for (var i = 0; i < usersInGroupListSelect.options.length; i++) {
+            if (i == 0) {
+                groupUserList.value = groupUserList.value + usersInGroupListSelect.options[i].value;
+            } else {
+                groupUserList.value = groupUserList.value + "," + usersInGroupListSelect.options[i].value;
+            }
+        }
+
+        createGroupForm.appendChild(formHashInput);
+        createGroupForm.appendChild(formNameInput);
+        createGroupForm.appendChild(groupIdInput);
+        createGroupForm.appendChild(groupNameInput);
+        createGroupForm.appendChild(groupUserList);
+
+        document.getElementById("create_group_div").appendChild(createGroupForm);
+
+        createGroupForm.submit();
+ }
+
+  var addUsernameToGroup = function() {
+    var usersListSelect = document.getElementById("users-list");
+
+    if (usersListSelect.selectedIndex > -1) {
+      var newUserOption = genOption(usersListSelect.options[usersListSelect.selectedIndex].value);
+      var usersInGroupListSelect = document.getElementById("users-in-group-list");
+
+      if (!selectContainsOption(usersInGroupListSelect, newUserOption.value)) {
+        usersInGroupListSelect.append(newUserOption);
+        usersListSelect.remove(usersListSelect.selectedIndex);
+      }
+    }
+  }
+
+  var removeUsernameFromGroup = function() {
+    var usersInGroupListSelect = document.getElementById("users-in-group-list");
+
+    if (usersInGroupListSelect.selectedIndex > -1) {
+      var newUserOption = genOption(usersInGroupListSelect.options[usersInGroupListSelect.selectedIndex].value);
+      var usersListSelect = document.getElementById("users-list");
+
+      if (!selectContainsOption(usersListSelect, newUserOption.value)) {
+        usersListSelect.append(newUserOption);
+        usersInGroupListSelect.remove(usersInGroupListSelect.selectedIndex);
+      }
+    }
+  }
+
+  var selectContainsOption = function(select, option) {
+    if (select !== null) {
+      return (select.innerHTML.indexOf('value="' + option + '"') > -1);
+    } else {
+      return false;
+    }
+  }
+
+  var genOption = function(value) {
+    var option = document.createElement("option");
+    option.value, option.innerHTML = value;
+    return option;
+  }
+</script>
