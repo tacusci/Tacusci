@@ -42,7 +42,7 @@ import utils.tree.Tree
  */
 data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
                 var fullName: String = "", var username: String = "", var password: String = "", var email: String = "",
-                var banned: Int = 0, var rootAdmin: Int = 0) {
+                var banned: Int = 0, var rootAdmin: Boolean = false) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }
@@ -70,7 +70,8 @@ data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdate
 }
 
 
-data class Group(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1, var name: String = "", var parentGroupId: Int = -1) {
+data class Group(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
+                 var name: String = "", var parentGroupId: Int = -1, var defaultGroup: Boolean = false) {
 
     fun isValid(): Boolean {
         if (!isNameValid()) { return false }

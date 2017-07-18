@@ -76,8 +76,10 @@ object GroupHandler : KLogging() {
     fun removeUserFromGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
-                val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                user2groupDAO.removeUserAndGroupMap(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                if (GroupHandler.groupDAO.getGroup(groupName).defaultGroup && !UserHandler.userDAO.getUser(username).rootAdmin) {
+                    val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+                    user2groupDAO.removeUserAndGroupMap(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
+                }
             }
         }
     }
@@ -95,6 +97,7 @@ object GroupHandler : KLogging() {
     fun userInGroup(username: String, groupName: String): Boolean {
         val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
         if (user2GroupDAO.areUserAndGroupMapped(UserHandler.userDAO.getUserID(username), GroupHandler.groupDAO.getGroupID(groupName))) return true
+
         groupDAO.getGroupChildren(groupName).forEach { childGroup ->
             if (userInGroup(username, childGroup.name))
                 return true
@@ -118,7 +121,7 @@ object GroupHandler : KLogging() {
     */
 
     fun displayGroupsAndChildren(groupName: String) {
-        println("Group: "+groupName)
+        println("Group: " + groupName)
         println("Parent: ${groupDAO.getGroup(groupDAO.getGroup(groupName).parentGroupId).name}")
         groupDAO.getGroupChildren(groupName).forEach { childGroup ->
             println("Child of $groupName: ${childGroup.name}")

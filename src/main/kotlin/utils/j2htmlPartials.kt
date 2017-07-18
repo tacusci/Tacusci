@@ -72,6 +72,16 @@ object j2htmlPartials {
                 .withValue(defaultContent)
     }
 
+    fun readOnlyInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+                .attr("readonly", "")
+    }
+
     fun fullNameInput(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)

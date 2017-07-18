@@ -57,6 +57,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return group }
@@ -87,12 +88,13 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
-            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP) VALUES (?,?,?,?)"
+            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP, DEFAULT_GROUP) VALUES (?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, group.name)
             preparedStatement?.setInt(4, group.parentGroupId)
+            preparedStatement?.setBoolean(5, group.defaultGroup)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -101,7 +103,22 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
-    fun updateGroup(group: Group)
+    fun updateGroup(group: Group): Boolean {
+        connect()
+        try {
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, GROUP_NAME=?, ID_PARENT_GROUP=?, DEFAULT_GROUP=?"
+            val preparedStatement = connection?.prepareStatement(updateStatement)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setString(2, group.name)
+            preparedStatement?.setInt(3, group.parentGroupId)
+            preparedStatement?.setBoolean(4, group.defaultGroup)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
 
     fun groupExists(groupName: String): Boolean {
         connect()
@@ -134,6 +151,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
                 groups.add(group)
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
@@ -164,6 +182,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
+                group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
                 childGroups.add(group)
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return childGroups }

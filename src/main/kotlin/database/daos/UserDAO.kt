@@ -48,7 +48,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getUser(userID: Int): User {
         connect()
-        val user = User(-1, -1, -1, "", "", "", "", 0, 0)
+        val user = User(-1, -1, -1, "", "", "", "", 0, true)
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
@@ -63,7 +63,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
                 user.password = resultSet.getString("AUTH_HASH")
                 user.email = resultSet.getString("EMAIL")
                 user.banned = resultSet.getInt("BANNED")
-                user.rootAdmin = resultSet.getInt("ROOT_ADMIN")
+                user.rootAdmin = resultSet.getBoolean("ROOT_ADMIN")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
@@ -98,7 +98,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
             //preparedStatement?.setString(1, count().toString())
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
-            preparedStatement?.setInt(3, user.rootAdmin)
+            preparedStatement?.setBoolean(3, user.rootAdmin)
             preparedStatement?.setString(4, user.username)
             preparedStatement?.setString(5, PasswordStorage.createHash(user.password))
             preparedStatement?.setString(6, user.email)
@@ -181,11 +181,11 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
-            val user = User(-1, -1, -1, "", "", "", "", 0, 0)
+            val user = User(-1, -1, -1, "", "", "", "", 0, false)
             user.id = resultSet.getInt("ID_USERS")
             user.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
             user.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
-            user.rootAdmin = resultSet.getInt("ROOT_ADMIN")
+            user.rootAdmin = resultSet.getBoolean("ROOT_ADMIN")
             user.username = resultSet.getString("USERNAME")
             user.password = resultSet.getString("AUTH_HASH")
             user.fullName = resultSet.getString("FULL_NAME")
@@ -199,16 +199,16 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun getRootAdmin(): User {
         connect()
-        val user = User(-1, -1, -1, "", "", "", "", 0, 1)
+        val user = User(-1, -1, -1, "", "", "", "", 0, true)
         val selectStatement = "SELECT ID_USERS, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, EMAIL, FULL_NAME, BANNED FROM $tableName WHERE ROOT_ADMIN=?"
         val preparedStatement = connection?.prepareStatement(selectStatement)
-        preparedStatement?.setInt(1, user.rootAdmin)
+        preparedStatement?.setBoolean(1, user.rootAdmin)
         val resultSet = preparedStatement?.executeQuery()
         if (resultSet!!.next()) {
             user.id = resultSet.getInt("ID_USERS")
             user.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
             user.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
-            user.rootAdmin = resultSet.getInt("ROOT_ADMIN")
+            user.rootAdmin = resultSet.getBoolean("ROOT_ADMIN")
             user.username = resultSet.getString("USERNAME")
             user.email = resultSet.getString("EMAIL")
             user.fullName = resultSet.getString("FULL_NAME")
@@ -231,7 +231,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
                 preparedStatement?.setString(3, user.password)
             else
                 preparedStatement?.setString(3, PasswordStorage.createHash(user.password))
-            preparedStatement?.setInt(4, user.rootAdmin)
+            preparedStatement?.setBoolean(4, user.rootAdmin)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

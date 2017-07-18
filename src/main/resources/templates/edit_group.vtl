@@ -38,7 +38,11 @@
             <fieldset>
                 <div class="pure-control-group">
                     <label class="theme-shade" for="group_name" required>Group Name</label>
-                    $TForms.getRequiredInputField("group_name", "Group Name", $groupToEdit.getName())
+                    #if (!$groupToEdit.getDefaultGroup())
+                        $TForms.getRequiredInputField("group_name", "Group Name", $groupToEdit.getName())
+                    #else
+                        $TForms.getReadOnlyInputField("group_name", "Group Name", $groupToEdit.getName())
+                    #end
                 </div>
             </fieldset>
         </form>
@@ -95,23 +99,23 @@
 <script type="text/javascript">
 
   function create() {
-        var createGroupForm = document.createElement("form");
-        createGroupForm.id = "create_group_form";
-        createGroupForm.name = "create_group_form";
-        createGroupForm.setAttribute('method', "post");
-        createGroupForm.setAttribute('action', "/dashboard/group_management/edit");
+        var editGroupForm = document.createElement("form");
+        editGroupForm.id = "edit_group_form";
+        editGroupForm.name = "edit_group_form";
+        editGroupForm.setAttribute('method', "post");
+        editGroupForm.setAttribute('action', "/dashboard/group_management/edit/$groupToEdit.getId()");
 
         var formHashInput = document.createElement("input");
         formHashInput.id = "hashid";
         formHashInput.name = "hashid";
         formHashInput.type = "text";
-        formHashInput.value = "$TForms.mapFormToHash("create_group_form")";
+        formHashInput.value = "$TForms.mapFormToHash("edit_group_form")";
 
         var formNameInput = document.createElement("input");
         formNameInput.id = "formName";
         formNameInput.name = "formName";
         formNameInput.type = "text";
-        formNameInput.value = "create_group_form";
+        formNameInput.value = "edit_group_form";
 
         var groupIdInput = document.createElement("group_id");
         groupIdInput.id = "group_id";
@@ -137,15 +141,15 @@
             }
         }
 
-        createGroupForm.appendChild(formHashInput);
-        createGroupForm.appendChild(formNameInput);
-        createGroupForm.appendChild(groupIdInput);
-        createGroupForm.appendChild(groupNameInput);
-        createGroupForm.appendChild(groupUserList);
+        editGroupForm.appendChild(formHashInput);
+        editGroupForm.appendChild(formNameInput);
+        editGroupForm.appendChild(groupIdInput);
+        editGroupForm.appendChild(groupNameInput);
+        editGroupForm.appendChild(groupUserList);
 
-        document.getElementById("create_group_div").appendChild(createGroupForm);
+        document.getElementById("create_group_div").appendChild(editGroupForm);
 
-        createGroupForm.submit();
+        editGroupForm.submit();
  }
 
   var addUsernameToGroup = function() {

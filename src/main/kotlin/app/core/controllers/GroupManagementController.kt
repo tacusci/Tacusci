@@ -111,11 +111,11 @@ class GroupManagementController : Controller {
             GroupHandler.createGroup(groupToCreate)
             request.queryParams("group_members_list").split(",").forEach {
                 val userToAdd = UserHandler.userDAO.getUser(it)
-                if (userToAdd.id > -1) {
+                if (userToAdd.id > -1)
                     if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
-                }
             }
         }
+        response.redirect(rootUri)
         return response
     }
 
@@ -123,13 +123,27 @@ class GroupManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_GROUP_FORM")
         val groupToEdit = Group()
         groupToEdit.name = request.queryParams("group_name")
-        if (!groupToEdit.name.isNullOrBlankOrEmpty()) {}
+        if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
+            GroupHandler.groupDAO.updateGroup(groupToEdit)
+            GroupHandler.getUsersInGroup(groupToEdit.name).forEach { GroupHandler.removeUserFromGroup(it, groupToEdit.name) }
+            request.queryParams("group_members_list").split(",").forEach {
+                val userToAdd = UserHandler.userDAO.getUser(it)
+                if (userToAdd.id > -1)
+                    if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
+            }
+        }
+        response.redirect(request.uri())
+        return response
     }
 
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("/group_management/create")) {
             if (Web.getFormHash(request, "create_group_form") == request.queryParams("hashid")) {
                 return post_CreateGroupForm(request, response)
+            }
+        } else if (request.uri().contains("/group_management/edit")) {
+            if (Web.getFormHash(request, "edit_group_form") == request.queryParams("hashid")) {
+                return post_EditGroupForm(request, response)
             }
         }
         return response
