@@ -121,6 +121,7 @@ object PageController : KLogging() {
                 velocityIMTemplateEngine.insertIntoContext(templateToUse.title, Web.loadNavigationElements(request, hashMapOf()))
                 velocityIMTemplateEngine.insertIntoContext(templateToUse.title, Web.insertPageTitle(request, hashMapOf(), page.title))
                 velocityIMTemplateEngine.insertIntoContext(templateToUse.title, hashMapOf<String, Any>(Pair("pageContent", result)))
+                TacusciAPI.injectAPIInstances(request, response, templateToUse.title, velocityIMTemplateEngine)
                 result = velocityIMTemplateEngine.render(templateToUse.title)
                 velocityIMTemplateEngine.flush(templateToUse.title)
             }
