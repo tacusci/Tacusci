@@ -136,8 +136,6 @@ class UserManagementController : Controller {
                     var statusChangedForAnyone = false
 
                     val usersAndBanned = getUserIsBanned(request)
-                    val usersAndIsModeratorState = getUserIsModerator(request)
-                    val usersAndIsAdminState = getUserIsAdminStateFromForm(request)
 
                     usersAndBanned.forEach {
                         for ((username, banned) in it) {
@@ -151,38 +149,6 @@ class UserManagementController : Controller {
                                 statusChangedForAnyone = true
                                 logger.info("${UserHandler.getSessionIdentifier(request)} -> has unbanned user $username")
                                 UserHandler.unban(username)
-                            }
-                        }
-                    }
-
-                    usersAndIsAdminState.forEach {
-                        for ((username, admin) in it) {
-                            if (username == UserHandler.getRootAdmin().username) continue
-                            if (username == UserHandler.loggedInUsername(request)) continue
-                            if (admin && !GroupHandler.userInGroup(username, "admins")) {
-                                statusChangedForAnyone = true
-                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username an admin")
-                                GroupHandler.addUserToGroup(username, "admins")
-                            } else if (!admin && GroupHandler.userInGroup(username, "admins")) {
-                                statusChangedForAnyone = true
-                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's admin status")
-                                GroupHandler.removeUserFromGroup(username, "admins")
-                            }
-                        }
-                    }
-
-                    usersAndIsModeratorState.forEach {
-                        for ((username, moderator) in it) {
-                            if (username == UserHandler.getRootAdmin().username) continue
-                            if (username == UserHandler.loggedInUsername(request)) continue
-                            if (moderator && !GroupHandler.userInGroup(username, "moderators")) {
-                                statusChangedForAnyone = true
-                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has made user $username a moderator")
-                                GroupHandler.addUserToGroup(username, "moderators")
-                            } else if (!moderator && GroupHandler.userInGroup(username, "moderators")) {
-                                statusChangedForAnyone = true
-                                logger.info("${UserHandler.getSessionIdentifier(request)} -> has removed user $username's moderator status")
-                                GroupHandler.removeUserFromGroup(username, "moderators")
                             }
                         }
                     }
@@ -213,35 +179,5 @@ class UserManagementController : Controller {
 
         usersAndBanStates.add(userAndBanState)
         return usersAndBanStates
-    }
-
-    private fun getUserIsModerator(request: Request): MutableList<MutableMap<String, Boolean>> {
-        val usersAndModeratorStates = mutableListOf<MutableMap<String, Boolean>>()
-        val userAndModeratorState = mutableMapOf<String, Boolean>()
-
-        if (request.queryParams().contains("moderator_checkbox.hidden")) {
-            request.queryParamsValues("moderator_checkbox.hidden").forEach { user -> userAndModeratorState.put(user, false) }
-        }
-
-        if (request.queryParams().contains("moderator_checkbox")) {
-            request.queryParamsValues("moderator_checkbox").forEach { user -> userAndModeratorState.put(user, true) }
-        }
-        usersAndModeratorStates.add(userAndModeratorState)
-        return usersAndModeratorStates
-    }
-
-    private fun getUserIsAdminStateFromForm(request: Request): MutableList<MutableMap<String, Boolean>> {
-        val usersAndAdminState = mutableListOf<MutableMap<String, Boolean>>()
-        val userAndAdminState = mutableMapOf<String, Boolean>()
-
-        if (request.queryParams().contains("admin_checkbox.hidden")) {
-            request.queryParamsValues("admin_checkbox.hidden").forEach { user -> userAndAdminState.put(user, false) }
-        }
-
-        if (request.queryParams().contains("admin_checkbox")) {
-            request.queryParamsValues("admin_checkbox").forEach { user -> userAndAdminState.put(user, true) }
-        }
-        usersAndAdminState.add(userAndAdminState)
-        return usersAndAdminState
     }
 }

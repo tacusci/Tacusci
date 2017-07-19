@@ -46,8 +46,6 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Banned</th>
-                    <th>Admin</th>
-                    <th>Moderator</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,18 +62,6 @@
                                        name="banned_checkbox.hidden"><input id=$user.getUsername() name="banned_checkbox"
                                                                             value=$user.getUsername() type="checkbox" #if
                                                                             ($TUsers.isBanned($user)) checked="" #end>
-                            </td>
-                            <td><input type="hidden" id=$user.getUsername() value=$user.getUsername()
-                                       name="admin_checkbox.hidden"><input id=$user.getUsername() name="admin_checkbox"
-                                                                           value=$user.getUsername() type="checkbox" #if
-                                                                           ($TGroups.userInGroup($user, "admins"))
-                                checked=""#end>
-                            </td>
-                            <td><input type="hidden" id=$user.getUsername() value=$user.getUsername()
-                                       name="moderator_checkbox.hidden"><input id=$user.getUsername() name="moderator_checkbox"
-                                                                               value=$user.getUsername() type="checkbox" #if
-                                                                               ($TGroups.userInGroup($user, "moderators"))
-                                checked=""#end>
                             </td>
                         </tr>
                     #end
