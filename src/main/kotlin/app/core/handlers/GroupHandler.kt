@@ -76,10 +76,9 @@ object GroupHandler : KLogging() {
     fun removeUserFromGroup(username: String, groupName: String) {
         if (UserHandler.userExists(username)) {
             if (groupExists(groupName)) {
-                if (GroupHandler.groupDAO.getGroup(groupName).defaultGroup && !UserHandler.userDAO.getUser(username).rootAdmin) {
-                    val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
-                    user2groupDAO.removeUserAndGroupMap(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
-                }
+                if (GroupHandler.groupDAO.getGroup(groupName).defaultGroup && UserHandler.userDAO.getUser(username).rootAdmin) return
+                val user2groupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+                user2groupDAO.removeUserAndGroupMap(UserHandler.userDAO.getUserID(username), groupDAO.getGroupID(groupName))
             }
         }
     }
