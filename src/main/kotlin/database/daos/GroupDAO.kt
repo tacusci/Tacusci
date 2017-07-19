@@ -32,6 +32,7 @@
  package database.daos
 
 import database.models.Group
+import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
@@ -68,7 +69,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
         return getGroup(getGroupID(groupName))
     }
 
-    fun getGroupID(groupName: String): Int {
+    private fun getGroupID(groupName: String): Int {
         connect()
         var groupID = -1
         try {
@@ -79,10 +80,18 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
             if (resultSet!!.next()) {
                 groupID = resultSet.getInt(1)
             }
-            disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
-        disconnect()
         return groupID
+    }
+
+    fun getGroupID(groupName: String, closeConnection: Boolean = true): Int {
+        if (!closeConnection) {
+            return getGroupID(groupName)
+        } else {
+            val groupId = getGroupID(groupName)
+            disconnect()
+            return groupId
+        }
     }
 
     fun insertGroup(group: Group): Boolean {
@@ -106,12 +115,13 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun updateGroup(group: Group): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, GROUP_NAME=?, ID_PARENT_GROUP=?, DEFAULT_GROUP=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, GROUP_NAME=?, ID_PARENT_GROUP=?, DEFAULT_GROUP=? WHERE ID_GROUPS=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, group.name)
             preparedStatement?.setInt(3, group.parentGroupId)
             preparedStatement?.setBoolean(4, group.defaultGroup)
+            preparedStatement?.setInt(5, group.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

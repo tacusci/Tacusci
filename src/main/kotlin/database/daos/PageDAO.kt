@@ -135,7 +135,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         return pageId
     }
 
-    public fun getPageById(pageId: Int): Page {
+    private fun getPageById(pageId: Int): Page {
         val page = Page()
         connect()
         try {
@@ -160,7 +160,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         return page
     }
 
-    fun getPageById(pageId: Int, closeConnection: Boolean): Page {
+    fun getPageById(pageId: Int, closeConnection: Boolean = true): Page {
         if (!closeConnection) {
             return getPageById(pageId)
         } else {

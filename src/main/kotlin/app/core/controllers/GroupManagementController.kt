@@ -122,6 +122,7 @@ class GroupManagementController : Controller {
     private fun post_EditGroupForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_GROUP_FORM")
         val groupToEdit = Group()
+        groupToEdit.id = request.queryParams("group_id").toIntSafe()
         groupToEdit.name = request.queryParams("group_name")
         if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
             GroupHandler.groupDAO.updateGroup(groupToEdit)

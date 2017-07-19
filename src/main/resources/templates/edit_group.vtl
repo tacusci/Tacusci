@@ -117,8 +117,9 @@
         formNameInput.type = "text";
         formNameInput.value = "edit_group_form";
 
-        var groupIdInput = document.createElement("group_id");
+        var groupIdInput = document.createElement("input");
         groupIdInput.id = "group_id";
+        groupIdInput.name = "group_id";
         groupIdInput.type = "text";
         groupIdInput.value = $groupToEdit.getId();
 
