@@ -40,6 +40,7 @@
             <table class="pure-table" align="center">
                 <thead>
                 <tr>
+                    <th><input id="select_all_checkbox" name="select_all_checkbox" type="checkbox" onclick="selectAllUsers()"></th>
                     <th>Date/Time</th>
                     <th>Updated Date/Time</th>
                     <th>Full Name</th>
@@ -53,6 +54,7 @@
                 #foreach ($user in $TUsers.getUsers())
                     #if ($loggedInUser.getId() != $user.getId())
                         <tr>
+                            <td class="theme-shade"><input id="select_checkbox_$user.getId()" name="select_checkbox" type="checkbox" value="$user.getId()"></td>
                             <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
                             <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getLastUpdatedDateTime())</td>
                             <td class="theme-shade">$user.getFullName()</td>
@@ -73,8 +75,30 @@
             #else
                 <br>
             #end
+
+            <input type="button" onclick="deleteSelectedUsers()" class="pure-button pure-button-primary" value="Delete Selected Users">
+
             <input id="update_user_management" name="update_user_management" type="submit"
                    class="pure-button pure-button-primary" value="Update">
+
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+    var selectAllUsers = function() {
+        var checkboxes = document.getElementsByName("select_checkbox");
+        var selectAllCheckbox = document.getElementById("select_all_checkbox");
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = selectAllCheckbox.checked;
+        }
+    }
+
+    var deleteSelectedUsers = function() {
+        var selectedUsers = document.getElementsByName("select_checkbox");
+        for (var i = 0; i < selectedUsers.length; i++) {
+            var deleteUserForm = document.createElement("form");
+            console.log(selectedUsers[i].value);
+        }
+    }
+</script>
