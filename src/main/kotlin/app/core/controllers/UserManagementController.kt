@@ -119,9 +119,11 @@ class UserManagementController : Controller {
     }
 
     private fun post_DeleteUserForm(request: Request, response: Response): Response {
-        val userToDelete = UserHandler.getUserById(request.queryParams("user_ids").toIntSafe())
-        if (!userToDelete.rootAdmin && userToDelete.id != UserHandler.userDAO.getUser(UserHandler.loggedInUsername(request)).id) {
-            UserHandler.userDAO.deleteUser(userToDelete)
+        request.queryParams("users_to_delete_list").split(",").forEach {
+            val userToDelete = UserHandler.getUserById(it.toIntSafe())
+            if (!userToDelete.rootAdmin && UserHandler.userDAO.getUser(UserHandler.loggedInUsername(request)).id != userToDelete.id) {
+                UserHandler.userDAO.deleteUser(userToDelete)
+            }
         }
         response.redirect(rootUri)
         return response

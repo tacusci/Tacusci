@@ -85,6 +85,8 @@
     </div>
 </div>
 
+<div id="delete_user_div" hidden></div>
+
 <script type="text/javascript">
     var selectAllUsers = function() {
         var checkboxes = document.getElementsByName("select_checkbox");
@@ -95,10 +97,50 @@
     }
 
     var deleteSelectedUsers = function() {
-        var selectedUsers = document.getElementsByName("select_checkbox");
-        for (var i = 0; i < selectedUsers.length; i++) {
-            var deleteUserForm = document.createElement("form");
-            console.log(selectedUsers[i].value);
+        var selectCheckbox = document.getElementsByName("select_checkbox");
+        for (var i = 0; i < selectCheckbox.length; i++) {
+            if (selectCheckbox[i].checked) {
+                var deleteUserForm = document.createElement("form");
+
+                deleteUserForm.id = "delete_user_form";
+                deleteUserForm.name = "delete_user_form";
+                deleteUserForm.setAttribute("method", "post");
+                deleteUserForm.setAttribute("action", "$TRequest.getRequestURI()/delete");
+
+                var formHashInput = document.createElement("input");
+                formHashInput.id = "hashid";
+                formHashInput.name = "hashid";
+                formHashInput.type = "text";
+                formHashInput.value = "$TForms.mapFormToHash("delete_user_form")";
+
+                var formNameInput = document.createElement("input");
+                formNameInput.id = "formName";
+                formNameInput.name = "formName";
+                formNameInput.type = "text";
+                formNameInput.value = "delete_user_form";
+
+                var usersToDeleteList = document.createElement("input");
+                usersToDeleteList.id = "users_to_delete_list";
+                usersToDeleteList.name = "users_to_delete_list";
+
+                for (var i = 0; i < selectCheckbox.length; i++) {
+                    if (selectCheckbox[i].checked) {
+                        if (i == 0) {
+                            usersToDeleteList.value = usersToDeleteList.value + selectCheckbox[i].value;
+                        } else {
+                            usersToDeleteList.value = usersToDeleteList.value + "," + selectCheckbox[i].value;
+                        }
+                    }
+                }
+
+                deleteUserForm.appendChild(formHashInput);
+                deleteUserForm.appendChild(formNameInput);
+                deleteUserForm.appendChild(usersToDeleteList);
+
+                document.getElementById("delete_user_div").appendChild(deleteUserForm);
+
+                deleteUserForm.submit();
+            }
         }
     }
 </script>
