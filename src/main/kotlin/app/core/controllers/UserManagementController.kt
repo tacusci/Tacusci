@@ -118,11 +118,24 @@ class UserManagementController : Controller {
         return response
     }
 
+    private fun post_DeleteUserForm(request: Request, response: Response): Response {
+        val userToDelete = UserHandler.getUserById(request.queryParams("user_ids").toIntSafe())
+        if (!userToDelete.rootAdmin && userToDelete.id != UserHandler.userDAO.getUser(UserHandler.loggedInUsername(request)).id) {
+            UserHandler.userDAO.deleteUser(userToDelete)
+        }
+        response.redirect(rootUri)
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
 
         if (request.uri().contains("user_management/create")) {
             if (Web.getFormHash(request, "create_user_form") == request.queryParams("hashid")) {
                 return post_CreateUserForm(request, response)
+            }
+        } else if (request.uri().contains("user_management/delete")) {
+            if (Web.getFormHash(request, "delete_user_form") == request.queryParams("hashid")) {
+                return post_DeleteUserForm(request, response)
             }
         }
 

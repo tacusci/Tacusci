@@ -257,6 +257,20 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
+    fun deleteUser(user: User): Boolean {
+        connect()
+        try {
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_USERS=?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, user.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
     fun ban(username: String): Boolean {
         connect()
         try {
