@@ -1,5 +1,6 @@
 package api.core;
 
+import app.core.core.controllers.Web;
 import extensions.ExtensionCollectionKt;
 import spark.Request;
 import spark.Response;
@@ -13,5 +14,10 @@ public class TResponse extends TAPIClass {
         super(request, response);
     }
 
+    public String fourOhFourPage() { return Web.INSTANCE.get404Page(request, response); }
+
+    public String fiveHundered() { return Web.INSTANCE.get500Page(request, response); }
+
     public void redirect(String location) { ExtensionCollectionKt.managedRedirect(response, request, location); }
+
 }
