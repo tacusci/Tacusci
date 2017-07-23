@@ -108,6 +108,8 @@ object  UserHandler : KLogging() {
         return false
     }
 
+    fun loggedInUser(request: Request): User = userDAO.getUser(loggedInUsername(request))
+
     fun loggedInUsername(request: Request): String {
         //TODO: WARNING!! For debug purposes only
         if (CliOptions.getFlag("debug"))
