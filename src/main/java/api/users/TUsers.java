@@ -63,7 +63,7 @@ public class TUsers extends TAPIClass {
         return moderatorUsernames;
     }
 
-    public ArrayList<String> getAllRegUserUsernames() {
+    public ArrayList<String> getAllRegularUserUsernames() {
         ArrayList<String> usernames = new ArrayList<>();
         for (User user : UserHandler.INSTANCE.getRegularUsers()) { usernames.add(user.getUsername()); }
         return usernames;

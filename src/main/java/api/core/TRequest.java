@@ -17,5 +17,7 @@ public class TRequest extends TAPIClass {
         return request.uri();
     }
 
+    public String getRequestURIParamValue(String paramName) { return request.params(paramName); }
+
     public Session getSession() { return request.session(); }
 }
