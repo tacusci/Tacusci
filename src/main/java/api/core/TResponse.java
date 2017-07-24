@@ -14,7 +14,7 @@ public class TResponse extends TAPIClass {
         super(request, response);
     }
 
-    public String fourOhFourPage() { return Web.INSTANCE.get404Page(request, response); }
+    public String fourOhFour() { return Web.INSTANCE.get404Page(request, response); }
 
     public String fiveHundered() { return Web.INSTANCE.get500Page(request, response); }
 

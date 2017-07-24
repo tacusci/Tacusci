@@ -106,6 +106,19 @@ object GroupHandler : KLogging() {
         return false
     }
 
+    fun deleteGroup(groupName: String): Boolean {
+        return deleteGroup(groupDAO.getGroup(groupName))
+    }
+
+    fun deleteGroup(group: Group): Boolean {
+        if (groupExists(group.name)) {
+            val user2GroupDAO = DAOManager.getDAO(DAOManager.TABLE.USER2GROUP) as User2GroupDAO
+            user2GroupDAO.removeAllGroupsMaps(group.id)
+            return groupDAO.deleteGroup(group)
+        }
+        return false
+    }
+
     /*
     fun userInGroupRec(username: String, groupName: String): Boolean {
         if (userInGroup(username, groupName)) return true

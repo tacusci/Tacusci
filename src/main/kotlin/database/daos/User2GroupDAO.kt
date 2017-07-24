@@ -97,7 +97,17 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         return false
     }
 
-    fun removeAllUserAndGroupMaps(userID: Int) {
-
+    fun removeAllGroupsMaps(groupID: Int): Boolean {
+        connect()
+        try {
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_GROUPS=?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, groupID)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 }

@@ -138,6 +138,17 @@ class GroupManagementController : Controller {
         return response
     }
 
+    private fun post_DeleteGroupForm(request: Request, response: Response): Response {
+        request.queryParams("groups_to_delete_list").split(",").forEach {
+            val groupToDelete = GroupHandler.groupDAO.getGroup(it.toIntSafe())
+            if (!groupToDelete.defaultGroup && !groupToDelete.hidden) {
+                GroupHandler.deleteGroup(groupToDelete)
+            }
+        }
+        response.redirect(rootUri)
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("/group_management/create")) {
             if (Web.getFormHash(request, "create_group_form") == request.queryParams("hashid")) {
@@ -146,6 +157,10 @@ class GroupManagementController : Controller {
         } else if (request.uri().contains("/group_management/edit")) {
             if (Web.getFormHash(request, "edit_group_form") == request.queryParams("hashid")) {
                 return post_EditGroupForm(request, response)
+            }
+        } else if (request.uri().contains("/group_management/delete")) {
+            if (Web.getFormHash(request, "delete_group_form") == request.queryParams("hashid")) {
+                return post_DeleteGroupForm(request, response)
             }
         }
         return response
