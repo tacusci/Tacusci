@@ -259,6 +259,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String) : Generi
 
     fun deleteUser(user: User): Boolean {
         connect()
+        //TODO("Must implement removing all other user references/mappings")
         try {
             val deleteStatement = "DELETE FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(deleteStatement)

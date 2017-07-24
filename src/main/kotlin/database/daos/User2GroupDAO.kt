@@ -79,7 +79,7 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
         return count > 0
     }
 
-    fun removeUserAndGroupMap(userID: Int, groupID: Int) {
+    fun removeUserAndGroupMap(userID: Int, groupID: Int): Boolean {
         if (areUserAndGroupMapped(userID, groupID)) {
             connect()
             try {
@@ -91,7 +91,13 @@ class User2GroupDAO(url: String, dbProperties: Properties, tableName: String) : 
                 connection?.commit()
                 preparedStatement?.close()
                 disconnect()
+                return true
             } catch (e: SQLException) { logger.error(e.message); disconnect(); }
         }
+        return false
+    }
+
+    fun removeAllUserAndGroupMaps(userID: Int) {
+
     }
 }
