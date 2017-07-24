@@ -71,7 +71,8 @@ data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdate
 
 
 data class Group(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
-                 var name: String = "", var parentGroupId: Int = -1, var defaultGroup: Boolean = false) {
+                 var name: String = "", var parentGroupId: Int = -1, var defaultGroup: Boolean = false,
+                 var hidden: Boolean = false) {
 
     fun isValid(): Boolean {
         if (!isNameValid()) { return false }

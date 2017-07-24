@@ -32,7 +32,6 @@
  package database.daos
 
 import database.models.Group
-import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
@@ -59,6 +58,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
                 group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
+                group.hidden = resultSet.getBoolean("HIDDEN")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return group }
@@ -97,13 +97,14 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
-            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP, DEFAULT_GROUP) VALUES (?,?,?,?,?)"
+            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP, DEFAULT_GROUP, HIDDEN) VALUES (?,?,?,?,?,?)"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, group.name)
             preparedStatement?.setInt(4, group.parentGroupId)
             preparedStatement?.setBoolean(5, group.defaultGroup)
+            preparedStatement?.setBoolean(6, group.hidden)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -115,13 +116,29 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
     fun updateGroup(group: Group): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, GROUP_NAME=?, ID_PARENT_GROUP=?, DEFAULT_GROUP=? WHERE ID_GROUPS=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, GROUP_NAME=?, ID_PARENT_GROUP=?, DEFAULT_GROUP=?, HIDDEN=? WHERE ID_GROUPS=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, group.name)
             preparedStatement?.setInt(3, group.parentGroupId)
             preparedStatement?.setBoolean(4, group.defaultGroup)
-            preparedStatement?.setInt(5, group.id)
+            preparedStatement?.setBoolean(5, group.hidden)
+            preparedStatement?.setInt(6, group.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
+    fun deleteGroup(group: Group): Boolean {
+        connect()
+        //TODO("Must implement removing all other group references/mappings")
+        try {
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_GROUPS=?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, group.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -162,6 +179,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
                 group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
+                group.hidden = resultSet.getBoolean("HIDDEN")
                 groups.add(group)
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return groups }
@@ -193,6 +211,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String) : Gener
                 group.name = resultSet.getString("GROUP_NAME")
                 group.parentGroupId = resultSet.getInt("ID_PARENT_GROUP")
                 group.defaultGroup = resultSet.getBoolean("DEFAULT_GROUP")
+                group.hidden = resultSet.getBoolean("HIDDEN")
                 childGroups.add(group)
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return childGroups }

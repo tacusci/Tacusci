@@ -45,7 +45,6 @@ import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
 import spark.Spark.*
-import spark.template.velocity.VelocityTemplateEngine
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
@@ -77,7 +76,7 @@ class Application {
     }
 
     fun setupDefaultGroups() {
-        GroupHandler.createGroup(Group(name = "dashboard_access", defaultGroup = true))
+        GroupHandler.createGroup(Group(name = "dashboard_access", defaultGroup = true, hidden = true))
         val dashboardGroupId = GroupHandler.groupDAO.getGroupID("dashboard_access")
         GroupHandler.createGroup(Group(name = "admins", parentGroupId = dashboardGroupId, defaultGroup = true))
         GroupHandler.createGroup(Group(name = "moderators", parentGroupId = dashboardGroupId, defaultGroup = true))

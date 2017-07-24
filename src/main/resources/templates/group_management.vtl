@@ -29,10 +29,6 @@
 
 <div class="pure-g">
 
-    <div class="pure-u-24-24">
-        $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE GROUP", "button-theme")
-    </div>
-
     <div class="pure-u-24-24 centered">
         <form class="pure-form" method="post" action=$TRequest.getRequestURI()>
             <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("group_management_form") hidden>
@@ -40,6 +36,7 @@
             <table class="pure-table" align="center">
                 <thead>
                 <tr>
+                    <th><input id="select_all_checkbox" name="select_all_checkbox" type="checkbox" onclick="selectAllGroups()"></th>
                     <th>Date/Time</th>
                     <th>Updated Date/Time</th>
                     <th>Group Name</th>
@@ -48,31 +45,99 @@
                 </thead>
                     <tbody>
                         #foreach ($group in $TGroups.getGroups())
-                            #set($usersInGroupList = [])
-                            #set($usernameListString = "")
+                            #if (!$group.getHidden())
+                                #set($usersInGroupList = [])
+                                #set($usernameListString = "")
 
-                            #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
-                                #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
-                                    #set($swallow = $usersInGroupList.add($userInGroup.getUsername()))
+                                #foreach ($userInGroup in $TGroups.getUsersInGroup($group.getName()))
+                                    #if (!$usersInGroupsList.contains($userInGroup.getUsername()))
+                                        #set($swallow = $usersInGroupList.add($userInGroup.getUsername()))
+                                    #end
                                 #end
-                            #end
 
-                            #foreach ($username in $usersInGroupList)
-                                #if ($usersInGroupList.indexOf($username) == 0)
-                                    #set($usernameListString = $username)
-                                #else
-                                    #set($usernameListString = $usernameListString + ", " + $username)
+                                #foreach ($username in $usersInGroupList)
+                                    #if ($usersInGroupList.indexOf($username) == 0)
+                                        #set($usernameListString = $username)
+                                    #else
+                                        #set($usernameListString = $usernameListString + ", " + $username)
+                                    #end
                                 #end
+                                    <tr>
+                                        <td class="theme-shade"><input id="select_checkbox_$group.getId()" name="select_checkbox" type="checkbox" value="$group.getId()"></td>
+                                        <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
+                                        <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
+                                        <td class="theme-shade"><a href="$TRequest.getRequestURI()/edit/$group.getId()">$group.getName()</a></td>
+                                        <td class="theme-shade">$usernameListString</td>
+                                    </tr>
                             #end
-                                <tr>
-                                    <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getCreatedDateTime())</td>
-                                    <td class="theme-shade">$TUtils.convertMillisToDateTime($group.getLastUpdatedDateTime())</td>
-                                    <td class="theme-shade"><a href="$TRequest.getRequestURI()/edit/$group.getId()">$group.getName()</a></td>
-                                    <td class="theme-shade">$usernameListString</td>
-                                </tr>
                         #end
                     </tbody>
             </table>
+
+            <br>
+
+            $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "Create Group", "pure-button-primary pure-button")
+            <input type="button" onclick="deleteSelectedGroups()" class="button-error pure-button" value="Delete Selected Groups">
         </form>
     </div>
 </div>
+
+<div id="delete_group_div" hidden></div>
+
+<script type="text/javascript">
+    var selectAllGroups = function() {
+        var checkboxes = document.getElementsByName("select_checkbox");
+        var selectAllCheckbox = document.getElementById("select_all_checkbox");
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = selectAllCheckbox.checked;
+        }
+    }
+    
+    var deleteSelectedGroups = function() {
+        var selectCheckbox = document.getElementsByName("select_checkbox");
+        for (var i = 0; i < selectCheckbox.length; i++) {
+            if (selectCheckbox[i].checked) {
+                var deleteUserForm = document.createElement("form");
+
+                deleteUserForm.id = "delete_group_form";
+                deleteUserForm.name = "delete_group_form";
+                deleteUserForm.setAttribute("method", "post");
+                deleteUserForm.setAttribute("action", "$TRequest.getRequestURI()/delete");
+
+                var formHashInput = document.createElement("input");
+                formHashInput.id = "hashid";
+                formHashInput.name = "hashid";
+                formHashInput.type = "text";
+                formHashInput.value = "$TForms.mapFormToHash("delete_group_form")";
+
+                var formNameInput = document.createElement("input");
+                formNameInput.id = "formName";
+                formNameInput.name = "formName";
+                formNameInput.type = "text";
+                formNameInput.value = "delete_group_form";
+
+                var groupsToDeleteList = document.createElement("input");
+                groupsToDeleteList.id = "groups_to_delete_list";
+                groupsToDeleteList.name = "groups_to_delete_list";
+
+                for (var i = 0; i < selectCheckbox.length; i++) {
+                    if (selectCheckbox[i].checked) {
+                        if (i == 0) {
+                            groupsToDeleteList.value = groupsToDeleteList.value + selectCheckbox[i].value;
+                        } else {
+                            groupsToDeleteList.value = groupsToDeleteList.value + "," + selectCheckbox[i].value;
+                        }
+                    }
+                }
+
+                deleteUserForm.appendChild(formHashInput);
+                deleteUserForm.appendChild(formNameInput);
+                deleteUserForm.appendChild(groupsToDeleteList);
+
+                document.getElementById("delete_group_div").appendChild(deleteUserForm);
+
+                deleteUserForm.submit();
+            }
+        }
+    }
+</script>
