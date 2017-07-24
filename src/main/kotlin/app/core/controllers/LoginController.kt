@@ -54,7 +54,8 @@ class LoginController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/login"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childGetUris: MutableList<String> = mutableListOf()
+    override val childPostUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/login.vtl"
     override val pageTitleSubstring: String = "Login"
     override val handlesGets: Boolean = true

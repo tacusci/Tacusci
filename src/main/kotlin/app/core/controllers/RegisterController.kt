@@ -52,7 +52,8 @@ class RegisterController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/register"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childGetUris: MutableList<String> = mutableListOf()
+    override val childPostUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/register.vtl"
     override val pageTitleSubstring: String = "Sign Up"
     override val handlesGets: Boolean = true

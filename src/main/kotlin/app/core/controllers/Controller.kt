@@ -40,7 +40,8 @@ import spark.Session
 interface Controller {
 
     var rootUri: String
-    val childUris: MutableList<String>
+    val childGetUris: MutableList<String>
+    val childPostUris: MutableList<String>
     val templatePath: String
     val pageTitleSubstring: String
     val handlesGets: Boolean

@@ -54,7 +54,8 @@ class ForgottenPasswordController : Controller {
     companion object : KLogging()
 
     override var rootUri = "/forgotten_password"
-    override var childUris = mutableListOf<String>()
+    override val childGetUris: MutableList<String> = mutableListOf()
+    override val childPostUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/forgotten_password.vtl"
     override val pageTitleSubstring: String = "Forgotten Password"
     override val handlesGets: Boolean = true

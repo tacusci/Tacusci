@@ -52,7 +52,8 @@ class PageManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/page_management"
-    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:page_id")
+    override val childGetUris: MutableList<String> = mutableListOf("/:command", "/:command/:page_id")
+    override val childPostUris: MutableList<String> = mutableListOf("/:command", "/:command/:page_id")
     override val templatePath: String = "/templates/page_management.vtl"
     override val pageTitleSubstring: String = "Page Management"
     override val handlesGets: Boolean = true

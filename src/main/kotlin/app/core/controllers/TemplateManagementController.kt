@@ -37,7 +37,6 @@ import app.core.core.handlers.TemplateHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.TemplateDAO
-import database.models.Page
 import database.models.Template
 import extensions.toIntSafe
 import mu.KLogging
@@ -45,9 +44,6 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import java.util.*
-import javax.enterprise.inject.Model
-import kotlin.collections.HashMap
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -58,7 +54,8 @@ class TemplateManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/template_management"
-    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:template_id")
+    override val childGetUris: MutableList<String> = mutableListOf("/:command", "/:command/:template_id")
+    override val childPostUris: MutableList<String> = mutableListOf("/:command", "/:command/:template_id")
     override val templatePath: String = "/templates/template_management.vtl"
     override val pageTitleSubstring: String = "Templates"
     override val handlesGets: Boolean = true

@@ -57,15 +57,24 @@ object ControllerManager : KLogging() {
 
     fun initBaseControllers() {
 
-        baseControllers.forEach {
-            logger.debug("Mapping route: ${it.rootUri}")
-            if (it.handlesGets) Spark.get(it.rootUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-            if (it.handlesPosts) Spark.post(it.rootUri, { request, response -> it.post(request, response) })
+        baseControllers.forEach { baseController ->
+            
+            if (baseController.handlesGets) {
+                logger.debug("Mapping GET route: ${baseController.rootUri}")
+                Spark.get(baseController.rootUri, { request, response -> baseController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+            }
 
-            it.childUris.forEach { childUri ->
-                logger.debug("Mapping route: ${it.rootUri+childUri}")
-                if (it.handlesGets) Spark.get(it.rootUri+childUri, { request, response -> it.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
-                if (it.handlesPosts) Spark.post(it.rootUri+childUri, { request, response -> it.post(request, response) })
+            if (baseController.handlesPosts) {
+                logger.debug("Mapping POST route: ${baseController.rootUri}")
+                Spark.post(baseController.rootUri, { request, response -> baseController.post(request, response) })
+            }
+
+            baseController.childGetUris.forEach { childGetUri ->
+                logger.debug("Mapping GET route: ${baseController.rootUri+childGetUri}")
+                if (baseController.handlesGets)
+                    Spark.get(baseController.rootUri+childGetUri, { request, response -> baseController.get(request, response, layoutTemplate) }, VelocityTemplateEngine())
+                if (baseController.handlesPosts)
+                    Spark.post(baseController.rootUri+childGetUri, { request, response -> baseController.post(request, response) })
             }
         }
     }

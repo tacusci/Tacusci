@@ -58,7 +58,8 @@ class LogFileViewController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/log_file"
-    override val childUris: MutableList<String> = mutableListOf()
+    override val childGetUris: MutableList<String> = mutableListOf()
+    override val childPostUris: MutableList<String> = mutableListOf()
     override val templatePath: String = "/templates/log_file.vtl"
     override val pageTitleSubstring: String = "Log File"
     override val handlesGets: Boolean = true

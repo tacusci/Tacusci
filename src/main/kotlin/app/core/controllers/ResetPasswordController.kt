@@ -47,7 +47,6 @@ import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
-import javax.xml.registry.infomodel.User
 
 /**
  * Created by alewis on 12/03/2017.
@@ -57,7 +56,8 @@ class ResetPasswordController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/reset_password"
-    override val childUris: MutableList<String> = mutableListOf("/:username", "/:username/:authhash")
+    override val childGetUris: MutableList<String> = mutableListOf("/:username", "/:username/:authhash")
+    override val childPostUris: MutableList<String> = mutableListOf("/:username", "/:username/:authhash")
     override val templatePath: String = "/templates/reset_password.vtl"
     override val pageTitleSubstring: String = "Reset Password"
     override val handlesGets: Boolean = true

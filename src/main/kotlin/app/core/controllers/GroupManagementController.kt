@@ -52,7 +52,8 @@ class GroupManagementController : Controller {
     companion object : KLogging()
 
     override var rootUri: String = "/dashboard/group_management"
-    override val childUris: MutableList<String> = mutableListOf("/:command", "/:command/:group_id")
+    override val childGetUris: MutableList<String> = mutableListOf("/:command", "/:command/:group_id")
+    override val childPostUris: MutableList<String> = mutableListOf("/:command", "/:command/:group_id")
     override val templatePath: String = "/templates/group_management.vtl"
     override val pageTitleSubstring: String = "Group Management"
     override val handlesGets: Boolean = true
@@ -89,10 +90,10 @@ class GroupManagementController : Controller {
             }
             
             "edit" -> {
-                if (request.params("group_id") != null) {
+                if (request.params(":group_id") != null) {
                     model.put("template", "/templates/edit_group.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
-                    val group = GroupHandler.groupDAO.getGroup(request.params("group_id").toIntSafe())
+                    val group = GroupHandler.groupDAO.getGroup(request.params(":group_id").toIntSafe())
                     if (group.id == -1) response.redirect("/dashboard/group_management")
                     model.put("groupToEdit", group)
                 } else {
