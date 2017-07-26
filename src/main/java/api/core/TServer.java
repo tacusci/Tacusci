@@ -16,6 +16,22 @@ public class TServer extends TAPIClass {
         this.instance = instance;
     }
 
+    public long getMemoryUsage() { if (instance != null) { return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory(); }
+        return -1;
+    }
+
+    public long getMemoryUsageKB() { if (instance != null) { return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(long)Math.pow(2, 10); }
+        return -1;
+    }
+
+    public long getMemoryUsageMB() { if (instance != null) { return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(long)Math.pow(2, 20); }
+        return -1;
+    }
+
+    public long getMemoryUsageGB() { if (instance != null) { return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(long)Math.pow(2, 30); }
+        return -1;
+    }
+
     public void restart() {
         if (instance != null) { instance.restartServer(); }
     }
