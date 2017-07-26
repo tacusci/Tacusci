@@ -9,7 +9,7 @@
 
     <groupId>co.uk.taurasystems</groupId>
     <artifactId>Tacusci</artifactId>
-    <version>1.0</version>
+    <version>1.2.0</version>
 
     <properties>
         <kotlin.version>1.1.1</kotlin.version>
