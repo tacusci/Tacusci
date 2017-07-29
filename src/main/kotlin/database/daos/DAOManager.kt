@@ -32,6 +32,7 @@
  package database.daos
 
 import database.SQLScript
+import database.connections.ConnectionPool
 import mu.KLogging
 import utils.Config
 import utils.InternalResourceFile
@@ -49,9 +50,7 @@ object DAOManager : KLogging() {
 
     var url = ""
     var dbProperties = Properties()
-
-    var randomPollThread = Thread()
-    var randomPollThreadRunning = false
+    val connectionPool = ConnectionPool()
 
     enum class TABLE {
         USERS,
@@ -69,6 +68,7 @@ object DAOManager : KLogging() {
     fun init(url: String, dbProperties: Properties) {
         this.url = url
         this.dbProperties = dbProperties
+        this.connectionPool.init(url, dbProperties)
         logger.info("Set up database settings to connect to $url")
     }
 
