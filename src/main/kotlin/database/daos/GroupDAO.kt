@@ -31,6 +31,7 @@
  
  package database.daos
 
+import database.connections.ConnectionPool
 import database.models.Group
 import mu.KLogging
 import java.sql.SQLException
@@ -39,7 +40,7 @@ import java.util.*
 /**
  * Created by alewis on 20/12/2016.
  */
-class GroupDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class GroupDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     companion object : KLogging()
 

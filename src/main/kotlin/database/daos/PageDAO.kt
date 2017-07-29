@@ -30,6 +30,7 @@
 package database.daos
 
 import app.core.pages.structured.StructuredPage
+import database.connections.ConnectionPool
 import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
@@ -39,7 +40,7 @@ import java.util.*
  * Created by alewis on 04/05/2017.
  */
 
-class PageDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class PageDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     companion object : KLogging()
 

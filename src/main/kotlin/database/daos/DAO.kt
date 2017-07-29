@@ -31,9 +31,9 @@
  
  package database.daos
 
+import database.connections.ConnectionPool
 import mu.KLogging
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
 
@@ -41,20 +41,18 @@ import java.util.*
  * Created by tauraamui on 27/10/2016.
  */
 
-abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String) : KLogging() {
-
-    protected var connection: Connection? = null
+abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String, var connectionPool: ConnectionPool) : KLogging() {
 
     fun connect(): Boolean {
         try {
-            open()
+            connection = open()
             logger.debug("Connected DAO to $tableName")
             return true
         } catch (e: SQLException) { logger.error(e.message) }
         return false
     }
 
-    fun disconnect(): Boolean {
+    fun disconnect(connection: Connection): Boolean {
         try {
             close()
             logger.debug("Disconnected DAO to $tableName")
@@ -66,10 +64,8 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
     @Throws(SQLException::class)
     private fun open(): Connection {
         try {
-            if (connection == null || connection!!.isClosed) {
-                connection = DriverManager.getConnection(url, dbProperties)
-                connection?.autoCommit = false
-            }
+            connection = connectionPool.getConnection()
+            connection?.autoCommit = false
             return connection!!
         } catch (e: SQLException) {
             throw e
@@ -77,14 +73,8 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
     }
 
     @Throws(SQLException::class)
-    private fun close() {
-        try {
-            if (connection != null && !connection!!.isClosed) {
-                connection!!.close()
-            }
-        } catch (e: SQLException) {
-            throw e
-        }
+    private fun close(connection: Connection) {
+        connectionPool.returnConnection(connection!!)
     }
 
     abstract fun count(): Int

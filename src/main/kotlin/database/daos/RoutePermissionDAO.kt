@@ -29,6 +29,7 @@
 
 package database.daos
 
+import database.connections.ConnectionPool
 import database.models.RoutePermission
 import java.sql.SQLException
 import java.util.*
@@ -36,7 +37,7 @@ import java.util.*
 /**
  * Created by tauraaamui on 24/06/2017.
  */
-class RoutePermissionDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class RoutePermissionDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     fun getRoutePermission(routePermissionId: Int): RoutePermission {
         connect()

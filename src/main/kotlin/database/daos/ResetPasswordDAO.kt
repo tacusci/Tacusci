@@ -29,6 +29,7 @@
 
 package database.daos
 
+import database.connections.ConnectionPool
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
@@ -36,7 +37,7 @@ import java.util.*
 /**
  * Created by tauraamui on 13/03/2017.
  */
-class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     companion object : KLogging()
 

@@ -91,7 +91,7 @@ object DAOManager : KLogging() {
     fun setup(sqlScript: SQLScript) {
         sqlScript.parse()
         sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
-        sqlScript.executeStatements(connectionPool.getConnection()!!)
+        sqlScript.executeStatements(connectionPool.getConnection())
     }
 
     fun connect() {
@@ -115,40 +115,32 @@ object DAOManager : KLogging() {
 
     @Throws(SQLException::class)
     private fun open(): Connection {
-        val connection = connectionPool.getConnection()
+        val connection: Connection
         try {
-            if (connection == null || connection!!.isClosed) {
-                connection = DriverManager.getConnection(url, dbProperties)
-                connection?.autoCommit = false
-            }
-            return connection!!
+            connection = connectionPool.getConnection()
+            connection.autoCommit = false
+            return connection
         } catch (e: SQLException) {
             throw e
         }
     }
 
     @Throws(SQLException::class)
-    private fun close() {
-        try {
-            if (connection != null && !connection!!.isClosed) {
-                connection!!.close()
-            }
-        } catch (e: SQLException) {
-            throw e
-        }
+    private fun close(connection: Connection) {
+        connectionPool.returnConnection(connection)
     }
 
     fun getDAO(table: TABLE): DAO {
         when (table) {
-            TABLE.USERS -> return UserDAO(url, dbProperties, "users")
-            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups")
-            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group")
-            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "reset_password")
-            TABLE.PAGES -> return PageDAO(url, dbProperties, "pages")
-            TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "templates")
-            TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "route_permissions")
+            TABLE.USERS -> return UserDAO(url, dbProperties, "users", connectionPool)
+            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups", connectionPool)
+            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group", connectionPool)
+            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "reset_password", connectionPool)
+            TABLE.PAGES -> return PageDAO(url, dbProperties, "pages", connectionPool)
+            TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "templates", connectionPool)
+            TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "route_permissions", connectionPool)
             else -> {
-                return GenericDAO(url, dbProperties, "")
+                return GenericDAO(url, dbProperties, "", connectionPool)
             }
         }
     }

@@ -31,6 +31,7 @@
  
  package database.daos
 
+import database.connections.ConnectionPool
 import database.models.User
 import mu.KLogging
 import utils.PasswordStorage
@@ -42,7 +43,7 @@ import java.util.regex.Pattern
  * Created by tauraamui on 27/10/2016.
  */
 
-class UserDAO(url: String, dbProperties: Properties, tableName: String) : GenericDAO(url, dbProperties, tableName) {
+class UserDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     companion object : KLogging()
 

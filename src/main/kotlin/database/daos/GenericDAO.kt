@@ -31,7 +31,7 @@
  
  package database.daos
 
-import java.sql.Connection
+import database.connections.ConnectionPool
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
@@ -39,7 +39,7 @@ import java.util.*
 /**
  * Created by alewis on 28/10/2016.
  */
-open class GenericDAO(url: String, dbProperties: Properties, tableName: String) : DAO(url, dbProperties, tableName) {
+open class GenericDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : DAO(url, dbProperties, tableName, connectionPool) {
 
     @Throws(SQLException::class)
     override fun count(): Int {
