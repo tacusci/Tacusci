@@ -63,7 +63,7 @@ object DAOManager : KLogging() {
         ROUTE_PERMISSIONS
     }
 
-    var connection: Connection? = null
+    //var connection: Connection? = null
 
     fun init(url: String, dbProperties: Properties) {
         this.url = url
@@ -91,7 +91,7 @@ object DAOManager : KLogging() {
     fun setup(sqlScript: SQLScript) {
         sqlScript.parse()
         sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
-        sqlScript.executeStatements(connection!!)
+        sqlScript.executeStatements(connectionPool.getConnection()!!)
     }
 
     fun connect() {
@@ -115,6 +115,7 @@ object DAOManager : KLogging() {
 
     @Throws(SQLException::class)
     private fun open(): Connection {
+        val connection = connectionPool.getConnection()
         try {
             if (connection == null || connection!!.isClosed) {
                 connection = DriverManager.getConnection(url, dbProperties)

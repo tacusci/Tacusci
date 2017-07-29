@@ -32,6 +32,7 @@ package database.connections
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
+import kotlin.concurrent.thread
 
 class ConnectionPool {
 
@@ -54,7 +55,23 @@ class ConnectionPool {
 
     fun init(url: String, dbProperties: Properties) {
         while (!connectionPoolFull()) {
-            availableConnections.add(DriverManager.getConnection(url, dbProperties))
+            val connection = DriverManager.getConnection(url, dbProperties)
+            connection.autoCommit = false
+            availableConnections.add(connection)
+        }
+        kickOffRefreshThread(url, dbProperties)
+    }
+
+    private fun kickOffRefreshThread(url: String, dbProperties: Properties) {
+        thread(true) {
+            availableConnections.forEachIndexed { index, connection ->
+                if (connection.isClosed) {
+                    availableConnections.removeAt(index)
+                    availableConnections.add(index, DriverManager.getConnection(url, dbProperties))
+                    println("Refreshed connection ${connection.catalog}")
+                    Thread.sleep(5)
+                }
+            }
         }
     }
 
