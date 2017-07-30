@@ -38,7 +38,6 @@ import utils.Config
 import utils.InternalResourceFile
 import java.io.File
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
 
@@ -50,7 +49,8 @@ object DAOManager : KLogging() {
 
     var url = ""
     var dbProperties = Properties()
-    val connectionPool = ConnectionPool()
+    private val connectionPool = ConnectionPool()
+    private var connection: Connection? = null
 
     enum class TABLE {
         USERS,
@@ -91,7 +91,7 @@ object DAOManager : KLogging() {
     fun setup(sqlScript: SQLScript) {
         sqlScript.parse()
         sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
-        sqlScript.executeStatements(connectionPool.getConnection())
+        sqlScript.executeStatements(connection!!)
     }
 
     fun connect() {
@@ -114,20 +114,18 @@ object DAOManager : KLogging() {
     }
 
     @Throws(SQLException::class)
-    private fun open(): Connection {
-        val connection: Connection
+    private fun open() {
         try {
             connection = connectionPool.getConnection()
-            connection.autoCommit = false
-            return connection
+            connection!!.autoCommit = false
         } catch (e: SQLException) {
             throw e
         }
     }
 
     @Throws(SQLException::class)
-    private fun close(connection: Connection) {
-        connectionPool.returnConnection(connection)
+    private fun close() {
+        connectionPool.returnConnection(connection!!)
     }
 
     fun getDAO(table: TABLE): DAO {

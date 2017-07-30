@@ -59,7 +59,7 @@ class ConnectionPool {
             connection.autoCommit = false
             availableConnections.add(connection)
         }
-        kickOffRefreshThread(url, dbProperties)
+        //kickOffRefreshThread(url, dbProperties)
     }
 
     private fun kickOffRefreshThread(url: String, dbProperties: Properties) {

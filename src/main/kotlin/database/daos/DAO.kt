@@ -43,18 +43,20 @@ import java.util.*
 
 abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String, var connectionPool: ConnectionPool) : KLogging() {
 
+    protected var connection: Connection? = null
+
     fun connect(): Boolean {
         try {
-            connection = open()
+            open()
             logger.debug("Connected DAO to $tableName")
             return true
         } catch (e: SQLException) { logger.error(e.message) }
         return false
     }
 
-    fun disconnect(connection: Connection): Boolean {
+    fun disconnect(): Boolean {
         try {
-            close()
+            close(connection!!)
             logger.debug("Disconnected DAO to $tableName")
             return true
         } catch (e: SQLException) { logger.error(e.message) }
@@ -62,11 +64,10 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
     }
 
     @Throws(SQLException::class)
-    private fun open(): Connection {
+    private fun open() {
         try {
             connection = connectionPool.getConnection()
             connection?.autoCommit = false
-            return connection!!
         } catch (e: SQLException) {
             throw e
         }
@@ -74,7 +75,7 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
 
     @Throws(SQLException::class)
     private fun close(connection: Connection) {
-        connectionPool.returnConnection(connection!!)
+        connectionPool.returnConnection(connection)
     }
 
     abstract fun count(): Int
