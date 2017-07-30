@@ -39,8 +39,9 @@ import java.util.*
 
 class ConnectionPool(private val url: String = "", private val dbProperties: Properties = Properties()) {
 
-    private val connections = mutableListOf<Connection>()
-    private val maxConnections = 8
+    val connections = mutableListOf<Connection>()
+    private val maxConnections = 28
+    private var existingConnectionCount = 0
 
     fun getConnection(): Connection {
         var connection = DriverManager.getConnection(url, dbProperties)
@@ -51,20 +52,14 @@ class ConnectionPool(private val url: String = "", private val dbProperties: Pro
             connection = connections[0]
             connections.removeAt(0)
         }
+        existingConnectionCount -= 1
         return connection
-        /*
-        var connection: Connection? = null
-        if (connections.size > 0) {
-            connection = connections[0]
-            connections.removeAt(0)
-        }
-        return connection!!
-        */
     }
 
     fun returnConnection(connection: Connection): Boolean {
         if (connections.size < maxConnections) {
             connections.add(connection)
+            existingConnectionCount += 1
             return true
         }
         return false
