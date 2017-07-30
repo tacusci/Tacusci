@@ -37,24 +37,29 @@ import java.util.*
  * Created by tauraamui on 30/07/2017.
  */
 
-class ConnectionPool {
+class ConnectionPool(private val url: String = "", private val dbProperties: Properties = Properties()) {
 
     private val connections = mutableListOf<Connection>()
     private val maxConnections = 8
 
-    fun init(url: String, dbProperties: Properties) {
-        while (connections.size < maxConnections) {
-            connections.add(DriverManager.getConnection(url, dbProperties))
-        }
-    }
-
     fun getConnection(): Connection {
+        var connection = DriverManager.getConnection(url, dbProperties)
+        if (connections.size < maxConnections) {
+            connections.add(connection)
+            return connection
+        } else {
+            connection = connections[0]
+            connections.removeAt(0)
+        }
+        return connection
+        /*
         var connection: Connection? = null
         if (connections.size > 0) {
             connection = connections[0]
             connections.removeAt(0)
         }
         return connection!!
+        */
     }
 
     fun returnConnection(connection: Connection): Boolean {

@@ -50,7 +50,7 @@ object DAOManager : KLogging() {
 
     var url = ""
     var dbProperties = Properties()
-    private val connectionPool = ConnectionPool()
+    private var connectionPool = ConnectionPool()
 
     enum class TABLE {
         USERS,
@@ -68,7 +68,7 @@ object DAOManager : KLogging() {
     fun init(url: String, dbProperties: Properties) {
         this.url = url
         this.dbProperties = dbProperties
-        connectionPool.init(url, dbProperties)
+        connectionPool = ConnectionPool(url, dbProperties)
         logger.info("Set up database settings to connect to $url")
     }
 
