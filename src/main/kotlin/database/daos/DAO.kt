@@ -31,9 +31,10 @@
  
  package database.daos
 
-import database.connections.ConnectionPool
+import database.ConnectionPool
 import mu.KLogging
 import java.sql.Connection
+import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
 
@@ -41,7 +42,7 @@ import java.util.*
  * Created by tauraamui on 27/10/2016.
  */
 
-abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String, var connectionPool: ConnectionPool) : KLogging() {
+abstract class DAO(var url: String, var dbProperties: Properties, var tableName: String, private val connectionPool: ConnectionPool) : KLogging() {
 
     protected var connection: Connection? = null
 
@@ -56,7 +57,7 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
 
     fun disconnect(): Boolean {
         try {
-            close(connection!!)
+            close()
             logger.debug("Disconnected DAO to $tableName")
             return true
         } catch (e: SQLException) { logger.error(e.message) }
@@ -64,18 +65,30 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
     }
 
     @Throws(SQLException::class)
-    private fun open() {
+    private fun open(): Connection {
         try {
-            connection = connectionPool.getConnection()
-            connection?.autoCommit = false
+            if (connection == null || connection!!.isClosed) {
+                connection = connectionPool.getConnection()
+                connection?.autoCommit = false
+            }
+            return connection!!
         } catch (e: SQLException) {
             throw e
         }
     }
 
     @Throws(SQLException::class)
-    private fun close(connection: Connection) {
-        connectionPool.returnConnection(connection)
+    private fun close() {
+        connectionPool.returnConnection(connection!!)
+        /*
+        try {
+            if (connection != null && !connection!!.isClosed) {
+                connection!!.close()
+            }
+        } catch (e: SQLException) {
+            throw e
+        }
+        */
     }
 
     abstract fun count(): Int

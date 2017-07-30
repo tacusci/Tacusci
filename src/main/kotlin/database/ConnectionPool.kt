@@ -26,36 +26,42 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package database.daos
 
-import database.ConnectionPool
+package database
+
 import java.sql.Connection
-import java.sql.ResultSet
-import java.sql.SQLException
+import java.sql.DriverManager
 import java.util.*
 
 /**
- * Created by alewis on 28/10/2016.
+ * Created by tauraamui on 30/07/2017.
  */
-open class GenericDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : DAO(url, dbProperties, tableName, connectionPool) {
 
-    @Throws(SQLException::class)
-    override fun count(): Int {
-        var count = 0
-        val countStatementString = "SELECT COUNT(*) AS count FROM $tableName;"
-        try {
-            connection?.autoCommit = false
-            val countStatement = connection?.prepareStatement(countStatementString)
-            val resultSet: ResultSet = countStatement!!.executeQuery()
-            while (resultSet.next()) {
-                count = resultSet.getInt("count")
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
+class ConnectionPool {
+
+    private val connections = mutableListOf<Connection>()
+    private val maxConnections = 8
+
+    fun init(url: String, dbProperties: Properties) {
+        while (connections.size < maxConnections) {
+            connections.add(DriverManager.getConnection(url, dbProperties))
         }
-        return count
+    }
+
+    fun getConnection(): Connection {
+        var connection: Connection? = null
+        if (connections.size > 0) {
+            connection = connections[0]
+            connections.removeAt(0)
+        }
+        return connection!!
+    }
+
+    fun returnConnection(connection: Connection): Boolean {
+        if (connections.size < maxConnections) {
+            connections.add(connection)
+            return true
+        }
+        return false
     }
 }

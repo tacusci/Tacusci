@@ -29,7 +29,7 @@
 
 package database.daos
 
-import database.connections.ConnectionPool
+import database.ConnectionPool
 import database.models.RoutePermission
 import java.sql.SQLException
 import java.util.*

@@ -30,7 +30,7 @@
 package database.daos
 
 import app.core.pages.structured.StructuredPage
-import database.connections.ConnectionPool
+import database.ConnectionPool
 import database.models.Page
 import mu.KLogging
 import java.sql.SQLException

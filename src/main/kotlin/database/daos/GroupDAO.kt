@@ -31,7 +31,7 @@
  
  package database.daos
 
-import database.connections.ConnectionPool
+import database.ConnectionPool
 import database.models.Group
 import mu.KLogging
 import java.sql.SQLException

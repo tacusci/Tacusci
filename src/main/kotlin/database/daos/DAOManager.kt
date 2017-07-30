@@ -31,13 +31,14 @@
  
  package database.daos
 
+import database.ConnectionPool
 import database.SQLScript
-import database.connections.ConnectionPool
 import mu.KLogging
 import utils.Config
 import utils.InternalResourceFile
 import java.io.File
 import java.sql.Connection
+import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
 
@@ -50,7 +51,6 @@ object DAOManager : KLogging() {
     var url = ""
     var dbProperties = Properties()
     private val connectionPool = ConnectionPool()
-    private var connection: Connection? = null
 
     enum class TABLE {
         USERS,
@@ -63,12 +63,12 @@ object DAOManager : KLogging() {
         ROUTE_PERMISSIONS
     }
 
-    //var connection: Connection? = null
+    var connection: Connection? = null
 
     fun init(url: String, dbProperties: Properties) {
         this.url = url
         this.dbProperties = dbProperties
-        this.connectionPool.init(url, dbProperties)
+        connectionPool.init(url, dbProperties)
         logger.info("Set up database settings to connect to $url")
     }
 
@@ -114,10 +114,13 @@ object DAOManager : KLogging() {
     }
 
     @Throws(SQLException::class)
-    private fun open() {
+    private fun open(): Connection {
         try {
-            connection = connectionPool.getConnection()
-            connection!!.autoCommit = false
+            if (connection == null || connection!!.isClosed) {
+                connection = DriverManager.getConnection(url, dbProperties)
+                connection?.autoCommit = false
+            }
+            return connection!!
         } catch (e: SQLException) {
             throw e
         }
@@ -125,7 +128,13 @@ object DAOManager : KLogging() {
 
     @Throws(SQLException::class)
     private fun close() {
-        connectionPool.returnConnection(connection!!)
+        try {
+            if (connection != null && !connection!!.isClosed) {
+                connection!!.close()
+            }
+        } catch (e: SQLException) {
+            throw e
+        }
     }
 
     fun getDAO(table: TABLE): DAO {
