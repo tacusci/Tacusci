@@ -33,6 +33,7 @@
 
 import database.ConnectionPool
 import database.SQLScript
+import extensions.toIntSafe
 import mu.KLogging
 import utils.Config
 import utils.InternalResourceFile
@@ -41,7 +42,6 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * Created by tauraamui on 27/10/2016.
@@ -70,6 +70,10 @@ object DAOManager : KLogging() {
         this.url = url
         this.dbProperties = dbProperties
         connectionPool = ConnectionPool(url, dbProperties)
+        val maxDBConnections = Config.getProperty("max-db-connections").toIntSafe()
+        if (maxDBConnections > 0) connectionPool.maxConnections = maxDBConnections
+        else connectionPool.maxConnections = Config.getDefaultProperty("max-db-connections").toIntSafe()
+        println(connectionPool.maxConnections)
         logger.info("Set up database settings to connect to $url")
     }
 

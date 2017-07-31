@@ -32,7 +32,6 @@ package database
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
-import java.util.concurrent.Executor
 
 /**
  * Created by tauraamui on 30/07/2017.
@@ -41,7 +40,7 @@ import java.util.concurrent.Executor
 class ConnectionPool(private val url: String = "", private val dbProperties: Properties = Properties()) {
 
     val connections = mutableListOf<Connection>()
-    private val maxConnections = 28
+    var maxConnections = 28
 
     fun getConnection(): Connection {
         var connection = DriverManager.getConnection(url, dbProperties)

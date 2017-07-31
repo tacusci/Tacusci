@@ -63,6 +63,7 @@ open class Config {
                     Pair("color-theme", "dark"),
                     Pair("max-threads", ""),
                     Pair("min-threads", ""),
+                    Pair("max-db-connections", "8"),
                     Pair("thread-idle-timeout", ""),
                     Pair("session-idle-timeout", ""),
                     Pair("log-file", "tacusci.log"),
