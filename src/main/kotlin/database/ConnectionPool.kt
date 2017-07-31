@@ -32,6 +32,7 @@ package database
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
+import kotlin.concurrent.thread
 
 /**
  * Created by tauraamui on 30/07/2017.
@@ -60,5 +61,17 @@ class ConnectionPool(private val url: String = "", private val dbProperties: Pro
             return true
         }
         return false
+    }
+
+    fun startCleanupThread(url: String, dbProperties: Properties) {
+        thread(start = true) {
+            while (true) {
+                connections.forEachIndexed { index, connection ->
+                    if (connection.isClosed || !connection.isValid(0)) {
+                        connections[index] = DriverManager.getConnection(url, dbProperties)
+                    }
+                }
+            }
+        }
     }
 }
