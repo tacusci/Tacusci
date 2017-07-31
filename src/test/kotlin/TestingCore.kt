@@ -57,6 +57,7 @@ object TestingCore {
         Config.setProperty("color-theme", "dark")
         Config.setProperty("max-threads", "")
         Config.setProperty("min-threads", "")
+        Config.setProperty("max-db-connections", "8")
         Config.setProperty("thread-idle-timeout", "")
         Config.setProperty("session-idle-timeout", "")
         Config.setProperty("log-file", "tacusci.log")
