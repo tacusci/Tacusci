@@ -27,6 +27,7 @@ public class VelocityIMTemplateEngine {
         Properties properties = new Properties();
         properties.setProperty("resource.loader", "string");
         properties.setProperty("description", "Velocity StringResource loader");
+        properties.setProperty("string.resource.loader.cache", "true");
         properties.setProperty(
                 "class.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");

@@ -55,6 +55,7 @@ public class VelocityTemplateEngine extends TemplateEngine {
         Properties properties = new Properties();
         properties.setProperty("resource.loader", "class");
         properties.setProperty("description", "Velocity TemplateFileResource loader");
+        properties.setProperty("class.resource.loader.cache", "true");
         properties.setProperty(
                 "class.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
