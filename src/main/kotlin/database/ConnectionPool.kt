@@ -29,6 +29,8 @@
 
 package database
 
+import extensions.toIntSafe
+import utils.Config
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
@@ -40,11 +42,13 @@ import java.util.*
 class ConnectionPool(private val url: String = "", private val dbProperties: Properties = Properties()) {
 
     val connections = mutableListOf<Connection>()
-    var maxConnections = 28
+    private var maxConnections = Config.getProperty("max-db-connections").toIntSafe()
 
     fun getConnection(): Connection {
-        var connection = DriverManager.getConnection(url, dbProperties)
+        if (maxConnections < 0) maxConnections = Config.getDefaultProperty("max-db-connections").toIntSafe()
+        var connection: Connection?
         if (connections.size < maxConnections) {
+            connection = DriverManager.getConnection(url, dbProperties)
             connections.add(connection)
         } else {
             connection = connections[0]
@@ -53,10 +57,11 @@ class ConnectionPool(private val url: String = "", private val dbProperties: Pro
                 connection = DriverManager.getConnection(url, dbProperties)
             }
         }
-        return connection
+        return connection!!
     }
 
     fun returnConnection(connection: Connection): Boolean {
+        if (maxConnections < 0) maxConnections = Config.getDefaultProperty("max-db-connections").toIntSafe()
         if (connections.size < maxConnections) {
             connections.add(connection)
             return true

@@ -70,9 +70,6 @@ object DAOManager : KLogging() {
         this.url = url
         this.dbProperties = dbProperties
         connectionPool = ConnectionPool(url, dbProperties)
-        val maxDBConnections = Config.getProperty("max-db-connections").toIntSafe()
-        if (maxDBConnections > 0) connectionPool.maxConnections = maxDBConnections
-        else connectionPool.maxConnections = Config.getDefaultProperty("max-db-connections").toIntSafe()
         logger.info("Set up database settings to connect to $url")
     }
 
