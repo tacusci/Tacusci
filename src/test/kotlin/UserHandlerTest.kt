@@ -27,17 +27,12 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-import TestingCore.mockRequest
-import app.core.handlers.UserHandler
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import utils.Config
-
 /**
  * Created by alewis on 30/01/2017.
  */
 class UserHandlerTest {
 
+    /*
     @Test
     fun login() {
         TestingCore.setupSetEnv()
@@ -51,4 +46,5 @@ class UserHandlerTest {
         val logoutSuccessful = UserHandler.logout(mockRequest())
         assertTrue(logoutSuccessful)
     }
+    */
 }
