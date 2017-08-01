@@ -62,7 +62,7 @@ class GroupManagementController : Controller {
     override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        UserManagementController.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for GROUP_MANAGEMENT page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for GROUP_MANAGEMENT page")
         val model = HashMap<String, Any>()
         model.put("template", templatePath)
 
