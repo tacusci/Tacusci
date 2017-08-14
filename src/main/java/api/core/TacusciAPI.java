@@ -7,11 +7,12 @@ import api.templates.TTemplates;
 import api.users.TUsers;
 import app.Application;
 import app.core.core.controllers.Web;
-import database.models.Page;
 import kotlin.Pair;
 import spark.Request;
 import spark.Response;
 import spark.template.velocity.VelocityIMTemplateEngine;
+import spi.Plugin;
+import spi.PluginLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.List;
 public class TacusciAPI {
 
     private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
+    private static PluginLoader pluginLoader = new PluginLoader();
     private static Application instance = null;
 
     public static void setApplication(Application application) {
@@ -42,11 +44,12 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
         apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
+        pluginLoader.loadPlugins(request, response);
+        for (Plugin plugin : pluginLoader.plugins) { apiObjInstances.add(new Pair<>(plugin.getTitle(), plugin)); }
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
         init(request, response);
-        Page page = new Page();
         velocityIMTemplateEngine.insertIntoContext(templateTitle, Web.INSTANCE.loadNavigationElements(request, new HashMap<>()));
         velocityIMTemplateEngine.insertIntoContext(templateTitle, apiObjInstances);
     }
