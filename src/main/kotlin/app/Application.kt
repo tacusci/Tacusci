@@ -45,6 +45,7 @@ import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
 import spark.Spark.*
+import spi.Plugin
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
@@ -208,3 +209,20 @@ fun main(args: Array<String>) {
     application.init()
     //Config.monitorPropertiesFile(application)
 }
+
+/*
+class GravatarPlugin : Plugin {
+
+    override fun getTitle(): String {
+        return "GravatarUtils"
+    }
+
+    override fun onLoad() {
+        println("Loading Gravatar plugin")
+    }
+
+    fun doSomething(): String {
+        return "<h2>Hi Robert</h2>"
+    }
+}
+*/
