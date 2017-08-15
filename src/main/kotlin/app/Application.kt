@@ -44,11 +44,15 @@ import database.models.Group
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
+import spark.Request
+import spark.Response
 import spark.Spark.*
 import spi.Plugin
+import spi.PluginLoader
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
+import java.nio.charset.Charset
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -176,6 +180,7 @@ class Application {
         setupDatabase()
         setupDefaultGroups()
         setupSpark()
+        PluginLoader.loadPlugins()
     }
 
     fun infoLog(message: String) {
@@ -210,19 +215,22 @@ fun main(args: Array<String>) {
     //Config.monitorPropertiesFile(application)
 }
 
-/*
 class GravatarPlugin : Plugin {
+
+    private var request: Request? = null
+    private var response: Response? = null
+
+    override fun initRequestResponse(request: Request?, response: Response?): Plugin {
+        this.request = request
+        this.response = response
+        return this
+    }
 
     override fun getTitle(): String {
         return "GravatarUtils"
     }
 
-    override fun onLoad() {
-        println("Loading Gravatar plugin")
-    }
+    override fun onLoad() {}
 
-    fun doSomething(): String {
-        return "<h2>Hi Robert</h2>"
-    }
+    fun getGravatar(email: String): String = "https://gravatar.com/avatar/${Base64.getEncoder().encodeToString(email.toByteArray(Charset.forName("UTF-8")))}"
 }
-*/

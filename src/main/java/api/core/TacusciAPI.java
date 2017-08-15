@@ -24,7 +24,6 @@ import java.util.List;
 public class TacusciAPI {
 
     private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
-    private static PluginLoader pluginLoader = new PluginLoader();
     private static Application instance = null;
 
     public static void setApplication(Application application) {
@@ -44,8 +43,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
         apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
-        pluginLoader.loadPlugins(request, response);
-        for (Plugin plugin : pluginLoader.plugins) { apiObjInstances.add(new Pair<>(plugin.getTitle(), plugin)); }
+        for (Plugin plugin : PluginLoader.plugins) { apiObjInstances.add(new Pair<>(plugin.getTitle(), plugin.initRequestResponse(request, response))); }
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
