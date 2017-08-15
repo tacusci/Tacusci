@@ -52,7 +52,7 @@ import spi.PluginLoader
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
-import java.nio.charset.Charset
+import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -227,10 +227,14 @@ class GravatarPlugin : Plugin {
     }
 
     override fun getTitle(): String {
-        return "GravatarUtils"
+        return "Gravatar"
     }
 
     override fun onLoad() {}
 
-    fun getGravatar(email: String): String = "https://gravatar.com/avatar/${Base64.getEncoder().encodeToString(email.toByteArray(Charset.forName("UTF-8")))}"
+    fun getGravatar(email: String): String {
+        val messageDigest = MessageDigest.getInstance("MD5")
+        return "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+        //return "https://gravatar.com/avatar/${messageDigest.digest(email.(Charset.forName("UTF-8")))}"
+    }
 }
