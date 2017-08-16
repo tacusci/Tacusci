@@ -75,6 +75,7 @@ open class Config {
                     Pair("page-title", "Tacusci Website"),
                     Pair("static-asset-folder", ""),
                     Pair("response-pages-folder", ""),
+                    Pair("plugins-folder", ""),
                     Pair("page-title-divider", "|"),
                     Pair("robots-file", ""),
                     Pair("reset-password-authhash-timeout-seconds", ""),
