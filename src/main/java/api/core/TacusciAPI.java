@@ -11,8 +11,6 @@ import kotlin.Pair;
 import spark.Request;
 import spark.Response;
 import spark.template.velocity.VelocityIMTemplateEngine;
-import spi.Plugin;
-import spi.PluginLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +41,6 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
         apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
-        for (Plugin plugin : PluginLoader.plugins) { apiObjInstances.add(new Pair<>(plugin.getTitle(), plugin.initRequestResponse(request, response))); }
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {

@@ -44,15 +44,10 @@ import database.models.Group
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
-import spark.Request
-import spark.Response
 import spark.Spark.*
-import spi.Plugin
-import spi.PluginLoader
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
-import java.security.MessageDigest
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -180,7 +175,6 @@ class Application {
         setupDatabase()
         setupDefaultGroups()
         setupSpark()
-        PluginLoader.loadPlugins()
     }
 
     fun infoLog(message: String) {
@@ -213,28 +207,4 @@ fun main(args: Array<String>) {
     TacusciAPI.setApplication(application)
     application.init()
     //Config.monitorPropertiesFile(application)
-}
-
-class GravatarPlugin : Plugin {
-
-    private var request: Request? = null
-    private var response: Response? = null
-
-    override fun initRequestResponse(request: Request?, response: Response?): Plugin {
-        this.request = request
-        this.response = response
-        return this
-    }
-
-    override fun getTitle(): String {
-        return "Gravatar"
-    }
-
-    override fun onLoad() {}
-
-    fun getGravatar(email: String): String {
-        val messageDigest = MessageDigest.getInstance("MD5")
-        return "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-        //return "https://gravatar.com/avatar/${messageDigest.digest(email.(Charset.forName("UTF-8")))}"
-    }
 }
