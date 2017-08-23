@@ -31,6 +31,7 @@ package app.plugins
 
 import utils.Config
 import java.io.File
+import java.lang.reflect.Constructor
 import java.net.URLClassLoader
 
 class PluginController {
@@ -38,6 +39,7 @@ class PluginController {
     companion object {
 
         private val pluginJars = mutableListOf<File>()
+        private val pluginInstances = mutableListOf<Constructor<*>>()
 
         fun loadPlugins() {
             val pluginsFolder = File(Config.getProperty("plugins-folder"))
@@ -47,6 +49,9 @@ class PluginController {
 
             pluginJars.forEach {
                 val loader = URLClassLoader.newInstance(arrayOf(it.toURI().toURL()), ClassLoader.getSystemClassLoader())
+
+                val tacusciPluginClass = Class.forName("GravatarPlugin", true, loader)
+                tacusciPluginClass.interfaces.forEach { println(it.name) }
             }
         }
     }
