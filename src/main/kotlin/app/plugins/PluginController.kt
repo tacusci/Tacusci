@@ -33,13 +33,15 @@ import utils.Config
 import java.io.File
 import java.lang.reflect.Constructor
 import java.net.URLClassLoader
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
 
 class PluginController {
 
     companion object {
 
         private val pluginJars = mutableListOf<File>()
-        private val pluginInstances = mutableListOf<Constructor<*>>()
+        private val pluginClassInstances = mutableListOf<Constructor<*>>()
 
         fun loadPlugins() {
             val pluginsFolder = File(Config.getProperty("plugins-folder"))
@@ -50,9 +52,25 @@ class PluginController {
             pluginJars.forEach {
                 val loader = URLClassLoader.newInstance(arrayOf(it.toURI().toURL()), ClassLoader.getSystemClassLoader())
 
+                val jarFile = JarFile(it)
+                val enum = jarFile.entries()
+                while (enum.hasMoreElements()) {
+                    val jarEntry: JarEntry = enum.nextElement()
+                    if (jarEntry.name.endsWith(".class")) {
+                        val classEntry = Class.forName(jarEntry.name.removeSuffix(".class"), true, loader)
+                        println(classEntry.interfaces)
+                        //if (interfacesInclude(classEntry.interfaces, "TacusciPlugin"))
+                    }
+                }
+
                 val tacusciPluginClass = Class.forName("GravatarPlugin", true, loader)
                 tacusciPluginClass.interfaces.forEach { println(it.name) }
             }
+        }
+
+        fun interfacesInclude(interfaces: MutableList<Class<*>>, interfaceNameToFind: String): Boolean {
+            interfaces.forEach { if (it.name == interfaceNameToFind) return true }
+            return false
         }
     }
 }
