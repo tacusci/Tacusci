@@ -43,6 +43,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
         apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
+        loadPlugins();
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
@@ -61,5 +62,8 @@ public class TacusciAPI {
 
     public static void loadPlugins() {
         List<Class<?>> pluginClasses = pluginController.loadPlugins();
+        for (Class<?> pluginClass : pluginClasses) {
+            System.out.println(pluginClass.getName());
+        }
     }
 }

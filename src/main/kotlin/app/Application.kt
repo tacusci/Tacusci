@@ -176,7 +176,6 @@ class Application {
         setupDatabase()
         setupDefaultGroups()
         setupSpark()
-        PluginController.loadPlugins()
     }
 
     fun infoLog(message: String) {
