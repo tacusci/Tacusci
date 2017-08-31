@@ -29,48 +29,48 @@
 
 package app.plugins
 
+import mu.KLogging
 import utils.Config
 import java.io.File
-import java.lang.reflect.Constructor
 import java.net.URLClassLoader
-import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
 class PluginController {
 
-    companion object {
+    companion object : KLogging()
 
-        private val pluginJars = mutableListOf<File>()
-        private val pluginClassInstances = mutableListOf<Constructor<*>>()
+    private val pluginJars = mutableListOf<File>()
 
-        fun loadPlugins() {
-            val pluginsFolder = File(Config.getProperty("plugins-folder"))
-            if (pluginsFolder.isDirectory) {
-                pluginsFolder.listFiles().forEach { if (it.endsWith(".jar")); pluginJars.add(it) }
-            }
+    fun loadPlugins(): MutableList<Class<*>> {
+        val pluginClasses = mutableListOf<Class<*>>()
+        val pluginsFolder = File(Config.getProperty("plugins-folder"))
+        if (pluginsFolder.isDirectory) {
+            pluginsFolder.listFiles().forEach { if (it.endsWith(".jar")); pluginJars.add(it) }
+        }
 
-            pluginJars.forEach {
-                val loader = URLClassLoader.newInstance(arrayOf(it.toURI().toURL()), ClassLoader.getSystemClassLoader())
-
-                val jarFile = JarFile(it)
-                val enum = jarFile.entries()
-                while (enum.hasMoreElements()) {
-                    val jarEntry: JarEntry = enum.nextElement()
-                    if (jarEntry.name.endsWith(".class")) {
-                        val classEntry = Class.forName(jarEntry.name.removeSuffix(".class"), true, loader)
-                        println(classEntry.interfaces)
-                        //if (interfacesInclude(classEntry.interfaces, "TacusciPlugin"))
+        pluginJars.forEach {
+            val loader = URLClassLoader.newInstance(arrayOf(it.toURI().toURL()), ClassLoader.getSystemClassLoader())
+            val jarFile = JarFile(it)
+            val allElements = jarFile.entries()
+            while (allElements.hasMoreElements()) {
+                val jarEntry = allElements.nextElement()
+                if (jarEntry.name.endsWith(".class")) {
+                    try {
+                        val clazzInstance = Class.forName(jarEntry.name.removeSuffix(".class"), true, loader)
+                        val inherits = classInheritsInterface(clazzInstance, "co.uk.taurasystems.tacusci.plugin.TacusciPlugin")
+                        if (inherits) pluginClasses.add(clazzInstance)
+                    } catch (e: ClassNotFoundException) {
+                        logger.error(e.message)
                     }
                 }
-
-                val tacusciPluginClass = Class.forName("GravatarPlugin", true, loader)
-                tacusciPluginClass.interfaces.forEach { println(it.name) }
             }
         }
+        return pluginClasses
+    }
 
-        fun interfacesInclude(interfaces: MutableList<Class<*>>, interfaceNameToFind: String): Boolean {
-            interfaces.forEach { if (it.name == interfaceNameToFind) return true }
-            return false
-        }
+    private fun classInheritsInterface(clazz: Class<*>, interfaceName: String): Boolean {
+        var found = false
+        clazz.interfaces.forEach { found = it.name == interfaceName; println(it.name); if (found) return found }
+        return found
     }
 }
