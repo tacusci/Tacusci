@@ -180,6 +180,7 @@ class ResetPasswordController : Controller {
                         if (usernameOfPasswordToReset == UserHandler.getRootAdmin().username) {
                             Config.props.setProperty("root-password", newPassword)
                             Config.storeAll()
+                            Config.encryptStoredPassword()
                             if (UserHandler.updateRootAdmin()) {
                                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Password for $usernameOfPasswordToReset has been reset/changed...")
                                 request.session().attribute("reset_password_successfully", true)
