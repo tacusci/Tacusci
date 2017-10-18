@@ -39,6 +39,10 @@ public class TUsers extends TAPIClass {
 
     public List<User> getUsers() { return UserHandler.INSTANCE.getUsers(); }
 
+    public boolean userExists(User user) { return UserHandler.INSTANCE.userExists(user); }
+
+    public boolean userExists(String username) { return UserHandler.INSTANCE.userExists(username); }
+
     public User getRootAdmin() { return UserHandler.INSTANCE.getRootAdmin(); }
 
     public List<User> getUsersInGroup(String groupName) {
@@ -47,7 +51,6 @@ public class TUsers extends TAPIClass {
             if (GroupHandler.INSTANCE.userInGroup(user, groupName))
                 usersInGroup.add(user);
         }
-        System.out.println(usersInGroup);
         return usersInGroup;
     }
 
