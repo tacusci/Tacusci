@@ -177,6 +177,11 @@ class Application {
         setupDatabase()
         setupDefaultGroups()
         setupSpark()
+        val pluginManager = DefaultPluginManager(File(Config.getProperty("plugins-folder")).toPath())
+        pluginManager.loadPlugins()
+        pluginManager.plugins.forEach { plugin ->
+            println(plugin.descriptor.pluginId)
+        }
     }
 
     fun infoLog(message: String) {

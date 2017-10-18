@@ -39,6 +39,9 @@ import utils.Utils
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.*
 
 /**
  * Created by alewis on 15/11/2016.
@@ -105,6 +108,17 @@ fun String.toIntSafe(): Int {
         return this.toInt()
     } catch (e: NumberFormatException) {
         return -1
+    }
+}
+
+@Throws(NoSuchAlgorithmException::class)
+fun String.toMD5Hash(): String {
+    try {
+        val messageDigest = MessageDigest.getInstance("MD5")
+        messageDigest.update(this.toByteArray(Charset.forName("UTF-8")))
+        return Base64.getEncoder().encodeToString(messageDigest.digest())
+    } catch (e: Exception) {
+        throw NoSuchAlgorithmException()
     }
 }
 
