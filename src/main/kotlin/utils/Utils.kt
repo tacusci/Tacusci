@@ -29,7 +29,13 @@
 
 package utils
 
+import extensions.toMD5Hash
 import mu.KLogging
+import java.io.ByteArrayInputStream
+import java.nio.charset.Charset
+import java.security.DigestInputStream
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -81,6 +87,10 @@ class Utils {
             val simpleDateFormat = SimpleDateFormat(dateStringFormat)
             val date = simpleDateFormat.parse(dateToConvert)
             return date.time
+        }
+
+        fun convertStringToMD5Hash(textToConvert: String): String {
+            return textToConvert.toMD5Hash()
         }
     }
 }

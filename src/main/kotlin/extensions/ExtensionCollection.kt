@@ -39,6 +39,11 @@ import utils.Utils
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.util.*
+import javax.xml.bind.DatatypeConverter
+import kotlin.experimental.and
 
 /**
  * Created by alewis on 15/11/2016.
@@ -105,6 +110,21 @@ fun String.toIntSafe(): Int {
         return this.toInt()
     } catch (e: NumberFormatException) {
         return -1
+    }
+}
+
+@Throws(NoSuchAlgorithmException::class)
+fun String.toMD5Hash(): String {
+    try {
+        val messageDigest = MessageDigest.getInstance("MD5")
+        messageDigest.update(this.toByteArray(Charset.forName("UTF-8")))
+        val stringBuffer = StringBuffer()
+        for (byte in messageDigest.digest()) {
+            stringBuffer.append(String.format("%02x", (byte.toInt() and 0xFF)))
+        }
+        return stringBuffer.toString()
+    } catch (e: Exception) {
+        throw NoSuchAlgorithmException()
     }
 }
 

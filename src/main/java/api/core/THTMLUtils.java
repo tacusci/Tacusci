@@ -43,15 +43,4 @@ public class THTMLUtils extends TAPIClass {
     public String formatBackForSaving(String content) {
         return content.replaceAll("&amp;", "&").replaceAll("<", "&lt;");
     }
-
-    public String convertToMD5(String toConvert) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(toConvert.getBytes(), 0, toConvert.length());
-            return new BigInteger(1, messageDigest.digest()).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "errorhashing";
-    }
 }

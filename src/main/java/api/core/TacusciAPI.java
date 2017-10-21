@@ -7,7 +7,6 @@ import api.templates.TTemplates;
 import api.users.TUsers;
 import app.Application;
 import app.core.core.controllers.Web;
-import app.plugins.PluginController;
 import kotlin.Pair;
 import spark.Request;
 import spark.Response;
@@ -24,7 +23,6 @@ public class TacusciAPI {
 
     private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
     private static Application instance = null;
-    private static PluginController pluginController = new PluginController();
 
     public static void setApplication(Application application) {
         instance = application;
@@ -43,7 +41,6 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("THTMLUtils", new THTMLUtils(request, response)));
         apiObjInstances.add(new Pair<>("TUtils", new TUtils(request, response)));
         apiObjInstances.add(new Pair<>("TServer", new TServer(instance, request, response)));
-        loadPlugins();
     }
 
     public static void injectAPIInstances(Request request, Response response, String templateTitle, VelocityIMTemplateEngine velocityIMTemplateEngine) {
@@ -58,12 +55,5 @@ public class TacusciAPI {
             model.put(apiInstance.getFirst(), apiInstance.getSecond());
         }
         return model;
-    }
-
-    public static void loadPlugins() {
-        List<Class<?>> pluginClasses = pluginController.loadPlugins();
-        for (Class<?> pluginClass : pluginClasses) {
-            System.out.println(pluginClass.getName());
-        }
     }
 }
