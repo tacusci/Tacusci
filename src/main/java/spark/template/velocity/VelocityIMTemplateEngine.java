@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by alewis on 17/05/2017.
@@ -66,7 +67,7 @@ public class VelocityIMTemplateEngine {
         }
     }
 
-    public void insertIntoContext(String templateTitle, List<Pair<String, Object>> keyAndValues) {
+    public void insertIntoContext(String templateTitle, CopyOnWriteArrayList<Pair<String, Object>> keyAndValues) {
         VelocityContext velocityContext = templatesAndContexts.get(templateTitle);
         if (velocityContext != null) {
             keyAndValues.forEach(pair -> velocityContext.put(pair.getFirst(), pair.getSecond()));

@@ -15,13 +15,14 @@ import spark.template.velocity.VelocityIMTemplateEngine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by alewis on 22/05/2017.
  */
 public class TacusciAPI {
 
-    private static List<Pair<String, Object>> apiObjInstances = new ArrayList<>();
+    private static CopyOnWriteArrayList<Pair<String, Object>> apiObjInstances = new CopyOnWriteArrayList<>();
     private static Application instance = null;
 
     public static void setApplication(Application application) {
