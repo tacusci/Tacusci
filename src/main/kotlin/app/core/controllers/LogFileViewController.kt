@@ -27,11 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
-import app.core.controllers.UserManagementController
+import app.core.core.controllers.Web
 import app.core.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
 import extensions.isNullOrBlankOrEmpty
