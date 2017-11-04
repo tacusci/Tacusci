@@ -61,7 +61,7 @@ class ForgottenPasswordController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
+    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false), Pair("email_send_failed", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
@@ -85,13 +85,19 @@ class ForgottenPasswordController : Controller {
             model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())
             request.session().attribute("email_sent", false)
         } else {
-            model.put("forgotten_password_form", forgottenPasswordForm.render())
+            if (request.session().attribute("email_send_failed")) {
+                model.put("sent_email_message", j2htmlPartials.centeredMessage("No email has been sent", j2htmlPartials.HeaderType.h2).render())
+                request.session().attribute("email_send_failed", false)
+                request.session().attribute("email_sent", false)
+            }
         }
+        model.put("forgotten_password_form", forgottenPasswordForm.render())
         return ModelAndView(model, layoutTemplate)
     }
 
     fun post_postForgottenPassword(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for forgotten password form")
+
         if (Web.getFormHash(request, "forgotten_password_form") == request.queryParams("hashid")) {
             val username = request.queryParams("username")
             val email = request.queryParams("email")
@@ -101,10 +107,15 @@ class ForgottenPasswordController : Controller {
                     val user = UserHandler.userDAO.getUser(username)
                     if (user.email == email) {
                         sendResetPasswordEmail(user, request)
+                    } else {
+                        logger.error("${UserHandler.getSessionIdentifier(request)} -> Email address entered for user, fetching equivalent username")
                     }
+                } else {
+                    logger.error("${UserHandler.getSessionIdentifier(request)} -> User entered for forgotten password does not exist")
                 }
+            } else {
+                logger.error("${UserHandler.getSessionIdentifier(request)} -> Invalid username and or password values for forgotten password")
             }
-            request.session().attribute("email_sent", true)
         } else {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Received invalid POST form for forgotten password")
         }
@@ -129,7 +140,12 @@ class ForgottenPasswordController : Controller {
         }
 
 
-        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
+        thread {
+            val emailSendFailed = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent)
+            request.session().attribute("email_send_failed", emailSendFailed)
+
+            if (!emailSendFailed) request.session().attribute("email_sent", true)
+        }
     }
 
     override fun post(request: Request, response: Response): Response {

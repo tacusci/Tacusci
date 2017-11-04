@@ -50,7 +50,7 @@ object Email : KLogging() {
     var password = ""
     var useTtls = ""
 
-    fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String) {
+    fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String): Boolean {
         host = Config.getProperty("smtp_server_host")
         port = Config.getProperty("smtp_server_port")
         username = Config.getProperty("smtp_account_username")
@@ -83,9 +83,11 @@ object Email : KLogging() {
             transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
             logger.info("Sent reset password email to $toAddresses from $sender")
             transport.close()
+            return true
         } catch (e: Exception) {
             logger.error(e.message)
             logger.debug("Full stack trace: ${e.printStackTrace()}")
+            return false
         }
     }
 }
