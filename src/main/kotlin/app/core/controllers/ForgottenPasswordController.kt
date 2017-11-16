@@ -32,6 +32,7 @@ package app.core.core.controllers
 import api.core.TacusciAPI
 import app.core.controllers.Controller
 import app.core.handlers.UserHandler
+import com.sun.org.apache.xpath.internal.operations.Bool
 import database.models.User
 import extensions.managedRedirect
 import mail.Email
@@ -61,7 +62,7 @@ class ForgottenPasswordController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
+    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false), Pair("email_send_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
@@ -81,16 +82,24 @@ class ForgottenPasswordController : Controller {
 
         val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 
-        if (request.session().attribute("email_sent")) {
-            model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())
-            request.session().attribute("email_sent", false)
+        model.put("forgotten_password_form", forgottenPasswordForm.render())
+
+        val emailErrorOccurred: Boolean = request.session().attribute("email_send_error")
+
+        if (!emailErrorOccurred) {
+            val emailSent: Boolean = request.session().attribute("email_sent")
+            if (emailSent) model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())
         } else {
-            model.put("forgotten_password_form", forgottenPasswordForm.render())
+            model.put("sent_email_message", j2htmlPartials.centeredMessage("Error occurred trying to send email...", j2htmlPartials.HeaderType.h2).render())
         }
+
+        request.session().attribute("email_sent", false)
+        request.session().attribute("email_send_error", false)
+
         return ModelAndView(model, layoutTemplate)
     }
 
-    fun post_postForgottenPassword(request: Request, response: Response): Response {
+    private fun post_postForgottenPassword(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for forgotten password form")
         if (Web.getFormHash(request, "forgotten_password_form") == request.queryParams("hashid")) {
             val username = request.queryParams("username")
@@ -100,11 +109,16 @@ class ForgottenPasswordController : Controller {
                 if (UserHandler.userExists(username)) {
                     val user = UserHandler.userDAO.getUser(username)
                     if (user.email == email) {
-                        sendResetPasswordEmail(user, request)
+                        if (sendResetPasswordEmail(user, request)) {
+                            request.session().attribute("email_send_error", false)
+                            request.session().attribute("email_sent", true)
+                        } else {
+                            request.session().attribute("email_send_error", true)
+                            request.session().attribute("email_sent", false)
+                        }
                     }
                 }
             }
-            request.session().attribute("email_sent", true)
         } else {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Received invalid POST form for forgotten password")
         }
@@ -112,9 +126,11 @@ class ForgottenPasswordController : Controller {
         return response
     }
 
-    private fun sendResetPasswordEmail(user: User, request: Request) {
+    private fun sendResetPasswordEmail(user: User, request: Request): Boolean {
         //change the latest reset password hash in the DB and append it to the address to send
         var resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
+        var sentEmailSuccessfully = false
+
         if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
             resetPasswordLink = resetPasswordLink.replace("http", "https")
         }
@@ -129,7 +145,9 @@ class ForgottenPasswordController : Controller {
         }
 
 
-        thread { Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
+        thread { sentEmailSuccessfully = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
+
+        return sentEmailSuccessfully
     }
 
     override fun post(request: Request, response: Response): Response {
