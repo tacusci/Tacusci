@@ -45,6 +45,7 @@ import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
+import javax.enterprise.inject.Model
 
 /**
  * Created by alewis on 25/10/2016.
@@ -62,11 +63,7 @@ object Web : KLogging() {
 
         model.put("home_link_address", "/")
         model.put("login_link_address", "/login")
-
-
-        if (Config.getProperty("allow-signup").toBoolean()) {
-            model.put("sign_up_link_address", "/register")
-        }
+        model.put("sign_up_link_address", "/register")
 
         if (UserHandler.isLoggedIn(request)) {
             val username = UserHandler.loggedInUsername(request)
@@ -113,6 +110,15 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    fun gen_404Page(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        var model = HashMap<String, Any>()
+        model.put("template", "/templates/404_not_found.vtl")
+        model = TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavigationElements(request, model)
+        Web.insertPageTitle(request, model, "404")
+        return ModelAndView(model, layoutTemplate)
+    }
+
     fun get404Page(request: Request, response: Response): String {
         val responsePagesFolder = File("${Config.getProperty("static-asset-folder")}/${Config.getProperty("response-pages-folder")}")
         var fourOhFourFile = File("")
@@ -121,6 +127,7 @@ object Web : KLogging() {
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        //should change this so that the alternative 404 page is actually the 404 template page
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavigationElements(request, hashMapOf()))

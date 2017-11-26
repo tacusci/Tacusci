@@ -70,7 +70,7 @@ class RegisterController : Controller {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
 
         if (!Config.getProperty("allow-signup").toBoolean()) {
-
+            return Web.gen_404Page(request, response, layoutTemplate)
         }
 
         val model = HashMap<String, Any>()
