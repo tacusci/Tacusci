@@ -60,7 +60,7 @@ class ForgottenPasswordController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false), Pair("email_send_error", false)).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
+    override fun initSessionBoolAttributes(session: Session) { hashMapOf(Pair("email_sent", false), Pair("email_send_error", false), Pair("error_sending_email_reason", "")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) } }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for forgotten password page")
@@ -87,11 +87,12 @@ class ForgottenPasswordController : Controller {
             val emailSent: Boolean = request.session().attribute("email_sent")
             if (emailSent) model.put("sent_email_message", j2htmlPartials.centeredMessage("Email has been sent", j2htmlPartials.HeaderType.h2).render())
         } else {
-            model.put("sent_email_message", j2htmlPartials.centeredMessage("Error occurred trying to send email...", j2htmlPartials.HeaderType.h2).render())
+            model.put("sent_email_message", j2htmlPartials.centeredMessage(request.session().attribute("error_sending_email_reason"), j2htmlPartials.HeaderType.h2).render())
         }
 
         request.session().attribute("email_sent", false)
         request.session().attribute("email_send_error", false)
+        request.session().attribute("error_sending_email_reason", "")
 
         return ModelAndView(model, layoutTemplate)
     }
@@ -112,8 +113,21 @@ class ForgottenPasswordController : Controller {
                         } else {
                             request.session().attribute("email_send_error", true)
                             request.session().attribute("email_sent", false)
+                            request.session().attribute("error_sending_email_reason", "Issues with email settings/server connection, please check logs...")
                         }
+                    } else {
+                        request.session().attribute("email_send_error", true)
+                        request.session().attribute("email_sent", false)
+                        //would like to put the following line, but for security reasons rather put:
+                        //request.session().attribute("error_sending_email_reason", "User doesn't exist...")
+                        request.session().attribute("error_sending_email_reason", "Username and email doesn't match...")
                     }
+                } else {
+                    request.session().attribute("email_send_error", true)
+                    request.session().attribute("email_sent", false)
+                    //would like to put the following line, but for security reasons rather put:
+                    //request.session().attribute("error_sending_email_reason", "User doesn't exist...")
+                    request.session().attribute("error_sending_email_reason", "Username and email doesn't match...")
                 }
             }
         } else {
