@@ -89,7 +89,7 @@ open class Config {
             val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
             //TODO: this could probably be cleaned up more
             if (propertiesFile.doesNotExist()) {
-                defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
+                defaults.forEach { this.setProperty(it.first, it.second) }
                 storeAll()
             } else {
                 try {
