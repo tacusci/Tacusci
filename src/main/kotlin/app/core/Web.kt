@@ -29,10 +29,10 @@
 
 
 
-package app.core.core.controllers
+package app.core
 
 import api.core.TacusciAPI
-import app.core.core.handlers.GroupHandler
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import j2html.TagCreator.*
 import mu.KLogging
@@ -62,7 +62,11 @@ object Web : KLogging() {
 
         model.put("home_link_address", "/")
         model.put("login_link_address", "/login")
-        model.put("sign_up_link_address", "/register")
+
+
+        if (Config.getProperty("allow-signup").toBoolean()) {
+            model.put("sign_up_link_address", "/register")
+        }
 
         if (UserHandler.isLoggedIn(request)) {
             val username = UserHandler.loggedInUsername(request)

@@ -61,6 +61,7 @@ open class Config {
                     Pair("root-password", "Password1234!"),
                     Pair("root-email", ""),
                     Pair("color-theme", "dark"),
+                    Pair("allow-signup", "false"),
                     Pair("max-threads", ""),
                     Pair("min-threads", ""),
                     Pair("max-db-connections", "8"),

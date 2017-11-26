@@ -27,10 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
+import app.core.Web
 import app.core.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
@@ -67,6 +68,10 @@ class RegisterController : Controller {
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
+
+        if (!Config.getProperty("allow-signup").toBoolean()) {
+
+        }
 
         val model = HashMap<String, Any>()
 

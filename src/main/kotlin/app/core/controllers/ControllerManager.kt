@@ -29,8 +29,8 @@
 
 package app.core.controllers
 
-import app.core.core.controllers.*
-import app.core.core.handlers.GroupHandler
+import app.core.Web
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.RoutePermissionDAO

@@ -1,6 +1,6 @@
 package api.core;
 
-import app.core.core.controllers.Web;
+import app.core.Web;
 import extensions.ExtensionCollectionKt;
 import spark.Request;
 import spark.Response;

@@ -1,7 +1,7 @@
 package api.templates;
 
 import api.core.TAPIClass;
-import app.core.core.handlers.TemplateHandler;
+import app.core.handlers.TemplateHandler;
 import database.models.Template;
 import spark.Request;
 import spark.Response;

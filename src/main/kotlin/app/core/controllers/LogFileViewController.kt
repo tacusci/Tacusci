@@ -30,7 +30,7 @@
 package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.core.controllers.Web
+import app.core.Web
 import app.core.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
 import extensions.isNullOrBlankOrEmpty

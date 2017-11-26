@@ -29,10 +29,10 @@
 
 
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
+import app.core.Web
 import app.core.handlers.UserHandler
 import extensions.managedRedirect
 import mu.KLogging

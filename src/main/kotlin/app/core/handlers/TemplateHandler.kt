@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.handlers
+package app.core.handlers
 
 import database.daos.DAOManager
 import database.daos.TemplateDAO

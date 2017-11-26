@@ -1,7 +1,7 @@
 package api.pages;
 
 import api.core.TAPIClass;
-import app.core.core.handlers.PageHandler;
+import app.core.handlers.PageHandler;
 import database.models.Page;
 import spark.Request;
 import spark.Response;

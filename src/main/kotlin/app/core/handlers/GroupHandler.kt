@@ -29,9 +29,8 @@
 
 
 
-package app.core.core.handlers
+package app.core.handlers
 
-import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.GroupDAO
 import database.daos.User2GroupDAO

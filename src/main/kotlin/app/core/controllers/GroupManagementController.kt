@@ -30,8 +30,8 @@
 package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.core.controllers.Web
-import app.core.core.handlers.GroupHandler
+import app.core.Web
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.models.Group
 import extensions.isNullOrBlankOrEmpty

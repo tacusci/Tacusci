@@ -27,7 +27,7 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-import app.core.core.handlers.GroupHandler
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import com.nhaarman.mockito_kotlin.whenever
 import database.daos.DAOManager

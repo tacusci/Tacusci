@@ -31,7 +31,6 @@
  
 package app.core.handlers
 
-import app.core.core.handlers.GroupHandler
 import database.daos.DAOManager
 import database.daos.ResetPasswordDAO
 import database.daos.UserDAO

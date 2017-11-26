@@ -27,12 +27,11 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
+import app.core.Web
 import app.core.handlers.UserHandler
-import com.sun.org.apache.xpath.internal.operations.Bool
 import database.models.User
 import extensions.managedRedirect
 import mail.Email
@@ -45,7 +44,6 @@ import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
-import kotlin.concurrent.thread
 
 /**
  * Created by alewis on 07/04/2017.
@@ -78,7 +76,6 @@ class ForgottenPasswordController : Controller {
         }
 
         model.put("template", templatePath)
-
 
         val forgottenPasswordForm = j2htmlPartials.pureFormAligned_ForgottenPassword(request.session(), "forgotten_password_form", rootUri, "post")
 
@@ -144,8 +141,8 @@ class ForgottenPasswordController : Controller {
             emailContent = emailContent.replace("\$time_stamp", Utils.getDateTimeNow())
         }
 
-
-        thread { sentEmailSuccessfully = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent) }
+        //taken out thread, since it is resulting in the incorrect reporting of whether an email has been sent successfully
+        sentEmailSuccessfully = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent)
 
         return sentEmailSuccessfully
     }
