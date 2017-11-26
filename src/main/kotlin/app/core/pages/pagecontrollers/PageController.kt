@@ -58,27 +58,6 @@ object PageController : KLogging() {
         index.content = this.javaClass.getResourceAsStream("/templates/index.vtl").readTextAndClose()
         index.authorUserId = UserHandler.getRootAdmin().id
         PageHandler.createPage(index)
-
-        /*
-        val undeletablePage = Page()
-        undeletablePage.title = "Undeletable"
-        undeletablePage.pageRoute = "/cant/wham/me"
-        undeletablePage.isDeleteable = false
-        undeletablePage.content = "<h1>Undeletable</h1>"
-        undeletablePage.authorUserId = UserHandler.getRootAdmin().id
-        PageHandler.createPage(undeletablePage)
-        */
-
-        /*
-        for (i in 1000..200000) {
-            val page = Page()
-            page.title = "Test Page $i"
-            page.pageRoute = "/test-page/$i"
-            page.content = i.toString()
-            page.authorUserId = UserHandler.getRootAdmin().id
-            PageHandler.createPage(page)
-        }
-        */
     }
 
     fun setupPages() {
