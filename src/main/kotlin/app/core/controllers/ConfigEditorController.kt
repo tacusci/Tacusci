@@ -55,8 +55,8 @@ class ConfigEditorController : Controller {
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CONFIG_EDITOR page")
-        val model = hashMapOf<String, Any>()
-
+        val model = HashMap<String, Any>()
+        model.put("template", templatePath)
         TacusciAPI.injectAPIInstances(request, response, model)
 
         Web.insertPageTitle(request, model, pageTitleSubstring)

@@ -30,5 +30,10 @@
 <div class="pure-g">
     <div class="pure-u-24-24 centered">
         <h1 class="header">Config Editor</h1>
+
+        #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
+            #set($configName = $configPropertyPair.getFirst())
+            <h2>$configName, $TConfig.getProperty($configName)</h2>
+        #end
     </div>
 </div>

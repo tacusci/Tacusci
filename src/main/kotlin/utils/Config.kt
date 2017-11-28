@@ -51,7 +51,7 @@ open class Config {
         var fileWatcher = FileWatcher(File(""))
         var propertiesFile = File("tacusci.properties")
 
-        private fun getDefaultPropertiesList(): List<Pair<String, String>> {
+        fun getDefaultPropertiesList(): List<Pair<String, String>> {
             return listOf(Pair("server-address", "localhost"),
                     Pair("port", "1025"),
                     Pair("using-ssl-on-proxy", "false"),
