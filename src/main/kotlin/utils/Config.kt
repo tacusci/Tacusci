@@ -46,6 +46,7 @@ import java.util.regex.Pattern
 
 open class Config {
 
+    //class itself becomes a Properties object to inherit some built in methods
     companion object props : LinkedProperties() {
 
         var fileWatcher = FileWatcher(File(""))
