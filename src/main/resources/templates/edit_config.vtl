@@ -33,7 +33,11 @@
 
         #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
             #set($configName = $configPropertyPair.getFirst())
-            <div class="configuration-setting-title">$configName ($TConfig.getPropertyType($configName))</div>
+            <div class="configuration-setting-title">$configName ($TConfig.getPropertyType($configName))
+                #if ($TConfig.getPropertyType($configName).equals("string"))
+                    <input type="text" name="$configName" class="page-title-editbox" value="$TConfig.getProperty($configName)">
+                #end
+            </div>
         #end
     </div>
 </div>
