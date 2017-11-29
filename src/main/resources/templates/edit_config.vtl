@@ -33,7 +33,7 @@
 
         #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
             #set($configName = $configPropertyPair.getFirst())
-            <h2>$configName, $TConfig.getProperty($configName)</h2>
+            <div class="configuration-setting-title">$configName</div>
         #end
     </div>
 </div>
