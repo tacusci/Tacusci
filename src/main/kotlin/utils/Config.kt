@@ -139,15 +139,8 @@ open class Config {
                 //this is just to check data type, so no need to log....
             }
 
-            try {
-                propertyValue.toBoolean()
-                //if it has gotten farther then the line above then the conversion has worked
-                //checked and it looks like a conversion of the value 1 to boolean doesn't resolve true, but will double check
-                if (!isInteger)
-                    isBoolean = true
-            } catch (e: Exception) {
-                //this is just to check data type, so no need to log....
-            }
+            //checked and it looks like a conversion of the value 1 to boolean doesn't resolve true, but will double check
+            if (!isInteger && propertyValue.toLowerCase() == "true" ||  propertyValue.toLowerCase() == "false") isBoolean = true
 
             if (!isInteger && !isBoolean) isString = true
 

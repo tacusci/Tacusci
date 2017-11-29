@@ -17,5 +17,7 @@ public class TConfig extends TAPIClass {
 
     public String getProperty(String propertyName) { return Config.props.getProperty(propertyName); }
 
+    public String getPropertyType(String propertyName) { return Config.props.getPropertyType(propertyName); }
+
     public List<Pair<String, String>> getAllDefaultPropertiesAndValues() { return Config.props.getDefaultPropertiesList(); }
 }
