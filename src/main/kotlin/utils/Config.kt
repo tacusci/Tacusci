@@ -123,7 +123,8 @@ open class Config {
 
         fun getPropertyType(key: String): String {
             var type = ""
-            val propertyValue = getProperty(key)
+            //don't rely on currently set Property
+            val propertyValue = getDefaultProperty(key)
 
             var isInteger = false
             var isBoolean = false
