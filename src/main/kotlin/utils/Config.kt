@@ -121,6 +121,44 @@ open class Config {
             return super.getProperty(key, defaultValue)
         }
 
+        fun getPropertyType(key: String): String {
+            var type = ""
+            val propertyValue = getProperty(key)
+
+            var isInteger = false
+            var isBoolean = false
+            var isString = false
+
+
+            try {
+                propertyValue.toInt()
+                //if it has gotten farther then the line above then the conversion has worked
+                isInteger = true
+            } catch (e: Exception) {
+                //this is just to check data type, so no need to log....
+            }
+
+            try {
+                propertyValue.toBoolean()
+                //if it has gotten farther then the line above then the conversion has worked
+                //checked and it looks like a conversion of the value 1 to boolean doesn't resolve true, but will double check
+                if (!isInteger)
+                    isBoolean = true
+            } catch (e: Exception) {
+                //this is just to check data type, so no need to log....
+            }
+
+            if (!isInteger && !isBoolean) isString = true
+
+            when (true) {
+                isInteger -> type = "integer"
+                isBoolean -> type = "boolean"
+                isString -> type = "string"
+            }
+
+            return type
+        }
+
         fun encryptStoredPassword() {
             val password = getProperty("root-password")
             val pattern = Pattern.compile("CRYPT\\((\\S*)\\)")
