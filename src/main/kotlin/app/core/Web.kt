@@ -55,7 +55,7 @@ import javax.enterprise.inject.Model
 object Web : KLogging() {
 
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page-title-divider")} $pageTitleSubstring")
         return model
     }
 

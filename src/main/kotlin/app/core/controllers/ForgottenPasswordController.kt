@@ -142,11 +142,11 @@ class ForgottenPasswordController : Controller {
         var resetPasswordLink = "${request.url().replace(request.uri(), "")}/reset_password/${user.username}/${UserHandler.updateResetPasswordHash(user.username)}"
         var sentEmailSuccessfully = false
 
-        if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
+        if (Config.getProperty("using-ssl-on-proxy").toBoolean()) {
             resetPasswordLink = resetPasswordLink.replace("http", "https")
         }
 
-        val emailContentFile = File(Config.getProperty("reset_password_email_content_file"))
+        val emailContentFile = File(Config.getProperty("reset-password-email-content-file"))
         var emailContent = "${Utils.getDateTimeNow()} $resetPasswordLink"
 
         if (emailContentFile.exists()) {
@@ -156,7 +156,7 @@ class ForgottenPasswordController : Controller {
         }
 
         //taken out thread, since it is resulting in the incorrect reporting of whether an email has been sent successfully
-        sentEmailSuccessfully = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset_password_from_address"), Config.getProperty("reset_password_email_subject"), emailContent)
+        sentEmailSuccessfully = Email.sendEmail(mutableListOf(user.email), Config.getProperty("reset-password-from-address"), Config.getProperty("reset-password-email-subject"), emailContent)
 
         return sentEmailSuccessfully
     }
