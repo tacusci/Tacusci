@@ -54,11 +54,11 @@ object Email : KLogging() {
 
         var sentEmail = false
 
-        host = Config.getProperty("smtp_server_host")
-        port = Config.getProperty("smtp_server_port")
-        username = Config.getProperty("smtp_account_username")
-        password = Config.getProperty("smtp_account_password")
-        useTtls = Config.getProperty("smtp_use_ttls")
+        host = Config.getProperty("smtp-server-host")
+        port = Config.getProperty("smtp-server-port")
+        username = Config.getProperty("smtp-account-username")
+        password = Config.getProperty("smtp-account-password")
+        useTtls = Config.getProperty("smtp-use-ttls")
 
         val properties = System.getProperties()
         properties.put("mail.smtp.starttls.enable", useTtls)

@@ -216,7 +216,7 @@ class ResetPasswordController : Controller {
 
     private fun checkAuthHashExpired(authHash: String): Boolean {
         var timeoutInSeconds = 1000
-        val secondsTimeout = Config.getProperty("reset_password_authhash_timeout_seconds")
+        val secondsTimeout = Config.getProperty("reset-password-authhash-timeout-seconds")
         try {
             timeoutInSeconds *= Integer.parseInt(secondsTimeout)
         } catch (e: Exception) {

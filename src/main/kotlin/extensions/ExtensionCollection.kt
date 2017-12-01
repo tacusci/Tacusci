@@ -85,7 +85,7 @@ fun Response.redirect(location: String, htmlStatus: Int) {
 
 fun Response.managedRedirect(request: Request, urlSuffix: String) {
     try {
-        if (Config.getProperty("using_ssl_on_proxy").toBoolean()) {
+        if (Config.getProperty("using-ssl-on-proxy").toBoolean()) {
             httpsRedirect(request, urlSuffix)
         } else {
             redirect(urlSuffix)
