@@ -27,10 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
+import app.core.Web
 import app.core.handlers.UserHandler
 import database.models.User
 import extensions.managedRedirect
@@ -39,6 +39,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 import utils.Validation
 import utils.j2htmlPartials
 import java.util.*
@@ -66,7 +67,12 @@ class RegisterController : Controller {
     }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for REGISTER page")
+
+        if (!Config.getProperty("allow-signup").toBoolean()) {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Sign up/register is not enabled, hiding REGISTER page behind 404...")
+            return Web.gen_404Page(request, response, layoutTemplate)
+        }
 
         val model = HashMap<String, Any>()
 
@@ -82,7 +88,7 @@ class RegisterController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
-        Web.logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
         if (Web.getFormHash(request, "register_form") == request.queryParams("hashid")) {
             val fullName = request.queryParams("full_name")
@@ -125,7 +131,7 @@ class RegisterController : Controller {
                 sendConfirmationEmail(user)
             }
         } else {
-            Web.logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
+            logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
         }
         response.managedRedirect(request, rootUri)
         return response

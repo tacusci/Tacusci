@@ -29,10 +29,10 @@
 
 
 
-package app.core.core.controllers
+package app.core
 
 import api.core.TacusciAPI
-import app.core.core.handlers.GroupHandler
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import j2html.TagCreator.*
 import mu.KLogging
@@ -45,6 +45,7 @@ import utils.Config
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
+import javax.enterprise.inject.Model
 
 /**
  * Created by alewis on 25/10/2016.
@@ -54,7 +55,7 @@ import java.io.File
 object Web : KLogging() {
 
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page_title_divider")} $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page-title")} ${Config.getProperty("page-title-divider")} $pageTitleSubstring")
         return model
     }
 
@@ -62,7 +63,10 @@ object Web : KLogging() {
 
         model.put("home_link_address", "/")
         model.put("login_link_address", "/login")
-        model.put("sign_up_link_address", "/register")
+
+        //if the configuration states that user side registrations are allowed add the link
+        if (Config.getProperty("allow-signup").toBoolean())
+            model.put("sign_up_link_address", "/register")
 
         if (UserHandler.isLoggedIn(request)) {
             val username = UserHandler.loggedInUsername(request)
@@ -77,7 +81,7 @@ object Web : KLogging() {
 
     fun get_robotstxt(request: Request): String {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ROBOTS.txt page")
-        val robotsFile = File(Config.getProperty("robots_file"))
+        val robotsFile = File(Config.getProperty("robots-file"))
         if (robotsFile.exists()) {
             return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
                     robotsFile.readText()
@@ -109,6 +113,15 @@ object Web : KLogging() {
         return ModelAndView(model, layoutTemplate)
     }
 
+    fun gen_404Page(request: Request, response: Response, layoutTemplate: String): ModelAndView {
+        var model = HashMap<String, Any>()
+        model.put("template", "/templates/404_not_found.vtl")
+        model = TacusciAPI.injectAPIInstances(request, response, model)
+        Web.loadNavigationElements(request, model)
+        Web.insertPageTitle(request, model, "404")
+        return ModelAndView(model, layoutTemplate)
+    }
+
     fun get404Page(request: Request, response: Response): String {
         val responsePagesFolder = File("${Config.getProperty("static-asset-folder")}/${Config.getProperty("response-pages-folder")}")
         var fourOhFourFile = File("")
@@ -117,6 +130,7 @@ object Web : KLogging() {
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        //should change this so that the alternative 404 page is actually the 404 template page
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavigationElements(request, hashMapOf()))

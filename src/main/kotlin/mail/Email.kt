@@ -51,11 +51,14 @@ object Email : KLogging() {
     var useTtls = ""
 
     fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String): Boolean {
-        host = Config.getProperty("smtp_server_host")
-        port = Config.getProperty("smtp_server_port")
-        username = Config.getProperty("smtp_account_username")
-        password = Config.getProperty("smtp_account_password")
-        useTtls = Config.getProperty("smtp_use_ttls")
+
+        var sentEmail = false
+
+        host = Config.getProperty("smtp-server-host")
+        port = Config.getProperty("smtp-server-port")
+        username = Config.getProperty("smtp-account-username")
+        password = Config.getProperty("smtp-account-password")
+        useTtls = Config.getProperty("smtp-use-ttls")
 
         val properties = System.getProperties()
         properties.put("mail.smtp.starttls.enable", useTtls)
@@ -83,11 +86,12 @@ object Email : KLogging() {
             transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
             logger.info("Sent reset password email to $toAddresses from $sender")
             transport.close()
-            return true
+            sentEmail = true
         } catch (e: Exception) {
+            sentEmail = false
             logger.error(e.message)
             logger.debug("Full stack trace: ${e.printStackTrace()}")
-            return false
         }
+        return sentEmail
     }
 }

@@ -26,10 +26,8 @@
  *  3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
- 
- 
- 
- package app.core.controllers
+
+package app.core.controllers
 
 import api.core.TacusciAPI
 import app.core.Web
@@ -39,39 +37,35 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-import java.util.*
 
-/**
- * Created by tauraamui on 27/10/2016.
- */
-
-class DashboardController : Controller {
+class ConfigEditorController : Controller {
 
     companion object : KLogging()
 
-    override var rootUri: String = "/dashboard"
+    override var rootUri: String = "/dashboard/configuration"
+
     override val childGetUris: MutableList<String> = mutableListOf()
     override val childPostUris: MutableList<String> = mutableListOf()
-    override val templatePath: String = "/templates/dashboard.vtl"
-    override val pageTitleSubstring: String = "Dashboard"
+    override val templatePath: String = "/templates/edit_config.vtl"
+    override val pageTitleSubstring: String = "Config Editor"
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = false
 
     override fun initSessionBoolAttributes(session: Session) {}
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for DASHBOARD page")
-        var model = HashMap<String, Any>()
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CONFIG_EDITOR page")
+        val model = HashMap<String, Any>()
         model.put("template", templatePath)
         TacusciAPI.injectAPIInstances(request, response, model)
+
         Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
-        model = TacusciAPI.injectAPIInstances(request, response, model)
+
         return ModelAndView(model, layoutTemplate)
     }
 
     override fun post(request: Request, response: Response): Response {
-        //TODO: IMPLEMENT THIS - 2017-05-24 Why? Silly past me...
         return response
     }
 }

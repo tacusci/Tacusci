@@ -35,8 +35,8 @@ package app
 
 import api.core.TacusciAPI
 import app.core.controllers.ControllerManager
-import app.core.core.controllers.Web
-import app.core.core.handlers.GroupHandler
+import app.core.Web
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
@@ -44,12 +44,10 @@ import database.models.Group
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
-import ro.fortsoft.pf4j.DefaultPluginManager
 import spark.Spark.*
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
-import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
 

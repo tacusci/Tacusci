@@ -27,10 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
+import app.core.Web
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.ResetPasswordDAO
@@ -216,7 +216,7 @@ class ResetPasswordController : Controller {
 
     private fun checkAuthHashExpired(authHash: String): Boolean {
         var timeoutInSeconds = 1000
-        val secondsTimeout = Config.getProperty("reset_password_authhash_timeout_seconds")
+        val secondsTimeout = Config.getProperty("reset-password-authhash-timeout-seconds")
         try {
             timeoutInSeconds *= Integer.parseInt(secondsTimeout)
         } catch (e: Exception) {

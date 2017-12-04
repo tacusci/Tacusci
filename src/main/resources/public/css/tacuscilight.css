@@ -113,6 +113,14 @@ submit-link:focus {
     margin-top: 0;
 }
 
+.configuration-setting-title {
+    color: rgb(95, 97, 102);
+    width: 250px;
+    min-width: 70px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+}
+
 .button-success,
         .button-error,
         .button-warning,

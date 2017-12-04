@@ -46,12 +46,13 @@ import java.util.regex.Pattern
 
 open class Config {
 
+    //class itself becomes a Properties object to inherit some built in methods
     companion object props : LinkedProperties() {
 
         var fileWatcher = FileWatcher(File(""))
         var propertiesFile = File("tacusci.properties")
 
-        private fun getDefaultPropertiesList(): List<Pair<String, String>> {
+        fun getDefaultPropertiesList(): List<Pair<String, String>> {
             return listOf(Pair("server-address", "localhost"),
                     Pair("port", "1025"),
                     Pair("using-ssl-on-proxy", "false"),
@@ -61,14 +62,15 @@ open class Config {
                     Pair("root-password", "Password1234!"),
                     Pair("root-email", ""),
                     Pair("color-theme", "dark"),
-                    Pair("max-threads", ""),
-                    Pair("min-threads", ""),
+                    Pair("allow-signup", "false"),
+                    Pair("max-threads", "-1"),
+                    Pair("min-threads", "-1"),
                     Pair("max-db-connections", "8"),
-                    Pair("thread-idle-timeout", ""),
-                    Pair("session-idle-timeout", ""),
+                    Pair("thread-idle-timeout", "-1"),
+                    Pair("session-idle-timeout", "-1"),
                     Pair("log-file", "tacusci.log"),
                     Pair("smtp-server-host", ""),
-                    Pair("smtp-server-port", ""),
+                    Pair("smtp-server-port", "-1"),
                     Pair("smtp-account-username", ""),
                     Pair("smtp-account-password", ""),
                     Pair("smtp-use-ttls", "false"),
@@ -78,7 +80,7 @@ open class Config {
                     Pair("plugins-folder", ""),
                     Pair("page-title-divider", "|"),
                     Pair("robots-file", ""),
-                    Pair("reset-password-authhash-timeout-seconds", ""),
+                    Pair("reset-password-authhash-timeout-seconds", "-1"),
                     Pair("reset-password-from-address", ""),
                     Pair("reset-password-email-subject", ""),
                     Pair("reset-password-email-content-file", ""))
@@ -88,7 +90,7 @@ open class Config {
             val defaults: List<Pair<String, String>> = getDefaultPropertiesList()
             //TODO: this could probably be cleaned up more
             if (propertiesFile.doesNotExist()) {
-                defaults.forEach { pair -> this.setProperty(pair.first, pair.second) }
+                defaults.forEach { this.setProperty(it.first, it.second) }
                 storeAll()
             } else {
                 try {
@@ -117,6 +119,38 @@ open class Config {
 
         override fun getProperty(key: String, defaultValue: String): String {
             return super.getProperty(key, defaultValue)
+        }
+
+        fun getPropertyType(key: String): String {
+            var type = ""
+            //don't rely on currently set Property
+            val propertyValue = getDefaultProperty(key)
+
+            var isInteger = false
+            var isBoolean = false
+            var isString = false
+
+
+            try {
+                propertyValue.toInt()
+                //if it has gotten farther then the line above then the conversion has worked
+                isInteger = true
+            } catch (e: Exception) {
+                //this is just to check data type, so no need to log....
+            }
+
+            //checked and it looks like a conversion of the value 1 to boolean doesn't resolve true, but will double check
+            if (!isInteger && propertyValue.toLowerCase() == "true" ||  propertyValue.toLowerCase() == "false") isBoolean = true
+
+            if (!isInteger && !isBoolean) isString = true
+
+            when (true) {
+                isInteger -> type = "integer"
+                isBoolean -> type = "boolean"
+                isString -> type = "string"
+            }
+
+            return type
         }
 
         fun encryptStoredPassword() {

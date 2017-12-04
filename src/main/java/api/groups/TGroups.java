@@ -1,7 +1,7 @@
 package api.groups;
 
 import api.core.TAPIClass;
-import app.core.core.handlers.GroupHandler;
+import app.core.handlers.GroupHandler;
 import database.models.Group;
 import database.models.User;
 import spark.Request;

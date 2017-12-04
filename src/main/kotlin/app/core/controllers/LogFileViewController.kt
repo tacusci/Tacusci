@@ -27,11 +27,10 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.core.controllers
+package app.core.controllers
 
 import api.core.TacusciAPI
-import app.core.controllers.Controller
-import app.core.controllers.UserManagementController
+import app.core.Web
 import app.core.handlers.UserHandler
 import extensions.fuzzySearchTokenSortPartialRatio
 import extensions.isNullOrBlankOrEmpty
@@ -117,7 +116,7 @@ class LogFileViewController : Controller {
         val refreshForm = form().withId(formName).withName(formName).withClass("pure-form").withHref(rootUri).withMethod("post").with(
                 fieldset().with(
                 input().withId("hashid").withName("hashid").withType("text").withValue(hash).isHidden,
-                label("Last    ").attr("for", "lines_to_show"),
+                label("Last    ").withClass("theme-shade").attr("for", "lines_to_show"),
                 input().withId("lines_to_show").withName("lines_to_show").withType("text").withValue(session.attribute("lines_to_show")),
                         label("    lines of ${ logFile.absolutePath }. Only show lines with text    ").withClass("theme-shade").attr("for", "text_to_show"),
                 input().withId("text_to_show").withName("text_to_show").withType("text").withValue(session.attribute("text_to_show")),

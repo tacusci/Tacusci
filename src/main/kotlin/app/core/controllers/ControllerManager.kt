@@ -29,8 +29,8 @@
 
 package app.core.controllers
 
-import app.core.core.controllers.*
-import app.core.core.handlers.GroupHandler
+import app.core.Web
+import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.RoutePermissionDAO
@@ -47,10 +47,10 @@ import utils.Config
 
 object ControllerManager : KLogging() {
 
-    val baseControllers = listOf(DashboardController(), RegisterController(), UserManagementController(),
+    private val baseControllers = listOf(DashboardController(), RegisterController(), UserManagementController(),
                                     LogFileViewController(), PageManagementController(), TemplateManagementController(),
                                         LoginController(), ProfileController(), ResetPasswordController(),
-                                            ForgottenPasswordController(), GroupManagementController())
+                                            ForgottenPasswordController(), GroupManagementController(), ConfigEditorController())
     val layoutTemplate = "/templates/layout.vtl"
 
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }

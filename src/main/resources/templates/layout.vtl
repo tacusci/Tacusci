@@ -60,10 +60,11 @@
                     #if ($TGroups.userInGroup($TUsers.getLoggedInUser(), "dashboard_access"))
                         <li class="pure-menu-item"><a class="pure-menu-link" href=$dashboard_link_address>Dashboard</a></li>
                     #end
-
                     #if (!$TUsers.isLoggedIn())
                         <li class="pure-menu-item"><a class="pure-menu-link" href=$login_link_address>Login</a></li>
-                        <li class="pure-menu-item"><a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a></li>
+                        #if ($TConfig.getProperty("allow-signup").toBoolean())
+                            <li class="pure-menu-item"><a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a></li>
+                        #end
                     #else
                         <li class="pure-menu-item"><a class="pure-menu-link" href=$profile_link_address>$TUsers.getLoggedInUsername()</a></li>
                     #end
