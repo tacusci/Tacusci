@@ -27,22 +27,26 @@
   ~  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
   -->
 
-<div class="pure-g">
+<div class="pure-g centered">
     <div class="pure-u-24-24">
 
-        <form class="pure-form pure-form-aligned">
+        <form id="config_form" name="config_form" class="pure-form pure-form-aligned" href=$TRequest.getRequestURI() method="post">
+            <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("config_form") hidden>
+            <input name="formName" value="config_form" hidden>
             <fieldset>
                     #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
                         #set($configName = $configPropertyPair.getFirst())
                         #if ($TConfig.getPropertyType($configName).equals("string"))
                             <div class="pure-control-group">
                                 <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
-                                <input id="$configName.toLowerCase()_input" type="text" value=$TConfig.getProperty($configName)>
+                                <input id="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
                             </div>
                         #end
                     #end
                 <div class="pure-controls">
-                    <button type="submit" class="pure-button pure-button-primary">Update Settings</button>
+                    <button type="submit" class="pure-button pure-button-primary">Update Settings</button><br>
+                    <br>
+                    <label class="theme-shade">(will restart server)</label>
                 </div>
             </fieldset>
         </form>
