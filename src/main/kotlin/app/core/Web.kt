@@ -63,7 +63,10 @@ object Web : KLogging() {
 
         model.put("home_link_address", "/")
         model.put("login_link_address", "/login")
-        model.put("sign_up_link_address", "/register")
+
+        //if the configuration states that user side registrations are allowed add the link
+        if (Config.getProperty("allow-signup").toBoolean())
+            model.put("sign_up_link_address", "/register")
 
         if (UserHandler.isLoggedIn(request)) {
             val username = UserHandler.loggedInUsername(request)
