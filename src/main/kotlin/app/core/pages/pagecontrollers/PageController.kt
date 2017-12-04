@@ -50,7 +50,7 @@ object PageController : KLogging() {
 
     val pages = mutableListOf<Page>()
 
-    fun initIndex() {
+    private fun initIndex() {
         val index = Page()
         index.title = "Index"
         index.pageRoute = "/"

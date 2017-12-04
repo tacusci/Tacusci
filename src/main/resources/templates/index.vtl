@@ -29,6 +29,7 @@
 <html>
     <head>
         <link rel="icon" href=""/>
+        <title>$title</title>
     </head>
     <body>
         <nav>
@@ -40,7 +41,9 @@
 
             #if (!$TUsers.isLoggedIn())
                 <a class="pure-menu-link" href=$login_link_address>Login</a>
-                <a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a>
+                #if ($Config.getProperty("allow-signup").toBoolean())
+                    <a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a>
+                #end
             #else
                 <a class="pure-menu-link" href=$profile_link_address>$TUsers.getLoggedInUsername()</a>
             #end
