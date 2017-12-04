@@ -55,7 +55,7 @@ import javax.enterprise.inject.Model
 object Web : KLogging() {
 
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
-        model.put("title", "${Config.getProperty("page_title")} ${Config.getProperty("page-title-divider")} $pageTitleSubstring")
+        model.put("title", "${Config.getProperty("page-title")} ${Config.getProperty("page-title-divider")} $pageTitleSubstring")
         return model
     }
 
@@ -78,7 +78,7 @@ object Web : KLogging() {
 
     fun get_robotstxt(request: Request): String {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ROBOTS.txt page")
-        val robotsFile = File(Config.getProperty("robots_file"))
+        val robotsFile = File(Config.getProperty("robots-file"))
         if (robotsFile.exists()) {
             return pre().attr("style", "word-wrap: break-word; white-space: pre-wrap;").withText(
                     robotsFile.readText()
