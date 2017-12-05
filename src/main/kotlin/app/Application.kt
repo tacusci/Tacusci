@@ -161,6 +161,7 @@ class Application {
     */
 
     fun restartServer() {
+        logger.info("Restarting...")
         restarting = true
         thread {
             Thread.sleep(300)

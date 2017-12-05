@@ -79,21 +79,32 @@ class ConfigEditorController : Controller {
 
     private fun post_config_form(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for EDIT_CONFIGURATION page")
+
+        var anyPropertyUpdated = false
+
         if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
             //for each input field in the config form
             request.queryParams().forEach {
                 if (it != "formName" && it != "hashid") {
+                    val propertyName = it.replace("_input", "")
                     //get the value from the input field
                     val propertyValueFromFormSubmission = request.queryParams(it)
                     //get the current value from the saved config
-                    val currentPropertyValue = Config.getProperty(it.replace("_input", ""))
+                    val currentPropertyValue = Config.getProperty(propertyName)
 
                     //if they are not the same, then update the saved config with it
                     if (currentPropertyValue != propertyValueFromFormSubmission) {
-                        Config.setProperty(it.replace("_input", ""), propertyValueFromFormSubmission)
-                        TacusciAPI.getApplication().restartServer()
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
+                        Config.setProperty(propertyName, propertyValueFromFormSubmission)
+                        anyPropertyUpdated = true
                     }
                 }
+            }
+            if (anyPropertyUpdated) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config, restarting server...")
+                //making config changes persistent
+                Config.storeAll()
+                TacusciAPI.getApplication().restartServer()
             }
         }
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
