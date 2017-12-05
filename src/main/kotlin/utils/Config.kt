@@ -80,6 +80,7 @@ open class Config {
                     Pair("response-pages-folder", ""),
                     Pair("plugins-folder", ""),
                     Pair("page-title-divider", "|"),
+                    Pair("page-title-format", "<page-title> , <page-title-substring>"),
                     Pair("robots-file", ""),
                     Pair("reset-password-authhash-timeout-seconds", "-1"),
                     Pair("reset-password-from-address", ""),
