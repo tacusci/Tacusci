@@ -38,8 +38,16 @@
                         #set($configName = $configPropertyPair.getFirst())
                         #if ($TConfig.getPropertyType($configName).equals("string") || $TConfig.getPropertyType($configName).equals("integer"))
                             <div class="pure-control-group">
-                                <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
+                                <label class="configuration-setting-title" for="$configName.toLowerCase()_input">$configName</label>
                                 <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
+                            </div>
+                        #end
+
+                        #if ($TConfig.getPropertyType($configName).equals("boolean"))
+                            <div clas="pure-controls">
+                                <label class="pure-checkbox" for="$configName.toLowerCase()_checkbox">$configName</label>
+                                <input type="hidden" id="$configName.toLowerCase()_checkbox" name="$configName.toLowerCase()_checkbox.hidden" value="$configName.toLowerCase()">
+                                <input type="checkbox" id="$configName.toLowerCase()_checkbox" name="$configName.toLowerCase()_checkbox" value="$configName.toLowerCase()" #if ($TConfig.getProperty($configName).tpBoolean()) checked="" #end>
                             </div>
                         #end
                     #end

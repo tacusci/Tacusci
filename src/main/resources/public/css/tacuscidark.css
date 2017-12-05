@@ -4,6 +4,10 @@ html {
     font-size: 9.5pt;
 }
 
+label {
+    color: #cec8c8;
+}
+
 .theme-shade {
     color: #cec8c8;
 }
