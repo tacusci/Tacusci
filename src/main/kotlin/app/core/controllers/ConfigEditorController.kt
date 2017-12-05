@@ -38,6 +38,7 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 
 class ConfigEditorController : Controller {
 
@@ -77,7 +78,21 @@ class ConfigEditorController : Controller {
 
     private fun post_config_form(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for EDIT_CONFIGURATION page")
-        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {}
+        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
+            //for each input field in the config form
+            request.queryParams().forEach {
+                if (it != "formName" && it != "hashid") {
+                    //get the value from the input field
+                    val propertyValueFromFormSubmission = request.queryParams(it)
+                    //get the current value from the saved config
+                    val currentPropertyValue = Config.getProperty(it.replace("_input", ""))
+
+                    //if they are not the same, then update the saved config with it
+                    if (currentPropertyValue != propertyValueFromFormSubmission)
+                        println(propertyValueFromFormSubmission)
+                }
+            }
+        }
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
         response.managedRedirect(request, rootUri)
         return response
