@@ -91,12 +91,14 @@ class ConfigEditorController : Controller {
                     val propertyValueFromFormSubmission = request.queryParams(it)
                     //get the current value from the saved config
                     val currentPropertyValue = Config.getProperty(propertyName)
-
-                    //if they are not the same, then update the saved config with it
-                    if (currentPropertyValue != propertyValueFromFormSubmission) {
-                        logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
-                        Config.setProperty(propertyName, propertyValueFromFormSubmission)
-                        anyPropertyUpdated = true
+                    //if the property if of type string
+                    if (Config.getPropertyType(propertyName) == "string") {
+                        //if they are not the same, then update the saved config with it
+                        if (currentPropertyValue != propertyValueFromFormSubmission) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
+                            Config.setProperty(propertyName, propertyValueFromFormSubmission)
+                            anyPropertyUpdated = true
+                        }
                     }
                 }
             }
