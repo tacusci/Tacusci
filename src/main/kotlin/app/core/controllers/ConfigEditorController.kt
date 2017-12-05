@@ -77,8 +77,7 @@ class ConfigEditorController : Controller {
 
     private fun post_config_form(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for EDIT_CONFIGURATION page")
-        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
-        }
+        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {}
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
         response.managedRedirect(request, rootUri)
         return response
