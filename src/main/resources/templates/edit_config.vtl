@@ -36,14 +36,7 @@
             <fieldset>
                     #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
                         #set($configName = $configPropertyPair.getFirst())
-                        #if ($TConfig.getPropertyType($configName).equals("string"))
-                            <div class="pure-control-group">
-                                <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
-                                <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
-                            </div>
-                        #end
-
-                        #if ($TConfig.getPropertyType($configName).equals("integer"))
+                        #if ($TConfig.getPropertyType($configName).equals("string") || $TConfig.getPropertyType($configName).equals("integer"))
                             <div class="pure-control-group">
                                 <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
                                 <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>

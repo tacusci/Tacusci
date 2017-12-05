@@ -92,7 +92,7 @@ class ConfigEditorController : Controller {
                     //get the current value from the saved config
                     val currentPropertyValue = Config.getProperty(propertyName)
                     //if the property if of type string
-                    if (Config.getPropertyType(propertyName) == "string") {
+                    if (Config.getPropertyType(propertyName) == "string" || Config.getPropertyType(propertyName) == "integer") {
                         //if they are not the same, then update the saved config with it
                         if (currentPropertyValue != propertyValueFromFormSubmission) {
                             logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
