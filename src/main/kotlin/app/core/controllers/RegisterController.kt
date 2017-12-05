@@ -91,44 +91,49 @@ class RegisterController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for REGISTER page")
 
         if (Web.getFormHash(request, "register_form") == request.queryParams("hashid")) {
-            val fullName = request.queryParams("full_name")
-            val username = request.queryParams("username")
-            val password = request.queryParams("password")
-            val repeatedPassword = request.queryParams("repeat_password")
-            val email = request.queryParams("email")
 
-            request.session().attribute("user_created_successfully", false)
+            if (!Config.getProperty("allow-signup")) {
+                val fullName = request.queryParams("full_name")
+                val username = request.queryParams("username")
+                val password = request.queryParams("password")
+                val repeatedPassword = request.queryParams("repeat_password")
+                val email = request.queryParams("email")
 
-            val fullNameInputIsValid = Validation.matchFullNamePattern(fullName)
-            val usernameInputIsValid = Validation.matchUsernamePattern(username)
-            val passwordInputIsValid = Validation.matchPasswordPattern(password)
-            val repeatedPasswordIsValid = Validation.matchPasswordPattern(repeatedPassword)
-            val emailIsValid = Validation.matchEmailPattern(email)
+                request.session().attribute("user_created_successfully", false)
 
-            if (!fullNameInputIsValid) request.session().attribute("full_name_field_error", true) else request.session().attribute("full_name_field_error", false)
-            if (!usernameInputIsValid) request.session().attribute("username_field_error", true) else request.session().attribute("username_field_error", false)
-            if (!passwordInputIsValid) request.session().attribute("password_field_error", true) else request.session().attribute("password_field_error", false)
-            if (!repeatedPasswordIsValid) request.session().attribute("repeated_password_field_error", true) else request.session().attribute("repeated_password_field_error", false)
-            if (!emailIsValid) request.session().attribute("email_field_error", true) else request.session().attribute("email_field_error", false)
+                val fullNameInputIsValid = Validation.matchFullNamePattern(fullName)
+                val usernameInputIsValid = Validation.matchUsernamePattern(username)
+                val passwordInputIsValid = Validation.matchPasswordPattern(password)
+                val repeatedPasswordIsValid = Validation.matchPasswordPattern(repeatedPassword)
+                val emailIsValid = Validation.matchEmailPattern(email)
 
-            //TODO: MUST ADD CHECK FOR PREEXISTING EMAIL
+                if (!fullNameInputIsValid) request.session().attribute("full_name_field_error", true) else request.session().attribute("full_name_field_error", false)
+                if (!usernameInputIsValid) request.session().attribute("username_field_error", true) else request.session().attribute("username_field_error", false)
+                if (!passwordInputIsValid) request.session().attribute("password_field_error", true) else request.session().attribute("password_field_error", false)
+                if (!repeatedPasswordIsValid) request.session().attribute("repeated_password_field_error", true) else request.session().attribute("repeated_password_field_error", false)
+                if (!emailIsValid) request.session().attribute("email_field_error", true) else request.session().attribute("email_field_error", false)
 
-            if (usernameInputIsValid) {
-                if (UserHandler.userExists(username)) {
-                    request.session().attribute("username_not_available_error", true)
-                    request.session().attribute("username_not_available", username)
+                //TODO: MUST ADD CHECK FOR PREEXISTING EMAIL
+
+                if (usernameInputIsValid) {
+                    if (UserHandler.userExists(username)) {
+                        request.session().attribute("username_not_available_error", true)
+                        request.session().attribute("username_not_available", username)
+                    }
                 }
-            }
 
-            if (passwordInputIsValid && repeatedPasswordIsValid) {
-                if (password != repeatedPassword) request.session().attribute("passwords_mismatch_error", true) else request.session().attribute("passwords_mismatch_error", false)
-            }
+                if (passwordInputIsValid && repeatedPasswordIsValid) {
+                    if (password != repeatedPassword) request.session().attribute("passwords_mismatch_error", true) else request.session().attribute("passwords_mismatch_error", false)
+                }
 
-            if (fullNameInputIsValid && usernameInputIsValid && passwordInputIsValid && repeatedPasswordIsValid && emailIsValid && (password == repeatedPassword)) {
-                val user = User(-1, -1, -1, fullName, username, password, email, 0, false)
-                request.session().attribute("user_created_successfully", true)
-                UserHandler.createUser(user)
-                sendConfirmationEmail(user)
+                if (fullNameInputIsValid && usernameInputIsValid && passwordInputIsValid && repeatedPasswordIsValid && emailIsValid && (password == repeatedPassword)) {
+                    val user = User(-1, -1, -1, fullName, username, password, email, 0, false)
+                    request.session().attribute("user_created_successfully", true)
+                    UserHandler.createUser(user)
+                    sendConfirmationEmail(user)
+                }
+            } else {
+                logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted a valid register form, but user side signups have been disabled")
             }
         } else {
             logger.warn("${UserHandler.getSessionIdentifier(request)} -> has submitted an invalid register form...")
