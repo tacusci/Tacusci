@@ -13,15 +13,16 @@
       <configuration version="2" platform="JVM 1.6" useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
-          <option name="languageVersion" value="1.2" />
-          <option name="apiVersion" value="1.2" />
-          <option name="pluginOptions">
-            <array />
-          </option>
+          <option name="jvmTarget" value="1.6" />
+          <option name="languageVersion" value="1.1" />
+          <option name="apiVersion" value="1.1" />
           <option name="pluginClasspaths">
             <array />
           </option>
           <option name="coroutinesWarn" value="true" />
+          <option name="pluginOptions">
+            <array />
+          </option>
         </compilerArguments>
       </configuration>
     </facet>
@@ -42,7 +43,6 @@
     <orderEntry type="library" name="mysql-connector-java-5.1.40-bin" level="project" />
     <orderEntry type="library" name="javax.activation:activation:1.1.1" level="project" />
     <orderEntry type="library" name="javax.mail:javax.mail-api:1.5.6" level="project" />
-    <orderEntry type="library" name="TacusciPlugin" level="project" />
     <orderEntry type="library" name="Maven: com.sparkjava:spark-core:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.4.6.v20170531" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />

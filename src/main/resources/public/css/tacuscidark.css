@@ -121,6 +121,10 @@ submit-link:focus {
     margin-right: 15px;
 }
 
+.configuration-setting-field {
+    color: #000000
+}
+
 .button-success,
         .button-error,
         .button-warning,
