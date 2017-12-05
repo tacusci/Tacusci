@@ -92,7 +92,7 @@ class RegisterController : Controller {
 
         if (Web.getFormHash(request, "register_form") == request.queryParams("hashid")) {
 
-            if (!Config.getProperty("allow-signup")) {
+            if (!Config.getProperty("allow-signup").toBoolean()) {
                 val fullName = request.queryParams("full_name")
                 val username = request.queryParams("username")
                 val password = request.queryParams("password")
