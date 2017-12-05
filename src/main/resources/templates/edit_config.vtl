@@ -42,6 +42,13 @@
                                 <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
                             </div>
                         #end
+
+                        #if ($TConfig.getPropertyType($configName).equals("integer"))
+                            <div class="pure-control-group">
+                                <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
+                                <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
+                            </div>
+                        #end
                     #end
                 <div class="pure-controls">
                     <button type="submit" class="pure-button pure-button-primary">Update Settings</button><br>
