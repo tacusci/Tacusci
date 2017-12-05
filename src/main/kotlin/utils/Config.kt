@@ -65,6 +65,7 @@ open class Config {
                     Pair("allow-signup", "false"),
                     Pair("max-threads", "-1"),
                     Pair("min-threads", "-1"),
+                    //maximum db connections in pool allowed
                     Pair("max-db-connections", "8"),
                     Pair("thread-idle-timeout", "-1"),
                     Pair("session-idle-timeout", "-1"),
