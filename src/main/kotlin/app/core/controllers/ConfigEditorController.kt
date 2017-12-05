@@ -29,6 +29,7 @@
 
 package app.core.controllers
 
+import api.core.TServer
 import api.core.TacusciAPI
 import app.core.Web
 import app.core.handlers.UserHandler
@@ -88,8 +89,10 @@ class ConfigEditorController : Controller {
                     val currentPropertyValue = Config.getProperty(it.replace("_input", ""))
 
                     //if they are not the same, then update the saved config with it
-                    if (currentPropertyValue != propertyValueFromFormSubmission)
-                        println(propertyValueFromFormSubmission)
+                    if (currentPropertyValue != propertyValueFromFormSubmission) {
+                        Config.setProperty(it.replace("_input", ""), propertyValueFromFormSubmission)
+                        TacusciAPI.getApplication().restartServer()
+                    }
                 }
             }
         }
