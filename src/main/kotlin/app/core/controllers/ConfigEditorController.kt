@@ -32,6 +32,7 @@ package app.core.controllers
 import api.core.TacusciAPI
 import app.core.Web
 import app.core.handlers.UserHandler
+import extensions.managedRedirect
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
@@ -49,7 +50,7 @@ class ConfigEditorController : Controller {
     override val templatePath: String = "/templates/edit_config.vtl"
     override val pageTitleSubstring: String = "Config Editor"
     override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {}
 
@@ -66,6 +67,20 @@ class ConfigEditorController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
+        when (request.queryParams("formName")) {
+            "config_form" -> return post_config_form(request, response)
+        }
+        //if none of the form names match go back to this page...
+        response.managedRedirect(request, rootUri)
+        return response
+    }
+
+    private fun post_config_form(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for EDIT_CONFIGURATION page")
+        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
+        }
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
