@@ -86,7 +86,7 @@ class ConfigEditorController : Controller {
             //for each input field in the config form
             request.queryParams().forEach {
                 if (it != "formName" && it != "hashid") {
-                    val propertyName = it.replace("_input", "").replace("_hidden_checkbox", "").replace("_checkbox", "")
+                    val propertyName = it.replace("_option_checkbox_input", "").replace("_input", "")
                     //get the value from the input field
                     val propertyValueFromFormSubmission = request.queryParams(it)
                     //get the current value from the saved config
@@ -118,8 +118,7 @@ class ConfigEditorController : Controller {
 
     private fun getIsChecked(request: Request, propertyName: String): Boolean {
         var isChecked = false
-        if (request.queryParams().contains("allow-signup_checkbox"))
-            println(request.queryParams("allow-signup_checkbox"))
+        println(request.queryParams("${propertyName}_option_checkbox_input"))
         return isChecked
     }
 }
