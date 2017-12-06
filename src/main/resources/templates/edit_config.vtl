@@ -45,9 +45,10 @@
 
                         #if ($TConfig.getPropertyType($configName).equals("boolean"))
                             <div clas="pure-controls">
-                                <label class="pure-checkbox" for="$configName.toLowerCase()_checkbox">$configName</label>
-                                <input type="hidden" id="$configName.toLowerCase()_checkbox" name="$configName.toLowerCase()_checkbox.hidden" value="$configName.toLowerCase()">
-                                <input type="checkbox" id="$configName.toLowerCase()_checkbox" name="$configName.toLowerCase()_checkbox" value="$configName.toLowerCase()" #if ($TConfig.getProperty($configName).tpBoolean()) checked="" #end>
+                                <label class="pure-checkbox" for="$configName.toLowerCase()">$configName</label>
+                                <input type="hidden" id="$configName.toLowerCase()" name="$configName.toLowerCase()_checkbox.hidden" value="$configName.toLowerCase()">
+                                <input type="checkbox" id="$configName.toLowerCase()" name="$configName.toLowerCase()_checkbox" value="$configName.toLowerCase()"
+                                       #if ($TConfig.getProperty($configName).equals("true")) checked="" #end)>
                             </div>
                         #end
                     #end
