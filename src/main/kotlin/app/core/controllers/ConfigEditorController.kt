@@ -85,12 +85,12 @@ class ConfigEditorController : Controller {
         if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
             //for each input field in the config form
             request.queryParams().forEach {
-                if (it != "formName" && it != "hashid") {
-                    val propertyName = it.replace("_option_checkbox_input", "").replace("_input", "")
+                if (it != "formName" && it != "hashid" && !it.contains("_option_checkbox_input")) {
+                    var propertyName = it.replace("_option_hidden_checkbox_input", "").replace("_input", "")
                     //get the value from the input field
-                    val propertyValueFromFormSubmission = request.queryParams(it)
+                    var propertyValueFromFormSubmission = request.queryParams(it)
                     //get the current value from the saved config
-                    val currentPropertyValue = Config.getProperty(propertyName)
+                    var currentPropertyValue = Config.getProperty(propertyName)
                     //if the property if of type string
                     if (Config.getPropertyType(propertyName) == "string" || Config.getPropertyType(propertyName) == "integer") {
                         //if they are not the same, then update the saved config with it
@@ -100,7 +100,17 @@ class ConfigEditorController : Controller {
                             anyPropertyUpdated = true
                         }
                     } else if (Config.getPropertyType(propertyName) == "boolean") {
-                        getIsChecked(request, propertyName)
+                        //if there is a hidden checkbox, then we know the property exists at all
+                        propertyName = request.queryParams("${propertyName}_option_hidden_checkbox_input")
+                        //if there is a regular version of the checkbox, we know it was ticked on the form
+                        propertyValueFromFormSubmission = request.queryParams().contains("${propertyName}_option_checkbox_input").toString()
+                        currentPropertyValue = Config.getProperty(propertyName)
+
+                        if (currentPropertyValue != propertyValueFromFormSubmission) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
+                            Config.setProperty(propertyName, propertyValueFromFormSubmission)
+                            anyPropertyUpdated = true
+                        }
                     }
                 }
             }
@@ -114,11 +124,5 @@ class ConfigEditorController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
         response.managedRedirect(request, rootUri)
         return response
-    }
-
-    private fun getIsChecked(request: Request, propertyName: String): Boolean {
-        var isChecked = false
-        println(request.queryParams("${propertyName}_option_checkbox_input"))
-        return isChecked
     }
 }
