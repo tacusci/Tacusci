@@ -95,7 +95,7 @@ class ConfigEditorController : Controller {
                     if (Config.getPropertyType(propertyName) == "string" || Config.getPropertyType(propertyName) == "integer") {
                         //if they are not the same, then update the saved config with it
                         if (currentPropertyValue != propertyValueFromFormSubmission) {
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName from $currentPropertyValue to $propertyValueFromFormSubmission")
                             Config.setProperty(propertyName, propertyValueFromFormSubmission)
                             anyPropertyUpdated = true
                         }
@@ -105,9 +105,9 @@ class ConfigEditorController : Controller {
                         //if there is a regular version of the checkbox, we know it was ticked on the form
                         propertyValueFromFormSubmission = request.queryParams().contains("${propertyName}_option_checkbox_input").toString()
                         currentPropertyValue = Config.getProperty(propertyName)
-
+                        //if they are not the same, then update the saved config with it
                         if (currentPropertyValue != propertyValueFromFormSubmission) {
-                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName")
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName from $currentPropertyValue to $propertyValueFromFormSubmission")
                             Config.setProperty(propertyName, propertyValueFromFormSubmission)
                             anyPropertyUpdated = true
                         }
