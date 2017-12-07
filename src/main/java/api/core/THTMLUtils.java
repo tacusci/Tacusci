@@ -34,7 +34,6 @@ public class THTMLUtils extends TAPIClass {
     }
 
     public String formatForEditing(String content) {
-        System.out.println(content);
         if (content != null)
             return content.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
         else

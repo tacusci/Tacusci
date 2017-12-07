@@ -4,6 +4,10 @@ html {
     font-size: 9.5pt;
 }
 
+label {
+    color: #cec8c8;
+}
+
 .theme-shade {
     color: #cec8c8;
 }
@@ -119,6 +123,10 @@ submit-link:focus {
     min-width: 70px;
     margin-bottom: 5px;
     margin-right: 15px;
+}
+
+.configuration-setting-field {
+    color: #000000
 }
 
 .button-success,

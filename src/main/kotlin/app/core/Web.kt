@@ -55,7 +55,11 @@ import javax.enterprise.inject.Model
 object Web : KLogging() {
 
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
-        model.put("title", "${Config.getProperty("page-title")} ${Config.getProperty("page-title-divider")} $pageTitleSubstring")
+        var pageTitleFormat = Config.getProperty("page-title-format")
+        pageTitleFormat = pageTitleFormat.replace("<page-title>", Config.getProperty("page-title"))
+                        .replace(",", Config.getProperty("page-title-divider"))
+                        .replace("<page-title-substring>", pageTitleSubstring)
+        model.put("title", pageTitleFormat)
         return model
     }
 

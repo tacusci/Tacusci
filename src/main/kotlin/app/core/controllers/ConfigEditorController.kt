@@ -29,14 +29,17 @@
 
 package app.core.controllers
 
+import api.core.TServer
 import api.core.TacusciAPI
 import app.core.Web
 import app.core.handlers.UserHandler
+import extensions.managedRedirect
 import mu.KLogging
 import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
+import utils.Config
 
 class ConfigEditorController : Controller {
 
@@ -49,7 +52,7 @@ class ConfigEditorController : Controller {
     override val templatePath: String = "/templates/edit_config.vtl"
     override val pageTitleSubstring: String = "Config Editor"
     override val handlesGets: Boolean = true
-    override val handlesPosts: Boolean = false
+    override val handlesPosts: Boolean = true
 
     override fun initSessionBoolAttributes(session: Session) {}
 
@@ -66,6 +69,60 @@ class ConfigEditorController : Controller {
     }
 
     override fun post(request: Request, response: Response): Response {
+        when (request.queryParams("formName")) {
+            "config_form" -> return post_config_form(request, response)
+        }
+        //if none of the form names match go back to this page...
+        response.managedRedirect(request, rootUri)
+        return response
+    }
+
+    private fun post_config_form(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for EDIT_CONFIGURATION page")
+
+        var anyPropertyUpdated = false
+
+        if (Web.getFormHash(request, "config_form") == request.queryParams("hashid")) {
+            //for each input field in the config form
+            request.queryParams().forEach {
+                if (it != "formName" && it != "hashid" && !it.contains("_option_checkbox_input")) {
+                    var propertyName = it.replace("_option_hidden_checkbox_input", "").replace("_input", "")
+                    //get the value from the input field
+                    var propertyValueFromFormSubmission = request.queryParams(it)
+                    //get the current value from the saved config
+                    var currentPropertyValue = Config.getProperty(propertyName)
+                    //if the property if of type string
+                    if (Config.getPropertyType(propertyName) == "string" || Config.getPropertyType(propertyName) == "integer") {
+                        //if they are not the same, then update the saved config with it
+                        if (currentPropertyValue != propertyValueFromFormSubmission) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName from $currentPropertyValue to $propertyValueFromFormSubmission")
+                            Config.setProperty(propertyName, propertyValueFromFormSubmission)
+                            anyPropertyUpdated = true
+                        }
+                    } else if (Config.getPropertyType(propertyName) == "boolean") {
+                        //if there is a hidden checkbox, then we know the property exists at all
+                        propertyName = request.queryParams("${propertyName}_option_hidden_checkbox_input")
+                        //if there is a regular version of the checkbox, we know it was ticked on the form
+                        propertyValueFromFormSubmission = request.queryParams().contains("${propertyName}_option_checkbox_input").toString()
+                        currentPropertyValue = Config.getProperty(propertyName)
+                        //if they are not the same, then update the saved config with it
+                        if (currentPropertyValue != propertyValueFromFormSubmission) {
+                            logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config property: $propertyName from $currentPropertyValue to $propertyValueFromFormSubmission")
+                            Config.setProperty(propertyName, propertyValueFromFormSubmission)
+                            anyPropertyUpdated = true
+                        }
+                    }
+                }
+            }
+            if (anyPropertyUpdated) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> has changed config, restarting server...")
+                //making config changes persistent
+                Config.storeAll()
+                TacusciAPI.getApplication().restartServer()
+            }
+        }
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Redirecting to edit config page")
+        response.managedRedirect(request, rootUri)
         return response
     }
 }

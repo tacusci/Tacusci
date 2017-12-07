@@ -36,10 +36,19 @@
             <fieldset>
                     #foreach ($configPropertyPair in $TConfig.getAllDefaultPropertiesAndValues())
                         #set($configName = $configPropertyPair.getFirst())
-                        #if ($TConfig.getPropertyType($configName).equals("string"))
+                        #if ($TConfig.getPropertyType($configName).equals("string") || $TConfig.getPropertyType($configName).equals("integer"))
                             <div class="pure-control-group">
-                                <label class="configuration-setting-title" for="$configName.toLowerCase()">$configName</label>
-                                <input id="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
+                                <label class="configuration-setting-title" for="$configName.toLowerCase()_input">$configName</label>
+                                <input id="$configName.toLowerCase()_input" name="$configName.toLowerCase()_input" type="text" value='$TConfig.getProperty($configName)'>
+                            </div>
+                        #end
+
+                        #if ($TConfig.getPropertyType($configName).equals("boolean"))
+                            <div clas="pure-controls">
+                                <label class="pure-checkbox" for="$configName.toLowerCase()_option_checkbox_input">$configName</label>
+                                <input type="hidden" id="$configName.toLowerCase()_option_checkbox_input" name="$configName.toLowerCase()_option_hidden_checkbox_input" value="$configName.toLowerCase()">
+                                <input type="checkbox" id="$configName.toLowerCase()_option_checkbox_input" name="$configName.toLowerCase()_option_checkbox_input" value="$configName.toLowerCase()"
+                                       #if ($TConfig.getProperty($configName).equals("true")) checked #end>
                             </div>
                         #end
                     #end

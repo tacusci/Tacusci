@@ -27,28 +27,5 @@
  *  you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
  */
 
-package app.core.pages.partials
+package app.core.pages.includes
 
-import j2html.TagCreator.body
-import j2html.TagCreator.html
-import j2html.tags.Tag
-import spark.Request
-import spark.Response
-
-/**
- * Created by alewis on 15/05/2017.
- */
-interface PartialPage {
-
-    enum class PageType {
-        FOOTER
-    }
-
-    var id: Int
-    var title: String
-    var content: MutableList<Tag>
-    val type: Enum<PageType>
-
-    fun get(request: Request, response: Response): String
-    fun generateHtml(): String { return html().with(body().with(content)).render() }
-}

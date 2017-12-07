@@ -27,6 +27,8 @@ public class TacusciAPI {
         instance = application;
     }
 
+    public static Application getApplication() { return instance; }
+
     private static void init(Request request, Response response) {
         apiObjInstances.add(new Pair<>("TUsers", new TUsers(request, response)));
         apiObjInstances.add(new Pair<>("TForms", new TForms(request, response)));
