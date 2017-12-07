@@ -41,7 +41,7 @@
 
             #if (!$TUsers.isLoggedIn())
                 <a class="pure-menu-link" href=$login_link_address>Login</a>
-                #if ($Config.getProperty("allow-signup").toBoolean())
+                #if ($TConfig.getProperty("allow-signup").toLowerCase().equals("true"))
                     <a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a>
                 #end
             #else
