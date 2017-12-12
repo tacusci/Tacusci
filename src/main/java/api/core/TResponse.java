@@ -20,4 +20,6 @@ public class TResponse extends TAPIClass {
 
     public void redirect(String location) { ExtensionCollectionKt.managedRedirect(response, request, location); }
 
+    public Response getResponse() { return response; }
+
 }
