@@ -36,6 +36,7 @@ import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.PageDAO
 import database.models.Page
+import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
@@ -90,10 +91,10 @@ class PageManagementController : Controller {
                     model.put("template", "/templates/edit_page.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
                     val page = PageHandler.getPageById(request.params("page_id").toIntSafe())
-                    if (page.id == -1) response.redirect("/dashboard/page_management")
+                    if (page.id == -1) response.managedRedirect(request,"/dashboard/page_management")
                     model.put("pageToEdit", page)
                 } else {
-                    response.redirect("/dashboard/page_management")
+                    response.managedRedirect(request, "/dashboard/page_management")
                 }
             }
         }
@@ -110,7 +111,7 @@ class PageManagementController : Controller {
         pageToCreate.lastUpdatedDateTime = System.currentTimeMillis()
         pageToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         PageHandler.createPage(pageToCreate)
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -127,7 +128,7 @@ class PageManagementController : Controller {
         pageToEdit.lastUpdatedDateTime = System.currentTimeMillis()
         pageToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         PageHandler.updatePage(pageToEdit)
-        response.redirect(request.uri())
+        response.managedRedirect(request, request.uri())
         return response
     }
 
@@ -135,7 +136,7 @@ class PageManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_PAGE_FORM")
         val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PageDAO
         PageHandler.deletePage(pageDAO.getPageById(request.queryParams("page_id").toIntSafe()))
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -154,7 +155,7 @@ class PageManagementController : Controller {
             }
         }
 
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
