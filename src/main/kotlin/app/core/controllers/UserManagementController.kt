@@ -98,10 +98,10 @@ class UserManagementController : Controller {
                     model.put("template", "/templates/edit_user.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit User")
                     val user = UserHandler.getUserById(request.params("user_id").toIntSafe())
-                    if (user.id == -1) response.redirect(rootUri)
+                    if (user.id == -1) response.managedRedirect(request, rootUri)
                     model.put("userToEdit", user)
                 } else {
-                    response.redirect(rootUri)
+                    response.managedRedirect(request, rootUri)
                 }
             }
         }
@@ -115,7 +115,7 @@ class UserManagementController : Controller {
         userToCreate.email = request.queryParams("email")
         userToCreate.password = request.queryParams("password")
         UserHandler.createUser(userToCreate)
-        response.redirect(request.uri())
+        response.managedRedirect(request, request.uri())
         return response
     }
 
@@ -126,7 +126,7 @@ class UserManagementController : Controller {
                 UserHandler.userDAO.deleteUser(userToDelete)
             }
         }
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
