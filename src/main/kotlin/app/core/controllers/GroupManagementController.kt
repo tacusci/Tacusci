@@ -35,6 +35,7 @@ import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import database.models.Group
 import extensions.isNullOrBlankOrEmpty
+import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
@@ -94,10 +95,10 @@ class GroupManagementController : Controller {
                     model.put("template", "/templates/edit_group.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
                     val group = GroupHandler.groupDAO.getGroup(request.params(":group_id").toIntSafe())
-                    if (group.id == -1) response.redirect("/dashboard/group_management")
+                    if (group.id == -1) response.managedRedirect(request, "/dashboard/group_management")
                     model.put("groupToEdit", group)
                 } else {
-                    response.redirect("/dashboard/group_management")
+                    response.managedRedirect(request, "/dashboard/group_management")
                 }
             }
         }
@@ -116,7 +117,7 @@ class GroupManagementController : Controller {
                     if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
             }
         }
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -134,7 +135,7 @@ class GroupManagementController : Controller {
                     if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
             }
         }
-        response.redirect(request.uri())
+        response.managedRedirect(request, request.uri())
         return response
     }
 
@@ -145,7 +146,7 @@ class GroupManagementController : Controller {
                 GroupHandler.deleteGroup(groupToDelete)
             }
         }
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 

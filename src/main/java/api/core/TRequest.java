@@ -20,4 +20,6 @@ public class TRequest extends TAPIClass {
     public String getRequestURIParamValue(String paramName) { return request.params(paramName); }
 
     public Session getSession() { return request.session(); }
+
+    public Request getRequest() { return request; }
 }

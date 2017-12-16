@@ -38,6 +38,7 @@ import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.TemplateDAO
 import database.models.Template
+import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
 import spark.ModelAndView
@@ -110,7 +111,7 @@ class TemplateManagementController : Controller {
         templateToCreate.lastUpdatedDateTime = System.currentTimeMillis()
         templateToCreate.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         TemplateHandler.createTemplate(templateToCreate)
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -123,7 +124,7 @@ class TemplateManagementController : Controller {
         templateToEdit.lastUpdatedDateTime = System.currentTimeMillis()
         templateToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         TemplateHandler.updateTemplate(templateToEdit)
-        response.redirect(request.uri())
+        response.managedRedirect(request, request.uri())
         return response
     }
 
@@ -131,7 +132,7 @@ class TemplateManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_TEMPLATE_FORM")
         val templateDAO = DAOManager.getDAO(DAOManager.TABLE.TEMPLATES) as TemplateDAO
         TemplateHandler.deleteTemplate(templateDAO.getTemplateById(request.queryParams("template_id").toIntSafe()))
-        response.redirect(rootUri)
+        response.managedRedirect(request, rootUri)
         return response
     }
 

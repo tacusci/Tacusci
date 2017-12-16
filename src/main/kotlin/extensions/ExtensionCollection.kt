@@ -41,9 +41,6 @@ import java.io.InputStream
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
-import javax.xml.bind.DatatypeConverter
-import kotlin.experimental.and
 
 /**
  * Created by alewis on 15/11/2016.
@@ -98,6 +95,8 @@ fun Response.managedRedirect(request: Request, urlSuffix: String) {
 }
 
 fun Response.httpsRedirect(request: Request, urlSuffix: String) {
+    var routeToRedirectTo = request.url().replace(request.uri(), "").replace("http", "https") + urlSuffix
+    if (!routeToRedirectTo.contains("//")) routeToRedirectTo = routeToRedirectTo.replace("http:", "http://").replace("https:", "https://")
     redirect(request.url().replace(request.uri(), "").replace("http", "https") + urlSuffix)
 }
 
