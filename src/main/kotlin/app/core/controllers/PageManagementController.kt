@@ -80,6 +80,7 @@ class PageManagementController : Controller {
     private fun getCommandPage(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         val model = HashMap<String, Any>()
         TacusciAPI.injectAPIInstances(request, response, model)
+        Web.insertPageTitle(request, model, pageTitleSubstring)
         Web.loadNavigationElements(request, model)
         when (request.params(":command")) {
             "create" -> {

@@ -32,6 +32,7 @@
 package app.core
 
 import api.core.TacusciAPI
+import app.core.controllers.Controller
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import j2html.TagCreator.*
