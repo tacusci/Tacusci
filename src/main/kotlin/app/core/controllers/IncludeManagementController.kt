@@ -87,7 +87,7 @@ class IncludeManagementController : Controller {
                 Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Include")
                 model.put("includeToCreate", Include())
             } "edit" -> {
-                if (request.params("template_id") != null) {
+                if (request.params("include_id") != null) {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for EDIT INCLUDE page")
                     model.put("include", "/includes/edit_include.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit include")
