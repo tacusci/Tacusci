@@ -108,7 +108,7 @@ class IncludeManagementController : Controller {
         includeToCreate.content = request.queryParams("include_content")
         includeToCreate.lastUpdatedDateTime = System.currentTimeMillis()
         includeToCreate.authorUserId = UserHandler.loggedInUser(request).id
-        //TODO("Add creating INCLUDE in db here...")
+        IncludeHandler.createInclude(includeToCreate)
         response.managedRedirect(request, request.uri())
         return response
     }
@@ -144,7 +144,7 @@ class IncludeManagementController : Controller {
                 return post_EditIncludeForm(request, response)
             }
         } else if (request.uri().contains("include_management/delete")) {
-            if (Web.getFormHash(request, "delete_include_form_${request.queryParams("template_id")}") == request.queryParams("hashid")) {
+            if (Web.getFormHash(request, "delete_include_form_${request.queryParams("include_id")}") == request.queryParams("hashid")) {
                 return post_DeleteIncludeForm(request, response)
             }
         }
