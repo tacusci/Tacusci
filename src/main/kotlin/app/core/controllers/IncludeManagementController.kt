@@ -87,6 +87,13 @@ class IncludeManagementController : Controller {
                 Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Include")
                 model.put("includeToCreate", Include())
             } "edit" -> {
+                if (request.params("template_id") != null) {
+                    logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for EDIT INCLUDE page")
+                    model.put("include", "/includes/edit_include.vtl")
+                    Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit include")
+                    val includeToEdit = IncludeHandler.getIncludeById(request.params("include_id").toIntSafe())
+                    model.put("includeToEdit", includeToEdit)
+                }
             }
         }
         return ModelAndView(model, layoutTemplate)
@@ -105,7 +112,7 @@ class IncludeManagementController : Controller {
     }
 
     private fun post_EditIncludeForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST response for EDIT_INCLUDE_FORM")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_INCLUDE_FORM")
         val includeToEdit = Include()
         includeToEdit.id = request.queryParams("include_id").toIntSafe()
         includeToEdit.title = request.queryParams("include_title")
@@ -118,7 +125,7 @@ class IncludeManagementController : Controller {
     }
 
     private fun post_DeleteIncludeForm(request: Request, response: Response): Response {
-        logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST response for DELETE_INCLUDE_FORM")
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_INCLUDE_FORM")
         val includeDAO = DAOManager.getDAO(DAOManager.TABLE.INCLUDES) as IncludeDAO
         IncludeHandler.deleteInclude(includeDAO.getIncludeById(request.queryParams("include_id").toIntSafe()))
         response.managedRedirect(request, request.uri())

@@ -49,4 +49,16 @@ object IncludeHandler : KLogging() {
     fun deleteInclude(include: Include): Boolean {
         return includeDAO.deleteInclude(include)
     }
+
+    fun getAllIncludes(): MutableList<Include> {
+        return includeDAO.getAllIncludes()
+    }
+
+    fun getIncludeById(includeId: Int): Include {
+        return includeDAO.getIncludeById(includeId, true)
+    }
+
+    fun getIncludeByTitle(includeTitle: String): Include {
+        return includeDAO.getIncludeById(includeDAO.getIncludeIdByTitle(includeTitle), true)
+    }
 }

@@ -36,25 +36,25 @@
             $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE INCLUDE", "button-theme")
         </div>
     </a>
-    #foreach ($template in $TTemplates.getAllTemplates())
-        #set ($divId = $template.getId())
+    #foreach ($include in $TIncludes.getAllIncludes())
+        #set ($divId = $include.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">
             <div class="pure-u">
-                <h4 class="page-info">Title: $template.getTitle()</h4>
+                <h4 class="page-info">Title: $include.getTitle()</h4>
             </div>
 
             <div class="pure-u" style="float: right;">
-                <form id="delete_template_form" name="delete_template_form" method="post" action="$TRequest.getRequestURI()/delete/$template.getId()">
-                    <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_template_form_$template.getId()") hidden>
-                    <input id="formName" name="formName" type="text" value="delete_template_form_$template.getId()" hidden>
-                    <input id="template_id" name="template_id" type="text" value="$template.getId()" hidden>
+                <form id="delete_include_form" name="delete_include_form" method="post" action="$TRequest.getRequestURI()/delete/$include.getId()">
+                    <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_include_form_$include.getId()") hidden>
+                    <input id="formName" name="formName" type="text" value="delete_include_form_$include.getId()" hidden>
+                    <input id="include_id" name="include_id" type="text" value="$include.getId()" hidden>
                     <button type="submit" class="pure-button button-theme page-info">X</button>
                 </form>
             </div>
 
             <div class="pure-u-24-24" style="display: inline-block">
-                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$template.getId()", "EDIT", "button-theme")
+                $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/edit/$include.getId()", "EDIT", "button-theme")
             </div>
         </div>
     #end

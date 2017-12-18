@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`includes` (
     `last_updated_date_time` LONG NOT NULL,
     `include_title` VARCHAR(100) NOT NULL,
     `include_content` LONGTEXT NOT NULL,
+    `author_user_id` INT NOT NULL,
     PRIMARY KEY (`id_include`),
     UNIQUE INDEX `id_include_UNIQUE` (`id_include` ASC));
 
