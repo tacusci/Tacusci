@@ -36,6 +36,8 @@ import database.daos.DAOManager
 import database.daos.RoutePermissionDAO
 import database.models.RoutePermission
 import mu.KLogging
+import spark.Request
+import spark.Response
 import spark.Session
 import spark.Spark
 import spark.template.velocity.VelocityTemplateEngine
@@ -113,5 +115,9 @@ object ControllerManager : KLogging() {
     fun initResponsePages() {
         Spark.notFound({ request, response -> Web.get404Page(request, response) })
         Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
+    }
+
+    fun initContactUsPostController() {'#'
+        Spark.post("/contact-us", { request: Request, response: Response -> Web.postContactUsForm(request, response) })
     }
 }

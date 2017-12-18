@@ -35,6 +35,7 @@ import api.core.TacusciAPI
 import app.core.controllers.Controller
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import extensions.managedRedirect
 import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
@@ -173,5 +174,16 @@ object Web : KLogging() {
             return request.session().attribute<String>(formTitle)
         }
         return "invalidhash"
+    }
+
+    fun postContactUsForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
+        if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
+            //TODO("Send email to contact us email set in configuration")
+            response.managedRedirect(request, request.queryParams("return_url"))
+        } else {
+            response.managedRedirect(request, "/")
+        }
+        return response
     }
 }
