@@ -43,6 +43,10 @@ object IncludeHandler : KLogging() {
     }
 
     fun updateInclude(include: Include): Boolean {
-        return false
+        return includeDAO.updateInclude(include)
+    }
+
+    fun deleteInclude(include: Include): Boolean {
+        return includeDAO.deleteInclude(include)
     }
 }

@@ -73,4 +73,54 @@ class IncludeDAO(url: String, dbProperties: Properties, tableName: String, conne
             true
         } catch (e: SQLException) { logger.error(e.message); disconnect(); false }
     }
+
+    fun deleteInclude(include: Include): Boolean {
+        connect()
+        return try {
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_INCLUDE?"
+            val preparedStatement = connection?.prepareStatement(deleteStatement)
+            preparedStatement?.setInt(1, include.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); false }
+    }
+
+    fun getIncludeIdByTitle(includeTitle: String): Int {
+        connect()
+        var includeId = -1
+        try {
+            val selectStatement = "SELECT ID_INCLUDE FROM $tableName WHERE INCLUDE_TITLE=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setString(1, includeTitle)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                includeId = resultSet.getInt(1)
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return includeId
+    }
+
+    fun getIncludeById(includeId: Int): Include {
+        val include = Include()
+        connect()
+        return try {
+            val selectStatement = "SELECT * FROM $tableName WHERE ID_INCLUDE=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setInt(1, includeId)
+            val resultSet = preparedStatement?.executeQuery()
+            if (resultSet!!.next()) {
+                include.id = resultSet.getInt("ID_INCLUDE")
+                include.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
+                include.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                include.title = resultSet.getString("INCLUDE_TITLE")
+                include.content = resultSet.getString("INCLUDE_CONTENT")
+                include.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
+            }
+            include
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); include }
+    }
 }

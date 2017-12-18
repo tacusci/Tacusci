@@ -31,8 +31,11 @@ package app.core.controllers
 
 import api.core.TacusciAPI
 import app.core.Web
+import app.core.handlers.IncludeHandler
 import app.core.handlers.PageHandler
 import app.core.handlers.UserHandler
+import database.daos.DAOManager
+import database.daos.IncludeDAO
 import database.models.Include
 import database.models.Page
 import extensions.managedRedirect
@@ -118,14 +121,15 @@ class IncludeManagementController : Controller {
         includeToEdit.content = request.queryParams("include_content")
         includeToEdit.lastUpdatedDateTime = System.currentTimeMillis()
         includeToEdit.authorUserId = UserHandler.loggedInUser(request).id
-        //TODO("Add updating INCLUDE in db here...")
+        IncludeHandler.updateInclude(includeToEdit)
         response.managedRedirect(request, request.uri())
         return response
     }
 
     private fun post_DeleteIncludeForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Recieved POST response for DELETE_INCLUDE_FORM")
-        val includeDAO = null
+        val includeDAO = DAOManager.getDAO(DAOManager.TABLE.INCLUDES) as IncludeDAO
+        IncludeHandler.deleteInclude(includeDAO.getIncludeById(request.queryParams("include_id").toIntSafe()))
         response.managedRedirect(request, request.uri())
         return response
     }
