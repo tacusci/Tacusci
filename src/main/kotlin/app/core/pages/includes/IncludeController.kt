@@ -43,17 +43,15 @@ object IncludeController : KLogging() {
     public fun renderInclude(include: Include, request: Request, response: Response): String {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for include: ${include.title}")
 
+        var result = ""
         if (include.content.isNotEmpty()) {
-            var result = ""
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString(include.title, include.content)
             velocityIMTemplateEngine.insertIntoContext(include.title, Web.loadNavigationElements(request, hashMapOf()))
             TacusciAPI.injectAPIInstances(request, response, include.title, velocityIMTemplateEngine)
             result = velocityIMTemplateEngine.render(include.title)
             velocityIMTemplateEngine.flush(include.title)
-            return result
-        } else {
-            return ""
         }
+        return result
     }
 }
