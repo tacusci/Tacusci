@@ -70,7 +70,7 @@ class IncludeManagementController : Controller {
         if (request.params(":command") == null && request.params(":include_id") == null) {
             model.put("template", templatePath)
         } else {
-            //return getCommandPage(request, response, layoutTemplate)
+            return getCommandPage(request, response, layoutTemplate)
         }
         return ModelAndView(model, layoutTemplate)
     }
