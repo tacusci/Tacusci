@@ -77,7 +77,7 @@ class IncludeDAO(url: String, dbProperties: Properties, tableName: String, conne
     fun deleteInclude(include: Include): Boolean {
         connect()
         return try {
-            val deleteStatement = "DELETE FROM $tableName WHERE ID_INCLUDE?"
+            val deleteStatement = "DELETE FROM $tableName WHERE ID_INCLUDE=?"
             val preparedStatement = connection?.prepareStatement(deleteStatement)
             preparedStatement?.setInt(1, include.id)
             preparedStatement?.execute()

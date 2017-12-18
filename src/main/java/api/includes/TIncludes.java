@@ -13,6 +13,7 @@ public class TIncludes extends TAPIClass {
     public TIncludes(Request request, Response response) { super(request, response); }
 
     public List<Include> getAllIncludes() { return IncludeHandler.INSTANCE.getAllIncludes(); }
+    public String getInclude(String includeTitle) { return getIncludeByTitle(includeTitle).getContent(); }
     public Include getIncludeByTitle(String includeTitle) { return IncludeHandler.INSTANCE.getIncludeByTitle(includeTitle); }
     public Include getIncludeById(Integer includeId) { return IncludeHandler.INSTANCE.getIncludeById(includeId); }
 }

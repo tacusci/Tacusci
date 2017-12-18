@@ -89,7 +89,7 @@ class IncludeManagementController : Controller {
             } "edit" -> {
                 if (request.params("include_id") != null) {
                     logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for EDIT INCLUDE page")
-                    model.put("include", "/includes/edit_include.vtl")
+                    model.put("template", "/templates/edit_include.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit include")
                     val includeToEdit = IncludeHandler.getIncludeById(request.params("include_id").toIntSafe())
                     model.put("includeToEdit", includeToEdit)
@@ -107,7 +107,7 @@ class IncludeManagementController : Controller {
         includeToCreate.lastUpdatedDateTime = System.currentTimeMillis()
         includeToCreate.authorUserId = UserHandler.loggedInUser(request).id
         IncludeHandler.createInclude(includeToCreate)
-        response.managedRedirect(request, request.uri())
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -128,7 +128,7 @@ class IncludeManagementController : Controller {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for DELETE_INCLUDE_FORM")
         val includeDAO = DAOManager.getDAO(DAOManager.TABLE.INCLUDES) as IncludeDAO
         IncludeHandler.deleteInclude(includeDAO.getIncludeById(request.queryParams("include_id").toIntSafe()))
-        response.managedRedirect(request, request.uri())
+        response.managedRedirect(request, rootUri)
         return response
     }
 
