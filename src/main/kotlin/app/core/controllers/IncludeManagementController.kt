@@ -85,18 +85,9 @@ class IncludeManagementController : Controller {
                 logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for CREATE INCLUDE PAGE")
                 model.put("template", "/templates/create_include.vtl")
                 Web.insertPageTitle(request, model, "$pageTitleSubstring - Create Include")
-                //model.put("pageToCreate", Page())
+                model.put("includeToCreate", Include())
             } "edit" -> {
-            if (request.params("include_id") != null) {
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for EDIT INCLUDE PAGE")
-                model.put("template", "/templates/edit_include.vtl")
-                Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Include")
-                val page = PageHandler.getPageById(request.params("include_id").toIntSafe())
-                if (page.id == -1) response.managedRedirect(request,"/dashboard/include_management")
-            } else {
-                response.managedRedirect(request, "/dashboard/include_management")
             }
-        }
         }
         return ModelAndView(model, layoutTemplate)
     }

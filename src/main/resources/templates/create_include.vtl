@@ -33,12 +33,12 @@
         height: 100%;
     }
 
-    .template-title-header {
+    .include-title-header {
         padding-left: 20px;
     }
 
 
-    .template-title-editbox {
+    .include-title-editbox {
         margin-left: 20px;
     }
 
@@ -60,4 +60,70 @@
     }
 </style>
 
-<h2 class="template-title-header header">Create new include</h2>
+<h2 class="include-title-header header">Create new include</h2>
+
+<a href="/dashboard/include_management" class="pure-button button-theme back-button">
+    <img src="/images/back_arrow.png" style="width:23px;height:17px;">
+</a>
+<input id="include_title_editable" class="include-title-editbox" name="include_title" type="text" value="$includeToCreate.getTitle()">
+
+<pre id="editor">
+    $THTMLUtils.formatForEditing($includeToCreate.getContent())
+</pre>
+
+<div class="pure-u-24-24 edit-button-bar">
+    <input class="pure-button" type="button" value="Create" onclick="create()">
+</div>
+
+<div id="create_include_div" hidden></div>
+
+<script src="/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    #include("/public/js/pageeditor.js")
+    function create() {
+        var createIncludeForm = document.createElement("form");
+        createIncludeForm.id = "create_include_form";
+        createIncludeForm.name = "create_include_form";
+        createIncludeForm.setAttribute('method', "post");
+        createIncludeForm.setAttribute('action', "/dashboard/include_management/create");
+
+        var formHashInput = document.createElement("input");
+        formHashInput.id = "hashid";
+        formHashInput.name = "hashid";
+        formHashInput.type = "text";
+        formHashInput.value = "$TForms.mapFormToHash("create_include_form")";
+
+        var formNameInput = document.createElement("input");
+        formNameInput.id = "formName";
+        formNameInput.name = "formName";
+        formNameInput.type = "text";
+        formNameInput.value = "create_include_form";
+
+        var includeIdInput = document.createElement("input");
+        includeIdInput.id = "include_id";
+        includeIdInput.name = "include_id";
+        includeIdInput.type = "text";
+        includeIdInput.value = $includeToCreate.getId();
+
+        var includeTitleInput = document.createElement("input");
+        includeTitleInput.id = "include_title";
+        includeTitleInput.name = "include_title";
+        includeTitleInput.type = "text";
+        includeTitleInput.value = document.getElementById("include_title_editable").value;
+
+        var includeContentInput = document.createElement("textarea");
+        includeContentInput.id = "include_content";
+        includeContentInput.name = "include_content";
+        includeContentInput.value = editor.getValue();
+
+        createIncludeForm.appendChild(formHashInput);
+        createIncludeForm.appendChild(formNameInput);
+        createIncludeForm.appendChild(includeIdInput);
+        createIncludeForm.appendChild(includeTitleInput);
+        createIncludeForm.appendChild(includeContentInput);
+
+        document.getElementById("create_include_div").appendChild(createIncludeForm);
+
+        createIncludeForm.submit();
+   }
+</script>
