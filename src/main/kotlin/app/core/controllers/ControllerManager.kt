@@ -117,7 +117,7 @@ object ControllerManager : KLogging() {
         Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
     }
 
-    fun initContactUsPostController() {'#'
+    fun initContactUsPostController() {
         Spark.post("/contact-us", { request: Request, response: Response -> Web.postContactUsForm(request, response) })
     }
 }
