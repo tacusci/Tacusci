@@ -123,4 +123,30 @@ class IncludeDAO(url: String, dbProperties: Properties, tableName: String, conne
             include
         } catch (e: SQLException) { logger.error(e.message); disconnect(); include }
     }
+
+    fun getIncludeById(includeId: Int, closeConnection: Boolean): Include {
+        return if (!closeConnection) {
+            getIncludeById(includeId)
+        } else {
+            val include = getIncludeById(includeId)
+            disconnect()
+            include
+        }
+    }
+
+    fun getAllIncludes(): MutableList<Include> {
+        val includes = mutableListOf<Include>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_INCLUDE FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val includeId = resultSet.getInt("ID_INCLUDE")
+                includes.add(getIncludeById(includeId))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return includes
+    }
 }
