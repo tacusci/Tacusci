@@ -50,7 +50,7 @@ object ControllerManager : KLogging() {
     private val baseControllers = listOf(DashboardController(), RegisterController(), UserManagementController(),
                                     LogFileViewController(), PageManagementController(), TemplateManagementController(),
                                     LoginController(), ResetPasswordController(), ForgottenPasswordController(),
-                                    GroupManagementController(), ConfigEditorController())
+                                    GroupManagementController(), ConfigEditorController(), IncludeManagementController())
     val layoutTemplate = "/templates/layout.vtl"
 
     fun initSessionAttributes(session: Session) = baseControllers.forEach { it.initSessionBoolAttributes(session) }
