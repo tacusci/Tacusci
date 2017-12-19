@@ -70,11 +70,12 @@ open class Config {
                     Pair("thread-idle-timeout", ""),
                     Pair("session-idle-timeout", ""),
                     Pair("log-file", "tacusci.log"),
+                    Pair("contact-us-email", ""),
+                    Pair("contact-us-email-recipients", "[]"),
                     Pair("smtp-server-host", ""),
                     Pair("smtp-server-port", ""),
                     Pair("smtp-account-username", ""),
                     Pair("smtp-account-password", ""),
-                    Pair("smtp-use-ttls", "false"),
                     Pair("page-title", "Tacusci Website"),
                     Pair("static-asset-folder", ""),
                     Pair("response-pages-folder", ""),
@@ -252,6 +253,18 @@ open class Config {
             fileAppender.append = true
             fileAppender.activateOptions()
             Logger.getRootLogger().addAppender(fileAppender)
+        }
+
+        fun getContactUsEmailsList(): MutableList<String> {
+            var configString = getProperty("contact-us-email-recipients")
+            val contactUsEmailsList = mutableListOf<String>()
+            if (configString.startsWith("[") && configString.endsWith("]")) {
+                configString = configString.removePrefix("[").removeSuffix("]")
+                configString.split(",").forEach {
+                    contactUsEmailsList.add(it.replaceFirst(" ", "").removeSuffix(" "))
+                }
+            }
+            return contactUsEmailsList
         }
 
         //NOTE: this is technically deprecated, but should keep this as it works well to pass lists from config

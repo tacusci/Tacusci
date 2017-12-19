@@ -31,6 +31,7 @@ package mail
 
 import mu.KLogging
 import utils.Config
+import javax.mail.Authenticator
 import javax.mail.Message
 import javax.mail.Session
 import javax.mail.internet.InternetAddress
@@ -48,8 +49,54 @@ object Email : KLogging() {
     var port = ""
     var username = ""
     var password = ""
-    var useTtls = ""
 
+    fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String): Boolean {
+
+        var sentEmail = false
+
+        host = Config.getProperty("smtp-server-host")
+        port = Config.getProperty("smtp-server-port")
+        username = Config.getProperty("smtp-account-username")
+        password = Config.getProperty("smtp-account-password")
+
+        val properties = System.getProperties()
+        properties.put("mail.smtp.host", host)
+        properties.put("mail.smtp.socketFactory.port", port)
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
+        properties.put("mail.smtp.user", username)
+        properties.put("mail.smtp.password", password)
+        properties.put("mail.smtp.port", port)
+        properties.put("mail.smtp.auth", "true")
+
+
+        val session = Session.getDefaultInstance(properties)
+
+        try {
+            val mimeMessage = MimeMessage(session)
+            mimeMessage.setFrom(InternetAddress(sender))
+            val toAddresses = mutableListOf<InternetAddress>()
+            recipients.forEach { toAddresses.add(InternetAddress(it)) }
+            toAddresses.forEach { mimeMessage.addRecipient(Message.RecipientType.TO, it) }
+
+            mimeMessage.subject = subject
+            mimeMessage.setContent(body, "text/html; charset=utf-8")
+
+            val transport = session.getTransport("smtp")
+
+            transport.connect(host, username, password)
+            transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
+            logger.info("Sent reset password email to $toAddresses from $sender")
+            transport.close()
+            sentEmail = true
+        } catch (e: Exception) {
+            sentEmail = false
+            logger.error(e.message)
+            logger.debug("Full stack trace: ${e.printStackTrace()}")
+        }
+        return sentEmail
+    }
+
+    /*
     fun sendEmail(recipients: MutableList<String>, sender: String, subject: String, body: String): Boolean {
 
         var sentEmail = false
@@ -94,4 +141,5 @@ object Email : KLogging() {
         }
         return sentEmail
     }
+    */
 }

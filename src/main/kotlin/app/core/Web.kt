@@ -37,6 +37,7 @@ import app.core.handlers.UserHandler
 import extensions.managedRedirect
 import extensions.readTextAndClose
 import j2html.TagCreator.*
+import mail.Email
 import mu.KLogging
 import spark.*
 import spark.template.velocity.VelocityIMTemplateEngine
@@ -180,8 +181,9 @@ object Web : KLogging() {
     fun postContactUsForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
         if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
-            request.queryParams().forEach { println(request.queryParams(it)) }
-            //TODO("Send email to contact us email set in configuration")
+            Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
+                    "Contact Us Form from ${request.url()}, sent by ${request.queryParams("name")} " +
+                             "(${request.queryParams("email_address")})", request.queryParams("message"))
             response.managedRedirect(request, request.queryParams("return_url"))
         } else {
             response.managedRedirect(request, "/")
