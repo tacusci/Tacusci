@@ -1,20 +1,16 @@
-<form id="contact_us_form" name="contact_us_form" class="pure-form pure-form-aligned" href="$hrefUri" method="post">
+<form id="contact_us_form" name="contact_us_form" href="$hrefUri" method="post">
     <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("contact_us_form") hidden>
     <input name="formName" value="contact_us_form" hidden>
     <input name="return_url" value="$returnUri" hidden>
-    <fieldset>
-        <div class="pure-control-group">
-            <label class="theme-shade" for="subject">Subject</label>
-            $TForms.getRequiredInputField("subject", "Subject")
-        </div>
 
-        <div class="pure-control-group">
-            <label class="theme-shade" for="content">Content</label>
-            $TForms.getRequiredInputField("content", "Content")
-        </div>
+    <label class="theme-shade" for="name">Name*</label>
+    $TForms.getRequiredInputField("name", "Name")
 
-        <div class="pure-controls" style="margin: 1.5em 0 0 auto;">
-            <button method="submit" class="pure-button pure-button-primary">Submit</button>
-        </div>
-    </fieldset>
+    <label class="theme-shade" for="email_address">Email Address*</label>
+    $TForms.getRequiredInputField("email_address", "")
+
+    <label class="theme-shade" for="message">Message</label>
+    $TForms.getRequiredInputField("message", "")
+
+    <button method="submit" class="pure-button pure-button-primary">Submit</button>
 </form>
