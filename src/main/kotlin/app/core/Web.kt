@@ -173,19 +173,8 @@ object Web : KLogging() {
         return "invalidhash"
     }
 
-    fun getContactUsForm(request: Request, response: Response, returnUri: String): String {
-        val contactUsForm = InternalResourceFile("/templates/contact_us_form.vtl")
-        var result = contactUsForm.inputStream.readTextAndClose().replace("\$hrefUri", request.uri()).replace("\$returnUri", returnUri)
-        Spark.post(request.uri(), { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
-        if (result.isNotEmpty()) {
-            val velocityIMTemplateEngine = VelocityIMTemplateEngine()
-            velocityIMTemplateEngine.insertTemplateAsString("contact_us_form", result)
-            velocityIMTemplateEngine.insertIntoContext("contact_us_form", Web.loadNavigationElements(request, hashMapOf()))
-            TacusciAPI.injectAPIInstances(request, response, "contact_us_form", velocityIMTemplateEngine)
-            result = velocityIMTemplateEngine.render("contact_us_form")
-            velocityIMTemplateEngine.flush("contact_us_form")
-        }
-        return result
+    fun registerContactUsForm(request: Request, response: Response, formName: String, hrefUri: String) {
+        Spark.post(hrefUri, { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
     }
 
     fun postContactUsForm(request: Request, response: Response): Response {

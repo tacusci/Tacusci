@@ -23,8 +23,8 @@ public class TForms extends TAPIClass {
         return j2htmlPartials.INSTANCE.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render();
     }
 
-    public String getContactUsForm(String returnUrl) {
-        return Web.INSTANCE.getContactUsForm(request, response, returnUrl);
+    public void registerContactUsForm(String formName, String hrefUri) {
+        Web.INSTANCE.registerContactUsForm(request, response, formName, hrefUri);
     }
 
     public String getInputField(String identifier, String placeholder) {

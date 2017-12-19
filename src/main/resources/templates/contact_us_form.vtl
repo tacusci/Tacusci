@@ -1,10 +1,10 @@
-<form id="contact_us_form" name="contact_us_form" href="$hrefUri" method="post">
+<form id="contact_us_form" name="contact_us_form" href="$TRequest.getRequestURI()" method="post">
     <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("contact_us_form") hidden>
     <input name="formName" value="contact_us_form" hidden>
-    <input name="return_url" value="$returnUri" hidden>
+    <input name="return_url" value="$TRequest.getRequestURI()" hidden>
 
     <label class="theme-shade" for="name">Name*</label>
-    $TForms.getRequiredInputField("name", "Name")
+    $TForms.getRequiredInputField("name", "")
 
     <label class="theme-shade" for="email_address">Email Address*</label>
     $TForms.getRequiredInputField("email_address", "")
@@ -12,5 +12,6 @@
     <label class="theme-shade" for="message">Message</label>
     $TForms.getRequiredInputField("message", "")
 
-    <button method="submit" class="pure-button pure-button-primary">Submit</button>
+    <button method="submit">Submit</button>
 </form>
+$TForms.registerContactUsForm("contact_us_form", $TRequest.getRequestURI())
