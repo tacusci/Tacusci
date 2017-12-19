@@ -14,7 +14,7 @@
  *  1. Do whatever you like with the original work, just don't be a dick.
  *
  *      Being a dick includes - but is not limited to - the following instances:
- *
+ *11
  * 	 1a. Outright copyright infringement - Don't just copy this and change the name.
  * 	 1b. Selling the unmodified original with no work done what-so-ever, that's REALLY being a dick.
  * 	 1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.
@@ -115,9 +115,5 @@ object ControllerManager : KLogging() {
     fun initResponsePages() {
         Spark.notFound({ request, response -> Web.get404Page(request, response) })
         Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
-    }
-
-    fun initContactUsPostController() {
-        Spark.post("/contact-us", { request: Request, response: Response -> Web.postContactUsForm(request, response) })
     }
 }

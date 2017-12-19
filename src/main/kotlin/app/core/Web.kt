@@ -38,10 +38,7 @@ import extensions.managedRedirect
 import extensions.readTextAndClose
 import j2html.TagCreator.*
 import mu.KLogging
-import spark.ModelAndView
-import spark.Request
-import spark.Response
-import spark.Session
+import spark.*
 import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.InternalResourceFile
@@ -176,9 +173,12 @@ object Web : KLogging() {
         return "invalidhash"
     }
 
-    fun getContactUsForm(request: Request, response: Response): String {
+    fun getContactUsForm(request: Request, response: Response, returnUrl: String): String {
         val contactUsForm = InternalResourceFile("/templates/contact_us_form.vtl")
         var result = contactUsForm.inputStream.readTextAndClose()
+        result.replace("returnUrl", returnUrl)
+        result.replace("hrefUri", request.uri())
+        Spark.post(request.uri(), { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
         if (result.isNotEmpty()) {
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString("contact_us_form", result)

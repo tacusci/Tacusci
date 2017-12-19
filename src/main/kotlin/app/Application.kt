@@ -113,7 +113,6 @@ class Application {
         ControllerManager.mapAccessToStaticLocalFolder()
         ControllerManager.initDefaultRoutePermissions()
         ControllerManager.initBaseControllers()
-        ControllerManager.initContactUsPostController()
 
         PageController.setupPages()
 
