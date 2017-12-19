@@ -61,6 +61,7 @@ object j2htmlPartials {
                 .withType("text")
                 .withName(identifier)
                 .withPlaceholder(placeholder)
+                .isRequired
     }
 
     fun requiredInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
@@ -70,6 +71,7 @@ object j2htmlPartials {
                 .withName(identifier)
                 .withPlaceholder(placeholder)
                 .withValue(defaultContent)
+                .isRequired
     }
 
     fun readOnlyInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
