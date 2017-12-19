@@ -173,11 +173,9 @@ object Web : KLogging() {
         return "invalidhash"
     }
 
-    fun getContactUsForm(request: Request, response: Response, returnUrl: String): String {
+    fun getContactUsForm(request: Request, response: Response, returnUri: String): String {
         val contactUsForm = InternalResourceFile("/templates/contact_us_form.vtl")
-        var result = contactUsForm.inputStream.readTextAndClose()
-        result.replace("returnUrl", returnUrl)
-        result.replace("hrefUri", request.uri())
+        var result = contactUsForm.inputStream.readTextAndClose().replace("\$hrefUri", request.uri()).replace("\$returnUri", returnUri)
         Spark.post(request.uri(), { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
         if (result.isNotEmpty()) {
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
@@ -193,7 +191,7 @@ object Web : KLogging() {
     fun postContactUsForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
         if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
-            request.queryParams().forEach { println(it) }
+            request.queryParams().forEach { println(request.queryParams(it)) }
             //TODO("Send email to contact us email set in configuration")
             response.managedRedirect(request, request.queryParams("return_url"))
         } else {
