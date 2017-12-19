@@ -34,6 +34,7 @@ package app.core
 import api.core.TacusciAPI
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import extensions.readTextAndClose
 import j2html.TagCreator.*
@@ -181,9 +182,16 @@ object Web : KLogging() {
     fun postContactUsForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
         if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
-            Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
-                    "Contact Us Form from ${request.url()}, sent by ${request.queryParams("name")} " +
-                             "(${request.queryParams("email_address")})", request.queryParams("message"))
+            val recipientName  = request.queryParams("name")
+            val recipientEmailAddress = request.queryParams("email_address")
+            val message = request.queryParams("message")
+
+            if (!recipientName.isNullOrBlankOrEmpty() && !recipientEmailAddress.isNullOrBlankOrEmpty() && !message.isNullOrBlankOrEmpty()) {
+                Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
+                        "Contact Us Form from ${request.url()}, sent by $recipientName " +
+                                 "($recipientEmailAddress)", message)
+            }
+
             response.managedRedirect(request, request.queryParams("return_url"))
         } else {
             response.managedRedirect(request, "/")
