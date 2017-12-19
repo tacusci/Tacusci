@@ -51,12 +51,20 @@ public class TForms extends TAPIClass {
         return j2htmlPartials.INSTANCE.fullNameInput(identifier, placeholder).render();
     }
 
+    public String getFullNameInputField(String identifier, String classAttribute, String placeholder) {
+        return j2htmlPartials.INSTANCE.fullNameInput(identifier, classAttribute, placeholder).render();
+    }
+
     public String getValidatedPasswordInputField(String identifier, String placeholder) {
         return j2htmlPartials.INSTANCE.validatedPasswordInput(identifier, placeholder).render();
     }
 
     public String getEmailInputField(String identifier, String placeholder) {
         return j2htmlPartials.INSTANCE.emailInput(identifier, placeholder).render();
+    }
+
+    public String getEmailInputField(String identifier, String classAttribute, String placeholder) {
+        return j2htmlPartials.INSTANCE.emailInput(identifier, classAttribute, placeholder).render();
     }
 
     public String mapFormToHash(String formName) {
