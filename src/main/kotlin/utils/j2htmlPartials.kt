@@ -55,6 +55,15 @@ object j2htmlPartials {
                 .withPlaceholder(placeholder)
     }
 
+    fun inputField(identifier: String, classAttribute: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
+                .withPlaceholder(placeholder)
+    }
+
     fun requiredInputField(identifier: String, placeholder: String): Tag {
         return input()
                 .withId(identifier)
