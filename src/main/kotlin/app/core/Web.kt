@@ -34,6 +34,8 @@ package app.core
 import api.core.TacusciAPI
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import extensions.managedRedirect
+import extensions.readTextAndClose
 import j2html.TagCreator.*
 import mu.KLogging
 import spark.ModelAndView
@@ -42,10 +44,10 @@ import spark.Response
 import spark.Session
 import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
+import utils.InternalResourceFile
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.File
-import javax.enterprise.inject.Model
 
 /**
  * Created by alewis on 25/10/2016.
@@ -172,5 +174,31 @@ object Web : KLogging() {
             return request.session().attribute<String>(formTitle)
         }
         return "invalidhash"
+    }
+
+    fun getContactUsForm(request: Request, response: Response): String {
+        val contactUsForm = InternalResourceFile("/templates/contact_us_form.vtl")
+        var result = contactUsForm.inputStream.readTextAndClose()
+        if (result.isNotEmpty()) {
+            val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+            velocityIMTemplateEngine.insertTemplateAsString("contact_us_form", result)
+            velocityIMTemplateEngine.insertIntoContext("contact_us_form", Web.loadNavigationElements(request, hashMapOf()))
+            TacusciAPI.injectAPIInstances(request, response, "contact_us_form", velocityIMTemplateEngine)
+            result = velocityIMTemplateEngine.render("contact_us_form")
+            velocityIMTemplateEngine.flush("contact_us_form")
+        }
+        return result
+    }
+
+    fun postContactUsForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
+        if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
+            request.queryParams().forEach { println(it) }
+            //TODO("Send email to contact us email set in configuration")
+            response.managedRedirect(request, request.queryParams("return_url"))
+        } else {
+            response.managedRedirect(request, "/")
+        }
+        return response
     }
 }

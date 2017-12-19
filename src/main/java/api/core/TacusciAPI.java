@@ -2,6 +2,7 @@ package api.core;
 
 import api.forms.TForms;
 import api.groups.TGroups;
+import api.includes.TIncludes;
 import api.pages.TPages;
 import api.templates.TTemplates;
 import api.users.TUsers;
@@ -36,6 +37,7 @@ public class TacusciAPI {
         apiObjInstances.add(new Pair<>("TGroups", new TGroups(request, response)));
         apiObjInstances.add(new Pair<>("TConfig", new TConfig(request, response)));
         apiObjInstances.add(new Pair<>("TTemplates", new TTemplates(request, response)));
+        apiObjInstances.add(new Pair<>("TIncludes", new TIncludes(request, response)));
         apiObjInstances.add(new Pair<>("TResponse", new TResponse(request, response)));
         apiObjInstances.add(new Pair<>("TRequest", new TRequest(request, response)));
         apiObjInstances.add(new Pair<>("TDateTime", new TDateTime(request, response)));

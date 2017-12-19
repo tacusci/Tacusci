@@ -32,6 +32,7 @@
 package extensions
 
 import me.xdrop.fuzzywuzzy.FuzzySearch
+import mu.KLogging
 import spark.Request
 import spark.Response
 import utils.Config

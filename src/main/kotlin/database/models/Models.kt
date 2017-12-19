@@ -123,6 +123,9 @@ data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdate
                 var authorUserId: Int = -1,
                 var type: StructuredPage.PageType = StructuredPage.PageType.RAW)
 
+data class Include(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
+                   var title: String = "", var content: String = "", var authorUserId: Int = -1)
+
 data class Template(var id: Int = 1, var createdDateTime: Long = 1, var lastUpdatedDateTime: Long = -1,
                     var title: String = "", var content: String = "", var authorUserId: Int = -1)
 

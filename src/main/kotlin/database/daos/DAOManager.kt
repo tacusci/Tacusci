@@ -61,6 +61,7 @@ object DAOManager : KLogging() {
         RESET_PASSWORD,
         PAGES,
         TEMPLATES,
+        INCLUDES,
         ROUTE_PERMISSIONS
     }
 
@@ -146,7 +147,9 @@ object DAOManager : KLogging() {
             TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "reset_password", connectionPool)
             TABLE.PAGES -> return PageDAO(url, dbProperties, "pages", connectionPool)
             TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "templates", connectionPool)
+            TABLE.INCLUDES -> return IncludeDAO(url, dbProperties, "includes", connectionPool)
             TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "route_permissions", connectionPool)
+
             else -> {
                 return GenericDAO(url, dbProperties, "", connectionPool)
             }

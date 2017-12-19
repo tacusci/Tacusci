@@ -73,6 +73,16 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`templates` (
     PRIMARY KEY (`id_template`),
     UNIQUE INDEX `id_page_UNIQUE` (`id_template` ASC));
 
+CREATE TABLE IF NOT EXISTS `$schema_name`.`includes` (
+    `id_include` INT NOT NULL AUTO_INCREMENT,
+    `created_date_time` LONG NOT NULL,
+    `last_updated_date_time` LONG NOT NULL,
+    `include_title` VARCHAR(100) NOT NULL,
+    `include_content` LONGTEXT NOT NULL,
+    `author_user_id` INT NOT NULL,
+    PRIMARY KEY (`id_include`),
+    UNIQUE INDEX `id_include_UNIQUE` (`id_include` ASC));
+
 CREATE TABLE IF NOT EXISTS `$schema_name`.`route_permissions` (
     `id_permission` INT NOT NULL AUTO_INCREMENT,
     `created_date_time` LONG NOT NULL,
