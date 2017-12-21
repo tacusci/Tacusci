@@ -201,7 +201,7 @@ object Web : KLogging() {
                     request.session().attribute("emailSent", sentEmail)
                     request.session().removeAttribute("emailNotSent")
                 } else {
-                    request.session().attribute("emailNotSent", sentEmail)
+                    request.session().attribute("emailNotSent", !sentEmail)
                     request.session().removeAttribute("emailSent")
                 }
             }

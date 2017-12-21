@@ -16,12 +16,13 @@
 </form>
 
 $TForms.registerContactUsForm("contact_us_form", $TRequest.getRequestURI())
-#if ($TRequest.session.attribute("emailSent"))
+
+#if ($TRequest.getSession().attribute("emailSent"))
     <p>Email Sent successfully</p>
-    $TRequest.session.removeAttribute("emailSent")
+    $TRequest.getSession().removeAttribute("emailSent")
 #end
 
-#if ($Request.session().attribute("emailNotSent"))
+#if ($TRequest.getSession().attribute("emailNotSent"))
     <p>Email Not Sent successfully</p>
-    $TRequest.session.removeAttribute("emailNotSent")
+    $TRequest.getSession().removeAttribute("emailNotSent")
 #end
