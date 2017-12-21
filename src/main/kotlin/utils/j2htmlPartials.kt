@@ -257,12 +257,20 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun passwordInput(identifier: String, placeholder: String): Tag {
+    fun passwordInput(identifier: String): Tag {
         return input()
                 .withType("password")
                 .withId(identifier)
                 .withName(identifier)
-                .withPlaceholder(placeholder)
+                .isRequired
+    }
+
+    fun passwordInput(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withType("password")
+                .withId(identifier)
+                .withName(identifier)
+                .withClass(classAttribute)
                 .isRequired
     }
 
@@ -276,12 +284,34 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun validatedPasswordInput(identifier: String, placeholder: String): Tag {
+    fun passwordInput(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
         return input()
                 .withType("password")
                 .withId(identifier)
                 .withName(identifier)
+                .withClass(classAttribute)
                 .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+                .isRequired
+    }
+
+    fun validatedPasswordInput(identifier: String): Tag {
+        return input()
+                .withType("password")
+                .withId(identifier)
+                .withName(identifier)
+                .attr("pattern", Validation.passwordRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getPasswordValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun validatedPasswordInput(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withType("password")
+                .withId(identifier)
+                .withName(identifier)
+                .withClass(classAttribute)
                 .attr("pattern", Validation.passwordRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getPasswordValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
@@ -301,12 +331,37 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun emailInput(identifier: String, placeholder: String): Tag {
+    fun validatedPasswordInput(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withType("password")
+                .withId(identifier)
+                .withName(identifier)
+                .withClass(classAttribute)
+                .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+                .attr("pattern", Validation.passwordRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getPasswordValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun emailInput(identifier: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
-                .withPlaceholder(placeholder)
+                .attr("pattern", Validation.emailRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun emailInput(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
                 .attr("pattern", Validation.emailRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
@@ -318,8 +373,21 @@ object j2htmlPartials {
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
+                .withPlaceholder(placeholder)
+                .attr("pattern", Validation.emailRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun emailInput(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
                 .withClass(classAttribute)
                 .withPlaceholder(placeholder)
+                .withValue(defaultContent)
                 .attr("pattern", Validation.emailRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getEmailValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
