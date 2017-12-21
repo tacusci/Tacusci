@@ -35,6 +35,7 @@ import api.core.TacusciAPI
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import com.mysql.cj.x.json.JsonParser
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import extensions.readTextAndClose
@@ -198,7 +199,8 @@ object Web : KLogging() {
 
             //if Google's recaptcha was used for this form, then verify it
             if (request.queryParams().contains("g-recaptcha-response")) {
-                if (!verifyRecaptchaToken(request.queryParams("g-recaptcha-response"), request.ip())) {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> contact us form includes Google ReCaptcha")
+                if (!verifyRecaptchaToken(request, request.queryParams("g-recaptcha-response"), request.ip())) {
                     request.session().attributes().remove("recaptchaSucceeded")
                     request.session().attribute("recaptchaFailed", true)
                     response.managedRedirect(request, request.uri())
@@ -235,10 +237,14 @@ object Web : KLogging() {
         return response
     }
 
-    fun verifyRecaptchaToken(token: String, ipAddress: String): Boolean {
+    fun verifyRecaptchaToken(request: Request, token: String, ipAddress: String): Boolean {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> verifying ReCaptcha")
         var tokenIsValid = false
 
-        if (token.isNullOrBlankOrEmpty()) return false
+        if (token.isNullOrBlankOrEmpty()) {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> ReCaptcha token invalid, rejecting form")
+            return false
+        }
 
         val secretRecaptchaKey = Config.getProperty("contact-us-recaptcha-secret")
 
@@ -264,7 +270,12 @@ object Web : KLogging() {
             val jsonObject = JSONObject(responseJSON)
             val success = jsonObject.getString("success")
 
-            if (success == "true") tokenIsValid = true
+            if (success == "true") {
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> ReCaptcha token valid, accepting form")
+                tokenIsValid = true
+            }
+        } else {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Secret ReCaptcha key not set in config, rejecting form anyway")
         }
         return tokenIsValid
     }
