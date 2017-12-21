@@ -85,7 +85,7 @@ object Email : KLogging() {
 
             transport.connect(host, username, password)
             transport.sendMessage(mimeMessage, mimeMessage.allRecipients)
-            logger.info("Sent reset password email to $toAddresses from $sender")
+            logger.info("Sent email to $toAddresses from $sender")
             transport.close()
             sentEmail = true
         } catch (e: Exception) {

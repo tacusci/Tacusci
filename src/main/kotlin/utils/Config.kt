@@ -72,6 +72,7 @@ open class Config {
                     Pair("log-file", "tacusci.log"),
                     Pair("contact-us-email", ""),
                     Pair("contact-us-email-recipients", "[]"),
+                    Pair("contact-us-recaptcha-secret", ""),
                     Pair("smtp-server-host", ""),
                     Pair("smtp-server-port", ""),
                     Pair("smtp-account-username", ""),

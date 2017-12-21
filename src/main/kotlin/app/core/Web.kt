@@ -34,19 +34,25 @@ package app.core
 import api.core.TacusciAPI
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import com.mysql.cj.x.json.JsonParser
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import extensions.readTextAndClose
 import j2html.TagCreator.*
 import mail.Email
 import mu.KLogging
+import org.json.JSONObject
 import spark.*
 import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
 import utils.InternalResourceFile
 import utils.Utils
 import utils.j2htmlPartials
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.URL
 
 /**
  * Created by alewis on 25/10/2016.
@@ -189,6 +195,18 @@ object Web : KLogging() {
     fun postContactUsForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST submission for contact us form")
         if (Web.getFormHash(request, "contact_us_form") == request.queryParams("hashid")) {
+
+            //if Google's recaptcha was used for this form, then verify it
+            if (request.queryParams().contains("g-recaptcha-response")) {
+                if (!verifyRecaptchaToken(request.queryParams("g-recaptcha-response"), request.ip())) {
+                    request.session().attribute("recaptchaFailed", true)
+                    response.managedRedirect(request, request.uri())
+                    return response
+                }
+            } else {
+                request.session().attribute("recaptchaFailed", false)
+            }
+
             val recipientName  = request.queryParams("name")
             val recipientEmailAddress = request.queryParams("email_address")
             val message = request.queryParams("message")
@@ -208,8 +226,42 @@ object Web : KLogging() {
 
             response.managedRedirect(request, request.queryParams("return_url"))
         } else {
-            response.managedRedirect(request, "/")
+            response.managedRedirect(request, request.uri())
         }
         return response
+    }
+
+    fun verifyRecaptchaToken(token: String, ipAddress: String): Boolean {
+        var tokenIsValid = false
+
+        if (token.isNullOrBlankOrEmpty()) return false
+
+        val secretRecaptchaKey = Config.getProperty("contact-us-recaptcha-secret")
+
+        if (!secretRecaptchaKey.isNullOrBlankOrEmpty()) {
+            val url = URL("https://www.google.com/recaptcha/api/siteverify")
+            val urlParameters = "secret=$secretRecaptchaKey&response=$token&remoteip=$ipAddress"
+            val urlConnection = url.openConnection()
+
+            urlConnection.doOutput = true
+            val outputStreamWriter = OutputStreamWriter(urlConnection.getOutputStream())
+
+            outputStreamWriter.write(urlParameters)
+            outputStreamWriter.flush()
+
+            val bufferedReader = BufferedReader(InputStreamReader(urlConnection.getInputStream()))
+
+            var responseJSON = ""
+            bufferedReader.forEachLine { responseJSON += it }
+
+            outputStreamWriter.close()
+            bufferedReader.close()
+
+            val jsonObject = JSONObject(responseJSON)
+            val success = jsonObject.getString("success")
+
+            if (success == "true") tokenIsValid = true
+        }
+        return tokenIsValid
     }
 }
