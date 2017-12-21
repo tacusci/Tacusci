@@ -199,9 +199,13 @@ object Web : KLogging() {
             //if Google's recaptcha was used for this form, then verify it
             if (request.queryParams().contains("g-recaptcha-response")) {
                 if (!verifyRecaptchaToken(request.queryParams("g-recaptcha-response"), request.ip())) {
+                    request.session().attributes().remove("recaptchaSucceeded")
                     request.session().attribute("recaptchaFailed", true)
                     response.managedRedirect(request, request.uri())
                     return response
+                } else {
+                    request.session().attributes().remove("recaptchaFailed")
+                    request.session().attribute("recaptchaSucceeded", true)
                 }
             } else {
                 request.session().attribute("recaptchaFailed", false)
