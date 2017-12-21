@@ -55,6 +55,8 @@ import java.io.File
 //TODO need to rename this class
 object Web : KLogging() {
 
+    private val contactUsFormPostRoutesRegistered = mutableListOf<String>()
+
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
         var pageTitleFormat = Config.getProperty("page-title-format")
         pageTitleFormat = pageTitleFormat.replace("<page-title>", Config.getProperty("page-title"))
@@ -176,7 +178,10 @@ object Web : KLogging() {
     }
 
     fun registerContactUsForm(request: Request, response: Response, formName: String, hrefUri: String) {
-        Spark.post(hrefUri, { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
+        if (!contactUsFormPostRoutesRegistered.contains(hrefUri)) {
+            Spark.post(hrefUri, { postRequest, postResponse -> postContactUsForm(postRequest, postResponse) })
+            contactUsFormPostRoutesRegistered.add(hrefUri)
+        }
     }
 
     fun postContactUsForm(request: Request, response: Response): Response {
