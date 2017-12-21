@@ -47,12 +47,19 @@ object j2htmlPartials {
         h2
     }
 
-    fun inputField(identifier: String, placeholder: String): Tag {
+    fun inputField(identifier: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
-                .withPlaceholder(placeholder)
+    }
+
+    fun inputField(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
     }
 
     fun inputField(identifier: String, classAttribute: String, placeholder: String): Tag {
@@ -64,41 +71,109 @@ object j2htmlPartials {
                 .withPlaceholder(placeholder)
     }
 
-    fun requiredInputField(identifier: String, placeholder: String): Tag {
+    fun inputField(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
+                .withClass(classAttribute)
+                .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+    }
+
+    fun requiredInputField(identifier: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .isRequired
+    }
+
+    fun requiredInputField(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
+                .isRequired
+    }
+
+    fun requiredInputField(identifier: String, classAttribute: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
                 .withPlaceholder(placeholder)
                 .isRequired
     }
 
-    fun requiredInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
+    fun requiredInputField(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
+                .withClass(classAttribute)
                 .withPlaceholder(placeholder)
                 .withValue(defaultContent)
                 .isRequired
     }
 
-    fun readOnlyInputField(identifier: String, placeholder: String, defaultContent: String): Tag {
+    fun readOnlyInputField(identifier: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
+                .attr("readonly", "")
+    }
+
+    fun readOnlyInputField(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
+                .attr("readonly", "")
+    }
+
+    fun readOnlyInputField(identifier: String, classAttribute: String, placeholder: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
+                .withPlaceholder(placeholder)
+                .attr("readonly", "")
+    }
+
+    fun readOnlyInputField(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
                 .withPlaceholder(placeholder)
                 .withValue(defaultContent)
                 .attr("readonly", "")
     }
 
-    fun fullNameInput(identifier: String, placeholder: String): Tag {
+    fun fullNameInput(identifier: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
-                .withPlaceholder(placeholder)
+                .attr("pattern", Validation.fullNameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getFullNameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun fullNameInput(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
                 .attr("pattern", Validation.fullNameRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getFullNameValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
@@ -118,12 +193,37 @@ object j2htmlPartials {
                 .isRequired
     }
 
-    fun usernameInput(identifier: String, placeholder: String): Tag {
+    fun fullNameInput(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
         return input()
                 .withId(identifier)
                 .withType("text")
                 .withName(identifier)
+                .withClass(classAttribute)
                 .withPlaceholder(placeholder)
+                .withValue(defaultContent)
+                .attr("pattern", Validation.fullNameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getFullNameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun usernameInput(identifier: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .attr("pattern", Validation.usernameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getUsernameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun usernameInput(identifier: String, classAttribute: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
                 .attr("pattern", Validation.usernameRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getUsernameValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
@@ -137,6 +237,20 @@ object j2htmlPartials {
                 .withName(identifier)
                 .withClass(classAttribute)
                 .withPlaceholder(placeholder)
+                .attr("pattern", Validation.usernameRegexStruct())
+                .attr("oninvalid", "setCustomValidity('${Validation.getUsernameValidationMessage()}')")
+                .attr("oninput", "setCustomValidity('')")
+                .isRequired
+    }
+
+    fun usernameInput(identifier: String, classAttribute: String, placeholder: String, defaultContent: String): Tag {
+        return input()
+                .withId(identifier)
+                .withType("text")
+                .withName(identifier)
+                .withClass(classAttribute)
+                .withPlaceholder(placeholder)
+                .withValue(defaultContent)
                 .attr("pattern", Validation.usernameRegexStruct())
                 .attr("oninvalid", "setCustomValidity('${Validation.getUsernameValidationMessage()}')")
                 .attr("oninput", "setCustomValidity('')")
