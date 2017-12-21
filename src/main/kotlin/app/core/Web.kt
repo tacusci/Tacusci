@@ -187,9 +187,10 @@ object Web : KLogging() {
             val message = request.queryParams("message")
 
             if (!recipientName.isNullOrBlankOrEmpty() && !recipientEmailAddress.isNullOrBlankOrEmpty() && !message.isNullOrBlankOrEmpty()) {
-                Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
+                val sentEmail = Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
                         "Contact Us Form from ${request.url()}, sent by $recipientName " +
                                  "($recipientEmailAddress)", message)
+                if (sentEmail) request.session().attribute("emailSent", sentEmail)
             }
 
             response.managedRedirect(request, request.queryParams("return_url"))
