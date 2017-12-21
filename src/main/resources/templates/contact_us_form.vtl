@@ -14,4 +14,14 @@
 
     <button method="submit">Submit</button>
 </form>
+
 $TForms.registerContactUsForm("contact_us_form", $TRequest.getRequestURI())
+#if ($TRequest.session.attribute("emailSent"))
+    <p>Email Sent successfully</p>
+    $TRequest.session.removeAttribute("emailSent")
+#end
+
+#if ($Request.session().attribute("emailNotSent"))
+    <p>Email Not Sent successfully</p>
+    $TRequest.session.removeAttribute("emailNotSent")
+#end

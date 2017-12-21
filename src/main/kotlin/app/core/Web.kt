@@ -197,7 +197,13 @@ object Web : KLogging() {
                 val sentEmail = Email.sendEmail(Config.getContactUsEmailsList(), Config.getProperty("contact-us-email"),
                         "Contact Us Form from ${request.url()}, sent by $recipientName " +
                                  "($recipientEmailAddress)", message)
-                if (sentEmail) request.session().attribute("emailSent", sentEmail)
+                if (sentEmail) {
+                    request.session().attribute("emailSent", sentEmail)
+                    request.session().removeAttribute("emailNotSent")
+                } else {
+                    request.session().attribute("emailNotSent", sentEmail)
+                    request.session().removeAttribute("emailSent")
+                }
             }
 
             response.managedRedirect(request, request.queryParams("return_url"))
