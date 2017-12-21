@@ -57,6 +57,8 @@ object Web : KLogging() {
 
     private val contactUsFormPostRoutesRegistered = mutableListOf<String>()
 
+    fun init() { contactUsFormPostRoutesRegistered.clear() }
+
     fun insertPageTitle(request: Request, model: HashMap<String, Any>, pageTitleSubstring: String): HashMap<String, Any> {
         var pageTitleFormat = Config.getProperty("page-title-format")
         pageTitleFormat = pageTitleFormat.replace("<page-title>", Config.getProperty("page-title"))

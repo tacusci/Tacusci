@@ -175,6 +175,7 @@ class Application {
     fun init() {
         setupDatabase()
         setupDefaultGroups()
+        Web.init()
         setupSpark()
     }
 
