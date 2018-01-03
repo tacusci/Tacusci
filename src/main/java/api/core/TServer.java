@@ -3,7 +3,9 @@ package api.core;
 import app.Application;
 import spark.Request;
 import spark.Response;
+import utils.Config;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -48,6 +50,10 @@ public class TServer extends TAPIClass {
 
     public long getMemoryUsageGB() { if (instance != null) { return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/(long)Math.pow(2, 30); }
         return -1;
+    }
+
+    public File getStaticAssetFolder() {
+        return new File(Config.props.getProperty("static-asset-folder"));
     }
 
     public void restart() {
