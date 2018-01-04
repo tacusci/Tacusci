@@ -35,6 +35,7 @@ import database.models.Page
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
+import kotlin.coroutines.experimental.buildSequence
 
 /**
  * Created by alewis on 04/05/2017.
@@ -88,6 +89,23 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
             disconnect()
             return true
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
+    fun getPageIdsUsingTemplate(templateId: Int): Sequence<Int> {
+        connect()
+        try {
+            val selectStatement = "SELECT ID_PAGE FROM $tableName WHERE TEMPLATE_TO_USE_ID=?"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            preparedStatement?.setInt(1, templateId)
+            val resultSet = preparedStatement?.executeQuery()
+            // retrieves list of page ids from statement result
+            val pageIds = buildSequence {
+                while (resultSet!!.next()) {
+                    yield(resultSet.getInt(1))
+                }
+            }
+            return pageIds
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return sequenceOf(-1) }
     }
 
     fun deletePage(page: Page): Boolean {

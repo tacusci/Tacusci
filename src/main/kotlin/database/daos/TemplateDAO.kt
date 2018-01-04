@@ -80,6 +80,15 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
     }
 
     fun deleteTemplate(template: Template): Boolean {
+        val pageDAO = DAOManager.getDAO(DAOManager.TABLE.PAGES) as PageDAO
+        val idsOfPagesWhichUseTemplate = pageDAO.getPageIdsUsingTemplate(template.id)
+
+        idsOfPagesWhichUseTemplate.forEach {
+            val currentPageUsingTemplate = pageDAO.getPageById(it)
+            currentPageUsingTemplate.templateToUseId = -1
+            pageDAO.updatePage(currentPageUsingTemplate)
+        }
+
         connect()
         try {
             val deleteStatement = "DELETE FROM $tableName WHERE ID_TEMPLATE=?"
