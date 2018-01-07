@@ -157,8 +157,10 @@ class LoginController : Controller {
             if (UserHandler.isLoggedIn(request)) {
                 UserHandler.logout(request)
             }
+            response.managedRedirect(request, "/")
+            return response
         }
-        response.managedRedirect(request, "/")
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
