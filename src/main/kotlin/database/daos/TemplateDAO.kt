@@ -63,7 +63,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
 
     fun updateTemplate(template: Template): Boolean {
         connect()
-        try {
+        return try {
             val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, TEMPLATE_TITLE=?, TEMPLATE_CONTENT=?, AUTHOR_USER_ID=? WHERE ID_TEMPLATE=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
@@ -75,8 +75,8 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
             connection?.commit()
             preparedStatement?.close()
             disconnect()
-            return true
-        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+            true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); false }
     }
 
     fun deleteTemplate(template: Template): Boolean {
@@ -90,7 +90,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
         }
 
         connect()
-        try {
+        return try {
             val deleteStatement = "DELETE FROM $tableName WHERE ID_TEMPLATE=?"
             val preparedStatement = connection?.prepareStatement(deleteStatement)
             preparedStatement?.setInt(1, template.id)
@@ -98,8 +98,8 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
             connection?.commit()
             preparedStatement?.close()
             disconnect()
-            return true
-        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+            true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); false }
     }
 
     fun getTemplateIdByTitle(templateTitle: String): Int {
