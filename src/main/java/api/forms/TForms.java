@@ -123,6 +123,22 @@ public class TForms extends TAPIClass {
         return j2htmlPartials.INSTANCE.emailInput(identifier, classAttribute, placeholder, defaultContent).render();
     }
 
+    public String getReadOnlyInputField(String identifier) {
+        return j2htmlPartials.INSTANCE.readOnlyInputField(identifier).render();
+    }
+
+    public String getReadOnlyInputField(String identifier, String classAttribute) {
+        return j2htmlPartials.INSTANCE.readOnlyInputField(identifier, classAttribute).render();
+    }
+
+    public String getReadOnlyInputField(String identifier, String classAttribute, String placeholder) {
+        return j2htmlPartials.INSTANCE.readOnlyInputField(identifier, classAttribute, placeholder).render();
+    }
+
+    public String getReadOnlyInputField(String identifier, String classAttribute, String placeholder, String defaultContent) {
+        return j2htmlPartials.INSTANCE.readOnlyInputField(identifier, classAttribute, placeholder, defaultContent).render();
+    }
+
     public String mapFormToHash(String formName) {
         return Web.INSTANCE.mapFormToHash(request.session(), formName);
     }
