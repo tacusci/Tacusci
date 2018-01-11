@@ -94,7 +94,7 @@ class GroupManagementController : Controller {
                 if (request.params(":group_id") != null) {
                     model.put("template", "/templates/edit_group.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
-                    val group = GroupHandler.groupDAO.getGroup(request.params(":group_id").toIntSafe())
+                    val group = GroupHandler.getGroup(request.params(":group_id").toIntSafe())
                     if (group.id == -1) response.managedRedirect(request, "/dashboard/group_management")
                     model.put("groupToEdit", group)
                 } else {
