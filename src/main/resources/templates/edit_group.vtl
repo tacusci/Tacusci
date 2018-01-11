@@ -39,9 +39,9 @@
                 <div class="pure-control-group">
                     <label class="theme-shade" for="group_name" required>Group Name</label>
                     #if (!$groupToEdit.getDefaultGroup())
-                        $TForms.getRequiredInputField("group_name", "Group Name", $groupToEdit.getName())
+                        $TForms.getRequiredInputField("group_name", "", "", $groupToEdit.getName())
                     #else
-                        $TForms.getReadOnlyInputField("group_name", "Group Name", $groupToEdit.getName())
+                        $TForms.getReadOnlyInputField("group_name", "", "", $groupToEdit.getName())
                     #end
                 </div>
             </fieldset>
