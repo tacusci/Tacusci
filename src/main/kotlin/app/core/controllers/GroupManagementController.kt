@@ -95,6 +95,7 @@ class GroupManagementController : Controller {
                     model.put("template", "/templates/edit_group.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
                     val group = GroupHandler.groupDAO.getGroup(request.params(":group_id").toIntSafe())
+                    println("Group - ${group.name} is default group: ${group.defaultGroup}")
                     if (group.id == -1) response.managedRedirect(request, "/dashboard/group_management")
                     model.put("groupToEdit", group)
                 } else {
@@ -126,14 +127,27 @@ class GroupManagementController : Controller {
         val groupToEdit = Group()
         groupToEdit.id = request.queryParams("group_id").toIntSafe()
         groupToEdit.name = request.queryParams("group_name")
+
         if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Group to edit: ${groupToEdit.name}")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group (ID: ${groupToEdit.id}) name to ${groupToEdit.name}")
             GroupHandler.groupDAO.updateGroup(groupToEdit)
-            GroupHandler.getUsersInGroup(groupToEdit.name).forEach { GroupHandler.removeUserFromGroup(it, groupToEdit.name) }
+
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Removing all users from group (${groupToEdit.id}) ${groupToEdit.name}")
+            GroupHandler.removeAllUsersFromGroup(groupToEdit.name)
+
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> For each user in the form's group member list")
             request.queryParams("group_members_list").split(",").forEach {
                 val userToAdd = UserHandler.userDAO.getUser(it)
-                if (userToAdd.id > -1)
-                    if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
+                if (userToAdd.id > -1) {
+                    if (UserHandler.userExists(userToAdd)) {
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Add user ${userToAdd.username} to group (${groupToEdit.id}) ${groupToEdit.name}")
+                        GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
+                    }
+                }
             }
+        } else {
+            logger.warn("${UserHandler.getSessionIdentifier(request)} -> Group name to edit is blank, cannot continue submission process")
         }
         response.managedRedirect(request, request.uri())
         return response

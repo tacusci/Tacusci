@@ -68,6 +68,12 @@ object GroupHandler : KLogging() {
         }
     }
 
+    fun removeAllUsersFromGroup(groupName: String) {
+        if (groupExists(groupName)) {
+            getUsersInGroup(groupName).forEach { removeUserFromGroup(it, groupName) }
+        }
+    }
+
     fun removeUserFromGroup(user: User, groupName: String) {
         removeUserFromGroup(user.username, groupName)
     }
