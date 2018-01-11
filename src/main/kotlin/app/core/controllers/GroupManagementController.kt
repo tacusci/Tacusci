@@ -135,29 +135,31 @@ class GroupManagementController : Controller {
         //first check to make sure that the group name is not blank
         if (!newGroupName.isNullOrBlankOrEmpty()) {
         //if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Group to edit: ${groupToEdit.name}")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Group to edit: ${groupToEdit.name} (${groupToEdit.id})")
 
             //update the group in the database with possibly changed name
             if (groupToEdit.name != newGroupName) {
                 groupToEdit.name = newGroupName
                 GroupHandler.groupDAO.updateGroup(groupToEdit)
-                logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group (ID: ${groupToEdit.id}) ${groupToEdit.name} name to $newGroupName")
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group ${groupToEdit.name} (${groupToEdit.id}) name to $newGroupName")
             }
 
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Removing all users from group (${groupToEdit.id}) ${groupToEdit.name}")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> Removing all users from group ${groupToEdit.name} (${groupToEdit.id})")
             //clear all existing users from group (this will always leave the root admin alone however)
             GroupHandler.removeAllUsersFromGroup(groupToEdit.name)
 
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> For each user in the form's group member list")
+            logger.info("${UserHandler.getSessionIdentifier(request)} -> For each user in the form's group member list, add user to group")
             //for each user in the group member list from the form submission
             request.queryParams("group_members_list").split(",").forEach {
                 //get existing data for user to add to group
                 val userToAdd = UserHandler.userDAO.getUser(it)
                 if (userToAdd.id > -1) {
-                    //if existing user found
-                    if (UserHandler.userExists(userToAdd)) {
-                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Add user ${userToAdd.username} to group (${groupToEdit.id}) ${groupToEdit.name}")
+                    //if existing user found and not already in the group
+                    if (UserHandler.userExists(userToAdd) && !GroupHandler.userInGroup(userToAdd, groupToEdit.name)) {
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Added user ${userToAdd.username} to group ${groupToEdit.name} (${groupToEdit.id})")
                         GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
+                    } else {
+                        logger.info("${UserHandler.getSessionIdentifier(request)} -> Either user ${userToAdd.username} doesn't exist or already in group ${groupToEdit.name} (${groupToEdit.id})")
                     }
                 } else {
                     logger.error("${UserHandler.getSessionIdentifier(request)} -> Unable to read existing user $it from database")
