@@ -116,6 +116,8 @@ class GroupManagementController : Controller {
                 if (userToAdd.id > -1)
                     if (UserHandler.userExists(userToAdd)) GroupHandler.addUserToGroup(userToAdd, groupToCreate.name)
             }
+            //always add the root account to every newly created group
+            GroupHandler.addUserToGroup(UserHandler.getRootAdmin(), groupToCreate.name)
         }
         response.managedRedirect(request, rootUri)
         return response
@@ -126,18 +128,24 @@ class GroupManagementController : Controller {
 
         // get group with existing data from database
         val groupToEdit = GroupHandler.getGroup(request.queryParams("group_id").toIntSafe())
-        //set the name to whatever came back in the form submission
-        groupToEdit.name = request.queryParams("group_name")
+
+        //get the name as whatever came back in the form submission
+        val newGroupName = request.queryParams("group_name")
 
         //first check to make sure that the group name is not blank
-        if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
+        if (!newGroupName.isNullOrBlankOrEmpty()) {
+        //if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Group to edit: ${groupToEdit.name}")
-            logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group (ID: ${groupToEdit.id}) name to ${groupToEdit.name}")
+
             //update the group in the database with possibly changed name
-            GroupHandler.groupDAO.updateGroup(groupToEdit)
+            if (groupToEdit.name != newGroupName) {
+                groupToEdit.name = newGroupName
+                GroupHandler.groupDAO.updateGroup(groupToEdit)
+                logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group (ID: ${groupToEdit.id}) ${groupToEdit.name} name to $newGroupName")
+            }
 
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Removing all users from group (${groupToEdit.id}) ${groupToEdit.name}")
-            //clear all existing users from group
+            //clear all existing users from group (this will always leave the root admin alone however)
             GroupHandler.removeAllUsersFromGroup(groupToEdit.name)
 
             logger.info("${UserHandler.getSessionIdentifier(request)} -> For each user in the form's group member list")
