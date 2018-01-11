@@ -124,25 +124,35 @@ class GroupManagementController : Controller {
     private fun post_EditGroupForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_GROUP_FORM")
 
+        // get group with existing data from database
         val groupToEdit = GroupHandler.getGroup(request.queryParams("group_id").toIntSafe())
+        //set the name to whatever came back in the form submission
         groupToEdit.name = request.queryParams("group_name")
 
+        //first check to make sure that the group name is not blank
         if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Group to edit: ${groupToEdit.name}")
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Updated group (ID: ${groupToEdit.id}) name to ${groupToEdit.name}")
+            //update the group in the database with possibly changed name
             GroupHandler.groupDAO.updateGroup(groupToEdit)
 
             logger.info("${UserHandler.getSessionIdentifier(request)} -> Removing all users from group (${groupToEdit.id}) ${groupToEdit.name}")
+            //clear all existing users from group
             GroupHandler.removeAllUsersFromGroup(groupToEdit.name)
 
             logger.info("${UserHandler.getSessionIdentifier(request)} -> For each user in the form's group member list")
+            //for each user in the group member list from the form submission
             request.queryParams("group_members_list").split(",").forEach {
+                //get existing data for user to add to group
                 val userToAdd = UserHandler.userDAO.getUser(it)
                 if (userToAdd.id > -1) {
+                    //if existing user found
                     if (UserHandler.userExists(userToAdd)) {
                         logger.info("${UserHandler.getSessionIdentifier(request)} -> Add user ${userToAdd.username} to group (${groupToEdit.id}) ${groupToEdit.name}")
                         GroupHandler.addUserToGroup(userToAdd, groupToEdit.name)
                     }
+                } else {
+                    logger.error("${UserHandler.getSessionIdentifier(request)} -> Unable to read existing user $it from database")
                 }
             }
         } else {

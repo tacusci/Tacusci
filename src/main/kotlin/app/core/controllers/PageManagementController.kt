@@ -118,12 +118,10 @@ class PageManagementController : Controller {
 
     private fun post_EditPageForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM")
-        val pageToEdit = Page()
-        val wasPreviouslyDeletable = PageHandler.getPageById(request.queryParams("page_id").toIntSafe()).isDeleteable
+        val pageToEdit = PageHandler.getPageById(request.queryParams("page_id").toIntSafe())
         pageToEdit.id = request.queryParams("page_id").toIntSafe()
         pageToEdit.title = request.queryParams("page_title")
         pageToEdit.pageRoute = request.queryParams("page_route")
-        pageToEdit.isDeleteable = wasPreviouslyDeletable
         pageToEdit.content = request.queryParams("page_content")
         pageToEdit.templateToUseId = request.queryParams("template_to_use").toIntSafe()
         pageToEdit.lastUpdatedDateTime = System.currentTimeMillis()
