@@ -76,9 +76,13 @@ object GroupHandler : KLogging() {
         }
     }
 
-    fun removeAllUsersFromGroup(groupName: String) {
+    fun removeAllUsersFromGroup(groupName: String, includeRootAdmin: Boolean = false) {
         if (groupExists(groupName)) {
-            getUsersInGroup(groupName).forEach { removeUserFromGroup(it, groupName) }
+            getUsersInGroup(groupName).forEach {
+                if (!it.rootAdmin || includeRootAdmin) {
+                    removeUserFromGroup(it, groupName)
+                }
+            }
         }
     }
 
