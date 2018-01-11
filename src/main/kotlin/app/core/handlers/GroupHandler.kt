@@ -52,6 +52,14 @@ object GroupHandler : KLogging() {
         return true
     }
 
+    fun getGroup(groupId: Int): Group {
+        return groupDAO.getGroup(groupId)
+    }
+
+    fun getGroup(group: Group): Group {
+        return groupDAO.getGroup(group.id)
+    }
+
     fun addUserToGroup(user: User, groupName: String) {
         addUserToGroup(user.username, groupName)
     }

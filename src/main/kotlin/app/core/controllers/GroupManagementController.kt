@@ -95,7 +95,6 @@ class GroupManagementController : Controller {
                     model.put("template", "/templates/edit_group.vtl")
                     Web.insertPageTitle(request, model, "$pageTitleSubstring - Edit Page")
                     val group = GroupHandler.groupDAO.getGroup(request.params(":group_id").toIntSafe())
-                    println("Group - ${group.name} is default group: ${group.defaultGroup}")
                     if (group.id == -1) response.managedRedirect(request, "/dashboard/group_management")
                     model.put("groupToEdit", group)
                 } else {
@@ -124,8 +123,8 @@ class GroupManagementController : Controller {
 
     private fun post_EditGroupForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_GROUP_FORM")
-        val groupToEdit = Group()
-        groupToEdit.id = request.queryParams("group_id").toIntSafe()
+
+        val groupToEdit = GroupHandler.getGroup(request.queryParams("group_id").toIntSafe())
         groupToEdit.name = request.queryParams("group_name")
 
         if (!groupToEdit.name.isNullOrBlankOrEmpty()) {
