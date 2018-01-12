@@ -68,9 +68,14 @@ class Application {
         //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
-        //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
-        //reconnect at the requested specific schema
-        DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
+
+        if (DAOManager.dbProperties.getProperty("server-type") == "MYSQL") {
+            //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
+            //reconnect at the requested specific schema
+            DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
+        } else {
+            DAOManager.init(dbURL, dbProperties)
+        }
     }
 
     fun setupDefaultGroups() {
