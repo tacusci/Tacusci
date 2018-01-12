@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS  $schema_name.groups (
     group_name VARCHAR(45) UNIQUE NOT NULL,
     id_parent_group INT,
     default_group BOOLEAN NOT NULL,
-    hidden BOOLEAN NOT NULL,
+    hidden BOOLEAN NOT NULL
 );
 
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.pages (
     template_to_use_id INT,
     maintenance_mode BOOLEAN NOT NULL,
     author_user_id INT NOT NULL,
-    page_type INT NOT NULL,
+    page_type INT NOT NULL
 );
 
 CREATE SEQUENCE $schema_name.templates_seq;
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.templates (
     last_updated_date_time TEXT NOT NULL,
     template_title VARCHAR(100) NOT NULL UNIQUE,
     template_content TEXT NOT NULL,
-    author_user_id INT NOT NULL,
+    author_user_id INT NOT NULL
 );
 
 CREATE SEQUENCE $schema_name.includes_seq;
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.includes (
     last_updated_date_time TEXT NOT NULL,
     include_title VARCHAR(100) NOT NULL,
     include_content TEXT NOT NULL,
-    author_user_id INT NOT NULL,
+    author_user_id INT NOT NULL
 );
 
 CREATE SEQUENCE $schema_name.route_permissions_seq;
@@ -93,5 +93,5 @@ CREATE TABLE IF NOT EXISTS $schema_name.route_permissions (
     last_updated_date_time TEXT NOT NULL,
     permission_title VARCHAR(100) NOT NULL UNIQUE,
     route VARCHAR(200) NOT NULL,
-    id_groups INT NOT NULL,
+    id_groups INT NOT NULL
 );
