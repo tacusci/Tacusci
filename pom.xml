@@ -58,6 +58,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.4.jre7</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.j2html</groupId>
             <artifactId>j2html</artifactId>
             <version>0.7</version>
