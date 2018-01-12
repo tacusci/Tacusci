@@ -108,7 +108,7 @@ object DAOManager : KLogging() {
             DAOManager.open()
             logger.info("Connected to DB at ${url}")
         } catch (e: SQLException) {
-            logger.error("Unable to connect to database at ${url}... Terminating...")
+            logger.error("Unable to connect to database at $url (Reason: ${e.message})... Terminating...")
             System.exit(-1)
         }
     }
@@ -117,7 +117,7 @@ object DAOManager : KLogging() {
         try {
             DAOManager.close()
             logger.info("Disconnected from database at ${url}")
-        } catch (e: SQLException) {
+        } catch (e: SQLException) {1
             logger.error(e.message)
         }
     }
