@@ -33,7 +33,6 @@
 
 import database.ConnectionPool
 import database.SQLScript
-import extensions.toIntSafe
 import mu.KLogging
 import utils.Config
 import utils.InternalResourceFile
@@ -75,7 +74,12 @@ object DAOManager : KLogging() {
     }
 
     fun setup() {
-        val sqlScriptData = InternalResourceFile("/sql/sql_setup_script.sql")
+        val sqlScriptData =
+                if (url.startsWith("jdbc:sql")) {
+                    InternalResourceFile("/sql/mysql_setup_script.sql")
+                } else {
+                    InternalResourceFile("/sql/postgresql_setup_script.sql")
+                }
         val sqlScript = SQLScript(sqlScriptData.inputStream)
         setup(sqlScript)
     }
