@@ -1,7 +1,5 @@
 CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-CREATE SEQUENCE $schema_name.users_seq;
-
 CREATE TABLE IF NOT EXISTS $schema_name.users (
   id_users INT NOT NULL DEFAULT NEXTVAL ('$schema_name.users_seq'),
   created_date_time TEXT NOT NULL,

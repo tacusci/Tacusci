@@ -31,6 +31,7 @@
  
  package database.daos
 
+import app.Application
 import database.ConnectionPool
 import database.SQLScript
 import mu.KLogging
@@ -76,8 +77,10 @@ object DAOManager : KLogging() {
     fun setup() {
         val sqlScriptData =
                 if (url.startsWith("jdbc:sql")) {
+                    dbProperties.setProperty("server-type", "MYSQL")
                     InternalResourceFile("/sql/mysql_setup_script.sql")
                 } else {
+                    dbProperties.setProperty("server-type", "POSTGRESQL")
                     InternalResourceFile("/sql/postgresql_setup_script.sql")
                 }
         val sqlScript = SQLScript(sqlScriptData.inputStream)
