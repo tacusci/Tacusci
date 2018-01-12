@@ -33,6 +33,7 @@
 
 import database.ConnectionPool
 import database.models.User
+import extensions.toBoolean
 import mu.KLogging
 import utils.PasswordStorage
 import java.sql.SQLException
@@ -94,7 +95,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun insertUser(user: User): Boolean {
         connect()
         try {
-            val createUserStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED) VALUES (?,?,?,?,?,?,?,?)"
+            val createUserStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, AUTH_HASH, EMAIL, FULL_NAME, BANNED) VALUES (?,?,?,?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("users_username_key")}"
             val preparedStatement = connection?.prepareStatement(createUserStatementString)
             //preparedStatement?.setString(1, count().toString())
             preparedStatement?.setLong(1, System.currentTimeMillis())
@@ -104,7 +105,10 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
             preparedStatement?.setString(5, PasswordStorage.createHash(user.password))
             preparedStatement?.setString(6, user.email)
             preparedStatement?.setString(7, user.fullName)
-            preparedStatement?.setInt(8, user.banned)
+            if (dbProperties.getProperty("server-type") == "POSTGRESQL")
+                preparedStatement?.setBoolean(8, user.banned.toBoolean())
+            else
+                preparedStatement?.setInt(8, user.banned)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -133,7 +137,13 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var count = 0
         try {
-            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE BINARY USERNAME=?"
+
+            val selectStatement= if (dbProperties.getProperty("server-type") == "POSTGRESQL") {
+                "SELECT COUNT(*) FROM $tableName WHERE username=?"
+            } else {
+                "SELECT COUNT(*) FROM $tableName WHERE BINARY USERNAME=?"
+            }
+
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()

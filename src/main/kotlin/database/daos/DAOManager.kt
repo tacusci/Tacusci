@@ -146,6 +146,9 @@ object DAOManager : KLogging() {
         }
     }
 
+    //checks what SQL server type is in use and based on that returns command to add to end of inserts
+    fun getConflictConstraintCommand(constraintName: String): String = if (dbProperties.getProperty("server-type") == "POSTGRESQL") "ON CONFLICT ON CONSTRAINT $constraintName DO NOTHING" else ""
+
     fun getDAO(table: TABLE): DAO {
 
         var schemaName = ""

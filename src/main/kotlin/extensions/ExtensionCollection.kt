@@ -113,6 +113,12 @@ fun String.toIntSafe(): Int {
     }
 }
 
+fun Int.toBoolean(): Boolean {
+    if (this >= 1) return true
+    else if (this <= 0) return false
+    return false
+}
+
 @Throws(NoSuchAlgorithmException::class)
 fun String.toMD5Hash(): String {
     try {
