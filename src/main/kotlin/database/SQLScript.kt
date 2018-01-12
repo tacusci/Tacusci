@@ -79,14 +79,11 @@ class SQLScript() {
 
     fun executeStatements(connection: Connection) {
         statements.forEach { statement ->
-            println(statement)
-            val preparedStatement = connection.prepareStatement("$statement;")
+            val preparedStatement = connection.prepareStatement(statement)
             try {
                 preparedStatement?.execute()
             } catch (e: SQLException) {
-                logger.error("Error executing statement -> $statement;")
                 logger.error(e.message)
-                System.exit(1)
             }
             preparedStatement?.closeOnCompletion()
         }

@@ -147,15 +147,21 @@ object DAOManager : KLogging() {
     }
 
     fun getDAO(table: TABLE): DAO {
+
+        var schemaName = ""
+
+        if (dbProperties.getProperty("server-type") == "POSTGRESQL")
+            schemaName = Config.getProperty("schema-name") + "."
+
         when (table) {
-            TABLE.USERS -> return UserDAO(url, dbProperties, "users", connectionPool)
-            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "groups", connectionPool)
-            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "user2group", connectionPool)
-            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "reset_password", connectionPool)
-            TABLE.PAGES -> return PageDAO(url, dbProperties, "pages", connectionPool)
-            TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "templates", connectionPool)
-            TABLE.INCLUDES -> return IncludeDAO(url, dbProperties, "includes", connectionPool)
-            TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "route_permissions", connectionPool)
+            TABLE.USERS -> return UserDAO(url, dbProperties, "${schemaName}users", connectionPool)
+            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "${schemaName}groups", connectionPool)
+            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "${schemaName}user2group", connectionPool)
+            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "${schemaName}reset_password", connectionPool)
+            TABLE.PAGES -> return PageDAO(url, dbProperties, "${schemaName}pages", connectionPool)
+            TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "${schemaName}templates", connectionPool)
+            TABLE.INCLUDES -> return IncludeDAO(url, dbProperties, "${schemaName}includes", connectionPool)
+            TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "${schemaName}route_permissions", connectionPool)
 
             else -> {
                 return GenericDAO(url, dbProperties, "", connectionPool)
