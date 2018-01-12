@@ -197,6 +197,7 @@ class GroupManagementController : Controller {
                 return post_DeleteGroupForm(request, response)
             }
         }
+        response.managedRedirect(request, request.uri())
         return response
     }
 }
