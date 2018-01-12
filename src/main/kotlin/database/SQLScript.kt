@@ -35,6 +35,7 @@ import mu.KLogging
 import java.io.File
 import java.io.InputStream
 import java.sql.Connection
+import java.sql.SQLException
 import java.util.*
 
 /**
@@ -79,7 +80,13 @@ class SQLScript() {
     fun executeStatements(connection: Connection) {
         statements.forEach { statement ->
             val preparedStatement = connection.prepareStatement("$statement;")
-            preparedStatement?.execute()
+            try {
+                preparedStatement?.execute()
+            } catch (e: SQLException) {
+                logger.error("Error executing statement -> $statement;")
+                logger.error(e.message)
+                System.exit(1)
+            }
             preparedStatement?.closeOnCompletion()
         }
     }
