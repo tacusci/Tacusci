@@ -79,6 +79,7 @@ open class Config {
                     Pair("smtp-account-password", ""),
                     Pair("page-title", "Tacusci Website"),
                     Pair("static-asset-folder", ""),
+                    Pair("static-asset-folder-live", "false"),
                     Pair("response-pages-folder", ""),
                     Pair("plugins-folder", ""),
                     Pair("page-title-divider", "|"),

@@ -89,7 +89,10 @@ object ControllerManager : KLogging() {
     }
 
     fun mapAccessToStaticLocalFolder() {
-        Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
+        if (Config.getProperty("static-asset-folder-live").toBoolean())
+            Spark.staticFiles.externalLocation(Config.getProperty("static-asset-folder"))
+        else
+            Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
     }
 
     fun applyGroupPermissionsToRoutes() {
