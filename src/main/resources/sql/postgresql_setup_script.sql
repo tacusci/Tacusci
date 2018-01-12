@@ -1,6 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS $schema_name;
 
-CREATE SEQUENCE $schema_name.users_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.users_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.users (
     id_users INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.users_seq'),
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.users (
 );
 
 
-CREATE SEQUENCE $schema_name.groups_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.groups_seq;
 
 CREATE TABLE IF NOT EXISTS  $schema_name.groups (
     id_groups INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.groups_seq'),
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.user2group (
     id_groups INT NOT NULL
 );
 
-CREATE SEQUENCE $schema_name.reset_password_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.reset_password_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.reset_password (
     id_reset_passwords INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.reset_password_seq'),
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.reset_password (
     expired BOOLEAN NOT NULL
 );
 
-CREATE SEQUENCE $schema_name.pages_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.pages_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.pages (
     id_page INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.pages_seq'),
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.pages (
     page_type INT NOT NULL
 );
 
-CREATE SEQUENCE $schema_name.templates_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.templates_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.templates (
     id_template INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.templates_seq'),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.templates (
     author_user_id INT NOT NULL
 );
 
-CREATE SEQUENCE $schema_name.includes_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.includes_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.includes (
     id_include INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.includes_seq'),
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.includes (
     author_user_id INT NOT NULL
 );
 
-CREATE SEQUENCE $schema_name.route_permissions_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.route_permissions_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.route_permissions (
     id_permission INT PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.route_permissions_seq'),

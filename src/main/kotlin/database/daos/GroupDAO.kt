@@ -98,7 +98,7 @@ class GroupDAO(url: String, dbProperties: Properties, tableName: String, connect
     fun insertGroup(group: Group): Boolean {
         connect()
         try {
-            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP, DEFAULT_GROUP, HIDDEN) VALUES (?,?,?,?,?,?)"
+            val createGroupStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, GROUP_NAME, ID_PARENT_GROUP, DEFAULT_GROUP, HIDDEN) VALUES (?,?,?,?,?,?)${if (dbProperties.getProperty("server-type") == "POSTGRESQL") " ON CONFLICT ON CONSTRAINT groups_group_name_key DO NOTHING" else ""}"
             val preparedStatement = connection?.prepareStatement(createGroupStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
