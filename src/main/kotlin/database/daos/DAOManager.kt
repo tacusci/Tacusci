@@ -76,7 +76,7 @@ object DAOManager : KLogging() {
 
     fun setup() {
         val sqlScriptData =
-                if (url.startsWith("jdbc:sql")) {
+                if (url.startsWith("jdbc:mysql")) {
                     dbProperties.setProperty("server-type", "MYSQL")
                     InternalResourceFile("/sql/mysql_setup_script.sql")
                 } else {

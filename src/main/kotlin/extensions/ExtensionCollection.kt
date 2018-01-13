@@ -119,6 +119,12 @@ fun Int.toBoolean(): Boolean {
     return false
 }
 
+fun Boolean.toInt(): Int {
+    if (this) return 1
+    else if (!this) return 0
+    return 0
+}
+
 @Throws(NoSuchAlgorithmException::class)
 fun String.toMD5Hash(): String {
     try {

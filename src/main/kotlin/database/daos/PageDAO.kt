@@ -57,7 +57,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
             preparedStatement?.setString(5, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setBoolean(6, page.isDeleteable)
             preparedStatement?.setInt(7, page.templateToUseId)
-            preparedStatement?.setInt(8, page.maintenanceMode)
+            preparedStatement?.setBoolean(8, page.maintenanceMode)
             preparedStatement?.setInt(9, page.authorUserId)
             preparedStatement?.setInt(10, page.type.ordinal)
             preparedStatement?.execute()
@@ -79,7 +79,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
             preparedStatement?.setString(4, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setBoolean(5, page.isDeleteable)
             preparedStatement?.setInt(6, page.templateToUseId)
-            preparedStatement?.setInt(7, page.maintenanceMode)
+            preparedStatement?.setBoolean(7, page.maintenanceMode)
             preparedStatement?.setInt(8, page.authorUserId)
             preparedStatement?.setInt(9, page.type.ordinal)
             preparedStatement?.setInt(10, page.id)
@@ -171,7 +171,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
                 page.content = resultSet.getString("PAGE_CONTENT")
                 page.isDeleteable = resultSet.getBoolean("DELETEABLE")
                 page.templateToUseId = resultSet.getInt("TEMPLATE_TO_USE_ID")
-                page.maintenanceMode = resultSet.getInt("MAINTENANCE_MODE")
+                page.maintenanceMode = resultSet.getBoolean("MAINTENANCE_MODE")
                 page.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
                 page.type = StructuredPage.PageType.fromInt(resultSet.getInt("PAGE_TYPE"))!!
             }

@@ -42,7 +42,7 @@ import utils.tree.Tree
  */
 data class User(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
                 var fullName: String = "", var username: String = "", var password: String = "", var email: String = "",
-                var banned: Int = 0, var rootAdmin: Boolean = false) {
+                var banned: Boolean = false, var rootAdmin: Boolean = false) {
 
     fun isValid(): Boolean {
         if (isUsernameValid()) { return true }
@@ -116,7 +116,7 @@ data class RouteEntity(var id: Long, var parentId: Long, var name: String,
                        var pageId: Long)
 
 data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
-                var title: String = "", var pageRoute: String = "", var maintenanceMode: Int = 0,
+                var title: String = "", var pageRoute: String = "", var maintenanceMode: Boolean = false,
                 var content: String = "",
                 var isDeleteable: Boolean = true,
                 var templateToUseId: Int = -1,

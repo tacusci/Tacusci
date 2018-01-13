@@ -34,6 +34,7 @@
 import database.ConnectionPool
 import database.models.User
 import extensions.toBoolean
+import extensions.toInt
 import mu.KLogging
 import utils.PasswordStorage
 import java.sql.SQLException
@@ -50,7 +51,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
 
     fun getUser(userID: Int): User {
         connect()
-        val user = User(-1, -1, -1, "", "", "", "", 0, true)
+        val user = User(-1, -1, -1, "", "", "", "", false, true)
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
@@ -64,7 +65,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
                 user.username = resultSet.getString("USERNAME")
                 user.password = resultSet.getString("AUTH_HASH")
                 user.email = resultSet.getString("EMAIL")
-                user.banned = resultSet.getInt("BANNED")
+                user.banned = resultSet.getBoolean("BANNED")
                 user.rootAdmin = resultSet.getBoolean("ROOT_ADMIN")
             }
             disconnect()
@@ -112,10 +113,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
             preparedStatement?.setString(5, PasswordStorage.createHash(user.password))
             preparedStatement?.setString(6, user.email)
             preparedStatement?.setString(7, user.fullName)
-            if (dbProperties.getProperty("server-type") == "POSTGRESQL")
-                preparedStatement?.setBoolean(8, user.banned.toBoolean())
-            else
-                preparedStatement?.setInt(8, user.banned)
+            preparedStatement?.setBoolean(8, user.banned)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -199,7 +197,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         val preparedStatement = connection?.prepareStatement(selectStatement)
         val resultSet = preparedStatement?.executeQuery()
         while (resultSet!!.next()) {
-            val user = User(-1, -1, -1, "", "", "", "", 0, false)
+            val user = User(-1, -1, -1, "", "", "", "", false, false)
             user.id = resultSet.getInt("ID_USERS")
             user.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
             user.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
@@ -208,7 +206,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
             user.password = resultSet.getString("AUTH_HASH")
             user.fullName = resultSet.getString("FULL_NAME")
             user.email = resultSet.getString("EMAIL")
-            user.banned = resultSet.getInt("BANNED")
+            user.banned = resultSet.getBoolean("BANNED")
             userList.add(user)
         }
         disconnect()
@@ -217,7 +215,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
 
     fun getRootAdmin(): User {
         connect()
-        val user = User(-1, -1, -1, "", "", "", "", 0, true)
+        val user = User(-1, -1, -1, "", "", "", "", false, true)
         val selectStatement = "SELECT ID_USERS, CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ROOT_ADMIN, USERNAME, EMAIL, FULL_NAME, BANNED FROM $tableName WHERE ROOT_ADMIN=?"
         val preparedStatement = connection?.prepareStatement(selectStatement)
         preparedStatement?.setBoolean(1, user.rootAdmin)
@@ -230,7 +228,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
             user.username = resultSet.getString("USERNAME")
             user.email = resultSet.getString("EMAIL")
             user.fullName = resultSet.getString("FULL_NAME")
-            user.banned = resultSet.getInt("BANNED")
+            user.banned = resultSet.getBoolean("BANNED")
         }
         disconnect()
         return user
@@ -322,16 +320,16 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 
-    fun isBanned(username: String): Int {
+    fun isBanned(username: String): Boolean {
         connect()
-        var banned = 0
+        var banned = false
         try {
             val selectStatement = "SELECT BANNED FROM $tableName WHERE BINARY USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                banned = resultSet.getInt("BANNED")
+                banned = resultSet.getBoolean("BANNED")
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         disconnect()

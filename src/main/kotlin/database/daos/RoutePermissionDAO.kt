@@ -127,7 +127,7 @@ class RoutePermissionDAO(url: String, dbProperties: Properties, tableName: Strin
     fun insertRoutePermission(routePermission: RoutePermission): Boolean {
         connect()
         try {
-            val createRoutePermissionStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PERMISSION_TITLE, ROUTE, ID_GROUPS) VALUES (?,?,?,?,?)"
+            val createRoutePermissionStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PERMISSION_TITLE, ROUTE, ID_GROUPS) VALUES (?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("route_permissions_permission_title_key")}"
             val preparedStatement = connection?.prepareStatement(createRoutePermissionStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
