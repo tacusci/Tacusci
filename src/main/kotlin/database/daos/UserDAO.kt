@@ -80,7 +80,14 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var userID = -1
         try {
-            val selectStatement = "SELECT ID_USERS FROM $tableName WHERE BINARY USERNAME=?"
+            //val selectStatement = "SELECT ID_USERS FROM $tableName WHERE BINARY USERNAME=?"
+
+            val selectStatement = if (dbProperties.getProperty("server-type") == "POSTGRESQL") {
+                "SELECT ID_USERS FROM $tableName WHERE USERNAME=?"
+            } else {
+                "SELECT ID_USERS FROM $tableName WHERE BINARY USERNAME=?"
+            }
+
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
@@ -139,7 +146,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         try {
 
             val selectStatement= if (dbProperties.getProperty("server-type") == "POSTGRESQL") {
-                "SELECT COUNT(*) FROM $tableName WHERE username=?"
+                "SELECT COUNT(*) FROM $tableName WHERE USERNAME=?"
             } else {
                 "SELECT COUNT(*) FROM $tableName WHERE BINARY USERNAME=?"
             }
