@@ -81,7 +81,8 @@ class SQLScript() {
         statements.forEach { statement ->
             val preparedStatement = connection.prepareStatement(statement)
             try {
-                preparedStatement?.execute()
+                preparedStatement.execute()
+                connection.commit()
             } catch (e: SQLException) {
                 logger.error(e.message)
             }
