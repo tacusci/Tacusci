@@ -46,7 +46,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
     fun insertTemplate(template: Template): Boolean {
         connect()
         try {
-            val createTemplateStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, TEMPLATE_TITLE, TEMPLATE_CONTENT, AUTHOR_USER_ID) VALUES (?,?,?,?,?)"
+            val createTemplateStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, TEMPLATE_TITLE, TEMPLATE_CONTENT, AUTHOR_USER_ID) VALUES (?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("templates_template_title_key")}"
             val preparedStatement = connection?.prepareStatement(createTemplateStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())

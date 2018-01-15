@@ -44,7 +44,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String,
      fun insertAuthHash(userId: Int, authHash: String) {
         connect()
         try {
-            val insertAuthHashStatement = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ID_USERS, AUTH_HASH, EXPIRED) VALUES (?,?,?,?,?)"
+            val insertAuthHashStatement = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, ID_USERS, AUTH_HASH, EXPIRED) VALUES (?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("reset_password_id_users_key")}"
             val preparedStatement = connection?.prepareStatement(insertAuthHashStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
