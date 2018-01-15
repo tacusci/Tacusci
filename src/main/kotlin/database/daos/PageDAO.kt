@@ -48,7 +48,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun insertPage(page: Page): Boolean {
         connect()
         try {
-            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, DELETEABLE, TEMPLATE_TO_USE_ID, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?)"
+            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, DELETEABLE, TEMPLATE_TO_USE_ID, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("pages_page_route_key")}"
             val preparedStatement = connection?.prepareStatement(createPageStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
