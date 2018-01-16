@@ -108,8 +108,6 @@ class Application {
         if (maxThreads > 0) threadPool(maxThreads)
         if (maxThreads > 0 && minThreads > 0 && threadIdleTimeout > 0) threadPool(maxThreads, minThreads, threadIdleTimeout)
 
-        staticFiles.location("/public")
-        staticFiles.expireTime(600L)
         setupSparkRoutes()
     }
 

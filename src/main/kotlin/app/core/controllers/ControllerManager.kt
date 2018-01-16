@@ -35,6 +35,7 @@ import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.RoutePermissionDAO
 import database.models.RoutePermission
+import extensions.isNullOrBlankOrEmpty
 import mu.KLogging
 import spark.Request
 import spark.Response
@@ -89,10 +90,13 @@ object ControllerManager : KLogging() {
     }
 
     fun mapAccessToStaticLocalFolder() {
-        if (Config.getProperty("static-asset-folder-live").toBoolean())
-            Spark.staticFiles.externalLocation(Config.getProperty("static-asset-folder"))
-        else
-            Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
+        if (!Config.getProperty("static-asset-folder").isNullOrBlankOrEmpty()) {
+            if (Config.getProperty("static-asset-folder-live").toBoolean()) {
+                Spark.staticFiles.externalLocation(Config.getProperty("static-asset-folder"))
+            } else {
+                Spark.externalStaticFileLocation(Config.getProperty("static-asset-folder"))
+            }
+        }
     }
 
     fun applyGroupPermissionsToRoutes() {
