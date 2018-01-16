@@ -81,13 +81,8 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var userID = -1
         try {
-            //val selectStatement = "SELECT ID_USERS FROM $tableName WHERE BINARY USERNAME=?"
 
-            val selectStatement = if (dbProperties.getProperty("server-type") == "POSTGRESQL") {
-                "SELECT ID_USERS FROM $tableName WHERE USERNAME=?"
-            } else {
-                "SELECT ID_USERS FROM $tableName WHERE BINARY USERNAME=?"
-            }
+            val selectStatement = "SELECT ID_USERS FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
 
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
@@ -124,9 +119,9 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
 
     fun getUserAuthHash(username: String): String {
         connect()
-        var authHash: String = ""
+        var authHash = ""
         try {
-            val selectStatement = "SELECT AUTH_HASH FROM $tableName WHERE BINARY USERNAME=?"
+            val selectStatement = "SELECT AUTH_HASH FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
@@ -142,12 +137,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var count = 0
         try {
-
-            val selectStatement= if (dbProperties.getProperty("server-type") == "POSTGRESQL") {
-                "SELECT COUNT(*) FROM $tableName WHERE USERNAME=?"
-            } else {
-                "SELECT COUNT(*) FROM $tableName WHERE BINARY USERNAME=?"
-            }
+            val selectStatement = "SELECT COUNT(*) FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
 
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
@@ -162,7 +152,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
 
     fun getUsernameFromEmail(email: String): String {
         connect()
-        var username: String = ""
+        var username = ""
         try {
             val selectStatement = "SELECT USERNAME FROM $tableName WHERE EMAIL=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
@@ -259,7 +249,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun updateUser(user: User): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, USERNAME=?, AUTH_HASH=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, USERNAME=?, AUTH_HASH=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, user.username)
@@ -291,7 +281,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun ban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 1)
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -307,7 +297,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun unban(username: String): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE BINARY USERNAME=?"
+            val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setInt(1, 0)
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -324,7 +314,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var banned = false
         try {
-            val selectStatement = "SELECT BANNED FROM $tableName WHERE BINARY USERNAME=?"
+            val selectStatement = "SELECT BANNED FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, username)
             val resultSet = preparedStatement?.executeQuery()
