@@ -50,8 +50,15 @@ import java.util.*
 object DAOManager : KLogging() {
 
     var url = ""
+    var dbType = DB_TYPE.UNKNOWN
     var dbProperties = Properties()
     private var connectionPool = ConnectionPool()
+
+    enum class DB_TYPE {
+        UNKNOWN,
+        MYSQL,
+        POSTGRESQL
+    }
 
     enum class TABLE {
         USERS,
@@ -67,6 +74,22 @@ object DAOManager : KLogging() {
 
     var connection: Connection? = null
 
+    fun getDBType(): DB_TYPE {
+        return dbType
+    }
+
+    fun isMySQL(): Boolean {
+        return dbType == DB_TYPE.MYSQL
+    }
+
+    fun isPostgresql(): Boolean {
+        return dbType == DB_TYPE.POSTGRESQL
+    }
+
+    fun isUnknown(): Boolean {
+        return dbType == DB_TYPE.UNKNOWN
+    }
+
     fun init(url: String, dbProperties: Properties) {
         this.url = url
         this.dbProperties = dbProperties
@@ -75,14 +98,26 @@ object DAOManager : KLogging() {
     }
 
     fun setup() {
-        val sqlScriptData =
-                if (url.startsWith("jdbc:mysql")) {
-                    dbProperties.setProperty("server-type", "MYSQL")
-                    InternalResourceFile("/sql/mysql_setup_script.sql")
-                } else {
-                    dbProperties.setProperty("server-type", "POSTGRESQL")
-                    InternalResourceFile("/sql/postgresql_setup_script.sql")
-                }
+        val sqlScriptData: InternalResourceFile
+
+        when {
+            url.startsWith("jdbc:mysql") -> {
+                dbType = DB_TYPE.MYSQL
+                dbProperties.setProperty("server-type", DB_TYPE.MYSQL.toString())
+                sqlScriptData = InternalResourceFile("/sql/mysql_setup_script.sql")
+            }
+            url.startsWith("jdbc:postgresql") -> {
+                dbType = DB_TYPE.POSTGRESQL
+                dbProperties.setProperty("server-type", DB_TYPE.POSTGRESQL.toString())
+                sqlScriptData = InternalResourceFile("/sql/postgresql_setup_script.sql")
+            }
+            else -> {
+                dbType = DB_TYPE.UNKNOWN
+                dbProperties.setProperty("server-type", DB_TYPE.UNKNOWN.toString())
+                sqlScriptData = InternalResourceFile("")
+            }
+        }
+
         val sqlScript = SQLScript(sqlScriptData.inputStream)
         setup(sqlScript)
     }
