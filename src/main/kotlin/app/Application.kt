@@ -108,6 +108,7 @@ class Application {
         if (maxThreads > 0) threadPool(maxThreads)
         if (maxThreads > 0 && minThreads > 0 && threadIdleTimeout > 0) threadPool(maxThreads, minThreads, threadIdleTimeout)
 
+        //this is to map the public folder within the .jar package, where all the default CSS, JS etc., is
         staticFiles.location("/public")
         staticFiles.expireTime(600L)
         setupSparkRoutes()
