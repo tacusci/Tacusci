@@ -61,6 +61,7 @@ object DAOManager : KLogging() {
     }
 
     enum class TABLE {
+        TACUSCI_INFO,
         USERS,
         USER2GROUP,
         GROUPS,
@@ -192,6 +193,7 @@ object DAOManager : KLogging() {
             schemaName = Config.getProperty("schema-name") + "."
 
         when (table) {
+            TABLE.TACUSCI_INFO -> return
             TABLE.USERS -> return UserDAO(url, dbProperties, "${schemaName}users", connectionPool)
             TABLE.GROUPS -> return GroupDAO(url, dbProperties, "${schemaName}groups", connectionPool)
             TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "${schemaName}user2group", connectionPool)
