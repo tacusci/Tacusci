@@ -32,13 +32,60 @@ package database.daos
 import database.ConnectionPool
 import database.models.TacusciInfo
 import mu.KLogging
+import java.sql.SQLException
 import java.util.*
 
 class TacusciInfoDAO(url: String, dbProperties: Properties, tableName: String, connectionPool: ConnectionPool) : GenericDAO(url, dbProperties, tableName, connectionPool) {
 
     companion object : KLogging()
 
+    fun insertTacusciInfo(tacusciInfo: TacusciInfo): Boolean {
+        connect()
+        try {
+            val insertStatement = "INSERT INTO $tableName (VERSION_NUMBER_MAJOR, VERSION_NUMBER_MINOR, VERSION_NUMBER_REVISION) VALUES (?,?,?)"
+            val preparedStatement = connection?.prepareStatement(insertStatement)
+            preparedStatement?.setInt(1, tacusciInfo.versionNumberMajor)
+            preparedStatement?.setInt(2, tacusciInfo.versionNumberMinor)
+            preparedStatement?.setInt(3, tacusciInfo.versionNumberRevision)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
+
     fun getTacusciInfo(): TacusciInfo {
-        
+        connect()
+        val tacusciInfo = TacusciInfo()
+        try {
+            val selectStatement = "SELECT * FROM $tableName"
+            val resultSet = connection?.prepareStatement(selectStatement)?.executeQuery()
+            if (resultSet!!.next()) {
+                tacusciInfo.id = resultSet.getInt(1)
+                tacusciInfo.versionNumberMajor = resultSet.getInt(2)
+                tacusciInfo.versionNumberMinor = resultSet.getInt(3)
+                tacusciInfo.versionNumberRevision = resultSet.getInt(4)
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return tacusciInfo
+    }
+
+    fun updateTacusciInfo(tacusciInfo: TacusciInfo): Boolean {
+        connect()
+        try {
+            val updateStatement = "UPDATE $tableName SET VERSION_NUMBER_MAJOR=?, VERSION_NUMBER_MINOR=?, VERSION_NUMBER_REVISION=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}ID_TACUSCI_INFO=?"
+            val preparedStatement = connection?.prepareStatement(updateStatement)
+            preparedStatement?.setInt(1, tacusciInfo.versionNumberMajor)
+            preparedStatement?.setInt(2, tacusciInfo.versionNumberMinor)
+            preparedStatement?.setInt(3, tacusciInfo.versionNumberRevision)
+            preparedStatement?.setInt(4, tacusciInfo.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 }

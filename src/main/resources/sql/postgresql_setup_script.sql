@@ -3,8 +3,10 @@ CREATE SCHEMA IF NOT EXISTS $schema_name;
 CREATE SEQUENCE IF NOT EXISTS $schema_name.tacusci_info_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.tacusci_info (
-    id_tacusci_info_id INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.tacusci_info_seq'),
-    version_number VARCHAR(45) NOT NULL
+    id_tacusci_info INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.tacusci_info_seq'),
+    version_number_major INT NOT NULL,
+    version_number_minor INT NOT NULL,
+    version_number_revision INT NOT NULL
 );
 
 CREATE SEQUENCE IF NOT EXISTS $schema_name.users_seq;

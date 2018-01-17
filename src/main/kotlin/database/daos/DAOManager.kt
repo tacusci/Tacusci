@@ -193,19 +193,21 @@ object DAOManager : KLogging() {
             schemaName = Config.getProperty("schema-name") + "."
 
         when (table) {
-            TABLE.TACUSCI_INFO -> return
-            TABLE.USERS -> return UserDAO(url, dbProperties, "${schemaName}users", connectionPool)
-            TABLE.GROUPS -> return GroupDAO(url, dbProperties, "${schemaName}groups", connectionPool)
-            TABLE.USER2GROUP -> return User2GroupDAO(url, dbProperties, "${schemaName}user2group", connectionPool)
-            TABLE.RESET_PASSWORD -> return ResetPasswordDAO(url, dbProperties, "${schemaName}reset_password", connectionPool)
-            TABLE.PAGES -> return PageDAO(url, dbProperties, "${schemaName}pages", connectionPool)
-            TABLE.TEMPLATES -> return TemplateDAO(url, dbProperties, "${schemaName}templates", connectionPool)
-            TABLE.INCLUDES -> return IncludeDAO(url, dbProperties, "${schemaName}includes", connectionPool)
-            TABLE.ROUTE_PERMISSIONS -> return RoutePermissionDAO(url, dbProperties, "${schemaName}route_permissions", connectionPool)
+            TABLE.TACUSCI_INFO -> TacusciInfoDAO(url, dbProperties, "${schemaName}tacusci_info", connectionPool)
+            TABLE.USERS -> UserDAO(url, dbProperties, "${schemaName}users", connectionPool)
+            TABLE.GROUPS -> GroupDAO(url, dbProperties, "${schemaName}groups", connectionPool)
+            TABLE.USER2GROUP -> User2GroupDAO(url, dbProperties, "${schemaName}user2group", connectionPool)
+            TABLE.RESET_PASSWORD -> ResetPasswordDAO(url, dbProperties, "${schemaName}reset_password", connectionPool)
+            TABLE.PAGES -> PageDAO(url, dbProperties, "${schemaName}pages", connectionPool)
+            TABLE.TEMPLATES -> TemplateDAO(url, dbProperties, "${schemaName}templates", connectionPool)
+            TABLE.INCLUDES -> IncludeDAO(url, dbProperties, "${schemaName}includes", connectionPool)
+            TABLE.ROUTE_PERMISSIONS -> RoutePermissionDAO(url, dbProperties, "${schemaName}route_permissions", connectionPool)
 
             else -> {
                 return GenericDAO(url, dbProperties, "", connectionPool)
             }
         }
+
+        return GenericDAO(url, dbProperties, "", connectionPool)
     }
 }

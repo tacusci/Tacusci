@@ -40,6 +40,7 @@ import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.daos.DAOManager
+import database.daos.TacusciInfoDAO
 import database.models.Group
 import extensions.managedRedirect
 import extensions.toIntSafe
@@ -76,6 +77,10 @@ class Application {
         } else {
             DAOManager.init(dbURL, dbProperties)
         }
+    }
+
+    fun updateDatabase() {
+        val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
     }
 
     fun setupDefaultGroups() {
@@ -207,6 +212,10 @@ fun main(args: Array<String>) {
             stop()
         }
     })
+
+    Config.setProperty("tacusci-version-major", "1")
+    Config.setProperty("tacusci-version-minor", "3")
+    Config.setProperty("tacusci-version-revision", "5")
 
     application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
     application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))
