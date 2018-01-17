@@ -48,7 +48,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun insertPage(page: Page): Boolean {
         connect()
         try {
-            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, DELETEABLE, TEMPLATE_TO_USE_ID, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("pages_page_route_key")}"
+            val createPageStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, PAGE_TITLE, PAGE_ROUTE, PAGE_CONTENT, DELETEABLE, DISABLED, TEMPLATE_TO_USE_ID, MAINTENANCE_MODE, AUTHOR_USER_ID, PAGE_TYPE) VALUES (?,?,?,?,?,?,?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("pages_page_route_key")}"
             val preparedStatement = connection?.prepareStatement(createPageStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
@@ -56,10 +56,11 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
             preparedStatement?.setString(4, page.pageRoute)
             preparedStatement?.setString(5, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setBoolean(6, page.isDeleteable)
-            preparedStatement?.setInt(7, page.templateToUseId)
-            preparedStatement?.setBoolean(8, page.maintenanceMode)
-            preparedStatement?.setInt(9, page.authorUserId)
-            preparedStatement?.setInt(10, page.type.ordinal)
+            preparedStatement?.setBoolean(7, page.isDisabled)
+            preparedStatement?.setInt(8, page.templateToUseId)
+            preparedStatement?.setBoolean(9, page.maintenanceMode)
+            preparedStatement?.setInt(10, page.authorUserId)
+            preparedStatement?.setInt(11, page.type.ordinal)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -71,18 +72,19 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
     fun updatePage(page: Page): Boolean {
         connect()
         try {
-            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, PAGE_TITLE=?, PAGE_ROUTE=?, PAGE_CONTENT=?, DELETEABLE=?, TEMPLATE_TO_USE_ID=?, MAINTENANCE_MODE=?, AUTHOR_USER_ID=?, PAGE_TYPE=? WHERE ID_PAGE=?"
+            val updateStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, PAGE_TITLE=?, PAGE_ROUTE=?, PAGE_CONTENT=?, DELETEABLE=?, DISABLED=?, TEMPLATE_TO_USE_ID=?, MAINTENANCE_MODE=?, AUTHOR_USER_ID=?, PAGE_TYPE=? WHERE ID_PAGE=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, page.title)
             preparedStatement?.setString(3, page.pageRoute)
             preparedStatement?.setString(4, page.content.trim().removeSuffix("\r\n"))
             preparedStatement?.setBoolean(5, page.isDeleteable)
-            preparedStatement?.setInt(6, page.templateToUseId)
-            preparedStatement?.setBoolean(7, page.maintenanceMode)
-            preparedStatement?.setInt(8, page.authorUserId)
-            preparedStatement?.setInt(9, page.type.ordinal)
-            preparedStatement?.setInt(10, page.id)
+            preparedStatement?.setBoolean(6, page.isDisabled)
+            preparedStatement?.setInt(7, page.templateToUseId)
+            preparedStatement?.setBoolean(8, page.maintenanceMode)
+            preparedStatement?.setInt(9, page.authorUserId)
+            preparedStatement?.setInt(10, page.type.ordinal)
+            preparedStatement?.setInt(11, page.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -170,6 +172,7 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
                 page.pageRoute = resultSet.getString("PAGE_ROUTE")
                 page.content = resultSet.getString("PAGE_CONTENT")
                 page.isDeleteable = resultSet.getBoolean("DELETEABLE")
+                page.isDisabled = resultSet.getBoolean("DISABLED")
                 page.templateToUseId = resultSet.getInt("TEMPLATE_TO_USE_ID")
                 page.maintenanceMode = resultSet.getBoolean("MAINTENANCE_MODE")
                 page.authorUserId = resultSet.getInt("AUTHOR_USER_ID")

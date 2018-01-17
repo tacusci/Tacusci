@@ -119,6 +119,7 @@ data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdate
                 var title: String = "", var pageRoute: String = "", var maintenanceMode: Boolean = false,
                 var content: String = "",
                 var isDeleteable: Boolean = true,
+                var isDisabled: Boolean = false,
                 var templateToUseId: Int = -1,
                 var authorUserId: Int = -1,
                 var type: StructuredPage.PageType = StructuredPage.PageType.RAW)

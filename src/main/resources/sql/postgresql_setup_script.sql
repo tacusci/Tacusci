@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.pages (
     page_route VARCHAR(200) UNIQUE NOT NULL,
     page_content TEXT NOT NULL,
     deleteable BOOLEAN NOT NULL,
+    disabled BOOLEAN NOT NULL,
     template_to_use_id INTEGER,
     maintenance_mode BOOLEAN NOT NULL,
     author_user_id INTEGER NOT NULL,
