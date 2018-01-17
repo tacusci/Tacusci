@@ -83,7 +83,7 @@ object PageController : KLogging() {
 
         //very hacky fix for routes that have been 'removed' :<
         if (page.pageRoute.isNotEmpty()) {
-            var result = ""
+            var result: String
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
             velocityIMTemplateEngine.insertIntoContext(page.pageRoute, Web.loadNavigationElements(request, hashMapOf()))
