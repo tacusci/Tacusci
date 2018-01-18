@@ -81,6 +81,9 @@ class Application {
 
     fun updateDatabase() {
         val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
+        val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
+
+        if (tacusciVersionFromDB.versionNumberMajor < Config.)
     }
 
     fun setupDefaultGroups() {
