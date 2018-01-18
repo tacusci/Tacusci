@@ -57,7 +57,7 @@ class TacusciInfoDAO(url: String, dbProperties: Properties, tableName: String, c
 
     fun getTacusciInfo(): TacusciInfo {
         connect()
-        val tacusciInfo = TacusciInfo()
+        val tacusciInfo = TacusciInfo(-1, -1, -1, -1)
         try {
             val selectStatement = "SELECT * FROM $tableName"
             val resultSet = connection?.prepareStatement(selectStatement)?.executeQuery()

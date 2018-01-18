@@ -49,6 +49,8 @@ public class InternalResourceFile {
         this.path = path;
     }
 
+    public String getPath() { return path; }
+
     public InputStream getInputStream() {
         return InternalResourceFile.class.getResourceAsStream(path);
     }

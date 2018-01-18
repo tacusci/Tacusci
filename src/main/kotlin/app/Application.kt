@@ -39,9 +39,11 @@ import app.core.Web
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
+import database.SQLScript
 import database.daos.DAOManager
 import database.daos.TacusciInfoDAO
 import database.models.Group
+import database.models.TacusciInfo
 import extensions.managedRedirect
 import extensions.toIntSafe
 import mu.KLogging
@@ -50,7 +52,6 @@ import utils.CliOption
 import utils.CliOptions
 import utils.Config
 import utils.InternalResourceFile
-import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -72,7 +73,7 @@ class Application {
         DAOManager.setup()
         DAOManager.disconnect()
 
-        if (DAOManager.dbProperties.getProperty("server-type") == "MYSQL") {
+        if (DAOManager.isMySQL()) {
             //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
             //reconnect at the requested specific schema
             DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
@@ -82,10 +83,16 @@ class Application {
     }
 
     fun updateDatabase() {
-        val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
-        val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
 
-        val tacusciVersionFromDBNumber = Integer.parseInt(tacusciVersionFromDB.versionNumberMajor.toString() + tacusciVersionFromDB.versionNumberMinor.toString() + tacusciVersionFromDB.versionNumberRevision.toString())
+        val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
+
+        val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
+        var tacusciVersionFromDBNumber = (tacusciVersionFromDB.versionNumberMajor.toString() + tacusciVersionFromDB.versionNumberMinor.toString() + tacusciVersionFromDB.versionNumberRevision.toString()).toIntSafe()
+
+        //if any of the version numbers are -1 then it does not currently exist in the database
+        if (tacusciVersionFromDB.versionNumberMajor < 0) tacusciVersionFromDBNumber = -1
+
+        val tacusciVersion = TacusciInfo(-1, Config.getProperty("tacusci-version-major").toIntSafe(), Config.getProperty("tacusci-version-minor").toIntSafe(), Config.getProperty("tacusci-version-revision").toIntSafe())
         val tacusciVersionNumber = Integer.parseInt(Config.getProperty("tacusci-version-major") + Config.getProperty("tacusci-version-minor") + Config.getProperty("tacusci-version-revision"))
 
         if (tacusciVersionFromDBNumber < tacusciVersionNumber) {
@@ -93,10 +100,28 @@ class Application {
             val internalResource = InternalResourceFile("/sql/update_sql")
 
             internalResource.internalFolderFiles.forEach {
+
                 if (DAOManager.isPostgresql()) {
+                    if (it.isDirectory) return@forEach
                     if (it.name.startsWith("postgresql_update_script_")) {
-                        val sqlVersionNumber = it.name.split("postgresql_update_script_")[1].removeSuffix(".sql")
-                        println(sqlVersionNumber)
+                        val sqlVersionNumbers = it.name.split("postgresql_update_script_")[1].removeSuffix(".sql").split(".")
+                        val sqlVersionNumber = (sqlVersionNumbers[0] + sqlVersionNumbers[1] + sqlVersionNumbers[2]).toIntSafe()
+                        if (sqlVersionNumber > tacusciVersionFromDBNumber) {
+                            DAOManager.connect()
+                            DAOManager.executeScript(SQLScript(InternalResourceFile(internalResource.path + "/" + it.name).inputStream))
+                            DAOManager.disconnect()
+                        }
+                    }
+
+                    if (tacusciVersionFromDB.versionNumberMajor < tacusciVersion.versionNumberMajor ||
+                            tacusciVersionFromDB.versionNumberMinor < tacusciVersion.versionNumberMinor ||
+                                tacusciVersionFromDB.versionNumberRevision < tacusciVersion.versionNumberRevision) {
+                        //if any of the version numbers are -1 then it does not currently exist in the database
+                        if (tacusciVersionFromDB.versionNumberMajor < 0) {
+                            tacusciVersionDAO.insertTacusciInfo(tacusciVersion)
+                        } else {
+                            tacusciVersionDAO.updateTacusciInfo(tacusciVersion)
+                        }
                     }
                 }
             }
