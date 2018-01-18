@@ -108,6 +108,8 @@ class Application {
 
                 if (DAOManager.isPostgresql()) {
                     scriptNamePrefix = "postgresql_update_script_"
+                } else if (DAOManager.isMySQL()) {
+                    scriptNamePrefix = "mysql_update_script_"
                 }
 
                 if (it.isDirectory) return@forEach

@@ -1,1 +1,1 @@
-ALTER TABLE $schema_name.pages ADD COLUMN IF NOT EXISTS disabled BOOLEAN NOT NULL DEFAULT false
+ALTER TABLE $schema_name.pages ADD COLUMN disabled BOOLEAN NOT NULL DEFAULT false

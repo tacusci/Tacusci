@@ -1,5 +1,13 @@
 CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `$schema_name`.`tacusci_info` (
+  `id_tacusci_info` INT NOT NULL AUTO_INCREMENT,
+  `version_number_major` INT NOT NULL $VERSION_MAJOR,
+  `version_number_minor` INT NOT NULL $VERSION_MINOR,
+  `version_number_revision` INT NOT NULL $VERSION_REVISION,
+  PRIMARY KEY (`id_tacusci_info`),
+  UNIQUE INDEX `id_tacusci_info_UNIQUE` (`id_tacusci_info` ASC));
+
 CREATE TABLE IF NOT EXISTS `$schema_name`.`users` (
   `id_users` INT NOT NULL AUTO_INCREMENT,
   `created_date_time` LONG NOT NULL,
