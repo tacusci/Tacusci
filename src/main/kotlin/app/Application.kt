@@ -64,26 +64,28 @@ class Application {
 
     companion object : KLogging()
 
-    fun setupDatabase() {
+    private fun setupDatabase() {
         val dbURL = Config.getProperty("db-url")
         //connect to root SQL server instance
         DAOManager.init(dbURL, dbProperties)
+        DAOManager.workOutDBType()
+
+        when {
+            DAOManager.isMySQL() -> DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
+            DAOManager.isPostgresql() -> DAOManager.init(dbURL, dbProperties)
+            DAOManager.isUnknown() -> {
+                logger.error("Database type not recognised, quitting...")
+                System.exit(1)
+            }
+        }
+
         DAOManager.connect()
         //run the set up schemas if they don't exist
         DAOManager.setup()
         DAOManager.disconnect()
-
-        if (DAOManager.isMySQL()) {
-            //I AM ALMOST CERTAIN I ACTUALLY NEED TO DO THIS DISCONNECT AND RE-CONNECT
-            //reconnect at the requested specific schema
-            DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
-        } else {
-            DAOManager.init(dbURL, dbProperties)
-        }
     }
 
-    fun updateDatabase() {
-
+    private fun updateDatabase() {
         val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
 
         val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
@@ -96,39 +98,46 @@ class Application {
         val tacusciVersionNumber = Integer.parseInt(Config.getProperty("tacusci-version-major") + Config.getProperty("tacusci-version-minor") + Config.getProperty("tacusci-version-revision"))
 
         if (tacusciVersionFromDBNumber < tacusciVersionNumber) {
+            logger.info("Old database discovered, DB version: ${tacusciVersionFromDB.versionNumberMajor}.${tacusciVersionFromDB.versionNumberMinor}.${tacusciVersionFromDB.versionNumberRevision}")
 
             val internalResource = InternalResourceFile("/sql/update_sql")
 
             internalResource.internalFolderFiles.forEach {
 
-                if (DAOManager.isPostgresql()) {
-                    if (it.isDirectory) return@forEach
-                    if (it.name.startsWith("postgresql_update_script_")) {
-                        val sqlVersionNumbers = it.name.split("postgresql_update_script_")[1].removeSuffix(".sql").split(".")
-                        val sqlVersionNumber = (sqlVersionNumbers[0] + sqlVersionNumbers[1] + sqlVersionNumbers[2]).toIntSafe()
-                        if (sqlVersionNumber > tacusciVersionFromDBNumber) {
-                            DAOManager.connect()
-                            DAOManager.executeScript(SQLScript(InternalResourceFile(internalResource.path + "/" + it.name).inputStream))
-                            DAOManager.disconnect()
-                        }
-                    }
+                var scriptNamePrefix = ""
 
-                    if (tacusciVersionFromDB.versionNumberMajor < tacusciVersion.versionNumberMajor ||
-                            tacusciVersionFromDB.versionNumberMinor < tacusciVersion.versionNumberMinor ||
-                                tacusciVersionFromDB.versionNumberRevision < tacusciVersion.versionNumberRevision) {
-                        //if any of the version numbers are -1 then it does not currently exist in the database
-                        if (tacusciVersionFromDB.versionNumberMajor < 0) {
-                            tacusciVersionDAO.insertTacusciInfo(tacusciVersion)
-                        } else {
-                            tacusciVersionDAO.updateTacusciInfo(tacusciVersion)
-                        }
+                if (DAOManager.isPostgresql()) {
+                    scriptNamePrefix = "postgresql_update_script_"
+                }
+
+                if (it.isDirectory) return@forEach
+                if (it.name.startsWith(scriptNamePrefix)) {
+                    val sqlVersionNumbers = it.name.split(scriptNamePrefix)[1].removeSuffix(".sql").split(".")
+                    val sqlVersionNumber = (sqlVersionNumbers[0] + sqlVersionNumbers[1] + sqlVersionNumbers[2]).toIntSafe()
+                    if (sqlVersionNumber > tacusciVersionFromDBNumber) {
+                        logger.info("Found SQL update script for tacusci version ${it.name.split(scriptNamePrefix)[1].removeSuffix(".sql")}")
+                        DAOManager.connect()
+                        logger.info("Executing update script")
+                        DAOManager.executeScript(SQLScript(InternalResourceFile(internalResource.path + "/" + it.name).inputStream), true)
+                        DAOManager.disconnect()
+                    }
+                }
+
+                if (tacusciVersionFromDB.versionNumberMajor < tacusciVersion.versionNumberMajor ||
+                        tacusciVersionFromDB.versionNumberMinor < tacusciVersion.versionNumberMinor ||
+                        tacusciVersionFromDB.versionNumberRevision < tacusciVersion.versionNumberRevision) {
+                    //if any of the version numbers are -1 then it does not currently exist in the database
+                    if (tacusciVersionFromDB.versionNumberMajor < 0) {
+                        tacusciVersionDAO.insertTacusciInfo(tacusciVersion)
+                    } else {
+                        tacusciVersionDAO.updateTacusciInfo(tacusciVersion)
                     }
                 }
             }
         }
     }
 
-    fun setupDefaultGroups() {
+    private fun setupDefaultGroups() {
         GroupHandler.createGroup(Group(name = "dashboard_access", defaultGroup = true, hidden = true))
         val dashboardGroupId = GroupHandler.groupDAO.getGroupID("dashboard_access")
         GroupHandler.createGroup(Group(name = "admins", parentGroupId = dashboardGroupId, defaultGroup = true))
@@ -176,7 +185,7 @@ class Application {
 
         //MAP BEFORES
 
-        before( "*", { request, response ->
+        before("*", { request, response ->
             if (request.uri() != "/" && request.uri().endsWith("/")) {
                 response.managedRedirect(request, request.uri().removeSuffix("/"))
             }

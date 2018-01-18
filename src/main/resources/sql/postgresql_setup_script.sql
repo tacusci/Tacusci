@@ -4,9 +4,9 @@ CREATE SEQUENCE IF NOT EXISTS $schema_name.tacusci_info_seq;
 
 CREATE TABLE IF NOT EXISTS $schema_name.tacusci_info (
     id_tacusci_info INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.tacusci_info_seq'),
-    version_number_major INT NOT NULL,
-    version_number_minor INT NOT NULL,
-    version_number_revision INT NOT NULL
+    version_number_major INT NOT NULL $VERSION_MAJOR,
+    version_number_minor INT NOT NULL $VERSION_MINOR,
+    version_number_revision INT NOT NULL $VERSION_REVISION
 );
 
 CREATE SEQUENCE IF NOT EXISTS $schema_name.users_seq;

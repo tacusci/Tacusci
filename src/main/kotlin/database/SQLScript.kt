@@ -77,10 +77,12 @@ class SQLScript() {
         }
     }
 
-    fun executeStatements(connection: Connection) {
+    fun executeStatements(connection: Connection, logScriptExecution: Boolean = false) {
         statements.forEach { statement ->
             val preparedStatement = connection.prepareStatement(statement)
             try {
+                if (logScriptExecution)
+                    logger.info("Executing update statement from script: $preparedStatement")
                 preparedStatement.execute()
                 connection.commit()
             } catch (e: SQLException) {

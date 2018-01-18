@@ -34,6 +34,8 @@
 import app.Application
 import database.ConnectionPool
 import database.SQLScript
+import database.models.TacusciInfo
+import extensions.toIntSafe
 import mu.KLogging
 import utils.Config
 import utils.InternalResourceFile
@@ -95,27 +97,36 @@ object DAOManager : KLogging() {
         this.url = url
         this.dbProperties = dbProperties
         connectionPool = ConnectionPool(url, dbProperties)
-        logger.info("Set up database settings to connect to $url")
     }
 
-    fun setup() {
-        val sqlScriptData: InternalResourceFile
-
+    fun workOutDBType() {
         when {
             url.startsWith("jdbc:mysql") -> {
                 dbType = DB_TYPE.MYSQL
                 dbProperties.setProperty("server-type", DB_TYPE.MYSQL.toString())
-                sqlScriptData = InternalResourceFile("/sql/mysql_setup_script.sql")
             }
             url.startsWith("jdbc:postgresql") -> {
                 dbType = DB_TYPE.POSTGRESQL
                 dbProperties.setProperty("server-type", DB_TYPE.POSTGRESQL.toString())
-                sqlScriptData = InternalResourceFile("/sql/postgresql_setup_script.sql")
             }
             else -> {
                 dbType = DB_TYPE.UNKNOWN
                 dbProperties.setProperty("server-type", DB_TYPE.UNKNOWN.toString())
-                sqlScriptData = InternalResourceFile("")
+            }
+        }
+    }
+
+    fun setup() {
+
+        val sqlScriptData = when (dbType) {
+            DB_TYPE.MYSQL -> {
+                InternalResourceFile("/sql/mysql_setup_script.sql")
+            }
+            DB_TYPE.POSTGRESQL -> {
+                InternalResourceFile("/sql/postgresql_setup_script.sql")
+            }
+            DB_TYPE.UNKNOWN -> {
+                InternalResourceFile("")
             }
         }
 
@@ -130,19 +141,27 @@ object DAOManager : KLogging() {
 
     fun setup(scriptFile: File) {
         val sqlScript = SQLScript(scriptFile.inputStream())
-        setup(sqlScript)
+        val tacusciInfo = TacusciInfo(-1, Config.getProperty("tacusci-version-major").toIntSafe(), Config.getProperty("tacusci-version-minor").toIntSafe(), Config.getProperty("tacusci-version-revision").toIntSafe())
+        setup(sqlScript, tacusciInfo)
     }
 
-    fun setup(sqlScript: SQLScript) {
+    fun setup(sqlScript: SQLScript, tacusciInfo: TacusciInfo = TacusciInfo()) {
         sqlScript.parse()
+
+        if (tacusciInfo.versionNumberMajor >= 0 && tacusciInfo.versionNumberMinor >= 0 && tacusciInfo.versionNumberRevision >= 0) {
+            sqlScript.replace("\$VERSION_MAJOR", " DEFAULT ${tacusciInfo.versionNumberMajor}")
+            sqlScript.replace("\$VERSION_MINOR", " DEFAULT ${tacusciInfo.versionNumberMinor}")
+            sqlScript.replace("\$VERSION_REVISION", " DEFAULT ${tacusciInfo.versionNumberRevision}")
+        }
+
         sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
         sqlScript.executeStatements(connection!!)
     }
 
-    fun executeScript(sqlScript: SQLScript) {
+    fun executeScript(sqlScript: SQLScript, logScriptExecution: Boolean = false) {
         sqlScript.parse()
         sqlScript.replace("\$schema_name", Config.getProperty("schema-name"))
-        sqlScript.executeStatements(connection!!)
+        sqlScript.executeStatements(connection!!, logScriptExecution)
     }
 
     fun connect() {
