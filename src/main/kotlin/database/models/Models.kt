@@ -115,7 +115,7 @@ data class RouteEntity(var id: Long, var parentId: Long, var name: String,
                        var routeEntityType: RouteEntityHandler.ROUTE_ENTITY_TYPE,
                        var pageId: Long)
 
-data class TacusciInfo(var id: Int = -1, var versionNumberMajor: Int = -1, var versionNumberMinor: Int = -1, var versionNumberRevision: Int = -1)
+data class TacusciInfo(var id: Int = -1, var versionNumberMajor: Int = 0, var versionNumberMinor: Int = 0, var versionNumberRevision: Int = 0)
 
 data class Page(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
                 var title: String = "", var pageRoute: String = "", var maintenanceMode: Boolean = false,

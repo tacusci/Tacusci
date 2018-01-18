@@ -192,7 +192,7 @@ object DAOManager : KLogging() {
         if (dbProperties.getProperty("server-type") == "POSTGRESQL")
             schemaName = Config.getProperty("schema-name") + "."
 
-        when (table) {
+        return when (table) {
             TABLE.TACUSCI_INFO -> TacusciInfoDAO(url, dbProperties, "${schemaName}tacusci_info", connectionPool)
             TABLE.USERS -> UserDAO(url, dbProperties, "${schemaName}users", connectionPool)
             TABLE.GROUPS -> GroupDAO(url, dbProperties, "${schemaName}groups", connectionPool)
@@ -204,10 +204,8 @@ object DAOManager : KLogging() {
             TABLE.ROUTE_PERMISSIONS -> RoutePermissionDAO(url, dbProperties, "${schemaName}route_permissions", connectionPool)
 
             else -> {
-                return GenericDAO(url, dbProperties, "", connectionPool)
+                GenericDAO(url, dbProperties, "", connectionPool)
             }
         }
-
-        return GenericDAO(url, dbProperties, "", connectionPool)
     }
 }

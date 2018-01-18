@@ -83,7 +83,12 @@ class Application {
         val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
         val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
 
-        if (tacusciVersionFromDB.versionNumberMajor < Config.)
+        val tacusciVersionFromDBNumber = Integer.parseInt(tacusciVersionFromDB.versionNumberMajor.toString() + tacusciVersionFromDB.versionNumberMinor.toString() + tacusciVersionFromDB.versionNumberRevision.toString())
+        val tacusciVersionNumber = Integer.parseInt(Config.getProperty("tacusci-version-major") + Config.getProperty("tacusci-version-minor") + Config.getProperty("tacusci-version-revision"))
+
+        if (tacusciVersionFromDBNumber < tacusciVersionNumber) {
+
+        }
     }
 
     fun setupDefaultGroups() {
@@ -188,6 +193,7 @@ class Application {
 
     fun init() {
         setupDatabase()
+        updateDatabase()
         setupDefaultGroups()
         Web.init()
         setupSpark()

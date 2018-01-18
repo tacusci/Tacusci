@@ -1,0 +1,1 @@
+ALTER TABLE $schema_name.pages ADD COLUMN disabled BOOLEAN NOT NULL
