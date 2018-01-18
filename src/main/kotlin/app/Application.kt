@@ -49,6 +49,7 @@ import spark.Spark.*
 import utils.CliOption
 import utils.CliOptions
 import utils.Config
+import utils.InternalResourceFile
 import java.io.File
 import java.util.*
 import kotlin.concurrent.thread
@@ -88,13 +89,14 @@ class Application {
         val tacusciVersionNumber = Integer.parseInt(Config.getProperty("tacusci-version-major") + Config.getProperty("tacusci-version-minor") + Config.getProperty("tacusci-version-revision"))
 
         if (tacusciVersionFromDBNumber < tacusciVersionNumber) {
-            val sqlUpdateScriptsFolder = File("/sql/update_sql")
 
-            sqlUpdateScriptsFolder.listFiles().forEach {
+            val internalResource = InternalResourceFile("/sql/update_sql")
 
+            internalResource.internalFolderFiles.forEach {
                 if (DAOManager.isPostgresql()) {
                     if (it.name.startsWith("postgresql_update_script_")) {
-                        it.name.split("postgresql_update_script_")[1].removeSuffix(".sql")
+                        val sqlVersionNumber = it.name.split("postgresql_update_script_")[1].removeSuffix(".sql")
+                        println(sqlVersionNumber)
                     }
                 }
             }

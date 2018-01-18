@@ -29,8 +29,14 @@
 
 package utils;
 
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by tauraamui on 27/12/2016.
@@ -45,5 +51,31 @@ public class InternalResourceFile {
 
     public InputStream getInputStream() {
         return InternalResourceFile.class.getResourceAsStream(path);
+    }
+
+    public List<File> getInternalFolderFiles() {
+        ArrayList<File> files = new ArrayList<>();
+        try {
+
+            URI uri = InternalResourceFile.class.getResource(path).toURI();
+            Path objPath;
+
+            if (uri.getScheme().equals("jar")) {
+                FileSystem fileSystem = FileSystems.getFileSystem(uri);
+                objPath = fileSystem.getPath(path);
+            } else {
+                objPath = Paths.get(uri);
+            }
+
+            Stream<Path> walk = Files.walk(objPath, 1);
+
+            for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                files.add(new File(it.next().toString()));
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return files;
     }
 }
