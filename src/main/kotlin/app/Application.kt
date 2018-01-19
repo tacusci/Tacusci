@@ -70,6 +70,13 @@ class Application {
         DAOManager.init(dbURL, dbProperties)
         DAOManager.workOutDBType()
 
+        if (DAOManager.isMySQL()) {
+            DAOManager.connect()
+            logger.info("Creating schema ${Config.getProperty("schema-name")} in MySQL server if doesn't exist")
+            DAOManager.setup()
+            DAOManager.disconnect()
+        }
+
         when {
             DAOManager.isMySQL() -> DAOManager.init(dbURL + "/${Config.getProperty("schema-name")}", dbProperties)
             DAOManager.isPostgresql() -> DAOManager.init(dbURL, dbProperties)
