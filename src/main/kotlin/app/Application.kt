@@ -280,7 +280,7 @@ fun main(args: Array<String>) {
 
     Config.setProperty("tacusci-version-major", "1")
     Config.setProperty("tacusci-version-minor", "3")
-    Config.setProperty("tacusci-version-revision", "7")
+    Config.setProperty("tacusci-version-revision", "5")
 
     application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
     application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))
