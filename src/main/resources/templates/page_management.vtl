@@ -40,13 +40,13 @@
         #set ($divId = $page.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">
-            <div class="pure-u">
+            <div class="pure-u-23-24">
                 <h4 class="page-info">Title: $page.getTitle()</h4>
                 <h4 class="page-info">Route: $page.getPageRoute()</h4>
             </div>
 
             #if ($page.isDeleteable())
-                <div class="pure-u" style="float: right;">
+                <div class="pure-u-1-24" style="float: right;">
                     <form id="delete_page_form" name="delete_page_form" method="post" action="$TRequest.getRequestURI()/delete/$page.getId()">
                         <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("delete_page_form_$page.getId()") hidden>
                         <input id="formName" name="formName" type="text" value="delete_page_form_$page.getId()" hidden>
