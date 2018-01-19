@@ -123,7 +123,7 @@ class Application {
                 if (it.name.startsWith(scriptNamePrefix)) {
                     val sqlVersionNumbers = it.name.split(scriptNamePrefix)[1].removeSuffix(".sql").split(".")
                     val sqlVersionNumber = (sqlVersionNumbers[0] + sqlVersionNumbers[1] + sqlVersionNumbers[2]).toIntSafe()
-                    if (sqlVersionNumber > tacusciVersionFromDBNumber) {
+                    if (sqlVersionNumber in (tacusciVersionFromDBNumber + 1)..(tacusciVersionNumber)) {
                         logger.info("Found SQL update script for tacusci version ${it.name.split(scriptNamePrefix)[1].removeSuffix(".sql")}")
                         DAOManager.connect()
                         logger.info("Executing update script")
@@ -131,16 +131,16 @@ class Application {
                         DAOManager.disconnect()
                     }
                 }
+            }
 
-                if (tacusciVersionFromDB.versionNumberMajor < tacusciVersion.versionNumberMajor ||
-                        tacusciVersionFromDB.versionNumberMinor < tacusciVersion.versionNumberMinor ||
+            if (tacusciVersionFromDB.versionNumberMajor < tacusciVersion.versionNumberMajor || tacusciVersionFromDB.versionNumberMinor < tacusciVersion.versionNumberMinor ||
                         tacusciVersionFromDB.versionNumberRevision < tacusciVersion.versionNumberRevision) {
-                    //if any of the version numbers are -1 then it does not currently exist in the database
-                    if (tacusciVersionFromDB.versionNumberMajor < 0) {
-                        tacusciVersionDAO.insertTacusciInfo(tacusciVersion)
-                    } else {
-                        tacusciVersionDAO.updateTacusciInfo(tacusciVersion)
-                    }
+                //if any of the version numbers are -1 then it does not currently exist in the database
+                if (tacusciVersionFromDB.versionNumberMajor < 0) {
+                    tacusciVersionDAO.insertTacusciInfo(tacusciVersion)
+                } else {
+                    tacusciVersion.id = tacusciVersionFromDB.id
+                    tacusciVersionDAO.updateTacusciInfo(tacusciVersion)
                 }
             }
         }
@@ -279,7 +279,7 @@ fun main(args: Array<String>) {
 
     Config.setProperty("tacusci-version-major", "1")
     Config.setProperty("tacusci-version-minor", "3")
-    Config.setProperty("tacusci-version-revision", "5")
+    Config.setProperty("tacusci-version-revision", "7")
 
     application.dbProperties.setProperty("user", CliOptions.getOptionValue("username"))
     application.dbProperties.setProperty("password", CliOptions.getOptionValue("password"))

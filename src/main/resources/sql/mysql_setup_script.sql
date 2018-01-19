@@ -1,7 +1,7 @@
 CREATE schema IF NOT EXISTS $schema_name CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`tacusci_info` (
-  `id_tacusci_info` INT NOT NULL AUTO_INCREMENT,
+  `id_tacusci_info` INT NOT NULL DEFAULT 1,
   `version_number_major` INT NOT NULL $VERSION_MAJOR,
   `version_number_minor` INT NOT NULL $VERSION_MINOR,
   `version_number_revision` INT NOT NULL $VERSION_REVISION,
