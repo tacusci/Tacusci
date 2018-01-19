@@ -121,10 +121,11 @@ class Application {
 
                 if (it.isDirectory) return@forEach
                 if (it.name.startsWith(scriptNamePrefix)) {
-                    val sqlVersionNumbers = it.name.split(scriptNamePrefix)[1].removeSuffix(".sql").split(".")
+                    val sqlVersionNumberAsString = it.name.split(scriptNamePrefix)[1].removeSuffix(".sql")
+                    val sqlVersionNumbers = sqlVersionNumberAsString.split(".")
                     val sqlVersionNumber = (sqlVersionNumbers[0] + sqlVersionNumbers[1] + sqlVersionNumbers[2]).toIntSafe()
                     if (sqlVersionNumber in (tacusciVersionFromDBNumber + 1)..(tacusciVersionNumber)) {
-                        logger.info("Found SQL update script for tacusci version ${it.name.split(scriptNamePrefix)[1].removeSuffix(".sql")}")
+                        logger.info("Found SQL update script for tacusci version $sqlVersionNumberAsString")
                         DAOManager.connect()
                         logger.info("Executing update script")
                         DAOManager.executeScript(SQLScript(InternalResourceFile(internalResource.path + "/" + it.name).inputStream), true)
