@@ -119,6 +119,7 @@ class PageManagementController : Controller {
     private fun post_EditPageForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_FORM")
         val pageToEdit = PageHandler.getPageById(request.queryParams("page_id").toIntSafe())
+        //TODO: Why am I reassigning the ID, do I need to do this? Testing required
         pageToEdit.id = request.queryParams("page_id").toIntSafe()
         pageToEdit.title = request.queryParams("page_title")
         pageToEdit.pageRoute = request.queryParams("page_route")
@@ -128,6 +129,12 @@ class PageManagementController : Controller {
         pageToEdit.authorUserId = UserHandler.userDAO.getUserID(UserHandler.loggedInUsername(request))
         PageHandler.updatePage(pageToEdit)
         response.managedRedirect(request, request.uri())
+        return response
+    }
+
+    private fun post_EditPageDisabledForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_DISABLED_FORM")
+        val pageToEdit = PageHandler.getPageById(request.queryParams("page_id").toIntSafe())
         return response
     }
 

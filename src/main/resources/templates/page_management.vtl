@@ -40,15 +40,21 @@
         #set ($divId = $page.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">
+            <!--The div containing the info spans most of the containing div box (23/24)-->
             <div class="pure-u-23-24">
                 <h4 class="page-info">Title: $page.getTitle()</h4>
                 <h4 class="page-info">Route: $page.getPageRoute()</h4>
                 #if ($page.isDeleteable())
                     <h4 class="page-info">Disabled:</h4>
-                    <input type="checkbox" id="page-disabled_option_checkbox_input_$page.getId()" name="page-disabled_option_checkbox_input_$page.getId()" value="page-disabled" #if ($page.isDisabled()) checked #end>
+                    <form style="display: inline-block" id="edit_page_disabled_form" name="edit_page_disabled_form" method="post" action="$TRequest.getRequestURI()/edit_page_disabled/$page.getId()">
+                        <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("edit_page_disabled_form_$page.getId()") hidden>
+                        <input id="formName" name="formName" type="text" value="edit_page_disabled_form_$page.getId()" hidden>
+                        <input id="page_id" name="page_id" type="text" value="$page.getId()" hidden>
+                        <input onchange="this.form.submit()" type="checkbox" id="page-disabled_option_checkbox_input_$page.getId()" name="page-disabled_option_checkbox_input_$page.getId()" value="page-disabled" #if ($page.isDisabled()) checked #end>
+                    </form>
                 #end
             </div>
-
+            <!--The div containing the info spans the rest of the containing div box (1/24)-->
             #if ($page.isDeleteable())
                 <div class="pure-u-1-24" style="float: right;">
                     <form id="delete_page_form" name="delete_page_form" method="post" action="$TRequest.getRequestURI()/delete/$page.getId()">
