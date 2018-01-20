@@ -43,6 +43,10 @@
             <div class="pure-u-23-24">
                 <h4 class="page-info">Title: $page.getTitle()</h4>
                 <h4 class="page-info">Route: $page.getPageRoute()</h4>
+                #if ($page.isDeleteable())
+                    <h4 class="page-info">Disabled:</h4>
+                    <input type="checkbox" id="page-disabled_option_checkbox_input_$page.getId()" name="page-disabled_option_checkbox_input_$page.getId()" value="page-disabled" #if ($page.isDisabled()) checked #end>
+                #end
             </div>
 
             #if ($page.isDeleteable())
