@@ -135,6 +135,9 @@ class PageManagementController : Controller {
     private fun post_EditPageDisabledForm(request: Request, response: Response): Response {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for EDIT_PAGE_DISABLED_FORM")
         val pageToEdit = PageHandler.getPageById(request.queryParams("page_id").toIntSafe())
+        pageToEdit.isDisabled = !pageToEdit.isDisabled
+        PageHandler.updatePage(pageToEdit)
+        response.managedRedirect(request, rootUri)
         return response
     }
 
@@ -152,9 +155,16 @@ class PageManagementController : Controller {
                 return post_CreatePageForm(request, response)
             }
         } else if (request.uri().contains("page_management/edit")) {
-            if (Web.getFormHash(request, "edit_page_form") == request.queryParams("hashid")) {
+
+            val editPageFormHash = Web.getFormHash(request,"edit_page_form")
+            val editPageDisabledFormHash = Web.getFormHash(request, "edit_page_disabled_form_${request.queryParams("page_id")}")
+
+            if (editPageFormHash == request.queryParams("hashid")) {
                 return post_EditPageForm(request, response)
+            } else if (editPageDisabledFormHash == request.queryParams("hashid")) {
+                return post_EditPageDisabledForm(request, response)
             }
+
         } else if (request.uri().contains("page_management/delete")) {
             if (Web.getFormHash(request, "delete_page_form_${request.queryParams("page_id")}") == request.queryParams("hashid")) {
                 return post_DeletePageForm(request, response)
