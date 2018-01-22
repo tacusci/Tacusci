@@ -53,7 +53,7 @@ object PageHandler : KLogging() {
     fun updatePage(page: Page): Boolean {
         val existingRoute = pageDAO.getPageById(page.id).pageRoute
         val updatedSuccessfully = pageDAO.updatePage(page)
-        if (updatedSuccessfully) {
+        if (updatedSuccessfully && existingRoute != page.pageRoute) {
             PageController.mapPageRouteTo404Page(existingRoute)
             PageController.mapPageRouteToDBPage(page.pageRoute)
         }
