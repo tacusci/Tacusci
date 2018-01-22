@@ -82,7 +82,7 @@ object PageController : KLogging() {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for ${page.pageRoute}")
 
         //very hacky fix for routes that have been 'removed' :<
-        if (page.pageRoute.isNotEmpty()) {
+        if (page.pageRoute.isNotEmpty() && !page.isDisabled) {
             var result: String
             val velocityIMTemplateEngine = VelocityIMTemplateEngine()
             velocityIMTemplateEngine.insertTemplateAsString(page.pageRoute, page.content)
