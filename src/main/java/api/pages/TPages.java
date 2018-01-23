@@ -18,4 +18,6 @@ public class TPages extends TAPIClass {
     }
 
     public List<Page> getAllPages() { return PageHandler.INSTANCE.getAllPages(); }
+
+    public List<Page> getAllPages(String orderByClause) { return PageHandler.INSTANCE.getAllPages(orderByClause); }
 }

@@ -208,6 +208,22 @@ class PageDAO(url: String, dbProperties: Properties, tableName: String, connecti
         return pages
     }
 
+    fun getAllPages(orderByClause: String): MutableList<Page> {
+        val pages = mutableListOf<Page>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_PAGE FROM $tableName ORDER BY $orderByClause"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val pageId = resultSet.getInt("ID_PAGE")
+                pages.add(getPageById(pageId, false))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return pages
+    }
+
     fun  getAllPageRoutes(): MutableList<String> {
         val pageRoutes = mutableListOf<String>()
         connect()

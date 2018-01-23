@@ -82,6 +82,10 @@ object PageHandler : KLogging() {
         return pageDAO.getAllPages()
     }
 
+    fun getAllPages(orderByClause: String): MutableList<Page> {
+        return pageDAO.getAllPages(orderByClause)
+    }
+
     fun getPageById(id: Int): Page {
         return pageDAO.getPageById(id, true)
     }
