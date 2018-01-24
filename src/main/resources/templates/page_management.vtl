@@ -36,7 +36,7 @@
             $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-theme")
         </div>
     </a>
-    #foreach ($page in $TPages.getAllPages())
+    #foreach ($page in $TPages.getAllPagesOrderBy("created_date_time ASC"))
         #set ($divId = $page.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">
