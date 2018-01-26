@@ -99,15 +99,15 @@ CREATE TABLE IF NOT EXISTS $schema_name.route_permissions (
     id_permission INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.route_permissions_seq'),
     created_date_time TEXT NOT NULL,
     last_updated_date_time TEXT NOT NULL,
-    permission_title VARCHAR(100) NOT NULL UNIQUE,
+    permission_title VARCHAR(100) UNIQUE NOT NULL,
     route VARCHAR(200) NOT NULL,
     id_groups INTEGER NOT NULL
 );
 
-CREATE SEQUENCE IF NOT EXISTS $schema_name.sql_query_collection_seq;
+CREATE SEQUENCE IF NOT EXISTS $schema_name.sql_queries_seq;
 
-CREATE TABLE IF NOT EXISTS $schema_name.sql_query_collection (
-    id_sql_query_collection INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.sql_query_collection_seq'),
+CREATE TABLE IF NOT EXISTS $schema_name.sql_queries (
+    id_sql_query INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.sql_queries_seq'),
     created_date_time TEXT NOT NULL,
     last_updated_date_time TEXT NOT NULL,
     query_label VARCHAR(45) UNIQUE NOT NULL,

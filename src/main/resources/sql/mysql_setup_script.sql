@@ -101,11 +101,11 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`route_permissions` (
     `id_groups` INT NOT NULL,
     PRIMARY KEY (`id_permission`));
 
-CREATE TABLE IF NOT EXISTS `$schema_name`.`sql_query_collection` (
-    `id_sql_query_collection` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `$schema_name`.`sql_queries` (
+    `id_sql_queries` INT NOT NULL AUTO_INCREMENT,
     `created_date_time` TEXT NOT NULL,
     `last_updated_date_time` TEXT NOT NULL,
     `query_label` VARCHAR(45) UNIQUE NOT NULL,
     `query_name` VARCHAR(45) UNIQUE NOT NULL,
     `query_text` TEXT NOT NULL,
-    PRIMARY KEY (`id_sql_query_collection`));
+    PRIMARY KEY (`id_sql_queries`));
