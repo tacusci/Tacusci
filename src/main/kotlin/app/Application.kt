@@ -41,8 +41,10 @@ import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.SQLScript
 import database.daos.DAOManager
+import database.daos.SQLQueriesDAO
 import database.daos.TacusciInfoDAO
 import database.models.Group
+import database.models.SQLQuery
 import database.models.TacusciInfo
 import extensions.managedRedirect
 import extensions.toIntSafe
@@ -145,6 +147,23 @@ class Application {
                 }
             }
         }
+    }
+
+    private fun createSavedSqlQueries() {
+        val sqlQueriesDAO = DAOManager.getDAO(DAOManager.TABLE.SQL_QUERIES) as SQLQueriesDAO
+
+        val orderByDateAsc = SQLQuery()
+        orderByDateAsc.name = "createddateasc"
+        orderByDateAsc.label = "Created Date - Oldest to Newest"
+        orderByDateAsc.string = "created_date_time ASC"
+
+        val orderByDateDesc = SQLQuery()
+        orderByDateDesc.name = "createddatedesc"
+        orderByDateDesc.label = "Created Date - Newest to Oldest"
+        orderByDateDesc.string = "created_date_time DESC"
+
+        sqlQueriesDAO.insertSQLQuery(orderByDateAsc)
+        sqlQueriesDAO.insertSQLQuery(orderByDateDesc)
     }
 
     private fun setupDefaultGroups() {
@@ -250,6 +269,7 @@ class Application {
     fun init() {
         setupDatabase()
         updateDatabase()
+        createSavedSqlQueries()
         setupDefaultGroups()
         Web.init()
         setupSpark()

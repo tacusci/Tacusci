@@ -228,7 +228,7 @@ object DAOManager : KLogging() {
             TABLE.TEMPLATES -> TemplateDAO(url, dbProperties, "${schemaName}templates", connectionPool)
             TABLE.INCLUDES -> IncludeDAO(url, dbProperties, "${schemaName}includes", connectionPool)
             TABLE.ROUTE_PERMISSIONS -> RoutePermissionDAO(url, dbProperties, "${schemaName}route_permissions", connectionPool)
-            TABLE.SQL_QUERIES -> SQLQueriesDAO(url, dbProperties, "${schemaName}sql_queries_seq", connectionPool)
+            TABLE.SQL_QUERIES -> SQLQueriesDAO(url, dbProperties, "${schemaName}sql_queries", connectionPool)
 
             else -> {
                 GenericDAO(url, dbProperties, "", connectionPool)
