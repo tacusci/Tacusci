@@ -136,4 +136,4 @@ data class RoutePermission(var id: Int = -1, var createdDateTime: Long = -1, var
                            var title: String = "", var route: String = "", var groupId: Int = -1)
 
 data class SQLQuery(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
-                    var queryLabel: String = "", var queryName: String = "", var queryText: String = "")
+                    var label: String = "", var name: String = "", var string: String = "")

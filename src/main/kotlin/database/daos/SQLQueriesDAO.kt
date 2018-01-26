@@ -51,9 +51,9 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
                 sqlQuery.id = resultSet.getInt("ID_QUERY")
                 sqlQuery.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
                 sqlQuery.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
-                sqlQuery.queryLabel = resultSet.getString("QUERY_LABEL")
-                sqlQuery.queryName = resultSet.getString("QUERY_NAME")
-                sqlQuery.queryText = resultSet.getString("QUERY_TEXT")
+                sqlQuery.label = resultSet.getString("QUERY_LABEL")
+                sqlQuery.name = resultSet.getString("QUERY_NAME")
+                sqlQuery.string = resultSet.getString("QUERY_STRING")
             }
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
@@ -69,7 +69,6 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         var sqlQueryId = -1
         try {
             val selectStatement = "SELECT ID_QUERY FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}QUERY_NAME=?"
-
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, queryName)
             val resultSet = preparedStatement?.executeQuery()
@@ -79,5 +78,23 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
             disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return sqlQueryId
+    }
+
+    fun insertSQLQuery(sqlQuery: SQLQuery): Boolean {
+        connect()
+        try {
+            val createSQLQueryStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, QUERY_LABEL, QUERY_NAME, QUERY_STRING) VALUES (?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("sql_queries_query_name_key")}"
+            val preparedStatement = connection?.prepareStatement(createSQLQueryStatementString)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setLong(2, System.currentTimeMillis())
+            preparedStatement?.setString(3, sqlQuery.label)
+            preparedStatement?.setString(4, sqlQuery.name)
+            preparedStatement?.setString(5, sqlQuery.string)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
 }

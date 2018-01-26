@@ -81,7 +81,6 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         connect()
         var userID = -1
         try {
-
             val selectStatement = "SELECT ID_USERS FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
 
             val preparedStatement = connection?.prepareStatement(selectStatement)
