@@ -152,18 +152,33 @@ class Application {
     private fun createSavedSqlQueries() {
         val sqlQueriesDAO = DAOManager.getDAO(DAOManager.TABLE.SQL_QUERIES) as SQLQueriesDAO
 
-        val orderByDateAsc = SQLQuery()
-        orderByDateAsc.name = "createddateasc"
-        orderByDateAsc.label = "Created Date - Oldest to Newest"
-        orderByDateAsc.string = "created_date_time ASC"
+        val orderByCreatedDateAsc = SQLQuery()
+        orderByCreatedDateAsc.name = "createddateasc"
+        orderByCreatedDateAsc.label = "Created Date - Oldest to Newest"
+        orderByCreatedDateAsc.string = "created_date_time ASC"
 
-        val orderByDateDesc = SQLQuery()
-        orderByDateDesc.name = "createddatedesc"
-        orderByDateDesc.label = "Created Date - Newest to Oldest"
-        orderByDateDesc.string = "created_date_time DESC"
+        sqlQueriesDAO.insertSQLQuery(orderByCreatedDateAsc)
 
-        sqlQueriesDAO.insertSQLQuery(orderByDateAsc)
-        sqlQueriesDAO.insertSQLQuery(orderByDateDesc)
+        val orderByCreatedDateDesc = SQLQuery()
+        orderByCreatedDateDesc.name = "createddatedesc"
+        orderByCreatedDateDesc.label = "Created Date - Newest to Oldest"
+        orderByCreatedDateDesc.string = "created_date_time DESC"
+
+        sqlQueriesDAO.insertSQLQuery(orderByCreatedDateDesc)
+
+        val oredrByLastUpdatedDateAsc = SQLQuery()
+        oredrByLastUpdatedDateAsc.name = "lastupdateddateasc"
+        oredrByLastUpdatedDateAsc.label = "Last Updated - Oldest to Newest"
+        oredrByLastUpdatedDateAsc.string = "last_updated_date_time ASC"
+
+        sqlQueriesDAO.insertSQLQuery(oredrByLastUpdatedDateAsc)
+
+        val oredrByLastUpdatedDateDesc = SQLQuery()
+        oredrByLastUpdatedDateDesc.name = "lastupdateddatedesc"
+        oredrByLastUpdatedDateDesc.label = "Last Updated - Newest to Oldest"
+        oredrByLastUpdatedDateDesc.string = "last_updated_date_time DESC"
+
+        sqlQueriesDAO.insertSQLQuery(oredrByLastUpdatedDateDesc)
     }
 
     private fun setupDefaultGroups() {
