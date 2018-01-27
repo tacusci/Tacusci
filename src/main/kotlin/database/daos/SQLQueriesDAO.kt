@@ -80,6 +80,22 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         return sqlQueryId
     }
 
+    fun getAllSQLQueries(): MutableList<SQLQuery> {
+        val sqlQueries = mutableListOf<SQLQuery>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_QUERY FROM $tableName"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val queryId = resultSet.getInt("ID_QUERY")
+                sqlQueries.add(getSQLQueryById(queryId))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return sqlQueries
+    }
+
     fun insertSQLQuery(sqlQuery: SQLQuery): Boolean {
         connect()
         try {
