@@ -37,6 +37,7 @@ import api.core.TacusciAPI
 import app.core.controllers.ControllerManager
 import app.core.Web
 import app.core.handlers.GroupHandler
+import app.core.handlers.SQLQueryHandler
 import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.SQLScript
@@ -150,35 +151,10 @@ class Application {
     }
 
     private fun createSavedSqlQueries() {
-        val sqlQueriesDAO = DAOManager.getDAO(DAOManager.TABLE.SQL_QUERIES) as SQLQueriesDAO
-
-        val orderByCreatedDateAsc = SQLQuery()
-        orderByCreatedDateAsc.name = "createddateasc"
-        orderByCreatedDateAsc.label = "Created Date - Oldest to Newest"
-        orderByCreatedDateAsc.string = "created_date_time ASC"
-
-        sqlQueriesDAO.insertSQLQuery(orderByCreatedDateAsc)
-
-        val orderByCreatedDateDesc = SQLQuery()
-        orderByCreatedDateDesc.name = "createddatedesc"
-        orderByCreatedDateDesc.label = "Created Date - Newest to Oldest"
-        orderByCreatedDateDesc.string = "created_date_time DESC"
-
-        sqlQueriesDAO.insertSQLQuery(orderByCreatedDateDesc)
-
-        val oredrByLastUpdatedDateAsc = SQLQuery()
-        oredrByLastUpdatedDateAsc.name = "lastupdateddateasc"
-        oredrByLastUpdatedDateAsc.label = "Last Updated - Oldest to Newest"
-        oredrByLastUpdatedDateAsc.string = "last_updated_date_time ASC"
-
-        sqlQueriesDAO.insertSQLQuery(oredrByLastUpdatedDateAsc)
-
-        val oredrByLastUpdatedDateDesc = SQLQuery()
-        oredrByLastUpdatedDateDesc.name = "lastupdateddatedesc"
-        oredrByLastUpdatedDateDesc.label = "Last Updated - Newest to Oldest"
-        oredrByLastUpdatedDateDesc.string = "last_updated_date_time DESC"
-
-        sqlQueriesDAO.insertSQLQuery(oredrByLastUpdatedDateDesc)
+        SQLQueryHandler.createSQLQuery(SQLQuery(name = "createddateasc", label = "Created Date - Oldest to Newest", string = "created_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(name = "createddatedesc", label = "Created Date - Newest to Oldest", string = "created_date_time DESC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(name = "lastupdateddateasc", label = "Last Updated - Oldest to Newest", string = "last_updated_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(name = "lastupdateddatedesc", label = "Last Updated - Newest to Oldest", string = "last_updated_date_time DESC"))
     }
 
     private fun setupDefaultGroups() {

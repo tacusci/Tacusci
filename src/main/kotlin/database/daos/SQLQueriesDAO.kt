@@ -39,13 +39,13 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
 
     companion object : KLogging()
 
-    fun getSQLQuery(queryID: Int): SQLQuery {
+    fun getSQLQueryById(queryId: Int): SQLQuery {
         connect()
         val sqlQuery = SQLQuery(-1, -1, -1, "", "", "")
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_QUERY=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
-            preparedStatement?.setInt(1, queryID)
+            preparedStatement?.setInt(1, queryId)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
                 sqlQuery.id = resultSet.getInt("ID_QUERY")
@@ -60,11 +60,11 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         return sqlQuery
     }
 
-    fun getSQLQuery(queryName: String): SQLQuery {
-        return getSQLQuery(getSQLQueryID(queryName))
+    fun getSQLQueryByName(queryName: String): SQLQuery {
+        return getSQLQueryById(getSQLQueryId(queryName))
     }
 
-    fun getSQLQueryID(queryName: String): Int {
+    fun getSQLQueryId(queryName: String): Int {
         connect()
         var sqlQueryId = -1
         try {
