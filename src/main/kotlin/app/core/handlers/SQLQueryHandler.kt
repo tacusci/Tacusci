@@ -42,6 +42,10 @@ object SQLQueryHandler : KLogging() {
         return sqlQueriesDAO.insertSQLQuery(sqlQuery)
     }
 
+    fun updateSQLQuery(sqlQuery: SQLQuery): Boolean {
+        return sqlQueriesDAO.updateSQLQuery(sqlQuery)
+    }
+
     fun getSQLQueryById(sqlQueryId: Int): SQLQuery {
         return sqlQueriesDAO.getSQLQueryById(sqlQueryId)
     }

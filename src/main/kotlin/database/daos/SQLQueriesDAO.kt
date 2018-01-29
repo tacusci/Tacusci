@@ -113,4 +113,22 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
             return true
         } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
     }
+
+    fun updateSQLQuery(sqlQuery: SQLQuery): Boolean {
+        connect()
+        try {
+            val updateSQLQueryStatementString = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, QUERY_LABEL=?, QUERY_NAME=?, QUERY_STRING=? WHERE ID_QUERY=?"
+            val preparedStatement = connection?.prepareStatement(updateSQLQueryStatementString)
+            preparedStatement?.setLong(1, System.currentTimeMillis())
+            preparedStatement?.setString(2, sqlQuery.label)
+            preparedStatement?.setString(3, sqlQuery.name)
+            preparedStatement?.setString(4, sqlQuery.string)
+            preparedStatement?.setInt(5, sqlQuery.id)
+            preparedStatement?.execute()
+            connection?.commit()
+            preparedStatement?.close()
+            disconnect()
+            return true
+        } catch (e: SQLException) { logger.error(e.message); disconnect(); return false }
+    }
 }
