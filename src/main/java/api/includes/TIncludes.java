@@ -14,7 +14,6 @@ public class TIncludes extends TAPIClass {
     public TIncludes(Request request, Response response) { super(request, response); }
 
     private Include getIncludeByTitle(String includeTitle) { return IncludeHandler.INSTANCE.getIncludeByTitle(includeTitle); }
-
     public List<Include> getAllIncludes() { return IncludeHandler.INSTANCE.getAllIncludes(); }
     public String renderInclude(String includeTitle) { return IncludeController.INSTANCE.renderInclude(getIncludeByTitle(includeTitle), request, response); }
     public Include getInclude(String includeTitle) { return IncludeHandler.INSTANCE.getIncludeByTitle(includeTitle); }
