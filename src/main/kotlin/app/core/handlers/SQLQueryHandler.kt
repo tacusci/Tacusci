@@ -32,6 +32,7 @@ package app.core.handlers
 import database.daos.DAOManager
 import database.daos.SQLQueriesDAO
 import database.models.SQLQuery
+import database.models.SQLQueryType
 import mu.KLogging
 
 object SQLQueryHandler : KLogging() {
@@ -52,5 +53,9 @@ object SQLQueryHandler : KLogging() {
 
     fun getSQLQueryByName(sqlQueryName: String): SQLQuery {
         return sqlQueriesDAO.getSQLQueryByName(sqlQueryName)
+    }
+
+    fun getSQLQueryOfType(sqlQueryType: SQLQueryType): MutableList<SQLQuery> {
+        return sqlQueriesDAO.getAllSQLQueriesOfType(sqlQueryType)
     }
 }
