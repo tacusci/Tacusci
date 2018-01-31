@@ -39,7 +39,7 @@
                 <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("query_option_form") hidden>
                 <input id="formName" name="formName" type="text" value="query_option_form" hidden>
                 <select form="query_option_form" id="query" name="query" onchange="this.form.submit()">
-                    #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME_FILTER"))
+                    #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME"))
                         #set ($currentQueryName = $TRequest.getSessionAttribute("selected_page_order_query"))
                         #if ($sqlQuery.getName().equals($currentQueryName))
                             #set ($selected = " selected")

@@ -140,7 +140,7 @@ data class SQLQuery(var id: Int = -1, var createdDateTime: Long = -1, var lastUp
 
 enum class SQLQueryType {
     UNDEFINED,
-    DATE_TIME_FILTER;
+    DATE_TIME;
 
     companion object {
         private val map = SQLQueryType.values().associateBy(SQLQueryType::ordinal)

@@ -42,7 +42,6 @@ import app.core.handlers.UserHandler
 import app.core.pages.pagecontrollers.PageController
 import database.SQLScript
 import database.daos.DAOManager
-import database.daos.SQLQueriesDAO
 import database.daos.TacusciInfoDAO
 import database.models.Group
 import database.models.SQLQuery
@@ -152,10 +151,10 @@ class Application {
     }
 
     private fun createSavedSqlQueries() {
-        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "createddatetimeasc", label = "Created Date/Time - Oldest to Newest", string = "created_date_time ASC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "createddatetimedesc", label = "Created Date/Time - Newest to Oldest", string = "created_date_time DESC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "lastupdateddatetimeasc", label = "Last Updated Date/Time - Oldest to Newest", string = "last_updated_date_time ASC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "lastupdateddatetimedesc", label = "Last Updated Date/Time - Newest to Oldest", string = "last_updated_date_time DESC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME, name = "createddatetimeasc", label = "Created Date/Time - Oldest to Newest", string = "created_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME, name = "createddatetimedesc", label = "Created Date/Time - Newest to Oldest", string = "created_date_time DESC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME, name = "lastupdateddatetimeasc", label = "Last Updated Date/Time - Oldest to Newest", string = "last_updated_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME, name = "lastupdateddatetimedesc", label = "Last Updated Date/Time - Newest to Oldest", string = "last_updated_date_time DESC"))
     }
 
     private fun setupDefaultGroups() {
