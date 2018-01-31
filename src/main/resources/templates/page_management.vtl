@@ -37,7 +37,7 @@
 
             <form style="display: inline-block" id="query_option_form" name="query_option_form" method="post" action="$TRequest.getRequestURI()/query_option_change">
                 <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("query_option_form") hidden>
-                <input id="formName" name="formName" type="text" value="edit_page_disabled_form_$page.getId()" hidden>
+                <input id="formName" name="formName" type="text" value="query_option_form" hidden>
                 <select form="query_option_form" id="query" name="query" onchange="this.form.submit()">
                     #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME_FILTER"))
                         <option value="$sqlQuery.getName()">$sqlQuery.getLabel()</option>
