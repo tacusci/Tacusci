@@ -149,4 +149,20 @@ class IncludeDAO(url: String, dbProperties: Properties, tableName: String, conne
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return includes
     }
+
+    fun getAllIncludesOrderBy(orderByClause: String): MutableList<Include> {
+        val includes = mutableListOf<Include>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_INCLUDE FROM $tableName ORDER BY $orderByClause"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val includeId = resultSet.getInt("ID_INCLUDE")
+                includes.add(getIncludeById(includeId, false))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return includes
+    }
 }

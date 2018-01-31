@@ -54,6 +54,10 @@ object IncludeHandler : KLogging() {
         return includeDAO.getAllIncludes()
     }
 
+    fun getAllIncludesOrderBy(orderByClause: String): MutableList<Include> {
+        return includeDAO.getAllIncludesOrderBy(orderByClause)
+    }
+
     fun getIncludeById(includeId: Int): Include {
         return includeDAO.getIncludeById(includeId, true)
     }

@@ -33,6 +33,7 @@ import api.core.TacusciAPI
 import app.core.Web
 import app.core.handlers.IncludeHandler
 import app.core.handlers.PageHandler
+import app.core.handlers.SQLQueryHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
 import database.daos.IncludeDAO
@@ -58,7 +59,9 @@ class IncludeManagementController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) {}
+    override fun initSessionBoolAttributes(session: Session) {
+        hashMapOf(Pair("selected_include_order_query", "createddatetimeasc")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for INCLUDE_MANAGEMENT_PAGE")
@@ -132,6 +135,14 @@ class IncludeManagementController : Controller {
         return response
     }
 
+    private fun post_QueryOptionForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for QUERY_OPTION_CHANGE_FORM")
+        val sqlQuery = SQLQueryHandler.getSQLQueryByName(request.queryParams("query"))
+        request.session().attribute("selected_include_order_query", sqlQuery.name)
+        response.managedRedirect(request, rootUri)
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("include_management/create")) {
             if (Web.getFormHash(request, "create_include_form") == request.queryParams("hashid")) {
@@ -145,7 +156,12 @@ class IncludeManagementController : Controller {
             if (Web.getFormHash(request, "delete_include_form_${request.queryParams("include_id")}") == request.queryParams("hashid")) {
                 return post_DeleteIncludeForm(request, response)
             }
+        } else if (request.uri().contains("include_management/query_option_change")) {
+            if (Web.getFormHash(request, "query_option_form") == request.queryParams("hashid")) {
+                return post_QueryOptionForm(request, response)
+            }
         }
+        response.managedRedirect(request, rootUri)
         return response
     }
 }
