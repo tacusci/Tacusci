@@ -23,5 +23,7 @@ public class TRequest extends TAPIClass {
 
     public Session getSession() { return request.session(); }
 
+    public Object getSessionAttribute(String attributeString) { return request.session().attribute(attributeString); }
+
     public Request getRequest() { return request; }
 }
