@@ -44,12 +44,12 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         connect()
         val sqlQuery = SQLQuery(-1, -1, -1, SQLQueryType.UNDEFINED,"", "", "")
         try {
-            val selectStatement = "SELECT * FROM $tableName WHERE ID_QUERY=?"
+            val selectStatement = "SELECT * FROM $tableName WHERE ID_SQL_QUERY=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, queryId)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                sqlQuery.id = resultSet.getInt("ID_QUERY")
+                sqlQuery.id = resultSet.getInt("ID_SQL_QUERY")
                 sqlQuery.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
                 sqlQuery.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
                 sqlQuery.type = SQLQueryType.fromInt(resultSet.getInt("QUERY_TYPE"))!!
@@ -70,7 +70,7 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         connect()
         var sqlQueryId = -1
         try {
-            val selectStatement = "SELECT ID_QUERY FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}QUERY_NAME=?"
+            val selectStatement = "SELECT ID_SQL_QUERY FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}QUERY_NAME=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setString(1, queryName)
             val resultSet = preparedStatement?.executeQuery()
@@ -86,11 +86,11 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         val sqlQueries = mutableListOf<SQLQuery>()
         connect()
         try {
-            val selectStatement = "SELECT ID_QUERY FROM $tableName"
+            val selectStatement = "SELECT ID_SQL_QUERY FROM $tableName"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
-                val queryId = resultSet.getInt("ID_QUERY")
+                val queryId = resultSet.getInt("ID_SQL_QUERY")
                 sqlQueries.add(getSQLQueryById(queryId))
             }
             disconnect()
@@ -102,12 +102,12 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
         val sqlQueries = mutableListOf<SQLQuery>()
         connect()
         try {
-            val selectStatement = "SELECT ID_QUERY FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}QUERY_TYPE=?"
+            val selectStatement = "SELECT ID_SQL_QUERY FROM $tableName WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}QUERY_TYPE=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
             preparedStatement?.setInt(1, sqlQueryType.ordinal)
             val resultSet = preparedStatement?.executeQuery()
             while (resultSet!!.next()) {
-                val queryId = resultSet.getInt("ID_QUERY")
+                val queryId = resultSet.getInt("ID_SQL_QUERY")
                 sqlQueries.add(getSQLQueryById(queryId))
             }
             disconnect()
@@ -137,7 +137,7 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
     fun updateSQLQuery(sqlQuery: SQLQuery): Boolean {
         connect()
         try {
-            val updateSQLQueryStatementString = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, QUERY_TYPE=?, QUERY_LABEL=?, QUERY_NAME=?, QUERY_STRING=? WHERE ID_QUERY=?"
+            val updateSQLQueryStatementString = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, QUERY_TYPE=?, QUERY_LABEL=?, QUERY_NAME=?, QUERY_STRING=? WHERE ID_SQL_QUERY=?"
             val preparedStatement = connection?.prepareStatement(updateSQLQueryStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setInt(2, sqlQuery.type.ordinal)

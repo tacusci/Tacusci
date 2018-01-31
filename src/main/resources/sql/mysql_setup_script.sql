@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`route_permissions` (
     PRIMARY KEY (`id_permission`));
 
 CREATE TABLE IF NOT EXISTS `$schema_name`.`sql_queries` (
-    `id_sql_queries` INT NOT NULL AUTO_INCREMENT,
+    `id_sql_query` INT NOT NULL AUTO_INCREMENT,
     `created_date_time` TEXT NOT NULL,
     `last_updated_date_time` TEXT NOT NULL,
     `query_type` INT NOT NULL,
