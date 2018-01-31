@@ -40,13 +40,22 @@
                 <input id="formName" name="formName" type="text" value="query_option_form" hidden>
                 <select form="query_option_form" id="query" name="query" onchange="this.form.submit()">
                     #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME_FILTER"))
-                        <option value="$sqlQuery.getName()">$sqlQuery.getLabel()</option>
+                        #set ($currentQueryName = $TRequest.getSessionAttribute("selected_page_order_query"))
+                        #if ($sqlQuery.getName().equals($currentQueryName))
+                            #set ($selected = " selected")
+                        #else
+                            #set ($selected = "")
+                        #end
+                        <option value="$sqlQuery.getName()"$selected>$sqlQuery.getLabel()</option>
                     #end
                 </select>
             </form>
         </div>
     </a>
-    #foreach ($page in $TPages.getAllPagesOrderBy("created_date_time ASC"))
+
+    #set ($queryString = $TSQLQueries.getSQLQueryByName($TRequest.getSessionAttribute("selected_page_order_query")).getString())
+
+    #foreach ($page in $TPages.getAllPagesOrderBy("$queryString"))
         #set ($divId = $page.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">
