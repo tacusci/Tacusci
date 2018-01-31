@@ -34,6 +34,11 @@
                 <img src="/images/back_arrow.png" style="width:23px;height:17px;">
             </a>
             $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-theme")
+            <select>
+                #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME_FILTER"))
+                    <option value="sqlQuery.getName()">sqlQuery.getLabel()</option>
+                #end
+            </select>
         </div>
     </a>
     #foreach ($page in $TPages.getAllPagesOrderBy("created_date_time ASC"))

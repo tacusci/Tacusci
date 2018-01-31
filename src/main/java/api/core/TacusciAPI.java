@@ -4,6 +4,7 @@ import api.forms.TForms;
 import api.groups.TGroups;
 import api.includes.TIncludes;
 import api.pages.TPages;
+import api.sql.TSQLQueries;
 import api.templates.TTemplates;
 import api.users.TUsers;
 import app.Application;
@@ -33,6 +34,7 @@ public class TacusciAPI {
     private static void init(Request request, Response response) {
         apiObjInstances.add(new Pair<>("TUsers", new TUsers(request, response)));
         apiObjInstances.add(new Pair<>("TForms", new TForms(request, response)));
+        apiObjInstances.add(new Pair<>("TSQLQueries", new TSQLQueries(request, response)));
         apiObjInstances.add(new Pair<>("TPages", new TPages(request, response)));
         apiObjInstances.add(new Pair<>("TGroups", new TGroups(request, response)));
         apiObjInstances.add(new Pair<>("TConfig", new TConfig(request, response)));

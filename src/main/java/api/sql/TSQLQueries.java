@@ -13,8 +13,8 @@ public class TSQLQueries extends TAPIClass {
 
     public TSQLQueries(Request request, Response response) { super(request, response); }
 
-    private List<SQLQuery> getSQLQueriesOfType(String sqlQueryTypeName) { return SQLQueryHandler.INSTANCE.getSQLQueryOfType(SQLQueryType.valueOf(sqlQueryTypeName)); }
-    private SQLQuery getSQLQueryById(Integer sqlQueryId) { return SQLQueryHandler.INSTANCE.getSQLQueryById(sqlQueryId); }
-    private SQLQuery getSQLQueryByName(String sqlQueryName) { return SQLQueryHandler.INSTANCE.getSQLQueryByName(sqlQueryName); }
+    public List<SQLQuery> getSQLQueriesOfType(String sqlQueryTypeName) { return SQLQueryHandler.INSTANCE.getSQLQueryOfType(SQLQueryType.valueOf(sqlQueryTypeName)); }
+    public SQLQuery getSQLQueryById(Integer sqlQueryId) { return SQLQueryHandler.INSTANCE.getSQLQueryById(sqlQueryId); }
+    public SQLQuery getSQLQueryByName(String sqlQueryName) { return SQLQueryHandler.INSTANCE.getSQLQueryByName(sqlQueryName); }
 
 }
