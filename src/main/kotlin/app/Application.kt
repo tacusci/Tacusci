@@ -46,6 +46,7 @@ import database.daos.SQLQueriesDAO
 import database.daos.TacusciInfoDAO
 import database.models.Group
 import database.models.SQLQuery
+import database.models.SQLQueryType
 import database.models.TacusciInfo
 import extensions.managedRedirect
 import extensions.toIntSafe
@@ -151,10 +152,10 @@ class Application {
     }
 
     private fun createSavedSqlQueries() {
-        SQLQueryHandler.createSQLQuery(SQLQuery(name = "createddateasc", label = "Created Date - Oldest to Newest", string = "created_date_time ASC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(name = "createddatedesc", label = "Created Date - Newest to Oldest", string = "created_date_time DESC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(name = "lastupdateddateasc", label = "Last Updated - Oldest to Newest", string = "last_updated_date_time ASC"))
-        SQLQueryHandler.createSQLQuery(SQLQuery(name = "lastupdateddatedesc", label = "Last Updated - Newest to Oldest", string = "last_updated_date_time DESC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "createddatetimeasc", label = "Created Date - Oldest to Newest", string = "created_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "createddatetimedesc", label = "Created Date - Newest to Oldest", string = "created_date_time DESC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "lastupdateddatetimeasc", label = "Last Updated - Oldest to Newest", string = "last_updated_date_time ASC"))
+        SQLQueryHandler.createSQLQuery(SQLQuery(type = SQLQueryType.DATE_TIME_FILTER, name = "lastupdateddatetimedesc", label = "Last Updated - Newest to Oldest", string = "last_updated_date_time DESC"))
     }
 
     private fun setupDefaultGroups() {

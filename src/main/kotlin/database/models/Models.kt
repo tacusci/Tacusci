@@ -136,4 +136,14 @@ data class RoutePermission(var id: Int = -1, var createdDateTime: Long = -1, var
                            var title: String = "", var route: String = "", var groupId: Int = -1)
 
 data class SQLQuery(var id: Int = -1, var createdDateTime: Long = -1, var lastUpdatedDateTime: Long = -1,
-                    var label: String = "", var name: String = "", var string: String = "")
+                    var type: SQLQueryType = SQLQueryType.UNDEFINED, var label: String = "", var name: String = "", var string: String = "")
+
+enum class SQLQueryType {
+    UNDEFINED,
+    DATE_TIME_FILTER;
+
+    companion object {
+        private val map = SQLQueryType.values().associateBy(SQLQueryType::ordinal)
+        fun fromInt(type: Int) = map[type]
+    }
+}

@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`sql_queries` (
     `id_sql_queries` INT NOT NULL AUTO_INCREMENT,
     `created_date_time` TEXT NOT NULL,
     `last_updated_date_time` TEXT NOT NULL,
+    `query_type` INT NOT NULL,
     `query_label` VARCHAR(45) UNIQUE NOT NULL,
     `query_name` VARCHAR(45) UNIQUE NOT NULL,
     `query_string` TEXT NOT NULL,

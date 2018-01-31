@@ -31,6 +31,7 @@ package database.daos
 
 import database.ConnectionPool
 import database.models.SQLQuery
+import database.models.SQLQueryType
 import mu.KLogging
 import java.sql.SQLException
 import java.util.*
@@ -41,7 +42,7 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
 
     fun getSQLQueryById(queryId: Int): SQLQuery {
         connect()
-        val sqlQuery = SQLQuery(-1, -1, -1, "", "", "")
+        val sqlQuery = SQLQuery(-1, -1, -1, SQLQueryType.UNDEFINED,"", "", "")
         try {
             val selectStatement = "SELECT * FROM $tableName WHERE ID_QUERY=?"
             val preparedStatement = connection?.prepareStatement(selectStatement)
@@ -51,6 +52,7 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
                 sqlQuery.id = resultSet.getInt("ID_QUERY")
                 sqlQuery.createdDateTime = resultSet.getLong("CREATED_DATE_TIME")
                 sqlQuery.lastUpdatedDateTime = resultSet.getLong("LAST_UPDATED_DATE_TIME")
+                sqlQuery.type = SQLQueryType.fromInt(resultSet.getInt("QUERY_TYPE"))!!
                 sqlQuery.label = resultSet.getString("QUERY_LABEL")
                 sqlQuery.name = resultSet.getString("QUERY_NAME")
                 sqlQuery.string = resultSet.getString("QUERY_STRING")
@@ -99,13 +101,14 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
     fun insertSQLQuery(sqlQuery: SQLQuery): Boolean {
         connect()
         try {
-            val createSQLQueryStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, QUERY_LABEL, QUERY_NAME, QUERY_STRING) VALUES (?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("sql_queries_query_name_key")}"
+            val createSQLQueryStatementString = "INSERT INTO $tableName (CREATED_DATE_TIME, LAST_UPDATED_DATE_TIME, QUERY_TYPE, QUERY_LABEL, QUERY_NAME, QUERY_STRING) VALUES (?,?,?,?,?,?) ${DAOManager.getConflictConstraintCommand("sql_queries_query_name_key")}"
             val preparedStatement = connection?.prepareStatement(createSQLQueryStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setLong(2, System.currentTimeMillis())
-            preparedStatement?.setString(3, sqlQuery.label)
-            preparedStatement?.setString(4, sqlQuery.name)
-            preparedStatement?.setString(5, sqlQuery.string)
+            preparedStatement?.setInt(3, sqlQuery.type.ordinal)
+            preparedStatement?.setString(4, sqlQuery.label)
+            preparedStatement?.setString(5, sqlQuery.name)
+            preparedStatement?.setString(6, sqlQuery.string)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -117,13 +120,14 @@ class SQLQueriesDAO(url: String, dbProperties: Properties, tableName: String, co
     fun updateSQLQuery(sqlQuery: SQLQuery): Boolean {
         connect()
         try {
-            val updateSQLQueryStatementString = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, QUERY_LABEL=?, QUERY_NAME=?, QUERY_STRING=? WHERE ID_QUERY=?"
+            val updateSQLQueryStatementString = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, QUERY_TYPE=?, QUERY_LABEL=?, QUERY_NAME=?, QUERY_STRING=? WHERE ID_QUERY=?"
             val preparedStatement = connection?.prepareStatement(updateSQLQueryStatementString)
             preparedStatement?.setLong(1, System.currentTimeMillis())
-            preparedStatement?.setString(2, sqlQuery.label)
-            preparedStatement?.setString(3, sqlQuery.name)
-            preparedStatement?.setString(4, sqlQuery.string)
-            preparedStatement?.setInt(5, sqlQuery.id)
+            preparedStatement?.setInt(2, sqlQuery.type.ordinal)
+            preparedStatement?.setString(3, sqlQuery.label)
+            preparedStatement?.setString(4, sqlQuery.name)
+            preparedStatement?.setString(5, sqlQuery.string)
+            preparedStatement?.setInt(6, sqlQuery.id)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()

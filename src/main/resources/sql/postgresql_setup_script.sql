@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS $schema_name.sql_queries (
     id_sql_query INTEGER PRIMARY KEY UNIQUE NOT NULL DEFAULT NEXTVAL ('$schema_name.sql_queries_seq'),
     created_date_time TEXT NOT NULL,
     last_updated_date_time TEXT NOT NULL,
+    query_type INTEGER NOT NULL,
     query_label VARCHAR(45) NOT NULL,
     query_name VARCHAR(45) UNIQUE NOT NULL,
     query_string TEXT NOT NULL
