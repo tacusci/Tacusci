@@ -36,7 +36,7 @@
             $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE PAGE", "button-theme")
             <select>
                 #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME_FILTER"))
-                    <option value="sqlQuery.getName()">sqlQuery.getLabel()</option>
+                    <option value="$sqlQuery.getName()">$sqlQuery.getLabel()</option>
                 #end
             </select>
         </div>
