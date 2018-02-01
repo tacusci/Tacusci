@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -63,7 +64,7 @@ public class InternalResourceFile {
             Path objPath;
 
             if (uri.getScheme().equals("jar")) {
-                FileSystem fileSystem = FileSystems.getFileSystem(uri);
+                FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
                 objPath = fileSystem.getPath(path);
             } else {
                 objPath = Paths.get(uri);
