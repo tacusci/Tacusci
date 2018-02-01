@@ -57,6 +57,10 @@ object TemplateHandler : KLogging() {
         return templateDAO.getAllTemplates()
     }
 
+    fun getAllTemplatesOrderBy(orderByClause: String): MutableList<Template> {
+        return templateDAO.getAllTemplatesOrderBy(orderByClause)
+    }
+
     fun getTemplateById(templateId: Int): Template {
         return templateDAO.getTemplateById(templateId, true)
     }

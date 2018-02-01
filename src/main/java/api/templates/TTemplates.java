@@ -18,4 +18,5 @@ public class TTemplates extends TAPIClass {
     }
 
     public List<Template> getAllTemplates() { return TemplateHandler.INSTANCE.getAllTemplates(); }
+    public List<Template> getAllTemplatesOrderBy(String orderByClause) { return TemplateHandler.INSTANCE.getAllTemplatesOrderBy(orderByClause); }
 }

@@ -163,4 +163,20 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return templates
     }
+
+    fun getAllTemplatesOrderBy(orderByClause: String): MutableList<Template> {
+        val templates = mutableListOf<Template>()
+        connect()
+        try {
+            val selectStatement = "SELECT ID_TEMPLATE FROM $tableName ORDER BY $orderByClause"
+            val preparedStatement = connection?.prepareStatement(selectStatement)
+            val resultSet = preparedStatement?.executeQuery()
+            while (resultSet!!.next()) {
+                val templateId = resultSet.getInt("ID_TEMPLATE")
+                templates.add(getTemplateById(templateId, false))
+            }
+            disconnect()
+        } catch (e: SQLException) { logger.error(e.message); disconnect() }
+        return templates
+    }
 }

@@ -34,9 +34,28 @@
                 <img src="/images/back_arrow.png" style="width:23px;height:17px;">
             </a>
             $THTMLUtils.getButtonStyledLink("$TRequest.getRequestURI()/create", "CREATE TEMPLATE", "button-theme")
+
+            <form style="display: inline-block" id="query_option_form" name="query_option_form" method="post" action="$TRequest.getRequestURI()/query_option_change">
+                <input id="hashid" name="hashid" type="text" value=$TForms.mapFormToHash("query_option_form") hidden>
+                <input id="formName" name="formName" type="text" value="query_option_form" hidden>
+                <select form="query_option_form" id="query" name="query" onchange="this.form.submit()">
+                    #foreach ($sqlQuery in $TSQLQueries.getSQLQueriesOfType("DATE_TIME"))
+                        #set ($currentQueryName = $TRequest.getSessionAttribute("selected_template_order_query"))
+                        #if ($sqlQuery.getName().equals($currentQueryName))
+                            #set ($selected = " selected")
+                        #else
+                            #set ($selected = "")
+                        #end
+                            <option value="$sqlQuery.getName()"$selected>$sqlQuery.getLabel()</option>
+                        #end
+                </select>
+            </form>
         </div>
     </a>
-    #foreach ($template in $TTemplates.getAllTemplates())
+
+    #set ($queryString = $TSQLQueries.getSQLQueryByName($TRequest.getSessionAttribute("selected_template_order_query")).getString())
+
+    #foreach ($template in $TTemplates.getAllTemplatesOrderBy("$queryString"))
         #set ($divId = $template.getId())
 
         <div id="$divId" class="pure-u-24-24 pure-g page-info">

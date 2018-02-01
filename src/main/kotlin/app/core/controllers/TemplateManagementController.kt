@@ -33,6 +33,7 @@
 
 import api.core.TacusciAPI
 import app.core.Web
+import app.core.handlers.SQLQueryHandler
 import app.core.handlers.TemplateHandler
 import app.core.handlers.UserHandler
 import database.daos.DAOManager
@@ -62,7 +63,9 @@ class TemplateManagementController : Controller {
     override val handlesGets: Boolean = true
     override val handlesPosts: Boolean = true
 
-    override fun initSessionBoolAttributes(session: Session) {}
+    override fun initSessionBoolAttributes(session: Session) {
+        hashMapOf(Pair("selected_template_order_query", "createddatetimeasc")).forEach { key, value -> if (!session.attributes().contains(key)) session.attribute(key, value) }
+    }
 
     override fun get(request: Request, response: Response, layoutTemplate: String): ModelAndView {
         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received GET request for TEMPLATE MANAGEMENT page")
@@ -136,6 +139,14 @@ class TemplateManagementController : Controller {
         return response
     }
 
+    private fun post_QueryOptionForm(request: Request, response: Response): Response {
+        logger.info("${UserHandler.getSessionIdentifier(request)} -> Received POST response for QUERY_OPTION_CHANGE_FORM")
+        val sqlQuery = SQLQueryHandler.getSQLQueryByName(request.queryParams("query"))
+        request.session().attribute("selected_template_order_query", sqlQuery.name)
+        response.managedRedirect(request, rootUri)
+        return response
+    }
+
     override fun post(request: Request, response: Response): Response {
         if (request.uri().contains("template_management/create")) {
             if (Web.getFormHash(request, "create_template_form") == request.queryParams("hashid")) {
@@ -148,6 +159,10 @@ class TemplateManagementController : Controller {
         } else if (request.uri().contains("template_management/delete")) {
             if (Web.getFormHash(request, "delete_template_form_${request.queryParams("template_id")}") == request.queryParams("hashid")) {
                 return post_DeleteTemplateForm(request, response)
+            }
+        } else if (request.uri().contains("template_management/query_option_change")) {
+            if (Web.getFormHash(request, "query_option_form") == request.queryParams("hashid")) {
+                return post_QueryOptionForm(request, response)
             }
         }
         return response
