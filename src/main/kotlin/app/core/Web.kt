@@ -86,7 +86,6 @@ object Web : KLogging() {
             if (GroupHandler.userInGroup(username, "admins") || GroupHandler.userInGroup(username, "moderators")) {
                 model.put("dashboard_link_address", "/dashboard")
             }
-            model.put("profile_link_address", "/profile/${UserHandler.loggedInUsername(request)}")
             model.put("sign_out_form", j2htmlPartials.pureMenuItemForm(request.session(), "sign_out_form", "/login", "post", "Logout").render())
         }
         return model

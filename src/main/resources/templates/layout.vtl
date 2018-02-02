@@ -65,8 +65,6 @@
                         #if ($TConfig.getProperty("allow-signup").toLowerCase().equals("true"))
                             <li class="pure-menu-item"><a class="pure-menu-link" href=$sign_up_link_address>Sign Up</a></li>
                         #end
-                    #else
-                        <li class="pure-menu-item"><a class="pure-menu-link" href=$profile_link_address>$TUsers.getLoggedInUsername()</a></li>
                     #end
 
                     #if ($TUsers.isLoggedIn())
