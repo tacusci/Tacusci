@@ -1,1 +1,1 @@
-ALTER TABLE $schema_name.pages ADD COLUMN IF NOT EXISTS disabled BOOLEAN NOT NULL DEFAULT false;
+DO $$ BEGIN BEGIN ALTER TABLE $schema_name.pages ADD COLUMN disabled BOOLEAN NOT NULL DEFAULT false; EXCEPTION WHEN duplicate_column THEN RAISE NOTICE 'column disabled already exists in table pages.'; END; END; $$
