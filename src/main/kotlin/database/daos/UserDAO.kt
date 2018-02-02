@@ -282,7 +282,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         try {
             val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
-            preparedStatement?.setInt(1, 1)
+            preparedStatement?.setBoolean(1, true)
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, username)
             preparedStatement?.execute()
@@ -298,7 +298,7 @@ class UserDAO(url: String, dbProperties: Properties, tableName: String, connecti
         try {
             val updateStatement = "UPDATE $tableName SET BANNED=?, BANNED_DATE_TIME=? WHERE ${if (DAOManager.isMySQL()) "BINARY " else ""}USERNAME=?"
             val preparedStatement = connection?.prepareStatement(updateStatement)
-            preparedStatement?.setInt(1, 0)
+            preparedStatement?.setBoolean(1, false)
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setString(3, username)
             preparedStatement?.execute()
