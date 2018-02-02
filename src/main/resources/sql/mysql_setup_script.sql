@@ -109,4 +109,4 @@ CREATE TABLE IF NOT EXISTS `$schema_name`.`sql_queries` (
     `query_label` VARCHAR(45) UNIQUE NOT NULL,
     `query_name` VARCHAR(45) UNIQUE NOT NULL,
     `query_string` TEXT NOT NULL,
-    PRIMARY KEY (`id_sql_queries`));
+    PRIMARY KEY (`id_sql_query`));

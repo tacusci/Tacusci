@@ -31,7 +31,6 @@
  
  package database.daos
 
-import app.Application
 import database.ConnectionPool
 import database.SQLScript
 import database.models.TacusciInfo
@@ -97,7 +96,26 @@ object DAOManager : KLogging() {
     fun init(url: String, dbProperties: Properties) {
         this.url = url
         this.dbProperties = dbProperties
+        registerJDBCDrivers()
         connectionPool = ConnectionPool(url, dbProperties)
+    }
+
+    fun registerJDBCDrivers(): Boolean {
+        var successful = true
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
+        } catch (e: ClassNotFoundException) {
+            logger.error(e.message)
+            successful = false
+        }
+
+        try {
+            Class.forName("org.postgresql.Driver").newInstance()
+        } catch (e: ClassNotFoundException) {
+            logger.error(e.message)
+            successful = false
+        }
+        return successful
     }
 
     fun workOutDBType() {

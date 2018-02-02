@@ -58,8 +58,6 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/eclipse/jetty/websocket/websocket-api/9.4.6.v20170531/websocket-api-9.4.6.v20170531.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/nhaarman/mockito-kotlin/1.2.0/mockito-kotlin-1.2.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/javax.mail-api/1.6.0/javax.mail-api-1.6.0.jar" path-in-jar="/" />
-      <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.2.1" />
-      <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.6" />
     </root>
   </artifact>
 </component>
