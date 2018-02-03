@@ -76,6 +76,10 @@ class UserManagementController : Controller {
 
         model.put("user_management_changes_made", request.session().attribute("user_management_changes_made"))
 
+        if (request.session().attribute("user_management_changes_made")) {
+            request.session().attribute("user_management_changes_made", false)
+        }
+
         if (request.params(":command") == null && request.params(":page_id") == null) {
             model.put("template", templatePath)
         } else {
