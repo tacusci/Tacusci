@@ -50,7 +50,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String,
             preparedStatement?.setLong(2, System.currentTimeMillis())
             preparedStatement?.setInt(3, userId)
             preparedStatement?.setString(4, authHash)
-            preparedStatement?.setInt(5, 0)
+            preparedStatement?.setBoolean(5, false)
             preparedStatement?.execute()
             connection?.commit()
             preparedStatement?.close()
@@ -58,14 +58,14 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String,
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
     }
 
-     fun updateAuthHash(userId: Int, authHash: String, expired: Int) {
+     fun updateAuthHash(userId: Int, authHash: String, expired: Boolean) {
         connect()
         try {
             val updateAuthHashStatement = "UPDATE $tableName SET LAST_UPDATED_DATE_TIME=?, AUTH_HASH=?, EXPIRED=? WHERE ID_USERS=?"
             val preparedStatement = connection?.prepareStatement(updateAuthHashStatement)
             preparedStatement?.setLong(1, System.currentTimeMillis())
             preparedStatement?.setString(2, authHash)
-            preparedStatement?.setInt(3, expired)
+            preparedStatement?.setBoolean(3, expired)
             preparedStatement?.setInt(4, userId)
             preparedStatement?.execute()
             connection?.commit()
@@ -92,7 +92,7 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String,
     }
 
     fun authHashExpired(authHash: String): Boolean {
-        var expired = 0
+        var expired = false
         connect()
         try {
             val selectStatement = "SELECT EXPIRED FROM $tableName WHERE AUTH_HASH=?"
@@ -100,10 +100,10 @@ class ResetPasswordDAO(url: String, dbProperties: Properties, tableName: String,
             preparedStatement?.setString(1, authHash)
             val resultSet = preparedStatement?.executeQuery()
             if (resultSet!!.next()) {
-                expired = resultSet.getInt("EXPIRED")
+                expired = resultSet.getBoolean("EXPIRED")
             }
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
-        return expired > 0
+        return expired
     }
 
     fun getAuthHash(userId: Int): String {

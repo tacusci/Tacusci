@@ -99,7 +99,7 @@ class ResetPasswordController : Controller {
                         logger.info("${UserHandler.getSessionIdentifier(request)} -> Received authorised reset password request for user $username")
 
                         //if authhash has gone past expired time limit, mark as expired
-                        if (checkAuthHashExpired(authHash)) resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+                        if (checkAuthHashExpired(authHash)) resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), true)
 
                         //check if the authhash is marked as expired
                         if (!resetPasswordDAO.authHashExpired(authHash)) {
@@ -129,7 +129,7 @@ class ResetPasswordController : Controller {
             request.session().attribute("reset_password_successfully", false)
             val userId = userDAO.getUserID(username)
             //update hash to mark it as expired
-            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), 1)
+            resetPasswordDAO.updateAuthHash(userId, resetPasswordDAO.getAuthHash(userId), true)
         } else {
             if (request.session().attribute("passwords_dont_match")) {
                 model.put("passwords_dont_match", h2("Passwords don't match").withClass("header"))
@@ -160,7 +160,7 @@ class ResetPasswordController : Controller {
             if (username != null && authHash != null) {
                 val userId = userDAO.getUserID(username)
                 if (resetPasswordDAO.authHashExists(userId)) {
-                    if (checkAuthHashExpired(authHash)) { resetPasswordDAO.updateAuthHash(userId, authHash, 1) }
+                    if (checkAuthHashExpired(authHash)) { resetPasswordDAO.updateAuthHash(userId, authHash, true) }
                 }
             }
 

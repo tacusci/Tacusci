@@ -210,7 +210,7 @@ object  UserHandler : KLogging() {
         val userId = userDAO.getUserID(username)
         val resetPasswordDAO = DAOManager.getDAO(DAOManager.TABLE.RESET_PASSWORD) as ResetPasswordDAO
         if (resetPasswordDAO.authHashExists(userId)) {
-            resetPasswordDAO.updateAuthHash(userId, newAuthHash, 0)
+            resetPasswordDAO.updateAuthHash(userId, newAuthHash, false)
         } else {
             resetPasswordDAO.insertAuthHash(userId, newAuthHash)
         }
