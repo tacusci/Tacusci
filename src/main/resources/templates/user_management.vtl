@@ -48,7 +48,18 @@
                 <tbody>
                 #set($loggedInUser = $TUsers.getLoggedInUser())
                 #foreach ($user in $TUsers.getUsers())
-                    #if ($loggedInUser.getId() != $user.getId())
+
+                    #set($addUser = true)
+
+                    #if (!$loggedInUser.getRootAdmin() && $TGroups.userInGroup($loggedInUser, "moderators") && !$TGroups.userInGroup($loggedInUser, "admins"))
+                        #if ($TGroups.userInGroup($user, "admins"))
+                            #set($addUser = false)
+                        #end
+                    #end
+
+                    #if (!$loggedInUser.getRootAdmin() && $user.getRootAdmin()) #set($addUser = false) #end
+
+                    #if ($loggedInUser.getId() != $user.getId() && $addUser)
                         <tr>
                             <td class="theme-shade"><input id="select_checkbox_$user.getId()" name="select_checkbox" type="checkbox" value="$user.getId()"></td>
                             <td class="theme-shade">$TUtils.convertMillisToDateTime($user.getCreatedDateTime())</td>
