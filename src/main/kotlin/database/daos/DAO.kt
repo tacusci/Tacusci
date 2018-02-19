@@ -79,8 +79,6 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
 
     @Throws(SQLException::class)
     private fun close() {
-        connectionPool.returnConnection(connection!!)
-        /*
         try {
             if (connection != null && !connection!!.isClosed) {
                 connection!!.close()
@@ -88,7 +86,7 @@ abstract class DAO(var url: String, var dbProperties: Properties, var tableName:
         } catch (e: SQLException) {
             throw e
         }
-        */
+        connectionPool.returnConnection(connection!!)
     }
 
     abstract fun count(): Int
