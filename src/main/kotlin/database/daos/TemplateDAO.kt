@@ -134,6 +134,7 @@ class TemplateDAO(url: String, dbProperties: Properties, tableName: String, conn
                 template.content = resultSet.getString("TEMPLATE_CONTENT")
                 template.authorUserId = resultSet.getInt("AUTHOR_USER_ID")
             }
+            disconnect()
         } catch (e: SQLException) { logger.error(e.message); disconnect() }
         return template
     }
