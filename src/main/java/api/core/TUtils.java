@@ -34,4 +34,6 @@ public class TUtils extends TAPIClass {
     public String convertMillisToDateTime(Long millis, String format) { return Utils.Companion.convertMillisToDateTime(millis, format); }
 
     public String convertStringToMD5Hash(String textToConvert) { return Utils.Companion.convertStringToMD5Hash(textToConvert); }
+
+    public Boolean isInteger(String intToCheck) { return Utils.Companion.isInteger(intToCheck); }
 }

@@ -29,6 +29,7 @@
 
 package utils
 
+import extensions.isNullOrBlankOrEmpty
 import extensions.toMD5Hash
 import mu.KLogging
 import java.io.ByteArrayInputStream
@@ -91,6 +92,22 @@ class Utils {
 
         fun convertStringToMD5Hash(textToConvert: String): String {
             return textToConvert.toMD5Hash()
+        }
+
+        fun isInteger(stringToCheck: String): Boolean {
+            return isInteger(stringToCheck, 10)
+        }
+
+        private fun isInteger(stringToCheck: String, radix: Int): Boolean {
+            if (stringToCheck.isNullOrBlankOrEmpty()) return false
+            for (i in 0 until stringToCheck.length) {
+                if (i == 0 && stringToCheck.toCharArray()[i] == '-') {
+                    if (stringToCheck.length == 1) return false
+                    else continue
+                }
+                if (Character.digit(stringToCheck.toCharArray()[i], radix) < 0) return false
+            }
+            return true
         }
     }
 }
