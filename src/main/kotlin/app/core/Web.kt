@@ -169,6 +169,14 @@ object Web : KLogging() {
         return result
     }
 
+    fun fourOhFourResponse(request: Request, response: Response) {
+        response.status(404)
+    }
+
+    fun fiveHunderedResponse(request: Request, response: Response) {
+        response.status(500)
+    }
+
     fun mapFormToHash(session: Session, formTitle: String): String {
         val hash = Utils.randomHash(80)
         session.attribute(formTitle, hash)

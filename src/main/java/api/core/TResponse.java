@@ -14,9 +14,13 @@ public class TResponse extends TAPIClass {
         super(request, response);
     }
 
-    public String fourOhFour() { return Web.INSTANCE.get404Page(request, response); }
+    //public String fourOhFour() { return Web.INSTANCE.get404Page(request, response); }
 
-    public String fiveHundered() { return Web.INSTANCE.get500Page(request, response); }
+    //public String fiveHundered() { return Web.INSTANCE.get500Page(request, response); }
+
+    public void fourOhFour() { Web.INSTANCE.fourOhFourResponse(request, response); }
+
+    public void fiveHundered() { Web.INSTANCE.fiveHunderedResponse(request, response); }
 
     public void redirect(String location) { ExtensionCollectionKt.managedRedirect(response, request, location); }
 
