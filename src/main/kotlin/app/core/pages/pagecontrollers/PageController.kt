@@ -70,7 +70,8 @@ object PageController : KLogging() {
     }
 
     fun mapPageRouteTo404Page(pageRoute: String) {
-        Spark.get(pageRoute, { request: Request, response: Response -> Web.get404Page(request, response) })
+        //Spark.get(pageRoute, { request: Request, response: Response -> Web.get404Page(request, response) })
+        Spark.get(pageRoute, { request: Request, response: Response -> Web.fourOhFourResponse(request, response) })
     }
 
     private fun getPageByRoute(pageRoute: String): Page {
