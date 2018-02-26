@@ -170,10 +170,12 @@ object Web : KLogging() {
     }
 
     fun fourOhFourResponse(request: Request, response: Response) {
+        response.body(get404Page(request, response))
         response.status(404)
     }
 
     fun fiveHunderedResponse(request: Request, response: Response) {
+        response.body(get500Page(request, response))
         response.status(500)
     }
 
