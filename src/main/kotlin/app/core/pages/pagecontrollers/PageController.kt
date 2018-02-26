@@ -106,7 +106,9 @@ object PageController : KLogging() {
             }
             return result
         } else {
-            return Web.get404Page(request, response)
+            Web.fourOhFourResponse(request, response)
+            return ""
+            //return Web.get404Page(request, response)
         }
     }
 }
