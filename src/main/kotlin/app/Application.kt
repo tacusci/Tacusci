@@ -98,7 +98,8 @@ class Application {
     private fun updateDatabase() {
         val tacusciVersionDAO = DAOManager.getDAO(DAOManager.TABLE.TACUSCI_INFO) as TacusciInfoDAO
 
-        val tacusciVersionFromDB = tacusciVersionDAO.getTacusciInfo()
+        val tacusciVersionFromDB =
+                tacusciVersionDAO.getTacusciInfo()
         var tacusciVersionFromDBNumber = (tacusciVersionFromDB.versionNumberMajor.toString() + tacusciVersionFromDB.versionNumberMinor.toString() + tacusciVersionFromDB.versionNumberRevision.toString()).toIntSafe()
 
         //if any of the version numbers are -1 then it does not currently exist in the database

@@ -30,6 +30,9 @@
       <console name="TVF" type="STANDARD" />
     </connection>
   </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="0115c00a-34cb-42b8-bb39-aae55af48b79" />
+  </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-list connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" dataset="tacusci.users" active-filter-id="e0d0dde8-9176-43bd-9546-4af4569032bd">
       <filter id="e0d0dde8-9176-43bd-9546-4af4569032bd" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
@@ -53,8 +56,14 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" current-schema="" />
-    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" session-id="MAIN" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" session-id="MAIN" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" session-id="MAIN" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" session-id="MAIN" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" session-id="MAIN" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" session-id="MAIN" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="0115c00a-34cb-42b8-bb39-aae55af48b79" session-id="MAIN" current-schema="tacusci" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/sql/sql_setup_script.sql" connection-id="" session-id="MAIN" current-schema="" />
   </component>
   <component name="DBNavigator.Project.MethodExecutionManager">
     <method-browser />
@@ -112,6 +121,7 @@
         </ssh-settings>
         <details>
           <charset value="UTF-8" />
+          <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
           <connect-automatically value="true" />
@@ -469,7 +479,6 @@
         <debug-execution-timeout value="600" />
         <focus-result value="false" />
         <prompt-execution value="false" />
-        <target-connection value="ASK" />
       </statement-execution>
       <script-execution>
         <command-line-interfaces />
