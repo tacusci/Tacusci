@@ -170,13 +170,11 @@ object Web : KLogging() {
     }
 
     fun fourOhFourResponse(request: Request, response: Response) {
-        response.body(get404Page(request, response))
-        response.status(404)
+        Spark.halt(404, get404Page(request, response))
     }
 
     fun fiveHunderedResponse(request: Request, response: Response) {
-        response.body(get500Page(request, response))
-        response.status(500)
+        Spark.halt(500, get500Page(request, response))
     }
 
     fun mapFormToHash(session: Session, formTitle: String): String {

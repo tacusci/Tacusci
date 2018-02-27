@@ -120,9 +120,7 @@ object ControllerManager : KLogging() {
     }
 
     fun initResponsePages() {
-        //Spark.notFound({ request, response -> Web.get404Page(request, response) })
-        Spark.notFound({ request, response -> Web.fourOhFourResponse(request, response) })
-        //Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
-        Spark.internalServerError({ request, response -> Web.fiveHunderedResponse(request, response) })
+        Spark.notFound({ request, response -> Web.get404Page(request, response) })
+        Spark.internalServerError({ request, response -> Web.get500Page(request, response) })
     }
 }
