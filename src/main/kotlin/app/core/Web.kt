@@ -137,14 +137,15 @@ object Web : KLogging() {
     }
 
     fun get404Page(request: Request, response: Response): String {
+        //try and load/find a 404 template from the public folder if the root response pages folder has been set
         val responsePagesFolder = File("${Config.getProperty("static-asset-folder")}/${Config.getProperty("response-pages-folder")}")
         var fourOhFourFile = File("")
         listOf("404.html", "404.md", "404.vtl").forEach {
             val currentFile = File(responsePagesFolder.absolutePath + "/$it")
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
-        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
 
+        //if there are no user provided 404 templates found try and use the internally packaged template
         if (fourOhFourFile.doesNotExist()) {
             val internalTemplatesFolder = InternalResourceFile("/templates")
             internalTemplatesFolder.internalFolderFiles.forEach {
@@ -153,7 +154,8 @@ object Web : KLogging() {
             }
         }
 
-        //should change this so that the alternative 404 page is actually the 404 template page
+        val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+        //note that if for some reason the internally packaged template isn't found/valid then just return 404
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
         velocityIMTemplateEngine.insertIntoContext("fourOhFourTemplate", Web.loadNavigationElements(request, hashMapOf()))
