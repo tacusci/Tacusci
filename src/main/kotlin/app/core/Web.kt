@@ -34,6 +34,7 @@ package app.core
 import api.core.TacusciAPI
 import app.core.handlers.GroupHandler
 import app.core.handlers.UserHandler
+import extensions.doesNotExist
 import extensions.isNullOrBlankOrEmpty
 import extensions.managedRedirect
 import j2html.TagCreator.h2
@@ -44,6 +45,7 @@ import org.json.JSONObject
 import spark.*
 import spark.template.velocity.VelocityIMTemplateEngine
 import utils.Config
+import utils.InternalResourceFile
 import utils.Utils
 import utils.j2htmlPartials
 import java.io.BufferedReader
@@ -142,6 +144,15 @@ object Web : KLogging() {
             if (currentFile.exists()) fourOhFourFile = currentFile; return@forEach
         }
         val velocityIMTemplateEngine = VelocityIMTemplateEngine()
+
+        if (fourOhFourFile.doesNotExist()) {
+            val internalTemplatesFolder = InternalResourceFile("/templates")
+            internalTemplatesFolder.internalFolderFiles.forEach {
+                if (it.name == "404_not_found.vtl")
+                    fourOhFourFile = it
+            }
+        }
+
         //should change this so that the alternative 404 page is actually the 404 template page
         velocityIMTemplateEngine.insertTemplateAsString("fourOhFourTemplate", (if (fourOhFourFile.exists()) fourOhFourFile.readText() else h2("404").render()))
         TacusciAPI.injectAPIInstances(request, response, "fourOhFourTemplate", velocityIMTemplateEngine)
