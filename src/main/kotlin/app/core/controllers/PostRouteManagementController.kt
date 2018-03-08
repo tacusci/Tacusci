@@ -34,8 +34,10 @@ import spark.ModelAndView
 import spark.Request
 import spark.Response
 import spark.Session
-
 class PostRouteManagementController : Controller {
+
+    companion object : KLogging()
+
     override var rootUri: String
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(value) {}
@@ -49,6 +51,7 @@ class PostRouteManagementController : Controller {
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     override val handlesGets: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+
     override val handlesPosts: Boolean
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
@@ -63,8 +66,4 @@ class PostRouteManagementController : Controller {
     override fun post(request: Request, response: Response): Response {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    companion object : KLogging()
-
-
 }
