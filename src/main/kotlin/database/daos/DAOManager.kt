@@ -197,7 +197,7 @@ object DAOManager : KLogging() {
         try {
             DAOManager.close()
             logger.info("Disconnected from database at ${url}")
-        } catch (e: SQLException) {1
+        } catch (e: SQLException) {
             logger.error(e.message)
         }
     }
